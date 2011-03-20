@@ -1,0 +1,337 @@
+<?php
+// $Id: uc_file.install,v 1.2.2.10 2009/01/19 20:31:25 islandusurper Exp $
+
+/**
+ * @file
+ * DB Schema and upgrade path for uc_file.
+ *
+ */
+
+// -1 is the UC_FILE_LIMIT_SENTINEL constant in uc_file.module, but
+// it might not be available (like when upgrading from 5 -> 6.
+
+function uc_file_schema() {
+  $schema = array();
+
+  $schema['uc_files'] = array(
+    'fields' => array(
+      'fid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'filename' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('fid'),
+  );
+
+  $schema['uc_file_products'] = array(
+    'fields' => array(
+      'fpid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'pfid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'fid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'model' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'description' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'shippable' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'download_limit' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => -1, // UC_FILE_LIMIT_SENTINEL
+      ),
+      'address_limit' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => -1, // UC_FILE_LIMIT_SENTINEL
+      ),
+
+      'time_granularity' => array(
+        'type' => 'varchar',
+        'length' => 16,
+        'not null' => TRUE,
+        'default' => '-1', // UC_FILE_LIMIT_SENTINEL
+      ),
+      'time_quantity' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => -1, // UC_FILE_LIMIT_SENTINEL
+      ),
+    ),
+    'indexes' => array(
+      'pfid' => array('pfid'),
+      'fid' => array('fid'),
+    ),
+    'primary key' => array('fpid'),
+  );
+
+  $schema['uc_file_users'] = array(
+    'fields' => array(
+      'fuid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'fid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'pfid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'file_key' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'granted' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'expiration' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'accessed' => array(
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'addresses' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'download_limit' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'address_limit' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+    ),
+    'indexes' => array(
+      'fid' => array('fid'),
+      'uid' => array('uid'),
+    ),
+    'primary key' => array('fuid'),
+  );
+
+  return $schema;
+}
+
+function uc_file_install() {
+  drupal_install_schema('uc_file');
+}
+
+function uc_file_uninstall() {
+  drupal_uninstall_schema('uc_file');
+  db_query("DELETE FROM {uc_product_features} WHERE fid = 'file'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_file_%%'");
+}
+
+function uc_file_update_6000() {
+  $ret = array();
+
+  db_drop_index($ret, 'uc_files', 'fid');
+  db_change_field($ret, 'uc_files', 'fid', 'fid', array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE), array('primary key' => array('fid')));
+
+  db_drop_index($ret, 'uc_file_products', 'pfid');
+  db_drop_index($ret, 'uc_file_products', 'fid');
+  db_change_field($ret, 'uc_file_products', 'pfid', 'pfid', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0), array('indexes' => array('pfid' => array('pfid'))));
+  db_change_field($ret, 'uc_file_products', 'fid', 'fid', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0), array('indexes' => array('fid' => array('fid'))));
+  db_change_field($ret, 'uc_file_products', 'shippable', 'shippable', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
+
+  db_drop_index($ret, 'uc_file_users', 'fid');
+  db_drop_index($ret, 'uc_file_users', 'uid');
+  db_change_field($ret, 'uc_file_users', 'fid', 'fid', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0), array('indexes' => array('fid' => array('fid'))));
+  db_change_field($ret, 'uc_file_users', 'uid', 'uid', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0), array('indexes' => array('uid' => array('uid'))));
+  db_change_field($ret, 'uc_file_users', 'pfid', 'pfid', array('type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE));
+
+  return $ret;
+}
+
+function uc_file_update_6001() {
+  $ret = array();
+
+  $new_field = array(
+    'type' => 'varchar',
+    'length' => 32,
+    'not null' => TRUE,
+    'default' => '',
+  );
+
+  // change the key field to something less conflicting...
+  if (db_column_exists('uc_file_users', 'key')) {
+
+    // workaround for Drupal limitation
+    if ($GLOBALS['db_type'] == 'mysql' || $GLOBALS['db_type'] == 'mysqli') {
+      $field = '`key`';
+    }
+    else {
+      $field = 'key';
+    }
+    db_change_field($ret,
+      'uc_file_users', $field, 'file_key',
+      $new_field
+    );
+  }
+
+  return $ret;
+}
+
+// Add primary keys to file_products and file_users
+function uc_file_update_6002() {
+  $ret = array();
+
+  $new_field = array(
+    'type' => 'serial',
+    'unsigned' => TRUE,
+    'not null' => TRUE,
+  );
+
+  db_add_field($ret, 'uc_file_users', 'fuid', $new_field, array('primary key' => array('fuid')));
+  db_add_field($ret, 'uc_file_products', 'fpid', $new_field, array('primary key' => array('fpid')));
+
+  return $ret;
+}
+
+// Make sure the quantity is validated.
+function uc_file_update_6003() {
+
+  if (variable_get('uc_file_download_limit_duration_granularity', 'never') != 'never' &&
+      variable_get('uc_file_download_limit_duration_qty', NULL) == NULL) {
+    variable_set('uc_file_download_limit_duration_qty', 1);
+  }
+
+  return array();
+}
+
+// Add per-file limits.
+function uc_file_update_6004() {
+  $ret = array();
+
+  $integer_field = array(
+    'type' => 'int',
+    'not null' => FALSE,
+    'default' => -1, // UC_FILE_LIMIT_SENTINEL
+  );
+
+  $null_integer_field = array(
+    'type' => 'int',
+    'not null' => FALSE,
+    'default' => NULL,
+  );
+
+  $string_field = array(
+    'type' => 'varchar',
+    'length' => 16,
+    'not null' => TRUE,
+    'default' => '-1', // UC_FILE_LIMIT_SENTINEL
+  );
+
+  // Add the per-file limit data.
+  db_add_field($ret, 'uc_file_products', 'download_limit'  , $integer_field);
+  db_add_field($ret, 'uc_file_products', 'address_limit'   , $integer_field);
+  db_add_field($ret, 'uc_file_products', 'time_granularity', $string_field );
+  db_add_field($ret, 'uc_file_products', 'time_quantity'   , $integer_field);
+
+  // Add the per-user db data.
+  db_add_field($ret, 'uc_file_users', 'download_limit', $null_integer_field);
+  db_add_field($ret, 'uc_file_users', 'address_limit' , $null_integer_field);
+  db_add_field($ret, 'uc_file_users', 'expiration'    , $null_integer_field);
+
+  return $ret;
+}
+
+// Iterate over all the existing file_user objects and replace them with the
+// defaults for their product feature. This gets us off depending on global
+// settings and also allows users to accumulate time. We also calculate the expiration
+// time here, and store it as 'expiration'.
+function uc_file_update_6005() {
+  $ret = array();
+
+  $file_users = db_query("SELECT * FROM {uc_file_users}");
+
+  while ($file_user = db_fetch_object($file_users)) {
+    $file_product = db_fetch_object(db_query("SELECT * FROM {uc_file_products} WHERE pfid = %d", $file_user->pfid));
+
+    // Get the higher limits. Work around the 5 -> 6 upgrade path.
+    if (function_exists('uc_file_get_download_limit') && $file_product) {
+      $file_user->download_limit = uc_file_get_download_limit($file_product);
+      $file_user->address_limit = uc_file_get_address_limit($file_product);
+      $time_limit = uc_file_get_time_limit($file_product);
+    }
+    else {
+      $file_user->download_limit = variable_get('uc_file_download_limit_number', NULL);
+      $file_user->address_limit = variable_get('uc_file_download_limit_addresses', NULL);
+
+      $time_limit = array(
+        'time_polarity'    => '+',
+        'time_granularity' => variable_get('uc_file_download_limit_duration_granularity', 'never'),
+        'time_quantity'    => variable_get('uc_file_download_limit_duration_qty', NULL),
+      );
+    }
+
+    $granted = $file_user->granted;
+
+    if ($time_limit['time_polarity'] == 'never') {
+      $expiration = NULL;
+    }
+    else {
+      $expiration = strtotime($time_limit['time_polarity'] . $time_limit['time_quantity'] .' '. $time_limit['time_granularity'], $file_user->granted);
+    }
+
+    // drupal_write_record() doesn't work here for some odd reason.
+    db_query("UPDATE {uc_file_users} SET expiration = %d WHERE fuid = %d", $expiration, $file_user->fuid);
+  }
+
+  return $ret;
+}

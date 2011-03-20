@@ -1,0 +1,15 @@
+; $Id: autosave.info,v 1.3.2.6 2008/09/12 13:37:55 ptalindstrom Exp $
+name = Autosave
+description = Automatically saves a node after a period of time.
+
+; Information added by drupal.org packaging script on 2008-01-04
+version = "6.x"
+project = autosave
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-09-12
+version = "6.x-1.1"
+core = "6.x"
+project = "autosave"
+datestamp = "1221227102"
+

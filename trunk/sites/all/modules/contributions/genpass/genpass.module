@@ -1,0 +1,162 @@
+<?php
+
+function _genpass_default_entropy() {
+  return 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!#$%&()*+,-./:;<=>?@[]^_{|}~';
+}
+
+/**
+ * Generate a new password
+ * Based on the original D6 user_password function (with more characters)
+ *
+ * @return a fresh password according to the settings made in /admin/user/settings
+ *
+ * @see genpass_form_alter()
+ */
+function genpass_password() {
+  $pass = '';
+  $length = variable_get('genpass_length', 8);
+  $allowable_characters = variable_get('genpass_entropy', _genpass_default_entropy());
+
+  // Zero-based count of characters in the allowable list:
+  $len = strlen($allowable_characters) - 1;
+  
+  // Loop the number of times specified by $length.
+  for ($i = 0; $i < $length; $i++) {
+    // Each iteration, pick a random character from the
+    // allowable string and append it to the password:
+    $pass .= $allowable_characters[mt_rand(0, $len)];
+  }
+
+  return $pass;
+}
+
+
+/**
+ * helper function to find the password item in a form, since its position within
+ * the form-array depends on the profile module (account-category)
+ */ 
+function &genpass_get_pass_item(&$form){
+  if(isset($form['account']['pass'])) return $form['account']['pass'];
+  else return $form['pass'];
+}
+
+
+
+
+/**
+ * Take care of new form handling (admin and registration forms)
+ */
+function genpass_form_alter(&$form, $form_state, $form_id) {
+  
+  switch($form_id) {
+  
+    case 'user_admin_settings':
+    
+      $form['registration']['genpass_mode'] = array(
+        '#type' => 'radios',
+        '#title' => t('Password handling'),
+        '#default_value' => variable_get('genpass_mode', 0),
+        '#options' => array(
+          0 => t('Users must enter a password on registration (default Drupal behaviour).'),
+          1 => t('Users may enter a password on registration. If not, a random password will be generated.'),
+          2 => t('Users cannot choose a password on registration. It will be generated.')
+        ),
+        '#description' => t('Choose a password handling mode for new users. Note that for manual user creation by an administrator the second option always applies.')
+      );
+      $form['registration']['genpass_length'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Generated password length'),
+        '#default_value' => variable_get('genpass_length', 8),
+        '#size' => 2,
+        '#maxlength' => 2,
+        '#description' => t('Set the length of generated passwords here. Allowed range: 5 to 32')
+      );
+      $form['registration']['genpass_entropy'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Generated password entropy'),
+        '#default_value' => variable_get('genpass_entropy', _genpass_default_entropy()),
+        '#description' => t('Give a list of possible characters for a generated password. Note that the list must contain at least X different characters where X is defined by the length you have given above.')
+      ); 
+      $form['#validate'][] = 'genpass_user_admin_settings_validate';
+      $form['#submit'][] = 'genpass_user_admin_settings_submit';
+      break;
+      
+    case 'user_register':
+      $pass_item =& genpass_get_pass_item($form);
+      // alter the user-admin register (no mode decision)
+      if ($form['destination']['#value'] == 'admin/user/user/create' && user_access('administer users')) { 
+        $pass_item['#required'] = FALSE;
+        $form['#validate'][] = 'genpass_user_admin_register_validate';
+      } 
+      else { // alter the user-register form according to the mode
+        switch(variable_get('genpass_mode',0)){
+          case 2: 
+            $pass_item['#type'] = 'hidden';
+          case 1: 
+            $pass_item['#required'] = FALSE;
+            $form['#validate'][] = 'genpass_register_validate';
+        }
+      }
+      break;
+  }
+  
+}
+
+
+function genpass_user_admin_settings_validate($form, &$form_state) {
+  $length = $form_state['values']['genpass_length'];
+  if(!is_numeric($length) || $length < 5 || $length > 32){
+    form_set_error('genpass_length', t('The length of a generated password must be between 5 and 32')); return;
+  }
+  $entropy = $form_state['values']['genpass_entropy'];
+  $chars = array_unique(str_split($entropy));
+  if(count($chars) < $length){ 
+    form_set_error('genpass_entropy', t('The list of possible characters is not long or unique enough')); return;
+  }
+  return $form;
+}
+
+
+function genpass_user_admin_settings_submit($form, &$form_state) {
+  $mode = $form_state['values']['genpass_mode'];
+  if($mode >= 0 && $mode < 3) variable_set('genpass_mode', $mode);
+  
+  $length = $form_state['values']['genpass_length'];
+  if(is_numeric($length) && $length >= 5 && $length <= 32) variable_set('genpass_length', $length);
+  
+  $entropy = $form_state['values']['genpass_entropy'];
+  $chars = array_unique(str_split($entropy));
+  if(count($chars) >= $length) variable_set('genpass_entropy',$entropy);
+}
+
+
+
+function genpass_register_validate($form, &$form_state) {
+  if (empty($form_state['values']['pass'])) {
+    $pass = genpass_password();
+    $pass_item =& genpass_get_pass_item($form);
+    form_set_value($pass_item, $pass, $form_state);
+    drupal_set_message("Generated password");
+  }
+  return $form;
+}
+
+
+function genpass_user_admin_register_validate($form, &$form_state) {
+  if (empty($form_state['values']['pass'])) {
+    $pass = genpass_password();
+    $pass_item =& genpass_get_pass_item($form);
+    form_set_value($pass_item, $pass, $form_state);
+    drupal_set_message( "Generated password.");
+  }
+  return $form;
+}
+
+if(!function_exists('str_split')) { // patch for PHP 4.x (http://drupal.org/node/319573)
+  function str_split($string, $split_length = 1) {
+    $array = explode("\r\n", chunk_split($string, $split_length));
+    array_pop($array);
+    return $array;
+  }
+}
+

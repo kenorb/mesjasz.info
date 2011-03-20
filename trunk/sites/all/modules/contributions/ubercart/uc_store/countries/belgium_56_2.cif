@@ -1,0 +1,47 @@
+<?php
+// $Id: belgium_56_2.cif,v 1.1.2.1 2009/02/13 22:01:14 islandusurper Exp $
+
+function belgium_install() {
+  db_query("INSERT INTO {uc_countries} VALUES (56, 'Belgium', 'BE', 'BEL', 2)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(56, 'VWV', 'West-Vlaanderen'),"
+          ."(56, 'VOV', 'Oost-Vlaanderen'),"
+          ."(56, 'VAN', 'Antwerpen'),"
+          ."(56, 'VLI', 'Limburg'),"
+          ."(56, 'VBR', 'Vlaams-Brabant'),"
+          ."(56, 'BRU', 'Brussel/Bruxelles'),"
+          ."(56, 'WBW', 'Brabant-Wallon'),"
+          ."(56, 'WLG', 'Liège'),"
+          ."(56, 'WHT', 'Hainaut'),"
+          ."(56, 'WNA', 'Namur'),"
+          ."(56, 'WLX', 'Luxembourg')" );
+
+  uc_set_address_format(56, "!company\n!first_name !last_name\n!street\n!postal_code !city\n!country_name_if");
+}
+
+function belgium_update($version) {
+  switch ($version) {
+    case '2':
+      // Update existing zone codes and names.
+      db_query("UPDATE {uc_zones} SET zone_code = 'VWV' WHERE zone_code = 'WV' AND zone_country_id = 56");
+      db_query("UPDATE {uc_zones} SET zone_code = 'VOV' WHERE zone_code = 'OV' AND zone_country_id = 56");
+      db_query("UPDATE {uc_zones} SET zone_code = 'VAN' WHERE zone_code = 'AN' AND zone_country_id = 56");
+      db_query("UPDATE {uc_zones} SET zone_code = 'VLI' WHERE zone_code = 'LG' AND zone_country_id = 56");
+      db_query("UPDATE {uc_zones} SET zone_code = 'VBR' WHERE zone_code = 'VB' AND zone_country_id = 56");
+      db_query("UPDATE {uc_zones} SET zone_name = 'Brabant-Wallon', zone_code = 'WBR' WHERE zone_code = 'BW' AND zone_country_id = 56");
+      db_query("UPDATE {uc_zones} SET zone_name = 'Liège', zone_code = 'WLG' WHERE zone_code = 'LB' AND zone_country_id = 56");
+      db_query("UPDATE {uc_zones} SET zone_name = 'Hainaut', zone_code = 'WHT' WHERE zone_code = 'HT' AND zone_country_id = 56");
+      db_query("UPDATE {uc_zones} SET zone_name = 'Namur', zone_code = 'WNA' WHERE zone_code = 'NM' AND zone_country_id = 56");
+      db_query("UPDATE {uc_zones} SET zone_name = 'Luxembourg', zone_code = 'WLX' WHERE zone_code = 'LU' AND zone_country_id = 56");
+
+      // Insert Brussels.
+      db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES (056, 'BRU', 'Brussel/Bruxelles')");
+
+      break;
+  }
+}
+
+function belgium_uninstall() {
+}

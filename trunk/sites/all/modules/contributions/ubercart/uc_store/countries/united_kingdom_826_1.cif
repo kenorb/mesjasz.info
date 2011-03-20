@@ -1,0 +1,143 @@
+<?php
+// $Id: united_kingdom_826_1.cif,v 1.5.2.1 2008/11/03 21:33:50 islandusurper Exp $
+
+/**
+ * First implement hook_install() using the name of the country as the base of
+ * the function name.
+ */
+function united_kingdom_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES ('826', 'United Kingdom', 'GB', 'GBR', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(826, 'ABN', 'Aberdeen'),"
+          ."(826, 'ABNS', 'Aberdeenshire'),"
+          ."(826, 'ANG', 'Anglesey'),"
+          ."(826, 'AGS', 'Angus'),"
+          ."(826, 'ARY', 'Argyll and Bute'),"
+          ."(826, 'BEDS', 'Bedfordshire'),"
+          ."(826, 'BERKS', 'Berkshire'),"
+          ."(826, 'BLA', 'Blaenau Gwent'),"
+          ."(826, 'BRI', 'Bridgend'),"
+          ."(826, 'BSTL', 'Bristol'),"
+          ."(826, 'BUCKS', 'Buckinghamshire'),"
+          ."(826, 'CAE', 'Caerphilly'),"
+          ."(826, 'CAMBS', 'Cambridgeshire'),"
+          ."(826, 'CDF', 'Cardiff'),"
+          ."(826, 'CARM', 'Carmarthenshire'),"
+          ."(826, 'CDGN', 'Ceredigion'),"
+          ."(826, 'CHES', 'Cheshire'),"
+          ."(826, 'CLACK', 'Clackmannanshire'),"
+          ."(826, 'CON', 'Conwy'),"
+          ."(826, 'CORN', 'Cornwall'),"
+          ."(826, 'CMA', 'Cumbria'),"
+          ."(826, 'DNBG', 'Denbighshire'),"
+          ."(826, 'DERBY', 'Derbyshire'),"
+          ."(826, 'DVN', 'Devon'),"
+          ."(826, 'DOR', 'Dorset'),"
+          ."(826, 'DGL', 'Dumfries and Galloway'),"
+          ."(826, 'DUND', 'Dundee'),"
+          ."(826, 'DHM', 'Durham'),"
+          ."(826, 'ARYE', 'East Ayrshire'),"
+          ."(826, 'DUNBE', 'East Dunbartonshire'),"
+          ."(826, 'LOTE', 'East Lothian'),"
+          ."(826, 'RENE', 'East Renfrewshire'),"
+          ."(826, 'ERYS', 'East Riding of Yorkshire'),"
+          ."(826, 'SXE', 'East Sussex'),"
+          ."(826, 'EDIN', 'Edinburgh'),"
+          ."(826, 'ESX', 'Essex'),"
+          ."(826, 'FALK', 'Falkirk'),"
+          ."(826, 'FFE', 'Fife'),"
+          ."(826, 'FLINT', 'Flintshire'),"
+          ."(826, 'GLAS', 'Glasgow'),"
+          ."(826, 'GLOS', 'Gloucestershire'),"
+          ."(826, 'GDD', 'Gwynedd'),"
+          ."(826, 'HANTS', 'Hampshire'),"
+          ."(826, 'HWR', 'Herefordshire'),"
+          ."(826, 'HERTS', 'Hertfordshire'),"
+          ."(826, 'HLD', 'Highlands'),"
+          ."(826, 'IVER', 'Inverclyde'),"
+          ."(826, 'IOW', 'Isle of Wight'),"
+          ."(826, 'KNT', 'Kent'),"
+          ."(826, 'LANCS', 'Lancashire'),"
+          ."(826, 'LEICS', 'Leicestershire'),"
+          ."(826, 'LINCS', 'Lincolnshire'),"
+          ."(826, 'LDN', 'London'),"
+          ."(826, 'MAN', 'Manchester'),"
+          ."(826, 'MSY', 'Merseyside'),"
+          ."(826, 'MERT', 'Merthyr Tydfil'),"
+          ."(826, 'MLOT', 'Midlothian'),"
+          ."(826, 'MMOUTH', 'Monmouthshire'),"
+          ."(826, 'MORAY', 'Moray'),"
+          ."(826, 'NPRTAL', 'Neath Port Talbot'),"
+          ."(826, 'NEWPT', 'Newport'),"
+          ."(826, 'NOR', 'Norfolk'),"
+          ."(826, 'ARYN', 'North Ayrshire'),"
+          ."(826, 'LANN', 'North Lanarkshire'),"
+          ."(826, 'YSN', 'North Yorkshire'),"
+          ."(826, 'NHM', 'Northamptonshire'),"
+          ."(826, 'NLD', 'Northumberland'),"
+          ."(826, 'NOT', 'Nottinghamshire'),"
+          ."(826, 'ORK', 'Orkney Islands'),"
+          ."(826, 'OFE', 'Oxfordshire'),"
+          ."(826, 'PEM', 'Pembrokeshire'),"
+          ."(826, 'PERTH', 'Perth and Kinross'),"
+          ."(826, 'PWS', 'Powys'),"
+          ."(826, 'REN', 'Renfrewshire'),"
+          ."(826, 'RHON', 'Rhondda Cynon Taff'),"
+          ."(826, 'RUT', 'Rutland'),"
+          ."(826, 'BOR', 'Scottish Borders'),"
+          ."(826, 'SHET', 'Shetland Islands'),"
+          ."(826, 'SPE', 'Shropshire'),"
+          ."(826, 'SOM', 'Somerset'),"
+          ."(826, 'ARYS', 'South Ayrshire'),"
+          ."(826, 'LANS', 'South Lanarkshire'),"
+          ."(826, 'YSS', 'South Yorkshire'),"
+          ."(826, 'SFD', 'Staffordshire'),"
+          ."(826, 'STIR', 'Stirling'),"
+          ."(826, 'SFK', 'Suffolk'),"
+          ."(826, 'SRY', 'Surrey'),"
+          ."(826, 'SWAN', 'Swansea'),"
+          ."(826, 'TORF', 'Torfaen'),"
+          ."(826, 'TWR', 'Tyne and Wear'),"
+          ."(826, 'VGLAM', 'Vale of Glamorgan'),"
+          ."(826, 'WARKS', 'Warwickshire'),"
+          ."(826, 'WDUN', 'West Dunbartonshire'),"
+          ."(826, 'WLOT', 'West Lothian'),"
+          ."(826, 'WMD', 'West Midlands'),"
+          ."(826, 'SXW', 'West Sussex'),"
+          ."(826, 'YSW', 'West Yorkshire'),"
+          ."(826, 'WIL', 'Western Isles'),"
+          ."(826, 'WLT', 'Wiltshire'),"
+          ."(826, 'WORCS', 'Worcestershire'),"
+          ."(826, 'WRX', 'Wrexham')"
+        );
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.  Documentation on address formats
+  // is available at:
+  // http://www.ubercart.org/ubercart_users_guide/country_settings#address_format_docs
+  uc_set_address_format(826,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+   ."\r\n!city, !zone_code !postal_code\r\n!country_name_if");
+}
+
+/**
+ * If necessary, implement hook_update() with $version being the only argument.
+ * Add a new case for each version update, and be sure to always include the
+ * latest changes in the install function.
+ */
+function united_kingdom_update($version) {
+}
+
+/**
+ * If necessary, implement hook_uninstall().  This requires no argument.  The
+ * store module automatically removes rows from the country and zones tables
+ * related to the country, and it unsets the address format.  This function is
+ * only necessary for other things you may have included in your country's
+ * installation process.
+ */
+function united_kingdom_uninstall() {
+}

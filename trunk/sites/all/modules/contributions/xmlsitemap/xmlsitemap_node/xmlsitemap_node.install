@@ -1,0 +1,271 @@
+<?php
+// $Id: xmlsitemap_node.install,v 1.9 2008/06/09 01:25:19 darrenoh Exp $
+
+/**
+ * Implementation of hook_requirements().
+ */
+function xmlsitemap_node_requirements($phase) {
+  $t = get_t();
+  $requirements = array();
+  if (in_array($GLOBALS['db_type'], array('mysql', 'mysqli')) && version_compare(db_version(), '4.0.14') < 0) {
+    $requirements['xmlsitemap_node_sql'] = array(
+      'title' => $t('XML Sitemap: Node'),
+      'value' => $t('Your MySQL version is too low. &ldquo;XML Sitemap: Node&rdquo; requires MySQL 4.0.14 or higher.'),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function xmlsitemap_node_install() {           
+  drupal_install_schema('xmlsitemap_node');
+  _xmlsitemap_node_gsitemap_replace();
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function xmlsitemap_node_schema() {
+  $schema['xmlsitemap_node'] = array(
+    'description' => t('The base table for xmlsitemap.'),
+    'fields' => array(
+      'nid' => array(
+        'description' => t('The path of this node.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'pid' => array(
+        'description' => t('The id of the path.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'last_changed' => array(
+        'description' => t('Keeps track of new changes.'),
+        'type' => 'int',
+      ),
+      'previously_changed' => array(
+        'description' => t('Keeps track of old changes.'),
+        'type' => 'int',
+      ),
+      'last_comment' => array(
+        'description' => t('Link to last comment.'),
+        'type' => 'int',
+      ),
+      'previous_comment' => array(
+        'description' => t('Link to previous comment.'),
+        'type' => 'int',
+      ),
+      'priority_override' => array(
+        'description' => t('Stores the index value.'),
+        'type' => 'float',
+      ),
+    ),
+    'indexes' => array(
+      'pid' => array('pid'),
+    ),
+    'primary key' => array('nid'),
+  );
+
+  return $schema;
+}
+
+
+/**
+ * Transfer data from Google Sitemap if it is installed.
+ */
+function _xmlsitemap_node_gsitemap_replace() {
+  if (db_result(db_query("
+    SELECT 1 FROM {system}
+    WHERE type = 'module' AND name = 'gsitemap' AND (status = 1 OR schema_version >= 0)
+  "))) {
+    switch ($GLOBALS['db_type']) {
+      case 'mysql':
+      case 'mysqli':
+        db_query("
+          UPDATE {xmlsitemap_node} xn, {url_alias} ua SET xn.pid = ua.pid
+          WHERE xn.pid IS NULL AND ua.src = CONCAT('node/', CAST(xn.nid AS CHAR))
+        ");
+        break;
+      case 'pgsql':
+        db_query("
+          UPDATE {xmlsitemap_node} SET pid = {url_alias}.pid FROM {url_alias}
+          WHERE {xmlsitemap_node}.pid IS NULL AND {url_alias}.src = CONCAT('node/', CAST(nid AS VARCHAR))
+        ");
+        break;
+    }
+    db_query("
+      INSERT INTO {xmlsitemap_node} (nid, pid, last_changed, previously_changed, last_comment, previous_comment, priority_override)
+      SELECT nid, pid, last_changed, previously_changed, last_comment, previous_comment, priority_override FROM {gsitemap}
+    ");
+    $settings = db_query("SELECT * FROM {variable} WHERE name LIKE 'gsitemap\_%wt'");
+    while ($variable = db_fetch_object($settings)) {
+      $ts = strlen('gsitemap_');
+      $tl = strlen('wt');
+      $type = substr($variable->name, $ts, -$tl);
+      if (node_get_types('type', $type) === FALSE) {
+        variable_set("xmlsitemap_node_${type}_priority", (float) unserialize($variable->value));
+      }
+      else {
+        variable_set("xmlsitemap_node_type_priority_$type", (float) unserialize($variable->value));
+      }
+      variable_del($variable->name);
+    }
+    $variable = db_fetch_object(db_query("SELECT * FROM {variable} WHERE name = 'gsitemap_countcom'"));
+    variable_set('xmlsitemap_node_count_comments', unserialize($variable->value));
+    variable_del($variable->name);
+  }
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function xmlsitemap_node_enable() {
+  $weight = db_result(db_query("SELECT weight FROM {system} WHERE type = 'module' AND name = 'pathauto'"));
+  if ($weight !== FALSE) {
+    db_query("UPDATE {system} SET weight = %d WHERE type = 'module' AND name = 'xmlsitemap_node'", ++$weight);
+  }
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      db_query("
+        UPDATE {xmlsitemap_node} xn INNER JOIN {node} n ON xn.nid = n.nid LEFT JOIN {node_comment_statistics} s ON s.nid = xn.nid
+        SET xn.previously_changed = xn.last_changed, xn.last_changed = n.changed, xn.last_comment = s.last_comment_timestamp
+        WHERE xn.nid = n.nid AND (xn.last_changed <> n.changed OR xn.last_comment <> s.last_comment_timestamp)
+      ");
+      break;
+    case 'pgsql':
+      db_query("
+        UPDATE {xmlsitemap_node} SET previously_changed = last_changed, last_changed = {node}.changed, last_comment = {node_comment_statistics}.last_comment_timestamp
+        FROM {node} LEFT JOIN {node_comment_statistics} ON {node_comment_statistics}.nid = {node}.nid
+        WHERE {xmlsitemap_node}.nid = {node}.nid AND (last_changed <> {node}.changed OR last_comment <> {node_comment_statistics}.last_comment_timestamp)
+      ");
+      break;
+  }
+  db_query(_xmlsitemap_node_insert_query());
+  db_query(_xmlsitemap_node_updatepid_query());
+  xmlsitemap_update_sitemap();
+}
+
+/**
+ * Build SQL query for populating the xmlsitemap_node table.
+ * @return Query string
+ */
+function _xmlsitemap_node_insert_query() {
+  return "
+    INSERT INTO {xmlsitemap_node} (nid, last_changed, last_comment, previous_comment)
+    SELECT n.nid, n.changed, s.last_comment_timestamp, MAX(c.timestamp) FROM {node} n
+    LEFT JOIN {node_comment_statistics} s ON s.nid = n.nid
+    LEFT OUTER JOIN {comments} c ON c.nid = n.nid AND c.timestamp < s.last_comment_timestamp
+    LEFT JOIN {xmlsitemap_node} xn ON xn.nid = n.nid
+    WHERE xn.nid IS NULL
+    GROUP BY n.nid, n.changed, s.last_comment_timestamp
+  ";
+}
+
+/**
+ * Build SQL query for updating pids in xmlsitemap_node table.
+ * @return Query string
+ */
+function _xmlsitemap_node_updatepid_query() {
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $query = "
+        UPDATE {xmlsitemap_node} xn INNER JOIN {url_alias} ua
+        ON ua.src = CONCAT('node/', CAST(xn.nid AS CHAR))
+        SET xn.pid = ua.pid
+        WHERE xn.pid IS NULL
+      ";
+      break;
+    case 'pgsql':
+      $query = "
+        UPDATE {xmlsitemap_node}
+        SET pid = {url_alias}.pid
+        FROM {url_alias}
+        WHERE {url_alias}.src = CONCAT('node/', CAST(nid AS VARCHAR)) AND {xmlsitemap_node}.pid IS NULL
+      ";
+      break;
+  }
+  return $query;
+}
+
+/**
+ * Implementation of hook_disable().
+ */
+function xmlsitemap_node_disable() {
+  xmlsitemap_update_sitemap();
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function xmlsitemap_node_uninstall() {
+  drupal_uninstall_schema('xmlsitemap_node');
+  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'xmlsitemap\_node\_%'");
+  while ($variable = db_fetch_array($settings)) {
+    variable_del($variable->name);
+  }
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Fix scrambled values.
+ */
+function xmlsitemap_node_update_1() {
+  $ret = array();
+  $result = db_query("SELECT xn.nid FROM {xmlsitemap_node} xn LEFT JOIN {node} n ON n.nid = xn.nid WHERE n.nid IS NULL");
+  $bad_nids = array();
+  while ($node = db_fetch_object($result)) {
+    $bad_nids[] = $node->nid;
+  }
+  if (!empty($bad_nids)) {
+    $ret[] = update_sql("DELETE FROM {xmlsitemap_node} WHERE nid IN (". db_escape_string(implode(', ', $bad_nids)) .")");
+    $ret[] = update_sql(_xmlsitemap_node_insert_query());
+    xmlsitemap_update_sitemap();
+  }
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Add missing nodes.
+ */
+function xmlsitemap_node_update_2() {
+  $ret = array(update_sql(_xmlsitemap_node_insert_query()));
+  xmlsitemap_update_sitemap();
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Add missing URL aliases.
+ * Update last-changed times.
+ */
+function xmlsitemap_node_update_3() {
+  $ret = array(update_sql("UPDATE {xmlsitemap_node} SET pid = NULL WHERE pid = 0"));
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("
+        UPDATE {xmlsitemap_node} xn
+        INNER JOIN {node} n ON n.nid = xn.nid
+        LEFT JOIN {url_alias} ua ON ua.src = CONCAT('node/', CAST(xn.nid AS CHAR)) AND xn.pid IS NULL
+        SET xn.last_changed = n.changed, xn.pid = ua.pid
+      ");
+      break;
+    case 'pgsql':
+      $ret[] = update_sql("
+        UPDATE {xmlsitemap_node}
+        SET pid = {url_alias}.pid, last_changed = {node}.changed
+        FROM {node} LEFT JOIN {url_alias} ON {url_alias}.src = CONCAT('node/', CAST({xmlsitemap_node}.nid AS VARCHAR)) AND {xmlsitemap_node}.pid IS NULL
+        WHERE {xmlsitemap_node}.nid = {node}.nid
+      ");
+      break;
+  }
+  $ret = array_merge($ret, xmlsitemap_node_update_2());
+  return $ret;
+}
+

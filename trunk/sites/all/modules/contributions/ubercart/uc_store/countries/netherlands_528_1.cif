@@ -1,0 +1,29 @@
+<?php
+// $Id: netherlands_528_1.cif,v 1.5.4.1 2008/11/03 21:33:50 islandusurper Exp $
+
+function netherlands_install() {
+  db_query("INSERT INTO {uc_countries} VALUES ('528', 'Netherlands', 'NL', 'NLD', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(528, 'ZHL', 'Zuid-Holland'),"
+          ."(528, 'NHL', 'Noord-Holland'),"
+          ."(528, 'NBR', 'Noord-Brabant'),"
+          ."(528, 'GLD', 'Gelderland'),"
+          ."(528, 'UTR', 'Utrecht'),"
+          ."(528, 'LIM', 'Limburg'),"
+          ."(528, 'OVE', 'Overijssel'),"
+          ."(528, 'FRL', 'Friesland'),"
+          ."(528, 'GRO', 'Groningen'),"
+          ."(528, 'DRE', 'Drenthe'),"
+          ."(528, 'ZLD', 'Zeeland'),"
+          ."(528, 'FLD', 'Flevoland')");
+
+  uc_set_address_format(528, "!company\n!first_name !last_name\n!street1\n!street2\n!postal_code !city\n!country_name_if");
+}
+
+function netherlands_update($version) {
+}
+
+function netherlands_uninstall() {
+}

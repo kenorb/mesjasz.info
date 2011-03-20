@@ -1,0 +1,82 @@
+<?php
+// $Id: faq_ask.install,v 1.4.2.7 2008/11/24 20:13:07 nancyw Exp $
+
+/**
+ * @file
+ * This module is an add-on to the FAQ module that allows users with the 'ask question'
+ * permission to create a question which will be queued for an 'expert' to answer.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function faq_ask_schema() {
+  $schema['faq_expert'] = array(
+    'description' => t('FAQ expert to term mapping.'),
+    'fields' => array(
+      'uid' => array(
+        'description' => t('User identifier for the expert.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        ),
+      'tid' => array(
+        'description' => t('Taxonomy identifier of the terms for the expert.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        ),
+      ),
+    'primary key' => array('uid', 'tid'),
+    'indexes' => array(
+      'tid' => array('tid', 'uid'),
+      ),
+    );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function faq_ask_install() {
+  $result = drupal_install_schema('faq_ask');
+
+  if (count($result) > 0) {
+    drupal_set_message(t('faq_ask module installed.'));
+  }
+  else {
+    drupal_set_message(t('faq_ask table creation failed. Please "uninstall" the module and retry.'));
+  }
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function faq_ask_update_6100() {
+  $ret = array();
+
+  $ret[] = update_sql('INSERT INTO {faq_expert} (uid, tid) VALUES ('. variable_get('faq_ask_default_expert', 1) .', 0)'); 
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function faq_ask_uninstall() {
+  drupal_uninstall_schema('faq_ask');
+
+  variable_del('faq_expert_role');
+  variable_del('faq_ask_vocabularies');
+  variable_del('faq_ask_title_len');
+  variable_del('faq_ask_suggest');
+  variable_del('faq_ask_notify');
+  variable_del('faq_ask_default_expert');
+  variable_del('faq_unanswered_count');
+  variable_del('faq_ask_expert_advice');
+  variable_del('faq_ask_help_text');
+  variable_del('faq_ask_categorize');
+  variable_del('faq_ask_expert_own');
+  
+  drupal_set_message(t('faq_ask module uninstalled.'));
+}

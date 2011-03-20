@@ -1,0 +1,62 @@
+<?php
+// $Id: simplefeed_stats.install,v 1.1.4.2 2008/09/29 23:21:43 m3avrck Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function simplefeed_stats_install() {
+  // Create tables.
+  drupal_install_schema('simplefeed_stats');
+  drupal_set_message(t('SimpleFeed Stats successfully installed.'));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function simplefeed_stats_uninstall() {
+  drupal_uninstall_schema('simplefeed_stats');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function simplefeed_stats_schema() {
+  $schema['simplefeed_feed_stats'] = array(
+    'description' => t('Stores stats about SimpleFeed feeds.'),
+    'fields' => array(
+      'sid' => array(
+        'type' => 'serial',
+        'description' => t('Stat id.'),
+      ),
+      'fid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t('Feed id.'),
+      ),
+      'new_nodes' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('Number of new nodes per feed refresh.'),
+      ),
+      'msg' => array(
+        'type' => 'text',
+        'description' => t('Message text from feed refresh.'),
+      ),
+      'timestamp' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t('When the feed was refreshed.'),
+      ),
+    ),
+    'primary key' => array('sid'),
+    'indexes' => array(
+      'fid' => array('fid'),
+    ),
+  );
+
+  return $schema;
+}

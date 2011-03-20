@@ -1,0 +1,31 @@
+<?php
+// $Id: malaysia_458_1.cif,v 1.1.4.4 2009/02/04 13:44:33 islandusurper Exp $
+
+function malaysia_install() {
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (458, 'Malaysia', 'MY', 'MYS', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(458, 'JHR', 'Johor'),"
+          ."(458, 'KDH', 'Kedah'),"
+          ."(458, 'KTN', 'Kelantan'),"
+          ."(458, 'MLK', 'Melaka'),"
+          ."(458, 'NSN', 'Negeri Sembilan'),"
+          ."(458, 'PHG', 'Pahang'),"
+          ."(458, 'PNG', 'Pulau Pinang'),"
+          ."(458, 'PRK', 'Perak'),"
+          ."(458, 'PLS', 'Perlis'),"
+          ."(458, 'SGR', 'Selangor'),"
+          ."(458, 'TRG', 'Terengganu'),"
+          ."(458, 'SBH', 'Sabah'),"
+          ."(458, 'SRW', 'Sarawak'),"
+          ."(458, 'KUL', 'Kuala Lumpur'),"
+          ."(458, 'LBN', 'Labuan'),"
+          ."(458, 'PJY', 'Putrajaya');");
+
+  uc_set_address_format(458,
+               "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+              ."\r\n!city, !zone_code !postal_code\r\n!country_name_if");
+}
+

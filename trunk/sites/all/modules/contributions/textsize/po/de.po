@@ -1,0 +1,456 @@
+#: $Id: de.po,v 1.1.1.3.2.3 2008/04/10 13:22:09 christianzwahlen Exp $
+#: translation of textsize.pot to de.po
+#: LANGUAGE translation of Drupal (general)
+#: Copyright 2008 Zwahlen <info@zwahlendesign.ch>
+#: Generated from files:
+#:  textsize.module: n/a
+#:  textsize.info: n/a
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2008-03-12 10:27+0100\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: Zwahlen info@zwahlendesign.ch\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Language: German\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: textsize.module:16;38;52;60
+msgid "Screenshot of text size changing in the website with the select menu."
+msgstr ""
+"Bildschirmfoto vom Schriftgrad Wechsel in der Website mit dem Auswahl "
+"Menü."
+
+#: textsize.module:16
+msgid "This module display a text size changer in a block for better web accessibility. The module is a <abbr title=\"PHP: Hypertext Preprocessor\">PHP</abbr> module and use JavaScript if supported,  but no <abbr title=\"MySQL\">MySQL</abbr>. Cookies are required, for saving the style durable and in old browsers."
+msgstr ""
+"Dieses Modul stellt für eine bessere Web Zugänglichkeit einen "
+"Schriftgrad Wechsler in einem Block dar. Das Modul ist ein komplettes "
+"<abbr xml:lang=\"en\" lang=\"en\" title=\"PHP: Hypertext "
+"Preprocessor\">PHP</abbr> Modul und verwendet <span xml:lang=\"en\" "
+"lang=\"en\">JavaScript</span> wenn es unterstützt wird, aber kein "
+"<abbr xml:lang=\"en\" lang=\"en\" title=\"MySQL\">MySQL</abbr>. "
+"Cookies sind erforderlich, um die Stile dauerhaft und in alten "
+"Browsern zu speichern."
+
+#: textsize.module:17
+msgid "Features"
+msgstr "Eigenschaften"
+
+#: textsize.module:19
+msgid "<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> conform. More Information on: "
+msgstr ""
+"<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie "
+"Informationstechnik-Verordnung\">BITV</abbr> konform. Mehr Information "
+"auf: "
+
+#: textsize.module:19
+msgid "Keep the conditions: "
+msgstr "Hält folgende Bedingungen ein:"
+
+#: textsize.module:21
+msgid "<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> 1.1 (alt text in the images)."
+msgstr ""
+"<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie "
+"Informationstechnik-Verordnung\">BITV</abbr> 1.1 (alt text in den "
+"Bildern)."
+
+#: textsize.module:22
+msgid "<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> 3.1 (standard links with text and not images)."
+msgstr ""
+"<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie "
+"Informationstechnik-Verordnung\">BITV</abbr> 3.1 (standard Links mit "
+"Text und nicht Bilder)."
+
+#: textsize.module:23
+msgid "<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> 6.3 (no JavaScript rquired)."
+msgstr ""
+"<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie "
+"Informationstechnik-Verordnung\">BITV</abbr> 6.3 (kein JavaScript "
+"erforderlich)."
+
+#: textsize.module:24
+msgid "<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> 11.1 (open and standard code)."
+msgstr ""
+"<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie "
+"Informationstechnik-Verordnung\">BITV</abbr> 11.1 (offener und "
+"standard Code)."
+
+#: textsize.module:25
+msgid "<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> 13.6 (links in a list)."
+msgstr ""
+"<abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie "
+"Informationstechnik-Verordnung\">BITV</abbr> 13.6 (Links in einer "
+"Liste)."
+
+#: textsize.module:28
+msgid "No JavaScript required."
+msgstr "Kein JavaScript erforderlich."
+
+#: textsize.module:29
+msgid "jQuery suppport!"
+msgstr "jQuery Unterstützung!"
+
+#: textsize.module:30
+msgid "Using Session for speed!"
+msgstr ""
+"Verwendet <span lang=\"en\" xml:lang=\"en\">Sessions</span> für "
+"Geschwindigkeit!"
+
+#: textsize.module:31
+msgid "No <abbr xml:lang=\"en\" title=\"Cascading Style Sheet\" lang=\"en\">CSS</abbr> required."
+msgstr ""
+"Kein <abbr xml:lang=\"en\" title=\"Cascading Style Sheet\" "
+"lang=\"en\">CSS</abbr> erforderlich."
+
+#: textsize.module:32;48;117
+msgid "Block type"
+msgstr "Block Art"
+
+#: textsize.module:34;51;119
+msgid "Variable links"
+msgstr "Veränderliche Links"
+
+#: textsize.module:34;37;38
+msgid "View lager image of: "
+msgstr "Grösseres Bild ansehen von:"
+
+#: textsize.module:34
+msgid "Screenshot of text size changing in the website with the variable link list."
+msgstr ""
+"Bildschirmfoto vom Schriftgrad Wechsel in der Website mit der "
+"variablen Link Liste."
+
+#: textsize.module:35;53;120
+msgid "Fixed links"
+msgstr "Festgesetzte Links"
+
+#: textsize.module:36;55;121
+msgid "Variable image links"
+msgstr "Veränderliche Bild Links"
+
+#: textsize.module:37;57;122
+msgid "Variable image links not in a list"
+msgstr "Veränderliche Bild Links nicht in einer Liste"
+
+#: textsize.module:37;58
+msgid "Screenshot of text size changing in the website with image links."
+msgstr ""
+"Bildschirmfoto vom Schriftgrad Wechsel in der Website mit den Bild "
+"Links."
+
+#: textsize.module:38;59;123
+msgid "Select menu"
+msgstr "Auswahl Menü"
+
+#: textsize.module:41
+msgid "No images in the code (<abbr xml:lang=\"en\" title=\"Cascading Style Sheet\" lang=\"en\">CSS</abbr> generated), only one link text (for example \"Increase\")."
+msgstr ""
+"Keine Bilder im Code (<abbr xml:lang=\"en\" title=\"Cascading Style "
+"Sheet\" lang=\"en\">CSS</abbr> generiert), nur ein Link Text (zum "
+"Beispiel \"Vergrössern\")."
+
+#: textsize.module:42
+msgid "Uniform markin of menu, based on the open source browser <a href=\"http://www.mozilla.com/en-US/firefox/\">Firefox 2.0</a>."
+msgstr ""
+"Einheitliche Menü Beschriftung, basierend auf dem quelloffenem <span "
+"lang=\"en\" xml:lang=\"en\">Browser</span> <a "
+"href=\"http://www.mozilla.com/en-US/firefox/\">Firefox 2.0</a>."
+
+#: textsize.module:43
+msgid "<abbr lang=\"en\" xml:lang=\"en\" title=\"Portable Network Graphics\">PNG</abbr> images for new browsers and <abbr lang=\"en\" xml:lang=\"en\" title=\"Graphic Interchange Format\">GIF</abbr> images for old browsers (Internet Explorer 6)."
+msgstr ""
+"<abbr lang=\"en\" xml:lang=\"en\" title=\"Portable Network "
+"Graphics\">PNG</abbr> Bilder für neue Browser und <abbr lang=\"en\" "
+"xml:lang=\"en\" title=\"Graphic Interchange Format\">GIF</abbr> Bidler "
+"für alte Browser (Internet Explorer 6)."
+
+#: textsize.module:44
+msgid "Tested themes: Bluemarine, Garland."
+msgstr "Getestete Themes: Bluemarine, Garland."
+
+#: textsize.module:45
+msgid "Design editable with the function: \"theme_textsize_html()\" in template.php."
+msgstr ""
+"Design editierbar mit der Funktion: \"theme_textsize_html()\" in "
+"template.php."
+
+#: textsize.module:47;111
+msgid "Global settings"
+msgstr "Allgemeine Einstellungen"
+
+#: textsize.module:49;126
+msgid "Select the type of block."
+msgstr "Wählen Sie die Art des Blocks aus."
+
+#: textsize.module:52;54;126
+msgid "Images are showed with <abbr lang=\"en\" xml:lang=\"en\" title=\"Cascading Style Sheets\">CSS</abbr>."
+msgstr ""
+"Bilder werden mit <abbr lang=\"en\" xml:lang=\"en\" title=\"Cascading "
+"Style Sheets\">CSS</abbr> dargestellt."
+
+#: textsize.module:52;54;126
+msgid "For Web Accessibility."
+msgstr "Für barrierefreien Zugang."
+
+#: textsize.module:54
+msgid "Two static increase/decrease links and one standard link."
+msgstr ""
+"Zwei statische Vergrössern/Verkleinerungs Links und einen Standard "
+"Link."
+
+#: textsize.module:56;126
+msgid "No Link text, only images in the <abbr lang=\"en\" xml:lang=\"en\" title=\"Extensible Hypertext Markup Language\">XHTML</abbr> source code with standard 0 pixel margin."
+msgstr ""
+"Kein Link Text, nur Bilder im <abbr lang=\"en\" xml:lang=\"en\" "
+"title=\"Extensible Hypertext Markup Language\">XHTML</abbr> Quellcode "
+"mit standard 0 Pixel Aussenabstand."
+
+#: textsize.module:56
+msgid "Warning: Not for: <abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> 3.1! If JavaScript is not activated: No image change action if the cursor move over the images!"
+msgstr ""
+"Warnung: Nicht für: <abbr lang=\"de\" xml:lang=\"de\" "
+"title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> "
+"3.1! Wenn JavaScript nicht unterstützt wird: Keinen Bildwechsel "
+"Aktion wenn der Mauszeiger über die Bilder fährt!"
+
+#: textsize.module:58;126
+msgid "Warning: Links ar not in a list! Not for: <abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> 13.6!"
+msgstr ""
+"Warnung: Links sind nicht in einer Liste! Nicht für: <abbr "
+"lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie "
+"Informationstechnik-Verordnung\">BITV</abbr> 13.6!"
+
+#: textsize.module:62;130
+msgid "List display"
+msgstr "Listen Darstellung"
+
+#: textsize.module:62;136
+msgid "Set the display of the list."
+msgstr "Stellen Sie die Darstellung der Liste hier ein."
+
+#: textsize.module:62
+msgid "Style"
+msgstr "Darstellung"
+
+#: textsize.module:62;132
+msgid "normal"
+msgstr "normal"
+
+#: textsize.module:62
+msgid "or"
+msgstr "oder"
+
+#: textsize.module:62;133
+msgid "inline"
+msgstr "in einer Linie"
+
+#: textsize.module:63;140
+msgid "Text display"
+msgstr "Text Darstellung"
+
+#: textsize.module:63;146
+msgid "By hide text in the links, it shows only the logos."
+msgstr "Beim Verstecken des Textes in den Links, werden nur Logos dargestellt."
+
+#: textsize.module:63;143
+msgid "Hide text in the links"
+msgstr "Verberge Text in den Links"
+
+#: textsize.module:63;146
+msgid "Not for links with images in the <abbr lang=\"en\" xml:lang=\"en\" title=\"Extensible Hypertext Markup Language\">XHTML</abbr> source code."
+msgstr ""
+"Nicht für Links mit Bilder im <abbr lang=\"en\" xml:lang=\"en\" "
+"title=\"Extensible Hypertext Markup Language\">XHTML</abbr> Quellcode."
+
+#: textsize.module:64
+msgid "The <abbr lang=\"en\" xml:lang=\"en\" title=\"Portable Network Graphics\">PNG</abbr> and <abbr lang=\"en\" xml:lang=\"en\" title=\"Graphic Interchange Format\">GIF</abbr> images are in the directory \"/modules/textsize/images/\" and the source file in \"/modules/textsize/images/source/\"."
+msgstr ""
+"Die <abbr lang=\"en\" xml:lang=\"en\" title=\"Portable Network "
+"Graphics\">PNG</abbr> und <abbr lang=\"en\" xml:lang=\"en\" "
+"title=\"Graphic Interchange Format\">GIF</abbr> Bilder sind im "
+"Verzeichnis \"/modules/pagestyle/images/\" und die Quelldatei in "
+"\"/modules/textsize/images/source/\"."
+
+#: textsize.module:65;150
+msgid "Current text size display"
+msgstr "Aktuelle Text Grösse"
+
+#: textsize.module:65;156
+msgid "By hide current text size, it shows no text and code."
+msgstr ""
+"Wenn die aktuelle Text Grösse verborgen wird, zeigt es keinen Text "
+"und Code an."
+
+#: textsize.module:66;160
+msgid "Advanced settings"
+msgstr "Erweiterte Einstellungen"
+
+#: textsize.module:67;166
+msgid "Increases/decreases step"
+msgstr "Vergrösserungs-/Verkleinerungsschritt"
+
+#: textsize.module:67
+msgid "Percentage by which each click increases/decreases the text size. The value have to be between 10-100&#037; and a number."
+msgstr ""
+"Prozentwert um den die Schriften pro Klick vergrössert/verkleinert "
+"werden. Der standard Vergrösserungs-/Verkleinerungsschritt ist "
+"10&#037;. und der Wert muss zwischen 10-100&#037; und eine Zahl sein."
+
+#: textsize.module:67;184
+msgid "Text Size Normal"
+msgstr "Schriftgrad Normal"
+
+#: textsize.module:67;204
+msgid "The default normal text size is 100&#037;. The value have to be between 50-200&#037; and a number."
+msgstr ""
+"Der standard normale Schriftgrad  ist 100&#037;. Der Wert muss "
+"zwischen 50-200&#037; und eine Zahl sein."
+
+#: textsize.module:68;208
+msgid "Link separator"
+msgstr "Link Trenner"
+
+#: textsize.module:68;212
+msgid "If you set the links not in a list, you can enter a hidden link seperator (like &brvbar;) or leave it blank for none. Standard is \" | \". The value have to be text or special characters."
+msgstr "Wenn Sie die Links nicht in einer Liste darstellen, können Sie einen versteckten Link Trenner einfügen (wie &brvbar;), oder Sie lassen es leer für keinen. Standard ist \" | \". Der Wert muss Text oder Sonderzeichen sein."
+
+#: textsize.module:69
+msgid "Important informations"
+msgstr "Wichtige Informationen"
+
+#: textsize.module:70
+msgid "Warning: For Internet Explorer: Your theme have to use font sitze with \"em\" or \"%\", not pixel or points!"
+msgstr ""
+"Warnung: Für Internet Explorer: Ihr Theme muss eine Schriftgrösse "
+"mit \"em\" oder \"%\" verwenden, nicht Pixel oder Punkte!"
+
+#: textsize.module:71
+msgid "If you are using a theme with \"font-size 0.9em\" in the CSS (like the garland theme), set the text size normal to 90% or delete the \"font-size\" and \"line-height\" values for the body in your theme."
+msgstr ""
+"Wenn Sie ein Theme mit \"font-size 0.9em\" im CSS verwenden (wie das "
+"Garland Theme), stellen Sie den normalen Schriftgrad auf 90% ein oder "
+"löschen Sie den <span lang=\"en\" "
+"xml:lang=\"en\">\"font-size\"</span> <span lang=\"en\" "
+"xml:lang=\"en\">\"line-height\"</span> Werte für den <span "
+"lang=\"en\" xml:lang=\"en\">body</span> in Ihrem Theme."
+
+#: textsize.module:73
+msgid "Alternate fix for the Garland Theme. Open the file \"themes/garland/style.css\" and edit the code on line 15 for the body element. Delete the code:"
+msgstr "Alternative Lösung für das Garland Theme. Öffnen Sie die Datei \"themes/garland/style.css\" und bearbeiten Sie den Code auf der Zeile 15 für das Body Element. Löschen Sie den Code:"
+
+#: textsize.module:74
+msgid "and add:"
+msgstr "und fügen Sie folgendes hinzu:"
+
+#: textsize.module:90
+msgid "Text Size configuration"
+msgstr "Schriftgrad Konfiguration."
+
+#: textsize.module:91
+msgid "Settings for the display and values."
+msgstr "Einstellungen für die Darstellung und Werte."
+
+#: textsize.module:105;256;402;427;456;484;512
+msgid "Increase"
+msgstr "Vergrössern"
+
+#: textsize.module:106;257;403;428;457;485;513
+msgid "Decrease"
+msgstr "Verkleinern"
+
+#: textsize.module:107;258;404;429;458;486;514
+msgid "Normal"
+msgstr "Normal"
+
+#: textsize.module:126
+msgid "Warning: Not for: <abbr lang=\"de\" xml:lang=\"de\" title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> 3.1! No hover action if JavaScript is not activated!"
+msgstr ""
+"Warnung: Nicht für: <abbr lang=\"de\" xml:lang=\"de\" "
+"title=\"Barrierefreie Informationstechnik-Verordnung\">BITV</abbr> "
+"3.1! Keine <span lang=\"en\" xml:lang=\"en\">\"hover\"</span> Aktion "
+"wenn <span lang=\"en\" xml:lang=\"en\">JavaScript</span> nicht "
+"aktiviert ist!"
+
+#: textsize.module:142
+msgid "Show text in the links"
+msgstr "Zeige Text in den Links"
+
+#: textsize.module:152
+msgid "Show current text size"
+msgstr "Zeige aktuelle Text Grösse"
+
+#: textsize.module:153
+msgid "Hide current text size"
+msgstr "Verberge aktuelle Text Grösse"
+
+#: textsize.module:180
+msgid "Percentage by which each click increases/decreases the text size. The default increases/decreases step is 10&#037; and the value have to be between 10-100&#037; and a number."
+msgstr ""
+"Prozentwert um den die Schriften pro Klick vergrössert/verkleinert "
+"werden. Der standard Vergrösserungs-/Verkleinerungsschritt  ist "
+"10&#037;. und der Wert muss zwischen 10-100&#037; und eine Zahl sein."
+
+#: textsize.module:228
+msgid "Please enter a number in \"Text Size Normal\"."
+msgstr "Bitte geben Sie eine Zahl in \"Schriftgrad Normal\" ein."
+
+#: textsize.module:231
+msgid "Default font size setting should between 10-200&#037;."
+msgstr "Standard Schriftgrad sollte zwischen 10-200&#037; sein."
+
+#: textsize.module:234
+msgid "Please enter a number in \"Increases/decreases step\"."
+msgstr ""
+"Bitte geben Sie eine Zahl in "
+"\"Vergrösserungs-/Verkleinerungsschritt\" ein."
+
+#: textsize.module:237
+msgid "Increase/decreases steps value setting should between 10-100&#037;."
+msgstr "Vergrösserungs-/Verkleinerungsschritt sollte zwischen 10-100&#037;."
+
+#: textsize.module:240
+msgid "Please enter text or special characters in \"Link seperator\"."
+msgstr "Bitte geben Sie Text oder Sonderzeichen in \"Link Trenner\" ein."
+
+#: textsize.module:260;341;406;431;460;488;516
+msgid "Current Size"
+msgstr "Aktuelle Grösse"
+
+#: textsize.module:261;264;291;407;432;461;489;517;519 textsize.info:0
+msgid "Text Size"
+msgstr "Schriftgrad"
+
+#: textsize.module:328
+msgid "Save"
+msgstr "Speichern"
+
+#: textsize.module:81
+msgid "administer textsize"
+msgstr "Schriftgrad verwalten"
+
+#: textsize.module:81
+msgid "access textsize content"
+msgstr "Schriftgrad Inhalt zugreiffen"
+
+#: textsize.module:0
+msgid "textsize"
+msgstr "Schriftgrad"
+
+#: textsize.info:0
+msgid "Display a text size changer on the page for better web accessibility."
+msgstr ""
+"Zeigt für die bessere Webzugänglichkeit einen Schriftgrad Wechsler "
+"auf der Seite an."
+
+#: textsize.info:0
+msgid "Other"
+msgstr "Andere"
+

@@ -1,0 +1,581 @@
+# $Id: de.po,v 1.2 2008/08/01 18:18:11 jvandyk Exp $
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: German\n"
+"POT-Creation-Date: 2008-08-01 09:07-0500\n"
+"PO-Revision-Date: 2008-08-01 20:04+0100\n"
+"Last-Translator: Frank Tartler <frank.tartler@googlemail.com>\n"
+"Language-Team: Frank Tartler <frank.tartler@googlemail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: workflow.module:14
+msgid "You are currently viewing the possible transitions to and from workflow states. The state is shown in the left column; the state to be moved to is to the right. For each transition, check the box next to the role(s) that may initiate the transition. For example, if only the \"production editor\" role may move a node from Review state to the Published state, check the box next to \"production editor\". The author role is built in and refers to the user who authored the node."
+msgstr "Hier werden die möglichen Übergänge von und zu Arbeitsablauf-Stati angezeigt. Der Status wird in der linken Spalte angezeigt; der Status, zu dem gewechselt werden soll, steht rechts. Für jeden Übergang muss das Ankreuzkästchen für jede Rolle ausgewählt werden, die den Übergang vornehmen darf. Wenn zum Beispiel nur die Rolle ‚Chefredaktion‘ einen Beitrag vom Status ‚Durchsehen‘ zum Status ‚Veröffentlicht‘ wechseln darf, muss das Kästchen bei ‚Chefredaktion‘ ausgewählt werden. Die Rolle ‚Autor‘ ist eingebaut und bezieht sich auf den Benutzer, der den Beitrag erstellt hat."
+
+#: workflow.module:16
+msgid "To get started, provide a name for your workflow. This name will be used as a label when the workflow status is shown during node editing."
+msgstr "Zunächst muss der Arbeitsablauf einen Namen erhalten. Der Name wird als Bezeichnung verwendet, wenn der Arbeitsablauf-Status beim Bearbeiten des Beitrags angezeigt wird."
+
+#: workflow.module:18;1282
+msgid "Enter the name for a state in your workflow. For example, if you were doing a meal workflow it may include states like <em>shop</em>, <em>prepare</em>, <em>eat</em>, and <em>clean up</em>."
+msgstr "Es muss ein Name für den Status im Arbeitsablauf eingegeben werden. Ein Arbeitsablauf ‚Mahlzeit‘, würde zum Beispiel Stati wie <em>einkaufen</em>, <em>Essen zubereiten</em>, <em>essen</em> und <em>abwaschen</em> beinhalten."
+
+#: workflow.module:20
+#, fuzzy
+msgid "Use this page to set actions to happen when transitions occur. To configure actions, use the <a href=\"@link\">actions settings page</a>."
+msgstr "Auf dieser Seite können Aktionen festgelegt werden, die ausgelöst werden, wenn Übergänge stattfinden. Um <a href=\"@link\">Aktionen zu konfigurieren</a> muss das Modul ‚Actions‘ verwendet werden."
+
+#: workflow.module:188
+msgid "Current state: !state"
+msgstr "Aktueller Status: !state"
+
+#: workflow.module:242
+msgid "Date"
+msgstr "Datum"
+
+#: workflow.module:242
+msgid "Old State"
+msgstr "Alter Status"
+
+#: workflow.module:242
+msgid "New State"
+msgstr "Neuer Status"
+
+#: workflow.module:242
+msgid "By"
+msgstr "Von"
+
+#: workflow.module:242;527;1686
+msgid "Comment"
+msgstr "Kommentar"
+
+#: workflow.module:242
+msgid "Workflow History"
+msgstr "Arbeitsablauf-Protokoll"
+
+#: workflow.module:244
+msgid "*State is no longer available."
+msgstr "*Status ist nicht mehr verfügbar."
+
+#: workflow.module:281;566;1161;1166;1453;1579;1602;1783
+msgid "(creation)"
+msgstr "(Erstellung)"
+
+#: workflow.module:303
+msgid "Change %s state"
+msgstr "Ändere Status %s"
+
+#: workflow.module:311
+msgid "Submit"
+msgstr "Speichern"
+
+#: workflow.module:382
+msgid "Node deleted"
+msgstr "Beitrag gelöscht"
+
+#: workflow.module:452
+msgid "@node_title is scheduled for state change to %state_name on !scheduled_date"
+msgstr "Für @node_title ist ein zeitgesteuerter Statuswechsel zu %state_name festgelegt auf !scheduled_date"
+
+#: workflow.module:500
+msgid "Schedule"
+msgstr "Zeitplan"
+
+#: workflow.module:502
+msgid "Immediately"
+msgstr "Sofort"
+
+#: workflow.module:503
+msgid "Schedule for state change at:"
+msgstr "Zeitgesteuerten Statuswechsel festlegen auf"
+
+#: workflow.module:520
+msgid "Please enter a time in 24 hour (eg. HH:MM) format. If no time is included, the default will be midnight on the specified date. The current time is: "
+msgstr "Zeit im 24-Stunden-Format eingeben. Wenn keine Zeit enthalten ist, wird standardmäßig Mitternacht des angegebenen Datums verwendet. Die aktuelle Zeit ist:"
+
+#: workflow.module:528
+msgid "A comment to put in the workflow log."
+msgstr "Ein Kommentar für das Arbeitsablauf-Protokoll."
+
+#: workflow.module:686
+msgid "Change workflow state of post to next state"
+msgstr "Ändere den Arbeitsablauf-Status eines Beitrages zum nächsten Status."
+
+#: workflow.module:696
+msgid "Change workflow state of post to new state"
+msgstr "Ändere den Arbeitsablauf-Status eines Beitrages zum nächsten Status."
+
+#: workflow.module:760
+msgid "Target state"
+msgstr "Ziel-Status"
+
+#: workflow.module:761
+msgid "Please select that state that should be assigned when this action runs."
+msgstr "Der Status, der beim Ausführen der Aktion zugewiesen werden soll, muss ausgewählt werden."
+
+#: workflow.module:767
+msgid "Force transition"
+msgstr "Übergang erzwingen"
+
+#: workflow.module:768
+msgid "If this box is checked, the new state will be assigned even if workflow permissions disallow it."
+msgstr "Wenn dieses Ankreuzkästchen angekreuzt ist wird der neue Status auch dann zugewiesen, wenn die Arbeitsablauf-Berechtigungen dies nicht erlauben."
+
+#: workflow.module:773
+msgid "Message"
+msgstr "Nachricht"
+
+#: workflow.module:774
+msgid "This message will be written into the workflow history log when the action runs. You may include the following variables: %state, %title"
+msgstr "Diese Nachricht wird in das Arbeitsablauf-Protokoll geschrieben, wenn die Aktion läuft. Folgende Variablen können verwendet werden: %stat, %title"
+
+#: workflow.module:775
+msgid "Action set %title to %state."
+msgstr ""
+
+#: workflow.module:940;1108
+msgid "Workflow Name"
+msgstr "Arbeitsablauf-Name"
+
+#: workflow.module:946
+msgid "Add Workflow"
+msgstr "Arbeitsablauf hinzufügen"
+
+#: workflow.module:961
+msgid "Please provide a nonblank name for the new workflow."
+msgstr "Es muss ein nicht-leerer Name für den Arbeitsablauf angegeben werden."
+
+#: workflow.module:965
+msgid "A workflow with the name %name already exists. Please enter another name for your new workflow."
+msgstr "Es gibt schon einen Arbeitsablauf mit dem Namen %name. Es muss ein anderer Name für den neuen Arbeitsablauf eingegeben werden."
+
+#: workflow.module:979
+msgid "The workflow %name was created. You should now add states to your workflow."
+msgstr "Der Arbeitsablauf %name wurde erstellt. Jetzt sollten dem Arbeitsablauf Stati hinzugefügt werden."
+
+#: workflow.module:1003
+msgid "Are you sure you want to delete %title? All nodes that have a workflow state associated with this workflow will have those workflow states removed."
+msgstr "Soll %title wirklich gelöscht werden? Bei allen Beiträgen, die für diesen Arbeitsablauf einen Arbeitsablauf-Status zugewiesen haben, wird der Arbeitsablauf-Status entfernt."
+
+#: workflow.module:1005;1629
+msgid "This action cannot be undone."
+msgstr "Dieser Vorgang kann nicht rückgängig gemacht werden."
+
+#: workflow.module:1006;1514;1538;1630
+msgid "Delete"
+msgstr "Löschen"
+
+#: workflow.module:1007;1631
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: workflow.module:1021
+msgid "The workflow %name with all its states was deleted."
+msgstr "Der Arbeitsablauf %name wurde mit allen Stati gelöscht."
+
+#: workflow.module:1035
+#: workflow_access.module:63
+msgid "author"
+msgstr "Autor"
+
+#: workflow.module:1054
+msgid "From"
+msgstr "Von"
+
+#: workflow.module:1054
+msgid "To"
+msgstr "Nach"
+
+#: workflow.module:1064
+msgid "%role may do these transitions:"
+msgstr "%role kann folgende Übergänge vornehmen:"
+
+#: workflow.module:1069;1657
+msgid "None"
+msgstr ""
+
+#: workflow.module:1103
+msgid "Workflow information"
+msgstr "Arbeitsablauf-Informationen"
+
+#: workflow.module:1114
+msgid "Workflow tab permissions"
+msgstr "Berechtigungen für den Reiter ‚Arbeitsablauf‘"
+
+#: workflow.module:1122
+msgid "Select any roles that should have access to the workflow tab on nodes that have a workflow."
+msgstr "Die Rollen müssen ausgewählt werden, die Zugriff auf den Reiter ‚Arbeitsablauf‘ haben, wenn ein Beitrag einen Arbeitsablauf hat."
+
+#: workflow.module:1130;1292
+msgid "Save"
+msgstr "Speichern"
+
+#: workflow.module:1135
+msgid "Permissions Summary"
+msgstr "Zusammenfassung der Berechtigungen"
+
+#: workflow.module:1154
+msgid "Edit workflow %name"
+msgstr "Arbeitsablauf %name bearbeiten"
+
+#: workflow.module:1157
+msgid "From / To "
+msgstr "Von / Nach"
+
+#: workflow.module:1190;1447
+msgid "There are no states defined for this workflow."
+msgstr "Für diesen Arbeitsablauf sind keine Stati definiert."
+
+#: workflow.module:1209
+msgid "A workflow with the name %name already exists. Please enter another name for this workflow."
+msgstr "Es gibt schon einen Arbeitsablauf %name. Für diesen Arbeitsablauf muss ein anderer Name eingegeben werden."
+
+#: workflow.module:1215
+msgid "Please provide a nonblank name for this workflow."
+msgstr "Der Arbeitsablauf muss einen nicht-leeren Namen erhalten."
+
+#: workflow.module:1230
+msgid "Please give the author permission to go from %creation to at least one state!"
+msgstr "Der Autor muss mindestens die Berechtigung haben, von %creation zu einem anderen Status zu gehen."
+
+#: workflow.module:1243
+msgid "The workflow was updated."
+msgstr "Der Arbeitsablauf wurde aktualisiert."
+
+#: workflow.module:1261
+msgid "Edit workflow state %state"
+msgstr "Arbeitsablauf-Status %state bearbeiten"
+
+#: workflow.module:1272
+msgid "Add a new state to workflow %workflow"
+msgstr "Einen neuen Status zum Arbeitsablauf %workflow hinzufügen"
+
+#: workflow.module:1277
+msgid "State name"
+msgstr "Status-Name"
+
+#: workflow.module:1286
+msgid "Weight"
+msgstr "Gewichtung"
+
+#: workflow.module:1288
+msgid "In listings, the heavier states will sink and the lighter states will be positioned nearer the top."
+msgstr "In Listen sinken schwerere Stati nach unten und die leichteren Stati werden weiter oben platziert."
+
+#: workflow.module:1309
+msgid "Please provide a nonblank name for this state."
+msgstr "Ein nicht-leerer Name muss für diesen Status eingegeben werden."
+
+#: workflow.module:1313
+msgid "A state with the name %state already exists in this workflow. Please enter another name for this state."
+msgstr "Es gibt in diesem Arbeitsablauf schon einen Status mit dem Namen %state. Für diesen Status muss ein anderer Name eingegeben werden."
+
+#: workflow.module:1319
+msgid "Please provide a nonblank name for the new state."
+msgstr "Ein nicht-leerer Name muss für den neuen Status eingegeben werden."
+
+#: workflow.module:1323
+msgid "A state with the name %state already exists in this workflow. Please enter another name for your new state."
+msgstr "Es gibt in diesem Arbeitsablauf schon einen Status mit dem Namen %state. Für den neuen Status muss ein anderer Name angegeben werden."
+
+#: workflow.module:1336
+msgid "The workflow state was updated."
+msgstr "Der Arbeitsablauf-Status wurde aktualisiert."
+
+#: workflow.module:1339
+msgid "The workflow state %name was created."
+msgstr "Der Arbeitsablauf-Status %name wurde erstellt."
+
+#: workflow.module:1505;64
+msgid "Add state"
+msgstr "Status hinzufügen"
+
+#: workflow.module:1508
+msgid "Actions"
+msgstr "Aktionen"
+
+#: workflow.module:1511;1534
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: workflow.module:1549
+msgid "State"
+msgstr "Status"
+
+#: workflow.module:1550;1558
+msgid "Operations"
+msgstr "Operationen"
+
+#: workflow.module:1558;1702;36;85
+#: workflow.info:0;0
+#: workflow_access.info:0
+msgid "Workflow"
+msgstr "Arbeitsablauf"
+
+#: workflow.module:1562
+msgid "No workflows have been added. Would you like to <a href=\"@link\">add a workflow</a>?"
+msgstr "Es wurden keine neuen Arbeitsabläufe hinzugefügt. Soll <a href=\"@link\">ein Arbeitsablauf hinzugefügt</a> werden?"
+
+#: workflow.module:1610
+msgid "State to be assigned to orphaned nodes"
+msgstr "Status, der verwaisten Beiträgen zugewiesen wird"
+
+#: workflow.module:1627
+msgid "Are you sure you want to delete %title (and all its transitions)?"
+msgstr "Soll %title (und alle zugehörigen Übergänge) gelöscht werden?"
+
+#: workflow.module:1646
+msgid "The workflow state %name was deleted."
+msgstr "Der Arbeitsablauf-Status %name wurde gelöscht."
+
+#: workflow.module:1672
+msgid "Each content type may have a separate workflow. The form for changing workflow state can be displayed when editing a node, editing a comment for a node, or both."
+msgstr "Jeder Inhaltstyp kann einen eigenen Arbeitsablauf haben. Das Formular zum Ändern des Arbeitsablauf-Status kann beim Bearbeiten eines Beitrags, eines Kommentars oder bei beidem angezeigt werden."
+
+#: workflow.module:1685
+msgid "Post"
+msgstr "Beitrag"
+
+#: workflow.module:1693
+msgid "Save workflow mapping"
+msgstr "Arbeitsablauf-Zuordnung speichern"
+
+#: workflow.module:1702
+msgid "Content Type"
+msgstr "Inhaltstyp"
+
+#: workflow.module:1702
+msgid "Display Workflow Form for:"
+msgstr "Arbeitsablauf-Formular anzeigen für:"
+
+#: workflow.module:1721
+msgid "The workflow mapping was saved."
+msgstr "Die Arbeitsablauf-Zuordnung wurde gespeichert."
+
+#: workflow.module:1923
+msgid "Previous state deleted"
+msgstr "Vorheriges Status gelöscht"
+
+#: workflow.module:2151;2176;2183;2225
+msgid "Workflow: state"
+msgstr "Arbeitsablauf: Status"
+
+#: workflow.module:2156
+msgid "Include only nodes in the selected workflow states."
+msgstr "Nur Beiträge mit den ausgewählten Arbeitsablauf-Stati einschließen."
+
+#: workflow.module:2178
+msgid "Order nodes by workflow state."
+msgstr "Inhalte nach Arbeitsablauf Status sortieren"
+
+#: workflow.module:2185
+msgid "Display the workflow state of the node."
+msgstr "Den Arbeitsablauf Status des Beitrages anzeigen."
+
+#: workflow.module:2208
+msgid "Workflow: comment"
+msgstr "Arbeitsablauf: Kommentar"
+
+#: workflow.module:2210
+msgid "Display the most recent workflow comment of the node."
+msgstr "Den neuesten Arbeitsablauf-Kommentar des Beitrags anzeigen."
+
+#: workflow.module:2227
+msgid "The workflow argument allows users to filter a view by workflow state."
+msgstr "Das Arbeitsablauf-Argument erlaubt es Benutzern, eine Ansicht nach dem Arbeitsablauf-Status zu filtern."
+
+#: workflow.module:2292
+msgid "view"
+msgstr "anzeigen"
+
+#: workflow.module:2333
+msgid "When %type moves from %state to %target_state"
+msgstr "Wenn %type von %state nach %target_state wechselt"
+
+#: workflow.module:2345
+msgid "No transitions have been set up. To enable the assignment of actions, edit the workflow to assign permissions for roles to do transitions. After that is completed, transitions will appear here and you will be able to assign actions to them. The workflow must also be assigned to at least one content type."
+msgstr "Es wurden keine Übergänge eingerichtet. Um Aktionen zuweisen zu können muss der Arbeitsablauf muss bearbeitet werden und Rollen die Berechtigung zugewiesen werden, Übergänge vorzunehmen. Danach erscheinen hier Übergänge, denen Aktionen zugewiesen werden können. Der Arbeitsablauf muss auch mindestens einem Inhaltstyp zugewiesen werden."
+
+#: workflow.module:451;636;643;653;669;716;978;1020;1338;1645;2051;2088;0
+msgid "workflow"
+msgstr "Arbeitsablauf"
+
+#: workflow.module:451
+msgid "@node_title scheduled for state change to %state_name on !scheduled_date"
+msgstr "Für @node_title ist ein zeitgesteuerter Statuswechsel zu %state_name festgelegt auf !scheduled_date"
+
+#: workflow.module:636
+msgid "Attempt to go to nonexistent transition (from %old to %new)"
+msgstr "Versuch eines nicht bestehenden Übergangs (von %old nach %new)"
+
+#: workflow.module:643
+msgid "User %user not allowed to go from state %old to %new"
+msgstr "Der Benutzer %user darf den Status nicht von %old auf %new setzen."
+
+#: workflow.module:653
+msgid "Transition vetoed by module."
+msgstr "Übergang vom Modul verhindert."
+
+#: workflow.module:669
+msgid "State of @type %node_title set to @state_name"
+msgstr "Status von %type %node_title wurde auf %state_name gesetzt"
+
+#: workflow.module:716
+msgid "Unable to get current workflow state of node %nid."
+msgstr "Der aktuelle Arbeitsablauf-Status für Beitrag %nid kann nicht ermittelt werden."
+
+#: workflow.module:978
+msgid "Created workflow %name"
+msgstr "Arbeitsablauf %name wurde erstellt"
+
+#: workflow.module:1020
+msgid "Deleted workflow %name with all its states"
+msgstr "Der Arbeitsablauf %name wurde mit allen seinen Stati gelöscht"
+
+#: workflow.module:1338
+msgid "Created workflow state %name"
+msgstr "Arbeitsablauf-Status %name wurde erstellt"
+
+#: workflow.module:1645
+msgid "Deleted workflow state %name"
+msgstr "Arbeitsablauf-Status %name wurde gelöscht"
+
+#: workflow.module:2051
+msgid "Unable to get actions associated with a transition because the actions module is not enabled."
+msgstr "Mit einem Übergang verbundene Aktionen können nicht ermittelt werden, da das Modul ‚Actions‘ nicht aktiviert ist."
+
+#: workflow.module:2088
+msgid "Action %action has been unassigned."
+msgstr "Die Zuweisung der Aktion %action wurde aufgehoben."
+
+#: workflow.module:2292
+msgid "content"
+msgstr "Inhalt"
+
+#: workflow.module:2292
+msgid "%type: scheduled transition of %title."
+msgstr "%type: zeitgesteuerter Übergang von %title."
+
+#: workflow.module:1611
+msgid "Since you are deleting a workflow state, a node which is in that state will be orphaned, and must be reassigned to a new state. Please choose the new state."
+msgid_plural "Since you are deleting a workflow state, @count nodes which are in that state will be orphaned, and must be reassigned to a new state. Please choose the new state."
+msgstr[0] "Beim Löschen eines Arbeitsablauf-Status wäre ein Beitrag, der diesen Status hat, verwaist und es muss ihm ein neuer Status zugewiesen werden. Der neue Status muss ausgewählt werden."
+msgstr[1] "Beim Löschen eines Arbeitsablauf-Status wären @count Beiträge, die diesen Status haben, verwaist und es muss ihnen ein neuer Status zugewiesen werden. Der neue Status muss ausgewählt werden."
+
+#: workflow.module:28
+msgid "administer workflow"
+msgstr "Arbeitsablauf verwalten"
+
+#: workflow.module:28
+msgid "schedule workflow transitions"
+msgstr "Zeitplanung für Arbeitsablauf-Übergänge"
+
+#: workflow.module:39
+#: workflow.info:0
+msgid "Allows the creation and assignment of arbitrary workflows to node types."
+msgstr "Ermöglicht es, beliebige Arbeitsabläufe zu erstellen und zuzuweisen."
+
+#: workflow.module:42
+msgid "Edit workflow"
+msgstr "Arbeitsablauf bearbeiten"
+
+#: workflow.module:49
+msgid "List"
+msgstr ""
+
+#: workflow.module:56
+msgid "Add workflow"
+msgstr "Arbeitsablauf hinzufügen"
+
+#: workflow.module:71
+msgid "Delete State"
+msgstr "Status löschen"
+
+#: workflow.module:78
+msgid "Delete workflow"
+msgstr "Arbeitsablauf löschen"
+
+#: workflow_access.module:67
+msgid "Access control"
+msgstr "Zugriffsberechtigung"
+
+#: workflow_access.module:113
+msgid "Roles who can view posts in this state"
+msgstr "Rollen, die Beiträge in diesem Status sehen können"
+
+#: workflow_access.module:120
+msgid "Roles who can edit posts in this state"
+msgstr "Rollen, die Beiträge in diesem Status bearbeiten können"
+
+#: workflow_access.module:127
+msgid "Roles who can delete posts in this state"
+msgstr "Rollen, die Beiträge in diesem Status löschen können"
+
+#: workflow_access.module:168
+msgid "Workflow access permissions updated."
+msgstr "Zugriffsberechtigungen auf den Arbeitsablauf wurden aktualisiert."
+
+#: workflow_access.module:0
+msgid "workflow_access"
+msgstr ""
+
+#: workflow_access.info:0
+msgid "Workflow access"
+msgstr ""
+
+#: workflow_access.info:0
+msgid "Content access control based on workflows and roles."
+msgstr "Zugriffsberechtigungen, basierend auf Arbeitsabläufen und Rollen."
+
+#~ msgid ""
+#~ "Enter the name for a state in your workflow. For example, if you were "
+#~ "doing a meal workflow it may include states like <em>shop</em>, "
+#~ "<em>prepare food</em>, <em>eat</em>, and <em>clean up</em>."
+#~ msgstr ""
+#~ "Es muss ein Name für den Status im Arbeitsablauf eingegeben werden. Ein "
+#~ "Arbeitsablauf ‚Mahlzeit‘, würde zum Beispiel Stati wie <em>einkaufen</"
+#~ "em>, <em>Essen zubereiten</em>, <em>essen</em> und <em>abwaschen</em> "
+#~ "beinhalten."
+#~ msgid "Workflow actions"
+#~ msgstr "Arbeitsablauf-Aktionen"
+#~ msgid "Enables users to manage content using workflow states."
+#~ msgstr ""
+#~ "Erlaubt es den Benutzer Inhalte mit Arbeitsablauf-Status zu verwalten"
+#~ msgid "Changed workflow state of node id %id to %state."
+#~ msgstr ""
+#~ "Der Arbeitsablauf-Status des Beitrags mit der Nummer %id wurde auf %state "
+#~ "gesetzt."
+#~ msgid "Workflow updated."
+#~ msgstr "Arbeitsablauf aktualisiert."
+#~ msgid "Name"
+#~ msgstr "Name"
+#~ msgid "add state"
+#~ msgstr "Status hinzufÃ¼gen"
+#~ msgid "Are you sure you want to delete the action %title?"
+#~ msgstr "Sind Sie sich sicher, dass Sie die Aktion %title lÃ¶schen wollen?"
+#~ msgid "You can add it again later if you wish."
+#~ msgstr "Sie kÃ¶nnen sie spÃ¤ter wieder hinzufÃ¼gen, falls gewÃ¼nscht."
+#~ msgid ""
+#~ "Before you can assign actions you must install and enable the actions "
+#~ "module."
+#~ msgstr ""
+#~ "Bevor Sie Aktionen hinzufÃ¼gen kÃ¶nnen mussen Sie das Aktionen Modul "
+#~ "installieren und aktivieren."
+#~ msgid "Transition"
+#~ msgstr "Ãbergang"
+#~ msgid "remove"
+#~ msgstr "LÃ¶schen"
+#~ msgid "Add"
+#~ msgstr "HinzufÃ¼gen"
+#~ msgid "You must first %link before you can assign actions."
+#~ msgstr "Sie mÃ¼ssen zuerst %link, bevor Sie Aktionen wÃ¤hlen kÃ¶nnen."
+#~ msgid "action"
+#~ msgstr "Aktion"
+

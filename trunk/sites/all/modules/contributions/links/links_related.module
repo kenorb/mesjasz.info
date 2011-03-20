@@ -1,0 +1,793 @@
+<?php
+// $Id: links_related.module,v 1.21.2.1 2008/12/31 01:37:00 syscrusher Exp $
+
+// ****************** General hooks ***************************
+
+function links_related_menu() {
+  $items = array();
+  $items['node/%node/links'] = array(
+    'title' => t('links'),
+    'page callback' => 'links_related_tab',
+    'page arguments' => array(1),
+    'access callback' => 'links_related_tab_access',
+    'weight' => 9,
+    'type' => MENU_LOCAL_TASK
+  );
+  $items['admin/settings/links/links_related'] = array(
+    'title' => t('related links'),
+    'description' => t('Configure settings for related links attached to other content.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('links_related_settings_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+function links_related_help($section="") {
+  switch($section) {
+    case 'admin/modules#description':
+      return t("Adds an extra URL field to nodes of admin-specified types.");
+      break;
+  }
+}
+
+// **************** Node functions ***********************
+
+/**
+ * Implementation of hook_link().
+ */
+function links_related_link($type='', $node=NULL, $teaser=FALSE) {
+  // Only node links supported here
+  if ($type != 'node') {
+    return array();
+  }
+  return _links_related_list($node, FALSE, $teaser, TRUE);
+}
+
+/**
+ * Retrieve the list of links to display with the node in the
+ * teaser, page, endnotes, or block.
+ */
+function _links_related_list(&$node, $page=FALSE, $teaser=FALSE, $statistics=FALSE) {
+  return links_get_list('links_related', $node, $page, $teaser, $statistics);
+}
+
+/**
+ * Implementation of hook_settings()
+ */
+function links_related_settings_form() {
+  $form = array();
+  if (!module_exists('links')) {
+    drupal_set_message(t('The &quot;links&quot; module is disabled or not installed. Node links will not function until this is corrected. Check the availability of that module, and enable if needed, in the !modules.',array('!modules'=>l(t('modules administration page'),'admin/modules'))),'error');
+  }
+
+  $form['link_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Link display settings'),
+    '#description' => t("Other settings for how the links behave and how they are displayed are available in the !linksettingspage.", array('!linksettingspage'=>l(t('links module settings page'),'admin/settings/links'))),
+  );
+
+  $form['link_settings']['links_related_display_teaser'] = array(
+    '#type' => 'select',
+    '#title' => t('Displayed links (teaser mode)'),
+    '#default_value' => variable_get('links_related_display_teaser','1'),
+    '#options' => array(0=>t('None'), 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, -1=>t('All')),
+    '#description' => t('This setting controls how many links are displayed near the node title (in most themes) for the teaser or listing format.'),
+  );
+
+  $form['link_settings']['links_related_display_full'] = array(
+    '#type' => 'select',
+    '#title' => t('Displayed links (full-page mode)'),
+    '#default_value' => variable_get('links_related_display_full','1'),
+    '#options' => array(0=>t('None'), 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, -1=>t('All')),
+    '#description' => t('This setting controls how many links are displayed near the node title (in most themes) in full-page displays.'),
+  );
+
+  $form['link_settings']['links_related_display_length'] = array(
+    '#type' => 'select',
+    '#title' => t('Display trim length'),
+    '#default_value' => variable_get('links_related_display_length','0'),
+    '#options' => array(0=>t('Unlimited'), 20=>20, 30=>30, 40=>40),
+    '#description' => t('Trims the displayed text (but not the actual URL) for links displayed near the article title. Does not affect display of links as end-notes within the article body.'),
+  );
+
+  $form['link_settings']['links_related_enable_list'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show end-notes list'),
+    '#return_value' => 1,
+    '#default_value' => variable_get('links_related_enable_list','1'),
+    '#description' => t('If enabled, list of the article\'s related links will be appended to the end of the content, when in full-page display mode. This listing will also appear as part of the separate links tab (if that feature is enabled).'),
+  );
+
+  $form['link_settings']['links_related_enable_embed_list'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('List embedded links'),
+    '#return_value' => 1,
+    '#default_value' => variable_get('links_related_enable_embed_list','1'),
+    '#description' => t('If enabled, a list of links contained within the article text will be appended to the end of the content, when in full-page display mode. This listing will also appear as part of the separate links tab (if that feature is enabled).'),
+  );
+  
+  $form['link_settings']['links_related_enable_tab'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show links tab'),
+    '#return_value' => 1,
+    '#default_value' => variable_get('links_related_enable_tab','0'),
+    '#description' => t('If enabled, a tab will be added to node displays to display the list of related and embedded links on their own separate page.'),
+  );
+  
+  $form['link_settings']['links_related_always_expand'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Always expand related links field'),
+    '#return_value' => 1,
+    '#default_value' => variable_get('links_related_always_expand','0'),
+    '#description' => t('This setting causes the related links area in node edit pages to always be expanded by default, although users can still collapse it manually. This can be useful if you want to call attention to the related links area for contributors.'),
+  );
+
+  $form['edit_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Node edit settings'),
+    '#description' => t("Other settings for how the links behave and how they are displayed are available in the !linksettingspage.", array('!linksettingspage'=>l(t('links module settings page'),'admin/settings/links'))),
+  );
+
+  $form['edit_settings']['links_related_blank_lines'] = array(
+    '#type' => 'select',
+    '#title' => t('Blank link lines'),
+    '#default_value' => variable_get('links_related_blank_lines','2'),
+    '#options' => array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8),
+    '#description' => t('This setting controls how many blank &quot;Related Links&quot; lines appear after already-defined links during node editing.'),
+  );
+
+  $form['types'] = array(
+    '#type' => 'markup',
+    '#value' =>'<p>' . t("To choose what content types have link URLs available, use the !contenttypespage to set the 'has related links url' attribute for the desired node types. Note that you may need to revisit this setting if you add modules that define new node types, because the default is OFF for each content type." . "</p>", array('!contenttypespage'=>l(t('content types page'),'admin/content/types'))),
+  );
+  
+  return system_settings_form($form);
+}
+
+/**
+ * Implementation of hook_nodeapi()
+ */
+function links_related_nodeapi(&$node, $op, $teaser=NULL, $page=NULL) {
+//print("nodeapi $op $node->nid<br>\n");
+  switch($op) {
+    // Load the values of the special table from the database as needed
+    case 'load':
+      if (variable_get('links_related_types_'. $node->type, FALSE) && ! is_array($_POST['links_related'])) {
+          $links = links_load_links_for_node($node->nid, 'links_related');
+          return array('links_related'=>$links);
+      }
+      break;
+
+    // Copy values from the POST array into the working copy of the node
+    case 'prepare':
+      if (variable_get('links_related_types_'. $node->type, FALSE) && ! isset($node->links_related)) {
+        _links_related_sort_post_links();
+        $node->links_related = is_array($_POST['links_related']) ? $_POST['links_related'] : array();
+        _links_related_sort_links($node->links_related);
+      }
+      break;
+
+    case 'validate':
+      if (variable_get('links_related_types_'. $node->type, FALSE) && isset($node->links_related)) {
+        _links_related_sort_post_links();
+        _links_related_sort_links($node->links_related);
+        foreach($node->links_related as $i=>$link) {
+          $node->links_related[$i]['url'] = links_normalize_url($link['url']);
+        }
+      }
+      break;
+
+    // Delete the values from a node that is being erased
+    // Don't care if it's "supposed" to have links -- delete if found anyway
+    case 'delete':
+      links_delete_links_for_node($node, 'links_related');
+      break;
+
+    // Update the values in an existing record, or insert a new record.
+    case 'insert':
+    case 'update':
+      if (variable_get('links_related_types_'. $node->type, FALSE)) {
+        links_save_links_for_node($node, 'links_related');
+      }
+      break;
+    case 'view':
+      $links =& links_load_links_for_node($node->nid, 'links_related');
+      $GLOBALS['links_related'] = array(
+        'node'=>$node, 'links'=>$links
+      );
+      $node->content['links_related'] = array(
+        '#value' => _links_related_prep_view($node, $teaser, $page),
+        '#weight' => 1,
+      );
+      break;
+  }
+}
+
+function links_related_form_alter(&$form, $form_state, $form_id) {
+  $node = $form['#node'];
+  switch ($form_id) {
+    case 'node_type_form':
+      // Nodetype-specific settings
+      $type = $form['old_type']['#value'];
+      $form['links_related'] = array(
+        '#type' => 'fieldset',
+        '#title' => t("Related links"),
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+        '#tree'  => FALSE,
+      );
+      $form['links_related']['links_related_types'] = array(
+        '#type' => 'radios',
+        '#title' => t('Allow related links'),
+        '#options' => array(0=>t('Disabled'), 1=>t('Optional'), 2=>t('Required')),
+        '#default_value' => variable_get('links_related_types_'. $type, 0),
+        '#description' => t('This setting enables or disables related links for this content type.'),
+      );
+      // Make sure the buttons are last
+      $form['submit']['#weight'] = 15;
+      $form['reset']['#weight'] = 16;
+      $form['delete']['#weight'] = 17;
+      break;
+
+    case $node->type .'_node_form':
+      // The actual node edit form. This allows the users to enter the
+      // links_related into appropriate node types' edit screens.
+      if (variable_get('links_related_types_'.$node->type, 0)) {
+        _links_related_sort_links($node->links_related);
+        $links =& $node->links_related;
+
+        $form['links_related'] = array(
+          '#type' => 'fieldset',
+          '#tree' => TRUE,
+          '#title' => t('Related Links'),
+          '#description' => t('Links are stored as part of the !page. Monitoring and dead link detection are centrally managed from there. <strong>To add more links, just click &quot;Preview&quot; to add another blank row. To remove a link from this article, just blank out its URL field or check the Delete box.</strong> If you blank out the title but leave the URL, then the system will suggest a title for you. The Weight allows you to determine the order in which links are displayed; lower numbers float to the top.',array('!page'=>l(t('links management feature'),'admin/content/links'))),
+          // Not collapsible if links are required
+          '#collapsible' => variable_get('links_related_types_'.$node->type, 0) < 2,
+          '#collapsed' => (count($links) == 0 && ! variable_get('links_related_always_expand',0)),
+          //'#weight' => -16,
+        );
+
+        $form['links_related']['#theme'] = 'links_related_form';
+        // Existing links first
+        $i = 0;
+        foreach ($links as $link) {
+          $form['links_related'][$i++] = links_related_form_line($link);
+        }
+        $blanks = variable_get('links_related_blank_lines','2');
+        for ($j=0; $j<$blanks; $j++) {
+          $form['links_related'][$i++] = links_related_form_line(NULL);
+        }
+        if (variable_get('links_related_types_'.$node->type, 0) >= 2) {
+          // The first one is required
+          $form['links_related'][0]['url']['#required'] = 1;
+          $form['links_related']['#title'] .= ' '.t('(at least one link required for this content type)');
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_theme to register our theme functions
+ */
+function links_related_theme($existing, $type, $theme, $path) {
+  return array(
+    'links_related_form' => array(
+      'arguments' => array('element' => NULL),
+    ),
+  );
+}
+
+/**
+ * This function wraps the related links form fields in a table for display.
+ */
+function theme_links_related_form($form) {
+  $header = array(t('URL'), t('Title'), t('Weight'), t('Delete'));
+
+  $rows = array();
+  $i = 0;
+  foreach (element_children($form) as $key) {
+    $rows[$i] = array();
+    $rows[$i][0] = drupal_render($form[$key]['url']);
+    $rows[$i][1] = drupal_render($form[$key]['link_title']);
+    $rows[$i][2] = drupal_render($form[$key]['weight']);
+    $rows[$i][3] = drupal_render($form[$key]['delete']);
+    $i++;
+  }
+  $output = theme('table', $header, $rows);
+  $output .= drupal_render($form);
+  return $output;
+}
+
+/**
+ * Implementation of hook_block()
+ */
+function links_related_block($op = 'list', $delta = 0, $edit = array()) {
+  switch($op) {
+    case 'list':
+      $blocks = array(0=>array('info'=>t('Related links')));
+      return $blocks;
+    case 'view':
+      $block = array();
+      switch($delta) {
+        case 0:
+          $block['subject'] = t('Related Links');
+          if (arg(0) == 'node' && is_numeric(arg(1)) && is_array($GLOBALS['links_related']['links']) && is_object($GLOBALS['links_related']['node'])) {
+//            $links =& $GLOBALS['links_related']['links'];
+            $node  =& $GLOBALS['links_related']['node'];
+            $list  =& _links_related_list($node, TRUE, FALSE, FALSE);
+            if (count($list)) {
+              $block['content'] = _links_related_format_list($list);
+            }
+          }
+      }
+      return $block;
+  }
+}
+
+/********************************************************************
+ * Internal functions
+ ********************************************************************/
+
+/**
+ * Builds one one line of the data entry form for links
+ */
+function links_related_form_line($link=NULL) {
+  $link = (array)$link;
+
+  $entry['url'] = array(
+    '#type' => 'textfield',
+    '#default_value' => $link['url'],
+  );
+
+  $entry['link_title'] = array(
+    '#type' => 'textfield',
+    '#default_value' => $link['link_title'],
+  );
+
+  $entry['weight'] = array(
+    '#type' => 'weight',
+    '#default_value' => (empty($link['weight']) ? 0 : $link['weight']),
+    '#delta' => 5,
+  );
+
+  $entry['delete'] = array(
+    '#type' => 'checkbox',
+    '#return_value' => 1,
+    '#default_value' => $link['delete'],
+  ); 
+
+  return $entry;
+}
+
+/**
+ * Compares two subarrays from $node->links_related and returns
+ * an integer -1, 0, or 1 based on that comparison. (See PHP
+ * function uasort() for details.)
+ */
+function _links_related_linkcompare($link1, $link2) {
+  if (intval($link1['weight']) == intval($link2['weight'])) {
+    if ($link1['link_title'] == $link2['link_title']) {
+      return 0;
+    } else {
+      return ($link1['link_title'] < $link2['link_title']) ? -1 : 1;
+    }
+  } else {
+//print("Sort by weight ".intval($link1['weight'])." vs ".intval($link2['weight'])."<br>\n");
+    return (intval($link1['weight']) < intval($link2['weight'])) ? -1 : 1;
+  }
+}
+
+/**
+ * Sorts the links by weight, keeping their existing order otherwise.
+ * Also removes any empty links and those with the "delete" flag set.
+ * $links is an integer-subscripted array of links.
+ */
+function _links_related_sort_links(&$links) {
+  if (is_array($links)) {
+    foreach ($links as $i=>$link) {
+      if ($link['delete'] || empty($link['url'])) {
+        unset($links[$i]);
+      }
+    }
+    uasort($links, '_links_related_linkcompare');
+  }
+}
+
+/**
+ * Works like _links_related_sort_links(), except operates
+ * on $_POST['links_related'] intrinsically, rather
+ * than accepting a node as a parameter.
+ */
+function _links_related_sort_post_links() {
+  if (is_array($_POST['links_related'])) {
+    // Delete any empty ones and renumber the rest to prevent
+    // problems during rendering of blank lines
+    $new = array();
+    foreach ($_POST['links_related'] as $i=>$link) {
+      if (!$link['delete'] && (!empty($link['url']) || !empty($link['link_title']))) {
+        $new[] = $_POST['links_related'][$i];
+      }
+    }
+    $_POST['links_related'] = $new;
+    uasort($_POST['links_related'], '_links_related_linkcompare');
+  }
+}
+
+/**
+ * Prepares a view of the links depending on the node viewing mode
+ * and the links_related module settings.
+ */
+function _links_related_prep_view(&$node, $teaser=FALSE, $page=FALSE) {
+  if ($teaser) {
+    return '';
+  }
+  $do_related = variable_get('links_related_enable_list',TRUE);
+  $do_embed   = variable_get('links_related_enable_embed_list',TRUE);
+  if ($do_related || $do_embed) {
+    $links =& links_load_links_for_node($node->nid, 'links_related');
+    if (! count($links)) {
+      return '';
+    }
+    $html = '';
+    if ($do_related) {
+      $list = _links_related_list($node, TRUE, FALSE, TRUE);
+      $html .=  _links_related_format_list($list, t('Related Links'));
+    }
+    if ($do_embed) {
+      $html .= _links_related_embedded($node, FALSE);
+    }
+  }
+  return $html;
+}
+
+/**
+ * Accepts a list of predefined HTML links (as returned from links_get_list())
+ * and returns the list HTML around them plus an optional level-2 heading
+ * at the top of the list. The entire thing is surrounded by a DIV tag
+ * with a class of "links_related_endnotes" to make it more themeable.
+ */
+function _links_related_format_list($list, $heading='') {
+  // Trivial rejection
+  if (count($list) < 1) {
+    return '';
+  }
+  $html = '<div id="links_related_endnotes">';
+  if (! empty($heading)) {
+    $html .= '<h2>' . $heading . '</h2>';
+  }
+  $html .= '<ul class="links_link_list">';
+  foreach ($list as $link) {
+    $html .= '<li>' . l($link['title'], $link['href'], $link['attributes']);
+  }
+  $html .= '</ul>'; 
+  $html .= '</div>';
+  return $html;
+}
+
+/*
+ * Determines access to the links tab
+ */
+function links_related_tab_access() {
+  return (user_access('access content') && variable_get('links_related_enable_tab',FALSE));
+}
+
+/**
+ * Displays the standalone "links" tab for a node
+ */
+function links_related_tab($node) {
+  drupal_set_title($node->title);
+  $html .= _links_related_prep_view($node, FALSE, FALSE);
+  return $html;
+}
+
+/**
+ * Provides either a displayable (read-only) listing, in endnotes
+ * format, or an editable form, showing all of the embedded links
+ * in the node body.
+ */
+function _links_related_embedded($node=NULL, $editable=FALSE) {
+  if (! is_object($node)) {
+    // Try to find the node ID from the Drupal path
+    if (arg(0) == 'node' && is_numeric(arg(1))) {
+      $nid = intval(arg(1));
+      $node2 = node_load(array('nid'=>$nid));
+    } else {
+      // Dereference to be sure we don't touch original.
+      $node2 = $node;
+    }
+    if (! $node2->nid) {
+      return array();
+    }
+  } else {
+    // Some node types -- notably book pages -- dink around with the
+    // body and add extraneous links that we don't want. So we have
+    // to go back to the database for the original body.
+    if ($node->type == 'book') {
+      $node2 = node_load(array('nid'=>$node->nid));
+    } else {
+      $node2 = $node;
+    }
+  }
+  $text = $node2->body;
+  // TODO -- add an API hook that allows modules to expose other text to this
+  // link-hunting process
+  $links =& links_find_links($text);
+  if ($editable) {
+    return drupal_get_form('links_related_embedded_form', $links, $node2);
+  } else {
+    return _links_related_format_embedded_list($links);
+  }
+}
+
+/**
+ * This function simply displays the embedded links in endnotes-style, without
+ * providing a form for editing.
+ */
+function _links_related_format_embedded_list($links) {
+  $list = array();
+  foreach ($links as $i=>$link) {
+    $url = $link['url']; // Get the normalized URL
+    $display_url = htmlspecialchars(strlen($url) > 60 ? substr($url, 0, 57) . '...' : $url);
+    $display_text = (empty($link['title']) || $link['title'] == $url) ? $display_url : $link['title'];
+    $attribs = array('title'=>t('Matched text: !match', array('!match'=>$link['matched'])));
+    $list[] = array('title'=>$display_text, 'href'=>$url, 'attributes'=>$attribs);
+  }
+  return _links_related_format_list($list, t('Links from Article Text'));
+}
+
+/**
+ * Given an array of links as returned from links_find_links(),
+ * this function returns an editable form to manage those links.
+ * 
+ * @param array $links link definitions (as extracted from the text)
+ * @param node $node Context node
+ */
+function links_related_embedded_form($links, $node) {
+  $form = array(
+    'links_embed' => array(
+      '#type' => 'fieldset',
+      '#title' => t('Embedded Links'),
+      '#collapsible' => 1,
+      '#tree' => 1,
+      '#description' => t('These are the links found inside the page content. You can choose to replace the direct URLs with managed links from the site\'s links catalog (adding new links if necessary), or to replace existing catalog links with the actual direct URLs. Titles added or changed here do not override titles for the same link if it appears on other pages.'),
+    ),
+    'nid' => array(
+        '#type' => 'hidden',
+        '#default_value' => $node->nid,
+    )
+  );
+  $goto = url('links/goto') . '/';
+  $linked_links = links_load_links_for_node($node->nid, '', 0, FALSE, 'url');
+  foreach ($links as $i=>$link) {
+
+    $url = links_normalize_url($link['url']); // Get the normalized URL
+    # Set $reverse TRUE if the URL is already one of our "goto" URLs
+    if (preg_match('!^(?:/*)'.$goto.'!', $url)) {
+      $reverse = TRUE;
+    } else {
+      $reverse = FALSE;
+    }
+    $exists = FALSE; // already in the catalog
+    $attached = FALSE; // already associated with this node
+    $weblink_exists = FALSE; // whether a stand-alone weblinks node page exists for this already
+    
+    $display_url = theme('display_url',$url);
+    $attributes = array('title'=>t('Matched text: !match', array('!match'=>$link['matched'])));
+
+    $existing_link = links_get_link($url);
+    if(is_array($existing_link) && $existing_link['url']){
+      $exists = TRUE;
+      $attributes['class'] = 'existing';
+      # dsm("Found an entry for ".$existing_link['url']." already");
+
+      // already attached to this node, cool
+      if($linked_links[$url]){
+        $existing_link = $linked_links[$url];
+        $attributes['class'] .= ' attached';
+        $attached = TRUE;
+      }
+
+        // lookup to see if it has a weblinks node attached
+        $referers = links_get_link_node_refs($existing_link['lid']);
+        foreach($referers as $ref){
+          if($ref['module'] == 'links_weblink'){
+            $weblink_exists = $ref['nid'];
+          }
+        }
+
+    } else {
+      # dsm("$url does not yet have an entry");
+      unset($existing_link); // an empty placeholder gets in the way @TODO ensure the suggested patch to the API goes through 
+    }
+ 
+    $form_row = array(
+      '#attributes' => $attributes,
+    );
+
+    if($existing_link && ($existing_link['link_title'] != $link['title'])){
+      $aka = t('also known as: %aka', array('%aka' => $existing_link['link_title']));
+    } 
+    else {$aka = '';}
+    
+    $form_row['title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Found title'),
+      '#size' => 40,
+      '#default_value' => $link['title'],
+      '#description' => $aka, 
+    );
+    $form_row['url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('URL') ." <small>". l($display_url, $url) ."</small> " ,
+      '#size' => 40,
+      '#maxlength' => 500, // required to handle insane redirect URLs. Drupal sets it to 128, so cannot leave it open
+      '#default_value' => $url,
+    );
+    $form_row['op'] = array(
+      '#tree' => TRUE
+    );
+
+    if(! $exists) {
+      $form_row['op']['link_item'] = array(
+        '#type' => 'checkbox',
+        '#title' => $reverse ? t('Make non-catalog link') : t('Make catalog link'),
+        '#default_value' => '0',
+        '#return_value'  => $reverse ? 'delete' : 'create',
+      );
+    } 
+    else {
+      if(module_exists('links_admin')){
+        $form_row['op']['link_item'] = array(
+          '#value' => l(t('Administer link'),'admin/content/links/'.$existing_link['lid'] )
+        );
+      }
+    }
+
+    $form_row['op']['attach_to_node'] = array(
+      '#type' => 'checkbox',
+      '#title' => $attached ? t('Detach from this node') : t('Attach to this node'),
+      '#default_value' => '0',
+      '#return_value'  => $attached ? 'detach' : 'attach',
+    );
+
+    // Add the option to make a weblink page on the fly
+    if(module_exists('links_weblink')){
+      if($weblink_exists){
+        $form_row['op']['weblink'] = array(
+          '#value' => l(t('Weblink page'),'node/'.$weblink_exists) . ' [' . l(t('Edit'),'node/'.$weblink_exists.'/edit') .']',
+        );
+      } 
+      else {
+        $form_row['op']['weblink'] = array(
+          '#type' => 'checkbox',
+          '#title' => t("Create weblink page"),
+          '#default_value' => '0',
+          '#return_value'  => 'create',
+        );
+      }
+    }
+
+    // if we have an existing link id, remember it. It may come in handy, especially for ajax later on
+    if($existing_link['lid']){
+      $form_row['lid'] = array(
+        '#type' => 'hidden',
+        '#default_value' => $existing_link['lid'],
+      );
+    }
+    
+    $form['links_embed'][$i] = $form_row;
+  }
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save changes'),
+  );
+  return $form;
+}
+
+function links_related_embedded_form_submit($form_id,$form_values) {
+  $node = node_load($form_values['nid']);
+  foreach($form_values['links_embed'] as $link_entry){
+    foreach($link_entry['op'] as $op => $action){
+      // The op handling is nested so we can do multiple 
+      // maintainence actions independantly 
+      if($action){
+        # dsm("need to modify $op to $action on ".$link_entry['url']); 
+        switch($op){
+          case 'link_item' :
+            if($action == 'create'){
+              // make it but don't link it
+              $link_entry['lid'] = links_put_link($link_entry['url'], $link_entry['title'] );
+            }
+          break; 
+          case 'attach_to_node' :
+            if($action == 'attach'){
+              // the API recommend this action be done in bulk. See later
+              $link_entry['link_title'] = $link_entry['title'];
+              $node->links_related[$link_entry['url']] = $link_entry;
+            }
+            if($action == 'detach'){
+              unset($node->links_related[$link_entry['url']]);
+            }
+          break; 
+          case 'weblink' :
+            if($action == 'create'){
+              global $user;
+              $new_node = (object)array(
+                'title' => $link_entry['title'],
+                'body' => $link_entry['title'],
+                'type' => 'weblink',
+                'uid' => $user->uid,
+                'status' => 1,
+                'links_weblink_url' => $link_entry['url'],
+              );
+              node_save($new_node);
+              drupal_set_message(t('Created a standalone weblink page for the link !page_link. !edit_link',
+                array(
+                  '!page_link' => l($new_node->title,'node/'.$new_node->nid),
+                  '!edit_link' => l(t('Edit'), 'node/'.$new_node->nid.'/edit')
+                )
+              ));
+            }
+          break;
+        }
+      }
+    } 
+  }
+  // @see links_save_links_for_node();
+  links_save_links_for_node($node, 'links_related');
+}
+
+/**
+ * This function wraps the embedded links form fields in a table for display.
+ */
+function theme_links_related_embedded_form(&$form) {
+  $header = array(t('Link Title').'<br />'.t('and URL'), t('Operations'));
+  $rows = array();
+  foreach (element_children($form['links_embed']) as $key) {
+    $row = $form['links_embed'][$key]['#attributes'] ? $form['links_embed'][$key]['#attributes'] : array();
+    $row['data'][] = drupal_render($form['links_embed'][$key]['title']) . '<br />' . drupal_render($form['links_embed'][$key]['url']);
+    #$row['data'][] = $form['links_embed'][$key]['#attributes']['class'];
+    $row['data'][] = drupal_render($form['links_embed'][$key]['op']);
+    $rows[] = $row;
+  }
+  // pre-render this set into a table before letting Drupal do the rest of the form
+  $form['links_embed']['#children'] = theme('table', $header, $rows);
+  $output .= drupal_render($form);
+  return $output;
+}
+
+/**
+ * Return an array of all places the given link is associated with - a reverse
+ * lookup on the links_node table.
+ * 
+ * Used to find if this link is mentioned elsewhere already
+ * 
+ * @TODO move this into the API if appropriate
+ * 
+ */
+function links_get_link_node_refs($lid) {
+  $sql = "SELECT * FROM {links_node} WHERE lid = %d";
+  $result = db_query($sql,$lid);
+  $referrers = array();
+  while($link_ref = db_fetch_array($result)){
+    $referrers[$link_ref['nid']] = $link_ref;
+  }
+  return $referrers;
+}
+
+/**
+ * Implements hook_links_delete_link_reference to remove $lid from
+ * the {links_node} table for records used by this module.
+ */
+function links_related_links_delete_link_reference($lid) {
+  db_query("DELETE FROM {links_node} WHERE lid=%d AND module='links_related'", $lid);
+  if (db_error()) {
+    watchdog("links","links delete references for link !lid failed for links_related module", array('!lid'=>$lid), WATCHDOG_ERROR);
+  } else {
+    watchdog("links","Deleted references for link !lid for links_related module", array('!lid'=>$lid), WATCHDOG_INFO);
+  }
+}

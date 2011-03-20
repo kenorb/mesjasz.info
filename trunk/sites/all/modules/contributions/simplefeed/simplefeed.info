@@ -1,0 +1,12 @@
+; $Id: simplefeed.info,v 1.4.4.1 2008/02/19 23:51:29 csevb10 Exp $
+name = SimpleFeed
+description = Parse feeds into nodes.
+package = SimpleFeed
+dependencies[] = simplefeed_item
+core=6.x
+; Information added by drupal.org packaging script on 2008-10-15
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "simplefeed"
+datestamp = "1224072754"
+

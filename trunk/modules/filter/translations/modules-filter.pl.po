@@ -1,0 +1,791 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/filter/filter.admin.inc:33
+msgid "All roles may use default format"
+msgstr "Wszystkie rangi mogą wykorzystywać domyślny format"
+
+#: modules/filter/filter.admin.inc:33
+msgid "No roles may use this format"
+msgstr "Brak rang, które mogłyby wykorzystywać ten format danych"
+
+#: modules/filter/filter.admin.inc:38
+msgid "Set default format"
+msgstr "Ustal domyślny format"
+
+#: modules/filter/filter.admin.inc:45
+msgid "Default format updated."
+msgstr "Domyślny format danych został zaktualizowany."
+
+#: modules/filter/filter.admin.inc:81 modules/filter/filter.module:83
+msgid "Add input format"
+msgstr "Dodaj format"
+
+#: modules/filter/filter.admin.inc:97
+msgid "All roles for the default format must be enabled and cannot be changed."
+msgstr ""
+"Do domyślnego formatu danych dostęp mają wszystkie rangi użytkowników. Nie "
+"można tego zmienić."
+
+#: modules/filter/filter.admin.inc:104
+msgid "Specify a unique name for this filter format."
+msgstr "Nazwa formatu danych. Nie może się powtarzać."
+
+#: modules/filter/filter.admin.inc:111
+msgid ""
+"Choose which roles may use this filter format. Note that roles with the "
+"\"administer filters\" permission can always use all the filter formats."
+msgstr ""
+"Rangi mogące wykorzystywać ten format danych. Warto pamiętać, że użytkownicy "
+"o rangach z uprawnieniami do \"zarządzania filtrami\" zawsze mogą korzystać "
+"ze wszystkich dostępnych formatów."
+
+#: modules/filter/filter.admin.inc:130
+msgid "Filters"
+msgstr "Filtry"
+
+#: modules/filter/filter.admin.inc:131
+msgid "Choose the filters that will be used in this filter format."
+msgstr "Filtry stosowane do treści korzystających z tego formatu danych."
+
+#: modules/filter/filter.admin.inc:146 modules/filter/filter.module:587
+msgid "More information about formatting options"
+msgstr "Więcej informacji na temat formatowania"
+
+#: modules/filter/filter.admin.inc:149
+msgid "No guidelines available."
+msgstr "Żadne wskazówki nie są dostępne."
+
+#: modules/filter/filter.admin.inc:151
+msgid ""
+"These are the guidelines that users will see for posting in this input "
+"format. They are automatically generated from the filter settings."
+msgstr ""
+"Oto wskazówki, które użytkownicy zobaczą podczas dodawania danych w tym "
+"formacie. Są one generowane automatycznie według ustawień filtra."
+
+#: modules/filter/filter.admin.inc:153 modules/filter/filter.module:516
+msgid "Formatting guidelines"
+msgstr "Wskazówki dotyczące formatowania"
+
+#: modules/filter/filter.admin.inc:168
+msgid ""
+"Filter format names need to be unique. A format named %name already exists."
+msgstr ""
+"Nazwa formatu danych nie może się powtarzać, tymczasem format o nazwie %name "
+"już istnieje."
+
+#: modules/filter/filter.admin.inc:187
+msgid "Added input format %format."
+msgstr "Dodano format danych %format."
+
+#: modules/filter/filter.admin.inc:190
+msgid "The input format settings have been updated."
+msgstr "Ustawienia formatu zostały zaktualizowane."
+
+#: modules/filter/filter.admin.inc:252
+msgid "Are you sure you want to delete the input format %format?"
+msgstr "Czy na pewno usunąć format danych %format?"
+
+#: modules/filter/filter.admin.inc:252
+msgid ""
+"If you have any content left in this input format, it will be switched to "
+"the default input format. This action cannot be undone."
+msgstr ""
+"Jeśli w witrynie pozostała jakakolwiek zawartość wprowadzona w tym formacie, "
+"zostanie ona przekonwertowana do formatu domyślnego. Operacja ta jest "
+"nieodwracalna."
+
+#: modules/filter/filter.admin.inc:255
+msgid "The default format cannot be deleted."
+msgstr "Domyślny format nie może zostać usunięty."
+
+#: modules/filter/filter.admin.inc:278
+msgid "Deleted input format %format."
+msgstr "Usunięto format danych %format."
+
+#: modules/filter/filter.admin.inc:289
+msgid "Configure %format"
+msgstr "Konfiguracja formatu %format"
+
+#: modules/filter/filter.admin.inc:312
+msgid "No settings are available."
+msgstr "Żadne ustawienia nie są dostępne."
+
+#: modules/filter/filter.admin.inc:330
+msgid "Rearrange %format"
+msgstr "Kolejność filtrów formatu %format"
+
+#: modules/filter/filter.admin.inc:391
+msgid "The filter ordering has been saved."
+msgstr "Kolejność filtrów została zapisana."
+
+#: modules/filter/filter.pages.inc:35
+msgid "input formats"
+msgstr "formaty danych"
+
+#: modules/filter/filter.module:23
+msgid ""
+"The filter module allows administrators to configure text input formats for "
+"use on your site. An input format defines the HTML tags, codes, and other "
+"input allowed in both content and comments, and is a key feature in guarding "
+"against potentially damaging input from malicious users. Two input formats "
+"included by default are <em>Filtered HTML</em> (which allows only an "
+"administrator-approved subset of HTML tags) and <em>Full HTML</em> (which "
+"allows the full set of HTML tags). Additional input formats may be created "
+"by an administrator."
+msgstr ""
+"Moduł daje administratorom możliwość skonfigurowania formatów danych "
+"tekstowych dostępnych w witrynie. Ustawienia formatu danych określają, z "
+"których znaczników HTML lub elementów innych języków można korzystać podczas "
+"dodawania zarówno wpisów, jak i odpowiedzi do nich. Funkcja ta jest kluczową "
+"dla zabezpieczenia witryny przed groźnym kodem, który mógłby być wprowadzany "
+"przez złośliwych użytkowników. Istnieją dwa standardowe formaty: "
+"<em>Filtered HTML</em>, który daje dostęp tylko do wybranych znaczników "
+"HTML, i <em>Full HTML</em>, który pozwala wprowadzać wszystkie znaczniki "
+"HTML. Administrator może stworzyć dodatkowe formaty danych."
+
+#: modules/filter/filter.module:24
+msgid ""
+"Each input format uses filters to manipulate text, and most input formats "
+"apply several different filters to text in a specific order. Each filter is "
+"designed for a specific purpose, and generally either adds, removes or "
+"transforms elements within user-entered text before it is displayed. A "
+"filter does not change the actual content of a post, but instead, modifies "
+"it temporarily before it is displayed. A filter may remove unapproved HTML "
+"tags, for instance, while another automatically adds HTML to make links "
+"referenced in text clickable."
+msgstr ""
+"Każdy z formatów korzysta z filtrów, które umożliwiają przekształcanie "
+"tekstu. Większość formatów wykorzystuje nawet kilka filtrów, uruchamianych w "
+"określonej kolejności. Każdy filtr został stworzony z myślą o wykonywaniu "
+"innego zadania, zazwyczaj polegającego na dodawaniu, usuwaniu lub zmianie "
+"fragmentów kopii tekstu wprowadzonego przez użytkownika. Filtr nie zmienia "
+"oryginalnej treści wpisu, a jedynie kopię, która jest wyświetlana na "
+"stronie. W ten sposób jeden filtr może usuwać niedozwolone znaczniki HTML, a "
+"w tym czasie drugi - przetwarzać adresy tak, by stały się odnośnikami."
+
+#: modules/filter/filter.module:25
+msgid ""
+"Users can choose between the available input formats when creating or "
+"editing content. Administrators can configure which input formats are "
+"available to which user roles, as well as choose a default input format."
+msgstr ""
+"Podczas dodawania lub edycji zawartości, użytkownicy mogą wybrać jeden z "
+"dostępnych formatów danych.  Administratorzy mają natomiast możliwość "
+"ustalenia, które z formatów danych mają być dostępne dla użytkowników o "
+"konkretnych rangach, a także wyboru formatu domyślnego."
+
+#: modules/filter/filter.module:26
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@filter"
+"\">Filter module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@filter\">stronie dotyczącej filtrów</a> w "
+"podręczniku konfiguracji w internecie."
+
+#: modules/filter/filter.module:29
+msgid ""
+"<em>Input formats</em> define a way of processing user-supplied text in "
+"Drupal. Each input format uses filters to manipulate text, and most input "
+"formats apply several different filters to text, in a specific order. Each "
+"filter is designed to accomplish a specific purpose, and generally either "
+"removes elements from or adds elements to text before it is displayed. Users "
+"can choose between the available input formats when submitting content."
+msgstr ""
+"<em>Formaty danych</em> określają sposób postępowania z tekstem wprowadzanym "
+"przez użytkowników Drupala. Każdy z formatów korzysta z filtrów, które "
+"umożliwiają przekształcanie tekstu. Większość formatów wykorzystuje nawet "
+"kilka filtrów, uruchamianych w określonej kolejności. Każdy filtr został "
+"stworzony z myślą o wykonywaniu innego zadania, zazwyczaj polegającego na "
+"dodawaniu lub usuwaniu fragmentów tekstu zanim zostanie on wyświetlony. "
+"Podczas dodawania zawartości użytkownicy mogą wybierać spomiędzy dostępnych "
+"im formatów."
+
+#: modules/filter/filter.module:30
+msgid ""
+"Use the list below to configure which input formats are available to which "
+"roles, as well as choose a default input format (used for imported content, "
+"for example). The default format is always available to users. All input "
+"formats are available to users in a role with the \"administer filters\" "
+"permission."
+msgstr ""
+"Poniższa lista służy do określenia, którym rangom użytkowników dostępne są "
+"określone formaty, a także wyboru formatu domyślnego, wykorzystywanego na "
+"przykład podczas importowania zawartości. Domyślny format danych jest zawsze "
+"dostępny wszystkim użytkownikom. Użytkownicu z uprawnieniami do "
+"\"zarządzania filtrami\" mogą, niezależnie od okoliczności, korzystać z "
+"wszystkich filtrów."
+
+#: modules/filter/filter.module:33
+msgid ""
+"Every <em>filter</em> performs one particular change on the user input, for "
+"example stripping out malicious HTML or making URLs clickable. Choose which "
+"filters you want to apply to text in this input format. If you notice some "
+"filters are causing conflicts in the output, you can <a href=\"@rearrange"
+"\">rearrange them</a>."
+msgstr ""
+"Każdy <em>filtr</em> wykonuje jedną konkretną operację na danych "
+"wprowadzanych przez użytkownika, taką jak na przykład wycinanie potencjalnie "
+"groźnego kodu lub zamiana adresów w odnośniki, które można kliknąć. Należy "
+"wskazać, które filtry mają być stosowane do tekstu wprowadzanego w tym "
+"formacie. Jeśli okaże się, że niektóre z nich powodują błędy, można <a href="
+"\"@rearrange\">zmienić kolejność ich uruchamiania</a>."
+
+#: modules/filter/filter.module:35
+msgid ""
+"If you cannot find the settings for a certain filter, make sure you have "
+"enabled it on the <a href=\"@url\">view tab</a> first."
+msgstr ""
+"Jeśli brak ustawień dla jakiegoś filtra, warto upewnić się, <a href=\"@url"
+"\">czy został on włączony</a>."
+
+#: modules/filter/filter.module:37
+msgid ""
+"Because of the flexible filtering system, you might encounter a situation "
+"where one filter prevents another from doing its job. For example: a word in "
+"an URL gets converted into a glossary term, before the URL can be converted "
+"to a clickable link. When this happens, rearrange the order of the filters."
+msgstr ""
+"System filtrów jest na tyle elastyczny, że może się zdarzyć iż jeden filtr "
+"przeszkadza drugiemu w wykonaniu jego zadania. Przykładowo: treść adresu "
+"zostaje opatrzona znacznikami formatowania, zanim adres zostanie zamieniony "
+"w odnośnik, który można kliknąć. W takich wypadkach należy zmienić kolejność "
+"stosowania filtrów."
+
+#: modules/filter/filter.module:38
+msgid ""
+"Filters are executed from top-to-bottom. To change the order of the filters, "
+"modify the values in the <em>Weight</em> column or grab a drag-and-drop "
+"handle under the <em>Name</em> column and drag filters to new locations in "
+"the list. (Grab a handle by clicking and holding the mouse while hovering "
+"over a handle icon.) Remember that your changes will not be saved until you "
+"click the <em>Save configuration</em> button at the bottom of the page."
+msgstr ""
+"Filtry są stosowane w kolejności, w jakiej widnieją na poniższej liście. By "
+"zmienić tę kolejność, należy się posłużyć wartościami z kolumny <em>Waga</"
+"em> lub przesuwać filtry metodą \"przeciągnij i upuść\", korzystając z "
+"uchwytów znajdujących się w kolumnie <em>Nazwa</em>. Do wprowadzenia "
+"poczynionych zmian służy przycisk <em>Zachowaj konfigurację</em> u dołu "
+"strony."
+
+#: modules/filter/filter.module:180;182
+msgid "Allowed HTML tags: @tags"
+msgstr "Dozwolone znaczniki HTML: @tags"
+
+#: modules/filter/filter.module:187
+msgid ""
+"\n"
+"<p>This site allows HTML content. While learning all of HTML may feel "
+"intimidating, learning how to use a very small number of the most basic HTML "
+"\"tags\" is very easy. This table provides examples for each tag that is "
+"enabled on this site.</p>\n"
+"<p>For more information see W3C's <a href=\"http://www.w3.org/TR/html/"
+"\">HTML Specifications</a> or use your favorite search engine to find other "
+"sites that explain HTML.</p>"
+msgstr ""
+"\n"
+"<p>Ta witryna pozwala na publikowanie zawartości w formacie HTML. Choć "
+"perspektywa nauki wszystkich znaczników HTML może onieśmielać, nauczenie się "
+"tylko kilku podstawowych jest bardzo proste. Tabela przedstawia przykładowe "
+"zastosowania dostępnych na tej stronie znaczników.</p>\n"
+"<p>Więcej informacji uzyskać można na <a href=\"http://www.w3.org/TR/html/"
+"\">stronie specyfikacji HTML</a> na serwerze W3C lub poprzez wyszukiwarkę "
+"internetową.</p>"
+
+#: modules/filter/filter.module:191
+msgid "Anchors are used to make links to other pages."
+msgstr ""
+"Znaczniki zwane kotwicami służą do tworzenia odnośników do innych stron."
+
+#: modules/filter/filter.module:192
+msgid ""
+"By default line break tags are automatically added, so use this tag to add "
+"additional ones. Use of this tag is different because it is not used with an "
+"open/close pair like all the others. Use the extra \" /\" inside the tag to "
+"maintain XHTML 1.0 compatibility"
+msgstr ""
+"Domyślnie znaczniki nowych linii wstawiane są automatycznie, więc z takich "
+"znaczników należy korzystać tylko do wprowadzenia dodatkowych odstępów. "
+"Znacznik nowej linii różni się od innych, ponieważ nie występuje w dwóch "
+"wariantach (otwierającym i zamykającym). By być w zgodzie ze standardem "
+"XHTML 1.0, należy postawić znak \" /\" wewnątrz znacznika."
+
+#: modules/filter/filter.module:192
+msgid "Text with <br />line break"
+msgstr "Tekst ze <br />znakiem końca linii"
+
+#: modules/filter/filter.module:193
+msgid ""
+"By default paragraph tags are automatically added, so use this tag to add "
+"additional ones."
+msgstr ""
+"Domyślnie znaczniki akapitu dodawane są automatycznie, więc z takich "
+"znaczników należy korzystać tylko do wprowadzenia dodatkowych akapitów."
+
+#: modules/filter/filter.module:193
+msgid "Paragraph one."
+msgstr "Akapit pierwszy."
+
+#: modules/filter/filter.module:193
+msgid "Paragraph two."
+msgstr "Akapit drugi."
+
+#: modules/filter/filter.module:194;194
+msgid "Strong"
+msgstr "Silne zaakcentowanie"
+
+#: modules/filter/filter.module:195;195
+msgid "Emphasized"
+msgstr "Zaakcentowanie"
+
+#: modules/filter/filter.module:196;196
+msgid "Cited"
+msgstr "Cytat"
+
+#: modules/filter/filter.module:197
+msgid "Coded text used to show programming source code"
+msgstr "Tekst zawierający kod programu"
+
+#: modules/filter/filter.module:197
+msgid "Coded"
+msgstr "Kod"
+
+#: modules/filter/filter.module:198;198
+msgid "Bolded"
+msgstr "Pogrubienie"
+
+#: modules/filter/filter.module:199;199
+msgid "Underlined"
+msgstr "Podkreślenie"
+
+#: modules/filter/filter.module:200;200
+msgid "Italicized"
+msgstr "Pochylenie"
+
+#: modules/filter/filter.module:201
+msgid "Superscripted"
+msgstr "Indeks górny"
+
+#: modules/filter/filter.module:201
+msgid "<sup>Super</sup>scripted"
+msgstr "Indeks <sup>górny</sup>"
+
+#: modules/filter/filter.module:202
+msgid "Subscripted"
+msgstr "Indeks dolny"
+
+#: modules/filter/filter.module:202
+msgid "<sub>Sub</sub>scripted"
+msgstr "Indeks <sub>dolny</sub>"
+
+#: modules/filter/filter.module:203;203
+msgid "Preformatted"
+msgstr "Preformatowany"
+
+#: modules/filter/filter.module:204
+msgid "Abbreviation"
+msgstr "Skrót"
+
+#: modules/filter/filter.module:204
+msgid "<abbr title=\"Abbreviation\">Abbrev.</abbr>"
+msgstr "<abbr title=\"Skrót\">Skr.</abbr>"
+
+#: modules/filter/filter.module:205
+msgid "Acronym"
+msgstr "Skrótowiec"
+
+#: modules/filter/filter.module:205
+msgid "<acronym title=\"Three-Letter Acronym\">TLA</acronym>"
+msgstr "<acronym title=\"Trój-Literowy Skrótowiec\">TLS</acronym>"
+
+#: modules/filter/filter.module:206;206
+msgid "Block quoted"
+msgstr "Cytat blokowy"
+
+#: modules/filter/filter.module:207;207
+msgid "Quoted inline"
+msgstr "Cytat zagnieżdżony"
+
+#: modules/filter/filter.module:209
+msgid "Table"
+msgstr "Tabela"
+
+#: modules/filter/filter.module:209
+msgid "Table header"
+msgstr "Nagłówek tabeli"
+
+#: modules/filter/filter.module:209
+msgid "Table cell"
+msgstr "Komórka tabeli"
+
+#: modules/filter/filter.module:211;211
+msgid "Deleted"
+msgstr "Usunięty"
+
+#: modules/filter/filter.module:212;212
+msgid "Inserted"
+msgstr "Wklejony"
+
+#: modules/filter/filter.module:214
+msgid "Ordered list - use the &lt;li&gt; to begin each list item"
+msgstr "Lista numerowana - znacznik &lt;li&gt; otwiera nowy element listy"
+
+#: modules/filter/filter.module:214;215
+msgid "First item"
+msgstr "Pierwszy element"
+
+#: modules/filter/filter.module:214;215
+msgid "Second item"
+msgstr "Drugi element"
+
+#: modules/filter/filter.module:215
+msgid "Unordered list - use the &lt;li&gt; to begin each list item"
+msgstr "Lista punktorowana - znacznik &lt;li&gt; otwiera nowy element listy"
+
+#: modules/filter/filter.module:218
+msgid ""
+"Definition lists are similar to other HTML lists. &lt;dl&gt; begins the "
+"definition list, &lt;dt&gt; begins the definition term and &lt;dd&gt; begins "
+"the definition description."
+msgstr ""
+"Listy definicji są podobne do innych list HTML. Znacznik &lt;dl&gt; otwiera "
+"listę, &lt;dt&gt; otwiera termin definicji, a &lt;dd&gt; otwiera samą "
+"definicję."
+
+#: modules/filter/filter.module:218
+msgid "First term"
+msgstr "Pierwszy termin"
+
+#: modules/filter/filter.module:218
+msgid "First definition"
+msgstr "Pierwsza definicja"
+
+#: modules/filter/filter.module:218
+msgid "Second term"
+msgstr "Drugi termin"
+
+#: modules/filter/filter.module:218
+msgid "Second definition"
+msgstr "Druga definicja"
+
+#: modules/filter/filter.module:221
+msgid "Subtitle"
+msgstr "Podtytuł"
+
+#: modules/filter/filter.module:222
+msgid "Subtitle three"
+msgstr "Podtytuł trzeciego stopnia"
+
+#: modules/filter/filter.module:223
+msgid "Subtitle four"
+msgstr "Podtytuł czwartego stopnia"
+
+#: modules/filter/filter.module:224
+msgid "Subtitle five"
+msgstr "Podtytuł piątego stopnia"
+
+#: modules/filter/filter.module:225
+msgid "Subtitle six"
+msgstr "Podtytuł szóstego stopnia"
+
+#: modules/filter/filter.module:227
+msgid "Tag Description"
+msgstr "Opis znacznika"
+
+#: modules/filter/filter.module:227;256
+msgid "You Type"
+msgstr "Wpisuje się"
+
+#: modules/filter/filter.module:227;256
+msgid "You Get"
+msgstr "Otrzymuje się"
+
+#: modules/filter/filter.module:241
+msgid "No help provided for tag %tag."
+msgstr "Brak objaśnienia dla znacznika %tag."
+
+#: modules/filter/filter.module:247
+msgid ""
+"\n"
+"<p>Most unusual characters can be directly entered without any problems.</"
+"p>\n"
+"<p>If you do encounter problems, try using HTML character entities. A common "
+"example looks like &amp;amp; for an ampersand &amp; character. For a full "
+"list of entities see HTML's <a href=\"http://www.w3.org/TR/html4/sgml/"
+"entities.html\">entities</a> page. Some of the available characters include:"
+"</p>"
+msgstr ""
+"\n"
+"<p>Większość z bardziej egzotycznych znaków można wprowadzać bezpośrednio "
+"bez żadnych dodatkowych zabiegów.</p>\n"
+"<p>W przypadku problemów należy wpisać odpowiednik znaku w postaci encji "
+"HTML. Na przykład zamiast cudzysłowu wpisać można &amp;quot;. Pełna lista "
+"niestandardowych znaków wraz z odpowiadającymi im encjami HTML znajduje się "
+"na <a href=\"http://www.w3.org/TR/html4/sgml/entities.html\">stronie "
+"dotyczącej encji</a>. Oto niektóre z dostępnych znaków:</p>"
+
+#: modules/filter/filter.module:251
+msgid "Ampersand"
+msgstr "Znak ampersand"
+
+#: modules/filter/filter.module:252
+msgid "Greater than"
+msgstr "Większy niż"
+
+#: modules/filter/filter.module:253
+msgid "Less than"
+msgstr "Mniejszy niż"
+
+#: modules/filter/filter.module:254
+msgid "Quotation mark"
+msgstr "Cudzysłów"
+
+#: modules/filter/filter.module:256
+msgid "Character Description"
+msgstr "Opis znaku"
+
+#: modules/filter/filter.module:270
+msgid "No HTML tags allowed"
+msgstr "Żadne znaczniki HTML nie są dozwolone"
+
+#: modules/filter/filter.module:278
+msgid "Lines and paragraphs break automatically."
+msgstr "Znaki końca linii i akapitu dodawane są automatycznie."
+
+#: modules/filter/filter.module:280
+msgid ""
+"Lines and paragraphs are automatically recognized. The &lt;br /&gt; line "
+"break, &lt;p&gt; paragraph and &lt;/p&gt; close paragraph tags are inserted "
+"automatically. If paragraphs are not recognized simply add a couple blank "
+"lines."
+msgstr ""
+"Końce linii i akapitów rozpoznawane są automatycznie. Znacznik końca linii "
+"&lt;br /&gt;, znacznik otwierający akapit &lt;p&gt; i znacznik zamykający "
+"akapit &lt;/p&gt; są dopisywane automatycznie. Jeśli Drupal nie uwzględnił "
+"podziału na linie, należy po prostu dodać kilka nowych, pustych linii."
+
+#: modules/filter/filter.module:284
+msgid "Web page addresses and e-mail addresses turn into links automatically."
+msgstr ""
+"Adresy internetowe są automatycznie zamieniane w odnośniki, które można "
+"kliknąć."
+
+#: modules/filter/filter.module:488
+msgid "Input format"
+msgstr "Format danych"
+
+#: modules/filter/filter.module:608;659
+msgid "HTML filter"
+msgstr "Filtr HTML"
+
+#: modules/filter/filter.module:608
+msgid "Line break converter"
+msgstr "Konwerter znaków końca linii"
+
+#: modules/filter/filter.module:608;719
+msgid "URL filter"
+msgstr "Filtr adresów URL"
+
+#: modules/filter/filter.module:608
+msgid "HTML corrector"
+msgstr "Korektor HTML"
+
+#: modules/filter/filter.module:613
+msgid ""
+"Allows you to restrict whether users can post HTML and which tags to filter "
+"out. It will also remove harmful content such as JavaScript events, "
+"JavaScript URLs and CSS styles from those tags that are not removed."
+msgstr ""
+"Służy do ogranicza dostępu do HTML lub wybranych jego znaczników. Usuwa "
+"także potencjalnie groźny kod, taki jak zdarzenia JavaScript, odnośniki "
+"korzystające z JavaScript i style CSS."
+
+#: modules/filter/filter.module:615
+msgid "Converts line breaks into HTML (i.e. &lt;br&gt; and &lt;p&gt; tags)."
+msgstr ""
+"Zamienia znaki końca linii na znaczniki HTML (np. &lt;br&gt; i &lt;p&gt;)."
+
+#: modules/filter/filter.module:617
+msgid "Turns web and e-mail addresses into clickable links."
+msgstr "Zamienia adresy internetowe w odnośniki, które można kliknąć."
+
+#: modules/filter/filter.module:619
+msgid "Corrects faulty and chopped off HTML in postings."
+msgstr "Poprawia błędy w kodzie HTML umieszczanym we wpisach."
+
+#: modules/filter/filter.module:664
+msgid "Filter HTML tags"
+msgstr "Filtrowanie znaczników HTML"
+
+#: modules/filter/filter.module:666
+msgid "Strip disallowed tags"
+msgstr "Wycinaj niedozwolone znaczniki"
+
+#: modules/filter/filter.module:666
+msgid "Escape all tags"
+msgstr "Zamieniaj wszystkie znaczniki na zwykły tekst"
+
+#: modules/filter/filter.module:667
+msgid ""
+"How to deal with HTML tags in user-contributed content. If set to \"Strip "
+"disallowed tags\", dangerous tags are removed (see below). If set to "
+"\"Escape tags\", all HTML is escaped and presented as it was typed."
+msgstr ""
+"Określa sposób postępowania ze znacznikami HTML wprowadzanymi przez "
+"użytkowników. Opcja \"Wycinaj niedozwolone znaczniki\" pozwala usuwać "
+"potencjalnie niebezpieczne znaczniki (patrz niżej). Opcja \"Zamieniaj "
+"wszystkie znaczniki na zwykły tekst\" pozwala natomiast prezentować kod HTML "
+"w formie tekstowej, w której nie ma już wpływu na zawartość."
+
+#: modules/filter/filter.module:675
+msgid ""
+"If \"Strip disallowed tags\" is selected, optionally specify tags which "
+"should not be stripped. JavaScript event attributes are always stripped."
+msgstr ""
+"Pole służy do wpisania znaczników, które nie mają być wycinane nawet wtedy, "
+"gdy włączona jest opcja wycinania znaczników. Nie dotyczy to jednak "
+"atrybutów zdarzeń Javascript, które będą wycinane niezależnie od ustawień "
+"administratora."
+
+#: modules/filter/filter.module:679
+msgid "Display HTML help"
+msgstr "Wyświetlaj pomoc dotyczącą HTML"
+
+#: modules/filter/filter.module:681
+msgid ""
+"If enabled, Drupal will display some basic HTML help in the long filter tips."
+msgstr ""
+"Wyświetla odnośnik do strony zawierającej podstawowe wskazówki dotyczące "
+"HTML."
+
+#: modules/filter/filter.module:685
+msgid "Spam link deterrent"
+msgstr "Zmniejszanie efektywności odnośników reklamowych"
+
+#: modules/filter/filter.module:687
+msgid ""
+"If enabled, Drupal will add rel=\"nofollow\" to all links, as a measure to "
+"reduce the effectiveness of spam links. Note: this will also prevent valid "
+"links from being followed by search engines, therefore it is likely most "
+"effective when enabled for anonymous users."
+msgstr ""
+"Opcja umożliwia dodawanie do wszystkich odnośników wprowadzanych przez "
+"użytkowników atrybutu rel=\"nofollow\", co powoduje zmniejszenie "
+"efektywności niepożądanych odnośników reklamowych. Należy jednak zwrócić "
+"uwagę na to, że wyszukiwarki internetowe będą pomijać takie odnośniki. Z "
+"tego też powodu najlepiej jest stosować tę metodę tylko w stosunku do "
+"użytkowników anonimowych."
+
+#: modules/filter/filter.module:724
+msgid "Maximum link text length"
+msgstr "Maksymalna długość tekstu odnośnika"
+
+#: modules/filter/filter.module:727
+msgid ""
+"URLs longer than this number of characters will be truncated to prevent long "
+"strings that break formatting. The link itself will be retained; just the "
+"text portion of the link will be truncated."
+msgstr ""
+"Adresy URL o liczbie znaków większej, niż zadeklarowana tutaj, zostaną "
+"skrócone, by zapobiec zaburzeniu wyglądu strony. Sam adres pozostanie "
+"nietknięty, a skrócony zostanie tylko tekst."
+
+#: modules/filter/filter.module:157
+msgid "administer filters"
+msgstr "zarządzanie filtrami"
+
+#: modules/filter/filter.module:71
+msgid "Input formats"
+msgstr "Formaty danych"
+
+#: modules/filter/filter.module:72
+msgid ""
+"Configure how content input by users is filtered, including allowed HTML "
+"tags. Also allows enabling of module-provided filters."
+msgstr ""
+"Filtry stosowane do wprowadzanej przez użytkowników zawartości. Pozwalają "
+"między innymi ograniczać wykorzystanie znaczników HTML. Można tu też włączyć "
+"dodatkowe filtry, udostępniane przez moduły."
+
+#: modules/filter/filter.module:91
+msgid "Delete input format"
+msgstr "Usuń format danych"
+
+#: modules/filter/filter.module:99
+msgid "Compose tips"
+msgstr "Wskazówki dotyczące tworzenia zawartości"
+
+#: modules/filter/filter.module:131
+msgid "Rearrange"
+msgstr "Kolejność"
+
+#: modules/filter/filter.module:0
+msgid "filter"
+msgstr "filtr"
+
+#: modules/filter/filter.install:9
+msgid ""
+"Table that maps filters (HTML corrector) to input formats (Filtered HTML)."
+msgstr ""
+
+#: modules/filter/filter.install:14
+msgid "Primary Key: Auto-incrementing filter ID."
+msgstr ""
+
+#: modules/filter/filter.install:20
+msgid ""
+"Foreign key: The {filter_formats}.format to which this filter is assigned."
+msgstr ""
+
+#: modules/filter/filter.install:27
+msgid "The origin module of the filter."
+msgstr ""
+
+#: modules/filter/filter.install:34
+msgid "ID to identify which filter within module is being referenced."
+msgstr ""
+
+#: modules/filter/filter.install:41
+msgid "Weight of filter within format."
+msgstr ""
+
+#: modules/filter/filter.install:53
+msgid ""
+"Stores input formats: custom groupings of filters, such as Filtered HTML."
+msgstr ""
+
+#: modules/filter/filter.install:58
+msgid "Primary Key: Unique ID for format."
+msgstr ""
+
+#: modules/filter/filter.install:65
+msgid "Name of the input format (Filtered HTML)."
+msgstr ""
+
+#: modules/filter/filter.install:72
+msgid "A comma-separated string of roles; references {role}.rid."
+msgstr ""
+
+#: modules/filter/filter.install:79
+msgid ""
+"Flag to indicate whether format is cachable. (1 = cachable, 0 = not cachable)"
+msgstr ""
+
+#: modules/filter/filter.install:87
+msgid ""
+"Cache table for the Filter module to store already filtered pieces of text, "
+"identified by input format and md5 hash of the text."
+msgstr ""

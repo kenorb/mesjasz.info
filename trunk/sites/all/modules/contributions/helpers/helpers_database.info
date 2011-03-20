@@ -1,0 +1,12 @@
+; $Id: helpers_database.info,v 1.1.2.1.2.2 2008/12/29 19:05:21 nancyw Exp $
+name = Helpers_database
+description = A collection of helper functions for database
+package = Development
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-12-30
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "helpers"
+datestamp = "1230595653"
+

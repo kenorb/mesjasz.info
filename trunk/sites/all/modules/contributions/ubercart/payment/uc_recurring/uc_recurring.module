@@ -1,0 +1,912 @@
+<?php
+// $Id: uc_recurring.module,v 1.7.2.12 2009/02/24 15:35:51 islandusurper Exp $
+
+/**
+ * @file
+ * Allows you to add a recurring fee to a product/SKU to handle subscription
+ *   type services.
+ *
+ * This module includes code for the recurring fee product feature and a default
+ * recurring fee handler.  The default handler simply adds fees to the queue to
+ * be processed on cron runs.  Initial charges, even if they're set to occur in
+ * 0 days will not be processed immediately upon checkout
+ */
+
+
+/*******************************************************************************
+ * Drupal Hooks
+ ******************************************************************************/
+
+/**
+ * Implementation of hook_menu().
+ */
+function uc_recurring_menu() {
+  $items = array();
+
+  $items['admin/store/orders/recurring'] = array(
+    'title' => 'Recurring fees',
+    'description' => 'View the recurring fees on your orders.',
+    'page callback' => 'uc_recurring_admin',
+    'access arguments' => array('administer recurring fees'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 5,
+    'file' => 'uc_recurring.admin.inc',
+  );
+  $items['user/%user/recurring/%/cancel'] = array(
+    'title' => 'Cancel the recurring fee?',
+    'description' => 'Cancel a recurring fee.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('uc_recurring_user_cancel_form', 1, 3),
+    'access callback' => 'uc_recurring_user_access',
+    'access arguments' => array(1, 3),
+    'type' => MENU_CALLBACK,
+    'file' => 'uc_recurring.pages.inc',
+  );
+  $items['admin/store/orders/recurring/view/fee/%'] = array(
+    'title' => 'Recurring fees',
+    'description' => 'View a specific recurring fee.',
+    'page callback' => 'uc_recurring_admin',
+    'access arguments' => array('administer recurring fees'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 5,
+    'file' => 'uc_recurring.admin.inc',
+  );
+  $items['admin/store/orders/recurring/view/order/%'] = array(
+    'title' => 'Recurring fees',
+    'description' => 'View the recurring fees on a specific order.',
+    'page callback' => 'uc_recurring_admin',
+    'access arguments' => array('administer recurring fees'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 5,
+    'file' => 'uc_recurring.admin.inc',
+  );
+  $items['admin/store/orders/recurring/%/charge'] = array(
+    'title' => 'Charge recurring fee @fee?',
+    'title arguments' => array('@fee' => 4),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('uc_recurring_admin_charge_form'),
+    'access arguments' => array('administer recurring fees'),
+    'type' => MENU_CALLBACK,
+    'file' => 'uc_recurring.admin.inc',
+  );
+  $items['admin/store/orders/recurring/%/edit'] = array(
+    'title' => 'Edit recurring fee @fee',
+    'title arguments' => array('@fee' => 4),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('uc_recurring_admin_edit_form'),
+    'access arguments' => array('administer recurring fees'),
+    'type' => MENU_CALLBACK,
+    'file' => 'uc_recurring.admin.inc',
+  );
+  $items['admin/store/orders/recurring/%/delete'] = array(
+    'title' => 'Delete recurring fee @fee?',
+    'title arguments' => array('@fee' => 4),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('uc_recurring_admin_delete_form'),
+    'access arguments' => array('administer recurring fees'),
+    'type' => MENU_CALLBACK,
+    'file' => 'uc_recurring.admin.inc',
+  );
+
+  return $items;
+}
+
+// Restrict access to recurring fee operations for users.
+function uc_recurring_user_access($account, $rfid) {
+  global $user;
+
+  // Let administrators do whatever they want.
+  if (user_access('administer recurring fees')) {
+    return TRUE;
+  }
+
+  // Users can only access forms for their own recurring fees through their own
+  // user account.
+  $fee_uid = db_result(db_query("SELECT uid FROM {uc_recurring_users} WHERE rfid = %d", $rfid));
+
+  if ($user->uid != $account->uid || $account->uid != $fee_uid) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function uc_recurring_perm() {
+  return array('administer recurring fees');
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function uc_recurring_form_alter(&$form, &$form_state, $form_id) {
+  // We may need to alter the checkout form to remove invalid payment methods.
+  if ($form_id == 'uc_cart_checkout_form' && isset($form['panes']['payment'])) {
+    $order->products = uc_cart_get_contents();
+
+    // Make no changes if no recurring fees are found.
+    if (uc_recurring_find_fees($order) == array()) {
+      return;
+    }
+
+    // If configured, display a message about the recurring fees.
+    if ($message = variable_get('uc_recurring_checkout_message', '')) {
+      drupal_set_message(check_markup($message));
+    }
+
+    // Remove invalid payment methods from the payment pane.
+    $valid = variable_get('uc_recurring_payment_methods', array());
+    foreach (array_keys($form['panes']['payment']['payment_method']['#options']) as $key) {
+      if (!isset($valid[$key]) || $valid[$key] === 0) {
+        unset($form['panes']['payment']['payment_method']['#options'][$key]);
+      }
+    }
+
+    $count = count($form['panes']['payment']['payment_method']['#options']);
+    if ($count == 0) {
+      // Display an error message if no payment methods remain.
+      drupal_set_message(t('There are no payment methods configured for orders with recurring fees!'), 'error');
+      drupal_set_message(t('Please contact an administrator to solve the issue.'), 'error');
+    }
+    elseif ($count == 1) {
+      // If only one payment method remains, make it the default.
+      $form['panes']['payment']['payment_method']['#default_value'] = array_pop(array_keys($form['panes']['payment']['payment_method']['#options']));
+    }
+  }
+
+  // Wipe any existing recurring fees on the review form load to prevent
+  // duplicate or unexpected fees.
+  if ($form_id == 'uc_cart_checkout_review_form') {
+    db_query("DELETE FROM {uc_recurring_users} WHERE order_id = %d", $_SESSION['cart_order']);
+  }
+
+  if ($form_id == 'uc_order_view_update_form') {
+    // Load the order object based on the form value for the order ID.
+    $order = uc_order_load($form['order_id']['#value']);
+
+    // Load up the valid payment methods.
+    $methods = variable_get('uc_recurring_payment_methods', array());
+
+    // Check to make sure the payment method is good and we're in CC debug mode.
+    if ($methods[$order->payment_method] === $order->payment_method && variable_get('uc_credit_debug', FALSE)) {
+      // Look for recurring fees on this order.
+      $fees = uc_recurring_find_fees($order);
+
+      // If we have fees, check to see if they've already been added to the order.
+      if (count($fees)) {
+        $result = db_result(db_query("SELECT COUNT(*) FROM {uc_recurring_users} WHERE order_id = %d AND fee_handler = '%s'", $order->order_id, variable_get('uc_recurring_handler', 'uc_recurring')));
+
+        // If they haven't been added, display the checkbox to make it so.
+        if ($result == 0) {
+          $form['process_fees'] = array(
+            '#type' => 'checkbox',
+            '#title' => t('Process the recurring fees associated with products on this order.', array('@count' => count($fees))),
+            '#description' => t('This action will not be available after any fees are successfully processed.<br /><b>Important:</b> You must verify that the credit card information is correct before processing the fees!'),
+            '#weight' => 5,
+          );
+          $form['#submit'][] = 'uc_recurring_order_view_update_form_submit';
+        }
+      }
+    }
+  }
+}
+
+// Submit function for the order view update form to process recurring fees.
+function uc_recurring_order_view_update_form_submit($form, &$form_state) {
+  if ($form_state['values']['process_fees']) {
+    $order = uc_order_load($form_state['values']['order_id']);
+    $fees = uc_recurring_find_fees($order);
+
+    if (count($fees)) {
+      $pass = TRUE;
+      foreach ($fees as $fee) {
+        if (!uc_recurring_process($order, $fee)) {
+          uc_order_comment_save($order->order_id, 0, t('The recurring fee for product @model failed.', array('@model' => $fee->model)), 'admin', $order->order_status);
+          $pass = FALSE;
+        }
+      }
+      if ($pass == FALSE) {
+        drupal_set_message(t('One or more recurring fees failed to process as indicated in the admin comments.'), 'error');
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_cron().
+ */
+function uc_recurring_cron() {
+  if (variable_get('uc_recurring_handler', 'uc_recurring') == 'uc_recurring') {
+    $successes = 0;
+    $fails = 0;
+
+    $result = db_query("SELECT * FROM {uc_recurring_users} WHERE fee_handler = 'uc_recurring' AND remaining_intervals > 0 AND next_charge <= %d", time());
+    while ($fee = db_fetch_array($result)) {
+      $fee['data'] = unserialize($fee['data']);
+
+      if ($key = uc_credit_encryption_key()) {
+        $crypt = new uc_encryption_class;
+        $fee['data']['payment_details']['cc_number'] = $crypt->decrypt($key, $fee['data']['payment_details']['cc_number']);
+        if (variable_get('uc_credit_debug', FALSE)) {
+          $fee['data']['payment_details']['cc_cvv'] = $crypt->decrypt($key, $fee['data']['payment_details']['cc_cvv']);
+        }
+        $fee['data']['payment_details']['cc_exp_month'] = $crypt->decrypt($key, $fee['data']['payment_details']['cc_exp_month']);
+        $fee['data']['payment_details']['cc_exp_year'] = $crypt->decrypt($key, $fee['data']['payment_details']['cc_exp_year']);
+        uc_store_encryption_errors($crypt, 'uc_recurring');
+      }
+
+      // Attempt to process the charge.
+      if (uc_recurring_charge($fee)) {
+        // Update the fee in the database.
+        if ($fee['remaining_intervals'] == 1) {
+          $next_charge = time();
+        }
+        else {
+          $next_charge = strtotime('+'. $fee['regular_interval']);
+        }
+        db_query("UPDATE {uc_recurring_users} SET next_charge = %d, remaining_intervals = remaining_intervals - 1, charged_intervals = charged_intervals + 1 WHERE rfid = %d", $next_charge, $fee['rfid']);
+        $successes++;
+      }
+      else {
+        $fails++;
+      }
+    }
+
+    if ($successes > 0 || $fails > 0) {
+      watchdog('uc_recurring', '!successes recurring fees processed successfully; !fails failed.', array('!successes' => $successes, '!fails' => $fails));
+    }
+  }
+}
+
+/**
+ * Implementation of hook_user().
+ */
+function uc_recurring_user($op, &$edit, &$account, $category = NULL) {
+  global $user;
+
+  switch ($op) {
+    case 'view':
+      if ($user->uid && ($user->uid == $account->uid || user_access('view all orders'))) {
+        // Get a table of recurring fees associated with this user.
+        $table = uc_recurring_user_table($account->uid);
+
+        // If fees exist, display them in a table.
+        if (!empty($table)) {
+          $account->content['recurring_fees'] = array(
+            '#type' => 'user_profile_category',
+            '#weight' => -3,
+            '#title' => t('Recurring fees'),
+            'table' => array(
+              '#type' => 'user_profile_item',
+              '#value' => $table,
+            ),
+          );
+        }
+      }
+
+      break;
+  }
+}
+
+
+/*******************************************************************************
+ * Ubercart Hooks
+ ******************************************************************************/
+
+/**
+ * Implementation of hook_order().
+ */
+function uc_recurring_order($op, &$arg1, $arg2) {
+  switch ($op) {
+    case 'submit':
+      if (variable_get('uc_recurring_checkout_process', TRUE)) {
+        $fees = uc_recurring_find_fees($arg1);
+        if (count($fees)) {
+          $pass = TRUE;
+          foreach ($fees as $fee) {
+            if (!uc_recurring_process($arg1, $fee)) {
+              uc_order_comment_save($arg1->order_id, 0, t('The recurring fee for product @model failed.', array('@model' => $fee->model)), 'admin', $arg1->order_status);
+              $pass = FALSE;
+            }
+          }
+          if ($pass == FALSE) {
+            $process = variable_get('uc_recurring_checkout_fail', 'fail');
+            if ($process == 'fail' && uc_payment_balance($arg1) < $arg1->order_total) {
+              $process = 'proceed';
+            }
+            switch ($process) {
+              case 'fail':
+                return array(array('pass' => FALSE, 'message' => t('Your order cannot be completed, because we could not process your recurring payment. Please review your payment details and contact us to complete your order if the problem persists.')));
+              case 'proceed':
+                return array(array('pass' => TRUE, 'message' => t('Your order has been submitted, but we may need to contact you to ensure your recurring fee is setup properly. Thank you for your understanding.')));
+            }
+          }
+        }
+      }
+      break;
+
+    case 'update':
+      if (uc_order_status_data($arg1->order_status, 'state') == 'in_checkout') {
+        db_query("UPDATE {uc_recurring_users} SET uid = %d WHERE uid = 0 AND order_id = %d", $arg1->uid, $arg1->order_id);
+      }
+  }
+}
+
+/**
+ * Implementation of hook_product_feature().
+ */
+function uc_recurring_product_feature() {
+  $features[] = array(
+    'id' => 'recurring',
+    'title' => t('Recurring fee'),
+    'callback' => 'uc_recurring_feature_form',
+    'delete' => 'uc_recurring_fee_delete',
+    'settings' => 'uc_recurring_settings_form',
+  );
+
+  return $features;
+}
+
+/**
+ * Implementation of hook_recurring_fee(); default recurring fee handler.
+ */
+function uc_recurring_recurring_fee($order, $fee) {
+  if ($order->payment_method !== 'credit') {
+    watchdog('uc_recurring', 'You can only use the credit card payment method with the uc_recurring handler.', array(), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  $data = array(
+    'billing_first_name' => $order->billing_first_name,
+    'billing_last_name' => $order->billing_last_name,
+    'billing_phone' => $order->billing_phone,
+    'billing_company' => $order->billing_company,
+    'billing_street1' => $order->billing_street1,
+    'billing_street2' => $order->billing_street2,
+    'billing_city' => $order->billing_city,
+    'billing_zone' => $order->billing_zone,
+    'billing_postal_code' => $order->billing_postal_code,
+    'billing_country' => $order->billing_country,
+    'payment_details' => $order->payment_details,
+    'model' => $fee->model,
+  );
+
+  if ($key = uc_credit_encryption_key()) {
+    $crypt = new uc_encryption_class;
+    $data['payment_details']['cc_number'] = $crypt->encrypt($key, $data['payment_details']['cc_number'], 32);
+    if (variable_get('uc_credit_debug', FALSE)) {
+      $data['payment_details']['cc_cvv'] = $crypt->encrypt($key, $data['payment_details']['cc_cvv'], 32);
+    }
+    $data['payment_details']['cc_exp_month'] = $crypt->encrypt($key, $data['payment_details']['cc_exp_month'], 32);
+    $data['payment_details']['cc_exp_year'] = $crypt->encrypt($key, $data['payment_details']['cc_exp_year'], 32);
+    uc_store_encryption_errors($crypt, 'uc_recurring');
+  }
+
+  $fee = array(
+    'rfid' => 0,
+    'uid' => $order->uid,
+    'fee_handler' => 'uc_recurring',
+    'next_charge' => strtotime('+'. $fee->initial_charge),
+    'fee_amount' => $fee->fee_amount,
+    'regular_interval' => $fee->regular_interval,
+    'remaining_intervals' => $fee->number_intervals,
+    'charged_intervals' => 0,
+    'order_id' => $order->order_id,
+    'data' => serialize($data),
+  );
+
+  $fee['rfid'] = uc_recurring_fee_save('user', $fee);
+
+  uc_order_comment_save($order->order_id, 0, t('Recurring fee <a href="!url">!fee</a> added to order.', array('!url' => url('admin/store/orders/recurring/view/fee/'. $fee['rfid']), '!fee' => $fee['rfid'])));
+
+  return TRUE;
+}
+
+/**
+ * Implementation of hook_recurring_fee_ops().
+ */
+function uc_recurring_recurring_fee_ops($context, $fee) {
+  $ops = array();
+
+  switch ($context) {
+    case 'fee_admin':
+      if ($fee['remaining_intervals'] > 0) {
+        $ops[] = l(t('charge'), 'admin/store/orders/recurring/'. $fee['rfid'] .'/charge');
+      }
+      $ops[] = l(t('edit'), 'admin/store/orders/recurring/'. $fee['rfid'] .'/edit');
+      $ops[] = l(t('delete'), 'admin/store/orders/recurring/'. $fee['rfid'] .'/delete');
+      break;
+
+    case 'user':
+      $ops[] = l(t('cancel'), 'user/'. $fee['uid'] .'/recurring/'. $fee['rfid'] .'/cancel');
+  }
+
+  return $ops;
+}
+
+
+/******************************************************************************
+ * Workflow-ng Hooks                                                          *
+ ******************************************************************************/
+
+// Tell Workflow about the various order events.
+function uc_recurring_event_info() {
+  $events['fee_expires'] = array(
+    '#label' => t('Recurring payment expires'),
+    '#module' => t('Recurring Payments'),
+    '#arguments' => array(
+      'order' => array('#entity' => 'order', '#lable' => t('Order')),
+    ),
+  );
+  $events['fee_charge_successful'] = array(
+    '#label' => t('Payment is charged successfully'),
+    '#module' => t('Recurring Payments'),
+    '#arguments' => array(
+      'order' => array('#entity' => 'order', '#lable' => t('Order')),
+    ),
+  );
+  $events['fee_charge_fails'] = array(
+    '#label' => t('Payment charge fails'),
+    '#module' => t('Recurring Payments'),
+    '#arguments' => array(
+      'order' => array('#entity' => 'order', '#lable' => t('Order')),
+    ),
+  );
+
+  return $events;
+}
+
+
+/*******************************************************************************
+ * Callback Functions
+ ******************************************************************************/
+
+// Builds the form to display for adding or editing a recurring fee.
+function uc_recurring_feature_form($form_state, $node, $feature) {
+  drupal_add_css(drupal_get_path('module', 'uc_recurring') .'/uc_recurring.css');
+
+  if (!empty($feature)) {
+    $fee = uc_recurring_fee_load('product', $feature['pfid']);
+  }
+
+  $options = uc_product_get_models($node);
+
+  $form['model'] = array(
+    '#type' => 'select',
+    '#title' => t('Applicable SKU'),
+    '#description' => t('Select the applicable product model/SKU for this fee.'),
+    '#options' => $options,
+    '#default_value' => $fee['model'],
+  );
+
+  $form['fee_amount'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Recurring fee amount'),
+    '#description' => t('Charge this amount each billing period.<br />The product price is still charged at checkout.'),
+    '#default_value' => $fee['fee_amount'],
+    '#size' => 16,
+    '#field_prefix' => variable_get('uc_sign_after_amount', FALSE) ? '' : variable_get('uc_currency_sign', '$'),
+    '#field_suffix' => variable_get('uc_sign_after_amount', FALSE) ? variable_get('uc_currency_sign', '$') : '',
+  );
+
+  $form['initial'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Initial charge'),
+    '#collapsible' => FALSE,
+    '#description' => t('Specify the time to wait to start charging the recurring fee after checkout. Remember the product price will be charged at the time of checkout.'),
+    '#attributes' => array('class' => 'interval-fieldset'),
+  );
+  $form['initial']['initial_charge_value'] = array(
+    '#type' => 'select',
+    '#options' => drupal_map_assoc(uc_range(0, 52)),
+    '#default_value' => $fee['initial_charge_value'],
+  );
+  $form['initial']['initial_charge_unit'] = array(
+    '#type' => 'select',
+    '#options' => array(
+      'days' => t('day(s)'),
+      'weeks' => t('week(s)'),
+      'months' => t('month(s)'),
+      'years' => t('year(s)'),
+    ),
+    '#default_value' => $fee['initial_charge_unit'],
+  );
+
+  $form['regular'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Regular interval'),
+    '#collapsible' => FALSE,
+    '#description' => t('Specify the length of the billing period for this fee.'),
+    '#attributes' => array('class' => 'interval-fieldset'),
+  );
+  $form['regular']['regular_interval_value'] = array(
+    '#type' => 'select',
+    '#options' => drupal_map_assoc(uc_range(1, 52)),
+    '#default_value' => $fee['regular_interval_value'],
+  );
+  $form['regular']['regular_interval_unit'] = array(
+    '#type' => 'select',
+    '#options' => array(
+      'days' => t('day(s)'),
+      'weeks' => t('week(s)'),
+      'months' => t('month(s)'),
+      'years' => t('year(s)'),
+    ),
+    '#default_value' => $fee['regular_interval_unit'],
+  );
+
+  $form['number_intervals'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Number of billing periods'),
+    '#description' => t('Specify how many times the recurring fee will be charged.'),
+    '#size' => 16,
+    '#default_value' => $fee['number_intervals'],
+    '#required' => TRUE,
+  );
+
+  return uc_product_feature_form($form);
+}
+
+function uc_recurring_feature_form_validate($form, &$form_state) {
+  if (intval($form_state['values']['number_intervals']) <= 0) {
+    form_set_error('number_intervals', t('Only positive whole number values are accepted for the number of billing periods.'));
+  }
+}
+
+function uc_recurring_feature_form_submit($form, &$form_state) {
+  // Use the form specified pfid if available.
+  if (!empty($form_state['values']['pfid'])) {
+    $pfid = $form_state['values']['pfid'];
+  }
+
+  // Build the recurring fee's data array.
+  $fee = array(
+    'pfid' => $pfid,
+    'model' => $form_state['values']['model'],
+    'fee_amount' => $form_state['values']['fee_amount'],
+    'initial_charge' => $form_state['values']['initial_charge_value'] .' '. $form_state['values']['initial_charge_unit'],
+    'regular_interval' => $form_state['values']['regular_interval_value'] .' '. $form_state['values']['regular_interval_unit'],
+    'number_intervals' => intval($form_state['values']['number_intervals']),
+  );
+
+  $args = array(
+    '@product' => empty($fee['model']) ? t('this product') : t('product @model', array('@model' => $fee['model'])),
+    '!amount' => uc_currency_format($fee['fee_amount']),
+    '!initial' => $fee['initial_charge'],
+    '!regular' => $fee['regular_interval'],
+    '!intervals' => t('!num times', array('!num' => $fee['number_intervals'] - 1)),
+  );
+
+  // Build the feature's data array.
+  $data = array(
+    'pfid' => $pfid,
+    'nid' => $form_state['values']['nid'],
+    'fid' => 'recurring',
+    'description' => t('When @product is purchased, add a fee for !amount charged first after !initial and every !regular after that !intervals.', $args),
+  );
+
+  // Save the product feature and store the returned URL as our redirect.
+  $form_state['redirect'] = uc_product_feature_save($data);
+
+  if (empty($pfid)) {
+    $fee['pfid'] = db_last_insert_id('uc_product_features', 'pfid');
+  }
+
+  uc_recurring_fee_save('product', $fee);
+}
+
+// Adds the settings for the recurring module on the feature settings form.
+function uc_recurring_settings_form() {
+  $form['uc_recurring_handler'] = array(
+    '#type' => 'select',
+    '#title' => t('Recurring fee handler'),
+    '#description' => t('Select a module to process recurring fees on your site.'),
+    '#options' => drupal_map_assoc(module_implements('recurring_fee', TRUE)),
+    '#default_value' => variable_get('uc_recurring_handler', 'uc_recurring'),
+  );
+  foreach (_payment_method_list() as $method) {
+    $options[$method['id']] = $method['name'];
+  }
+  $form['uc_recurring_payment_methods'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Valid payment methods for orders with recurring fees'),
+    '#description' => t('Only selected payment methods will be available for customers purchasing products with recurring fees.<br/>It is up to you to make sure your chosen handler is compatible with the payment methods you select.<br />For example, the uc_recurring handler is only compatible with the Credit Card payment method.'),
+    '#options' => $options,
+    '#default_value' => variable_get('uc_recurring_payment_methods', array()),
+  );
+  $form['uc_recurring_checkout_message'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Recurring free checkout form message'),
+    '#description' => t('Enter a message to be displayed on the checkout form page when a customer has products in the cart with recurring fees.<br />Leave blank to not display any message.'),
+    '#default_value' => variable_get('uc_recurring_checkout_message', ''),
+  );
+  $form['uc_recurring_checkout_process'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Attempt to process recurring fees during checkout.'),
+    '#description' => t('If not selected, you must have an alternate way of processing fees.<br />With the default handler, this is only possible in credit card debug mode.'),
+    '#default_value' => variable_get('uc_recurring_checkout_process', TRUE),
+  );
+  $form['uc_recurring_checkout_fail'] = array(
+    '#type' => 'radios',
+    '#title' => t('Action to take if a recurring fee fails to process during checkout'),
+    '#description' => t('Regardless of your selection, an admin comment will report the failure.<br/><strong>Note:</strong> Even if you select the first option, checkout will complete if another payment has already been captured.'),
+    '#options' => array(
+      'fail' => t('Return a failed message and do not complete checkout.'),
+      'proceed' => t('Return a failed message but complete checkout.'),
+      'silent' => t('Show no message and complete checkout.'),
+    ),
+    '#default_value' => variable_get('uc_recurring_checkout_fail', 'fail'),
+  );
+
+  return $form;
+}
+
+// Displays a table for users to administer their recurring fees.
+function uc_recurring_user_table($uid) {
+  $rows = array();
+  $output = '';
+
+  // Setup a header array for the table.
+  $header = array(t('Order'), t('Amount'), t('Interval'), t('Next charge'), t('Remaining'), t('Operations'));
+
+  // Loop through the fees sorted by the order ID descending.
+  $result = db_query("SELECT * FROM {uc_recurring_users} WHERE uid = %d AND remaining_intervals > 0 ORDER BY order_id DESC", $uid);
+  while ($fee = db_fetch_array($result)) {
+    $ops = array();
+
+    // Get the $ops from the module implementing the handler.
+    $callback = $fee['fee_handler'] .'_recurring_fee_ops';
+    if (function_exists($callback)) {
+      $ops = $callback('user', $fee);
+    }
+
+    // Add the row to the table for display.
+    $rows[] = array(
+      l($fee['order_id'], 'user/'. $uid .'/order/'. $fee['order_id']),
+      uc_currency_format($fee['fee_amount']),
+      array('data' => check_plain($fee['regular_interval']), 'nowrap' => 'nowrap'),
+      $fee['remaining_intervals'] == 0 ? '-' : format_date($fee['next_charge'], 'small'),
+      $fee['remaining_intervals'],
+      array('data' => implode(' ', $ops), 'nowrap' => 'nowrap'),
+    );
+  }
+
+  // Only display the table if fees were found.
+  if (count($rows) > 0) {
+    $output = theme('table', $header, $rows);
+  }
+
+  return $output;
+}
+
+/**
+ * Saves a recurring fee either for a product or for a user.
+ *
+ * @param $type
+ *   String specifying whether the fee is being added to a product as a feature
+ *     or attached to a user account; use 'product' or 'user'.
+ * @param $data
+ *   An array of data for the fee depending on $type.
+ * @return
+ *   No return for 'product' $type; the rfid of the saved fee for 'user' $type.
+ */
+function uc_recurring_fee_save($type, $data) {
+  switch ($type) {
+    case 'product':
+      // First attempt to update an existing row.
+      db_query("UPDATE {uc_recurring_products} SET model = '%s', fee_amount = %f, initial_charge = '%s', regular_interval = '%s', number_intervals = %d WHERE pfid = %d",
+        $data['model'], $data['fee_amount'], $data['initial_charge'], $data['regular_interval'], $data['number_intervals'], $data['pfid']);
+
+      // Otherwise insert this feature as a new row.
+      if (db_affected_rows() == 0) {
+        db_query("INSERT INTO {uc_recurring_products} (pfid, model, fee_amount, initial_charge, regular_interval, number_intervals) VALUES (%d, '%s', %f, '%s', '%s', %d)",
+          $data['pfid'], $data['model'], $data['fee_amount'], $data['initial_charge'], $data['regular_interval'], $data['number_intervals']);
+      }
+      break;
+
+    case 'user':
+      // First attempt to update an existing row.
+      db_query("UPDATE {uc_recurring_users} SET uid = %d, fee_handler = '%s', next_charge = %d, fee_amount = %f, regular_interval = '%s', remaining_intervals = %d, charged_intervals = %d, order_id = %d, data = '%s' WHERE rfid = %d",
+        $data['uid'], $data['fee_handler'], $data['next_charge'], $data['fee_amount'], $data['regular_interval'], $data['remaining_intervals'], $data['charged_intervals'], $data['order_id'], $data['data'], $data['rfid']);
+
+      // Otherwise insert this feature as a new row.
+      if (db_affected_rows() == 0) {
+        db_query("INSERT INTO {uc_recurring_users} (uid, fee_handler, next_charge, fee_amount, regular_interval, remaining_intervals, charged_intervals, order_id, data, created) VALUES (%d, '%s', %d, %f, '%s', %d, %d, %d, '%s', %d)",
+          $data['uid'], $data['fee_handler'], $data['next_charge'], $data['fee_amount'], $data['regular_interval'], $data['remaining_intervals'], $data['charged_intervals'], $data['order_id'], $data['data'], time());
+        $data['rfid'] = db_last_insert_id('uc_recurring_users', 'rfid');
+      }
+
+      return $data['rfid'];
+  }
+}
+
+/**
+ * Loads a recurring fee either from a product or for a user.
+ *
+ * @param $type
+ *   'product' to load a recurring fee product feature.
+ *   'user' to load a recurring fee schedule for a user.
+ * @param $id
+ *   The ID of the fee to load, either the product feature ID or the recurring
+ *     fee ID from the appropriate table.
+ * @return
+ *   An associative array of data for the specified fee.
+ */
+function uc_recurring_fee_load($type, $id) {
+  switch ($type) {
+    case 'product':
+      $fee = db_fetch_array(db_query("SELECT * FROM {uc_recurring_products} WHERE pfid = %d", $id));
+      if (!empty($fee)) {
+        list($fee['initial_charge_value'], $fee['initial_charge_unit']) = explode(' ', $fee['initial_charge']);
+        list($fee['regular_interval_value'], $fee['regular_interval_unit']) = explode(' ', $fee['regular_interval']);
+      }
+      break;
+    case 'user':
+      $fee = db_fetch_array(db_query("SELECT * FROM {uc_recurring_users} WHERE rfid = %d", $id));
+
+      if ($fee['fee_handler'] == 'uc_recurring') {
+        $fee['data'] = unserialize($fee['data']);
+
+        if ($key = uc_credit_encryption_key()) {
+          $crypt = new uc_encryption_class;
+          $fee['data']['payment_details']['cc_number'] = $crypt->decrypt($key, $fee['data']['payment_details']['cc_number']);
+          if (variable_get('uc_credit_debug', FALSE)) {
+            $fee['data']['payment_details']['cc_cvv'] = $crypt->decrypt($key, $fee['data']['payment_details']['cc_cvv']);
+          }
+          $fee['data']['payment_details']['cc_exp_month'] = $crypt->decrypt($key, $fee['data']['payment_details']['cc_exp_month']);
+          $fee['data']['payment_details']['cc_exp_year'] = $crypt->decrypt($key, $fee['data']['payment_details']['cc_exp_year']);
+          uc_store_encryption_errors($crypt, 'uc_recurring');
+        }
+      }
+      break;
+  }
+
+  return $fee;
+}
+
+/**
+ * Deletes a recurring fee from a product or user.
+ *
+ * @param $type
+ *   Either 'product' or 'user' to specify what type of delete needs to happen.
+ * @param $id
+ *   The ID of the recurring fee to be removed from the appropriate table.
+ */
+function uc_recurring_fee_delete($feature, $type = 'product') {
+  switch ($type) {
+    case 'product':
+      db_query("DELETE FROM {uc_recurring_products} WHERE pfid = %d", $feature['pfid']);
+      break;
+    case 'user':
+      module_invoke_all('recurring_api', 'delete', $feature['fid']);
+      db_query("DELETE FROM {uc_recurring_users} WHERE rfid = %d", $feature['pfid']);
+      break;
+  }
+}
+
+/**
+ * Cancels a user's recurring fee by setting remaining intervals to 0.
+ *
+ * @param $rfid
+ *   The recurring fee's ID.
+ */
+function uc_recurring_fee_cancel($rfid) {
+  db_query("UPDATE {uc_recurring_users} SET remaining_intervals = 0 WHERE rfid = %d", $rfid);
+}
+
+/**
+ * Returns an array of recurring fees associated with any product on an order.
+ *
+ * @param $order
+ *   The order object in question.
+ * @return
+ *   An array of recurring fee objects containing all their data from the DB.
+ */
+function uc_recurring_find_fees($order) {
+  if (!is_array($order->products) || count($order->products) == 0) {
+    return array();
+  }
+
+  $models = array();
+  $nids = array();
+
+  foreach ((array) $order->products as $product) {
+    $nids[] = $product->nid;
+    $models[] = check_plain($product->model);
+  }
+
+  $fees = array();
+  $result = db_query("SELECT rp.*, nid FROM {uc_recurring_products} AS rp LEFT JOIN {uc_product_features} AS pf ON rp.pfid = pf.pfid WHERE rp.model IN ('". implode("', '", $models) ."') OR (rp.model = '' AND pf.nid IN ('". implode("', '", $nids) ."'))");
+  while ($fee = db_fetch_object($result)) {
+    $fees[] = $fee;
+  }
+
+  return $fees;
+}
+
+/**
+ * Passes the information onto the specified fee handler for processing.
+ *
+ * @param $order
+ *   The order object the fees are attached to.
+ * @param $fee
+ *   The fee object to be processed.
+ * @return
+ *   TRUE or FALSE indicating whether or not the processing was successful.
+ */
+function uc_recurring_process($order, $fee) {
+  $handler = variable_get('uc_recurring_handler', 'uc_recurring') .'_recurring_fee';
+  if (!function_exists($handler)) {
+    drupal_set_message(t('The handler for processing recurring fees cannot be found.'), 'error');
+    return FALSE;
+  }
+
+  if ($handler($order, $fee) == TRUE) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+// Processes credit cards for the default handler.
+function uc_recurring_charge($fee) {
+  static $show = TRUE;
+
+  // Get the charge function for the default credit card gateway.
+  $gateways = _payment_gateway_list('credit', TRUE);
+  if (count($gateways) == 1) {
+    $keys = array_keys($gateways);
+    $func = $gateways[$keys[0]]['credit'];
+  }
+  elseif (count($gateways) > 1) {
+    foreach ($gateways as $gateway) {
+      if ($gateway['id'] == variable_get('uc_payment_credit_gateway', '')) {
+        $func = $gateway['credit'];
+      }
+    }
+  }
+
+  // Whoa... bad function? ABORT! ABORT!
+  if (!function_exists($func)) {
+    if ($show) {
+      watchdog('uc_recurring', 'Recurring payments failed to process due to invalid credit card gateway.', array(), WATCHDOG_ERROR);
+      $show = FALSE;
+    }
+    return FALSE;
+  }
+
+  // Cache the CC details stored by the handler.
+  uc_credit_cache('save', $fee['data']['payment_details'], FALSE);
+
+  // Run the charge.
+  $result = $func($fee['order_id'], $fee['fee_amount'], NULL);
+
+  // Handle the result.
+  if ($result['success'] === TRUE) {
+    uc_payment_enter($fee['order_id'], 'credit', $fee['fee_amount'], 0, $result['data'], t('Recurring fee payment.') .'<br />'. $result['comment']);
+    uc_order_comment_save($fee['order_id'], 0, t('!amount recurring fee collected for @model. (ID: <a href="!url">!fee</a>)', array('!url' => url('admin/store/orders/recurring/view/fee/'. $fee['rfid']), '!fee' => $fee['rfid'], '!amount' => uc_currency_format($fee['fee_amount']), '@model' => $fee['data']['model'])));
+
+    // Modules can hook into the charge process using hook_recurring_api().
+    module_invoke_all('recurring_api', 'charge', $fee);
+
+    // Needs to be updated for Conditional Actions. -RS
+    // workflow_ng_invoke_event('fee_charge_successful', uc_order_load($fee['order_id']));
+    // if ($fee['remaining_intervals'] == 1) {
+    //   workflow_ng_invoke_event('fee_expires', uc_order_load($fee['order_id']));
+    // }
+  }
+  else {
+    uc_order_comment_save($fee['order_id'], 0, t('Error: Recurring fee <a href="!url">!fee</a> for product @model failed.', array('!url' => url('admin/store/orders/recurring/view/fee/'. $fee['rfid']), '!fee' => $fee['rfid'], '@model' => $fee['data']['model'])));
+    watchdog('uc_recurring', 'Failed to capture recurring fee of !amount for product @model on order !order_id.', array('!amount' => $fee['fee_amount'], '@model' => $fee['data']['model'], '!order_id' => $fee['order_id']), WATCHDOG_ERROR, l(t('order !order_id', array('!order_id' => $fee['order_id'])), 'admin/store/orders/'. $fee['order_id']));
+
+    // Modules can hook into the charge process using hook_recurring_api().
+    module_invoke_all('recurring_api', 'fail', $fee);
+
+    // Provide a Workflow event for folks to hook into.
+    // workflow_ng_invoke_event('fee_charge_fails', uc_order_load($fee['order_id']));
+  }
+
+  return $result['success'];
+}

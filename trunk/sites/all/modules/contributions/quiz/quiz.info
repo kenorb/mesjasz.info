@@ -1,0 +1,13 @@
+; $Id: quiz.info,v 1.10 2008/10/06 16:41:04 mbutcher Exp $
+name = Quiz
+package = Quiz
+description = "Create interactive, multipage quizzes. This module must have at least one question-type module enabled in order to function properly. If in doubt, use the Multichoice module."
+core = 6.x
+php = 5.1
+
+; Information added by drupal.org packaging script on 2008-12-10
+version = "6.x-3.x-dev"
+core = "6.x"
+project = "quiz"
+datestamp = "1228867930"
+

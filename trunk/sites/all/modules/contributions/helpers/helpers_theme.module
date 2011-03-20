@@ -1,0 +1,238 @@
+<?php
+// $Id: helpers_theme.module,v 1.1.4.2 2008/02/14 17:43:30 nancyw Exp $
+
+/**
+ * @file
+ * This is a library of useful theming functions and methods.
+ * Please insert the link if you have a patch for core to introduce a function from this lib to core.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function helpers_theme_help($path, $args) {
+  $output = null;
+  switch ($path) {
+    case 'admin/help#helpers_theme':
+      $output .= t('A development library for theme functions. Contains numerous useful theming functions and methods.');
+      $output .= '<dl>';
+      $output .= '<dt>'."theme('paragraph'...".'</dt><dd>'. t('Theme a paragraph.') .'</dd>';
+      $output .= '<dt>'."theme('heading'...".'</dt><dd>'. t('Theme a heading.') .'</dd>';
+      $output .= '<dt>'."theme('empty_placeholder'...".'</dt><dd>'. t('Theme an "empty" placeholder.') .'</dd>';
+      $output .= '<dt>'."theme('definition_list'...".'</dt><dd>'. t('Theme a defintion list.') .'</dd>';
+      $output .= '<dt>'."theme('name_and_value_pair'...".'</dt><dd>'. t('Theme name and value as a DT DD pair.') .'</dd>';
+      $output .= '<dt>'."theme('none_option'...".'</dt><dd>'. t('Theme a "none" string.') .'</dd>';
+      $output .= '<dt>'."theme('read_more'...".'</dt><dd>'. t('Theme a "read_more" link.') .'</dd>';
+      $output .= '<dt>'."theme('shorten_string'...".'</dt><dd>'. t('Theme a shortened string.') .'</dd>';
+      $output .= '</dl>';
+  }
+  return $output;
+}
+
+/**
+ * Implementation of hook_theme.
+ */
+function helpers_theme_theme() {
+  return array(
+    'definition_list' => array(
+      'arguments' => array('items' => array(), 'title' => null, 'filter' => null),
+      ),
+    'empty_placeholder' => array(
+      'arguments' => array('message' => null),
+      ),
+    'heading' => array(
+      'arguments' => array('text' => null, 'level' => 2, 'attributes' => array()),
+      ),
+    'name_and_value_pair' => array(
+      'arguments' => array('name' => null, 'value' => 2, 'filter' => true),
+      ),
+    'none_option' => array(
+      'arguments' => array('string' => null),
+      ),
+    'paragraph' => array(
+      'arguments' => array('text' => null, 'attributes' => array()),
+      ),
+    'read_more' => array(
+      'arguments' => array('path' => null, 'title' => null),
+      ),
+    'shorten_string' => array(
+      'arguments' => array('short_string' => null, 'full_string' => null, 'count_addition' => 3),
+      ),
+    'style' => array(
+      'arguments' => array('style' => null, 'text' => null),
+      ),
+    );
+}
+
+/**
+ * Theme functions.
+ * HTML should not be inserted into output outside of the theme layer;
+ * this module adds commonly needed theming function.
+ */
+
+/**
+ * Theme a paragraph.
+ * @param $text: the text to be included in the paragraph. Not translated here.
+ * @param $attributes: Optional attributes.
+ * @return themed paragraph.
+ */
+function theme_paragraph($text, $attributes = array()) {
+  return '<p '. drupal_attributes($attributes) .'>'. $text .'</p>';
+}
+
+/**
+ * Theme a heading.
+ * @param $text: the text to be included in the heading. Not translated here.
+ * @param $level: the level of the heading (1 - 6).
+ * @param $attributes: Optional attributes.
+ * @return themed heading.
+ */
+function theme_heading($text, $level = 2, $attributes = array()) {
+  if ($level > 6 || $level < 1) {
+    drupal_set_message(t('Invalid heading level requested (@level).', array('@level' => $level)), 'error');
+    $level = 6;
+  }
+  return "<h$level ". drupal_attributes($attributes) .'>'. $text ."</h$level>";
+}
+
+/**
+ * Theme a section of text with a desired style.
+ * @param $style: the type of styling desired. Not translated here.
+ *   May be 'italics,' 'bold,' 'underline,' 'strikethrough,' 'delete,' 'insert'.
+ * @param $text: the text to be stylized. Not translated here.
+ * @return themed text or just the text if the style is invalid.
+ */
+function theme_style($style, $text) {
+  $styles = array(
+    'big' => 'big',
+    'bold' => 'strong',
+    'delete' => 'del',
+    'insert' => 'ins',
+    'italics' => 'em',
+    'small' => 'small',
+    'strikethrough' => 'strike',
+    'underline' => 'u',
+    );
+  if (isset($styles[$style])) {
+    $tag = $styles[$style];
+    return "<$tag>". $text ."</$tag>";
+  }
+  else {
+    drupal_set_message(t('Invalid style type requested. (@bad)', array('@bad' => $style)), 'error');
+    return $text;
+  }
+}
+
+/**
+ * Theme an "empty" placeholder. Outputs a translated "not available" by default.
+ * @param $message: Optional. Provide a translated message string.
+ * @return a string that can be used as placeholder for non existing content.
+ */
+function theme_empty_placeholder($message = null) {
+  $message = ($message ? $message : t("not available"));
+  return '<span class="empty">'. $message .'</span>';
+}
+
+/**
+ * Return a themed list of definition items.
+ * Patch pending at http://drupal.org/node/54898
+ * @param $items
+ *   An array of items to be displayed in the list.
+ *   The argument is: array("term" => $term, "definitions" => $definitions)
+ *   If you provide the $definition as arrays, you will get multiple DDs with each DT.
+ *   If you provide the $definitions as a string, only one DD will be added to the DT.
+ * @param $title
+ *   The title of the list.
+ * @param $filter
+ *   Boolean value to define wether or not you wish to filter the input. Should be left TRUE, unless you sanitize your input yourself.
+ * @return
+ *   A string containing the list output.
+ */
+function theme_definition_list($items = array(), $title = null, $filter = TRUE) {
+  $output = '<div class="definition-list">';
+  if (isset($title)) {
+    $output .= '<h3>'. ($filter ? check_plain($title) : $title) .'</h3>';
+  }
+
+  if (!empty($items)) {
+    $output .= "<dl>";
+    foreach ($items as $item) {
+      if (is_string($item['term'])) {
+        $output .= '  <dt>'. ($filter ? check_plain($item['term']) : $item['term']) .'</dt>';
+      }
+      elseif (is_array($item['term'])) {
+        foreach ($item['term'] as $term) {
+          $output .= '  <dt>'.  ($filter ? check_plain($term) : $term) ."</dt>\n";
+        }
+      }
+
+      if (is_string($item['definitions'])) {
+        $output .= '  <dd>'. ($filter ? filter_xss($item['definitions']) : $item['definitions']) .'</dd>';
+      }
+      elseif (is_array($item['definitions'])) {
+        foreach ($item['definitions'] as $definition) {
+          $output .= '  <dd>'.  ($filter ? filter_xss($definition) : $definition) ."</dd>\n";
+        }
+      }
+    }
+    $output .= "</dl>";
+  }
+  $output .= '</div>';
+  return $output;
+}
+
+ /**
+ * Return a themed name and value as a DT DD pair.
+ * @param $name
+ *   The name string.
+ * @param $value
+ *   The value string.
+ * @param $filter
+ *   Bool passed on to definition list.
+ */
+function theme_name_and_value_pair($name, $value, $filter = TRUE) {
+  //simple version: return "<strong>$name:</strong> $value";
+  $items[] = array('term' => $name .':', 'definitions' => $value);
+  return theme('definition_list', $items, null, $filter);
+}
+
+/**
+ * Returns a themed "none" string, for usage in a select form.
+ * In case you wish a general way of building the &lt;none&gt; strings.
+ * @param $string optionally provide a string that goes in the place of the word "none". If you provide this, it will not be translated.
+ */
+function theme_none_option($string = null) {
+  $string = ($string ? $string : t('none'));
+  return '<'. $string .'>';
+}
+
+/**
+ * Function to theme the read more links
+ * Drupal issue number 69571
+ * @ingroup themeable
+ * @param $path a drupal path or full url to the full resource. Include http:// if you link to external resource.
+ * @param $title an optional title that will provide a tooltip text when hovering over the link.
+ */
+function theme_read_more($path, $title = null) {
+  if ($title) {
+    $params['title'] = check_plain($title);
+  }
+  $params['class'] = 'read-more';
+  return l(t('read more'), $path, $params);
+}
+
+/**
+ * Function to theme the a shortened string (see "shorten_string" above)
+ * @ingroup themeable
+ * @param $short_string The shortened string
+ * @param $full_string The unshortened string, for display in the tooltip
+ * @param $count_addition The amount of charanters that the calling function wants to be added. Defaults to three. Optional.
+ */
+function theme_shorten_string($short_string, $full_string, $count_addition = 3) {
+  while ($i < $count_addition) {
+    $i++;
+    $addition .= '.';
+  }
+
+  return '<span title="'. $full_string .'">'. $short_string . $addition .'</span>';
+}

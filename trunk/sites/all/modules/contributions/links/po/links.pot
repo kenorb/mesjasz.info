@@ -1,0 +1,1102 @@
+# $Id: links.pot,v 1.1.2.1 2008/12/30 23:11:18 syscrusher Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  links.inc,v 1.28 2008/12/28 00:56:51 syscrusher
+#  links.module,v 1.21 2008/07/07 02:28:55 syscrusher
+#  links_related.module,v 1.21 2008/12/23 03:07:29 syscrusher
+#  links_weblink.module,v 1.26 2008/12/28 00:56:51 syscrusher
+#  links_admin.module,v 1.11.2.1 2008/12/30 11:57:06 syscrusher
+#  links_views.inc,v 1.2 2006/06/22 03:01:14 syscrusher
+#  links_related.info,v 1.3 2008/07/07 02:28:55 syscrusher
+#  links.info,v 1.3 2008/01/01 00:10:41 syscrusher
+#  links_admin.info,v 1.3 2008/11/01 00:46:30 syscrusher
+#  links_weblink.info,v 1.3 2008/07/17 02:50:26 syscrusher
+#  links.install,v 1.8 2008/01/01 00:10:41 syscrusher
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2008-12-30 18:10-0500\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: links.inc:204
+msgid "Web Link: "
+msgstr ""
+
+#: links.inc:669
+msgid "Update of title in existing link record failed."
+msgstr ""
+
+#: links.inc:689
+msgid "Update of URL and title in existing link record failed."
+msgstr ""
+
+#: links.inc:898
+msgid "Query for existing link record failed."
+msgstr ""
+
+#: links.inc:1103
+msgid "Cannot find or create link record for %url"
+msgstr ""
+
+#: links.inc:1109
+msgid "update"
+msgstr ""
+
+#: links.inc:1112
+msgid "insert"
+msgstr ""
+
+#: links.inc:1116
+msgid "Unable to %op link &quot;%t&quot; in database."
+msgstr ""
+
+#: links.inc:1169;1543;1588
+msgid "links failed on query "
+msgstr ""
+
+#: links.inc:1395
+msgid "Visit"
+msgstr ""
+
+#: links.inc:1409;1413
+msgid "!v !link"
+msgstr ""
+
+#: links.inc:1417
+msgid "visit linked page"
+msgstr ""
+
+#: links.inc:615;618;624;627;670;690;693;731;760;762;799;809;828;857;875;877;899 links.module:0 links_related.module:12;813;815 links_weblink.module:753;755;757
+msgid "links"
+msgstr ""
+
+#: links.inc:615
+msgid "Links could not delete link !lid from {links_node} table"
+msgstr ""
+
+#: links.inc:618
+msgid "Executed backstop clearing of {links_node} for lid=!lid"
+msgstr ""
+
+#: links.inc:624 links_admin.module:851
+msgid "Failed to delete link !lid"
+msgstr ""
+
+#: links.inc:627 links_admin.module:849
+msgid "Deleted link !lid"
+msgstr ""
+
+#: links.inc:670
+msgid "links update for existing link !lid failed"
+msgstr ""
+
+#: links.inc:690
+msgid "Links update for existing link !lid failed"
+msgstr ""
+
+#: links.inc:693
+msgid "Changed URL for existing link !lid to !url"
+msgstr ""
+
+#: links.inc:731
+msgid "Updated link ID from !old to !new. Calling hook to update references, then old link will be deleted."
+msgstr ""
+
+#: links.inc:760
+msgid "Failed to force master title for link !lid"
+msgstr ""
+
+#: links.inc:762
+msgid "Forcing master title for link !lid"
+msgstr ""
+
+#: links.inc:799
+msgid "links update for existing link record failed"
+msgstr ""
+
+#: links.inc:809
+msgid "database error while retrieving link reference lid=!lid, nid=!nid, module=!module"
+msgstr ""
+
+#: links.inc:828
+msgid "cannot find master link for !lid while updating title in node reference"
+msgstr ""
+
+#: links.inc:857
+msgid "links update for link !lid, node !nid failed"
+msgstr ""
+
+#: links.inc:875
+msgid "links delete references for link !lid failed for null module"
+msgstr ""
+
+#: links.inc:877
+msgid "Deleted references for link !lid for null module"
+msgstr ""
+
+#: links.inc:899
+msgid "links query for existing link record failed"
+msgstr ""
+
+#: links_views.inc:25
+msgid "Links: Link title"
+msgstr ""
+
+#: links_views.inc:26
+msgid "The title of the associated link."
+msgstr ""
+
+#: links_views.inc:34;40
+msgid "Links: Clickthroughs"
+msgstr ""
+
+#: links_views.inc:35
+msgid "The number of clickthroughs for the associated link."
+msgstr ""
+
+#: links_views.inc:41
+msgid "This allows you to sort by the number of link clickthroughs."
+msgstr ""
+
+#: links_views.inc:59
+msgid "Links: Link URL"
+msgstr ""
+
+#: links_views.inc:62
+msgid "The clickable URL of the link."
+msgstr ""
+
+#: links.module:34
+msgid "These settings control the behavior of the link-management services and provide defaults for modules which use those services. Some modules may offer module-specific settings that override these for that module only."
+msgstr ""
+
+#: links.module:39 links_admin.module:117
+msgid "Display settings"
+msgstr ""
+
+#: links.module:44
+msgid "Visit link display mode"
+msgstr ""
+
+#: links.module:46
+msgid "display as title"
+msgstr ""
+
+#: links.module:46
+msgid "display as url"
+msgstr ""
+
+#: links.module:46
+msgid "only display the 'visit linked page' text"
+msgstr ""
+
+#: links.module:48
+msgid "Users are able to visit links via the node links list. This setting toggles how the visit link is displayed, either containing the node title or the node target URL or just the words 'visit linked page'"
+msgstr ""
+
+#: links.module:53
+msgid "Link targets"
+msgstr ""
+
+#: links.module:55
+msgid "These settings allow you to apply the attribute <code>target=\"_blank\"</code> to cause links to open in a new browser window or tab. Using this setting will cause your pages not to validate under the XHTML standard, but will work with most browsers. There is some debate over whether using the <code>target</code> attribute is good design practice; Links leaves this choice up to the system administrator."
+msgstr ""
+
+#: links.module:60
+msgid "Open links in new window"
+msgstr ""
+
+#: links.module:62;103
+msgid "Never"
+msgstr ""
+
+#: links.module:62;103
+msgid "All links"
+msgstr ""
+
+#: links.module:62;103
+msgid "External links only"
+msgstr ""
+
+#: links.module:64
+msgid "Controls opening of new browser windows for links."
+msgstr ""
+
+#: links.module:69
+msgid "User setting for target"
+msgstr ""
+
+#: links.module:71
+msgid "deny"
+msgstr ""
+
+#: links.module:71
+msgid "allow"
+msgstr ""
+
+#: links.module:73
+msgid "Allow users to specify their own preference via the user settings page."
+msgstr ""
+
+#: links.module:78
+msgid "Security settings"
+msgstr ""
+
+#: links.module:83
+msgid "You can set the permissions of who is allowed to view the count of how many people have followed each link in the !link."
+msgstr ""
+
+#: links.module:83
+msgid "access control page"
+msgstr ""
+
+#: links.module:95
+msgid "Links behavior"
+msgstr ""
+
+#: links.module:101
+msgid "Open links in new browser window"
+msgstr ""
+
+#: links.module:105
+msgid "Create a new window (or tab, depending on your browser's settings) when you click on a link? This affects all URLs managed by the Links package."
+msgstr ""
+
+#: links.module:142
+msgid "package settings"
+msgstr ""
+
+#: links.module:159
+msgid "Link data not found"
+msgstr ""
+
+#: links.module:161
+msgid "Return"
+msgstr ""
+
+#: links.module:23 links_admin.module:36
+msgid "access links statistics"
+msgstr ""
+
+#: links.module:118
+msgid "Outlink Redirection"
+msgstr ""
+
+#: links.module:125
+msgid "link management"
+msgstr ""
+
+#: links.module:126
+msgid "Manage links for your site."
+msgstr ""
+
+#: links.module:133
+msgid "Links package"
+msgstr ""
+
+#: links.module:134
+msgid "Configure the global display settings and default targets for links managed by the Links package."
+msgstr ""
+
+#: links_admin.module:28
+msgid "Administer the database of links"
+msgstr ""
+
+#: links_admin.module:45
+msgid "links admin module"
+msgstr ""
+
+#: links_admin.module:46
+msgid "Configure settings for the links administration module."
+msgstr ""
+
+#: links_admin.module:55
+msgid "Links database"
+msgstr ""
+
+#: links_admin.module:56
+msgid "Update individual links, and mark links for scheduled validation."
+msgstr ""
+
+#: links_admin.module:70
+msgid "administer links database"
+msgstr ""
+
+#: links_admin.module:112
+msgid "These settings control the behavior of the link-management services."
+msgstr ""
+
+#: links_admin.module:122
+msgid "Links per page in administrative screens"
+msgstr ""
+
+#: links_admin.module:125
+msgid "This setting controls how many links will be displayed per page in link administration pages."
+msgstr ""
+
+#: links_admin.module:130
+msgid "Always collapse filter criteria form"
+msgstr ""
+
+#: links_admin.module:132
+msgid "If selected, this option always hides the sorting criteria form unless you expand it. Otherwise, the form is expanded when there are currently active filter criteria, and collapsed if there are none."
+msgstr ""
+
+#: links_admin.module:139;242
+msgid "matches"
+msgstr ""
+
+#: links_admin.module:139;243
+msgid "does not match"
+msgstr ""
+
+#: links_admin.module:157
+msgid "No filter currently set."
+msgstr ""
+
+#: links_admin.module:159
+msgid "Current filter displays links matching all of the following:"
+msgstr ""
+
+#: links_admin.module:220;380 links_weblink.module:438
+msgid "Link URL"
+msgstr ""
+
+#: links_admin.module:221 links_related.module:772
+msgid "Link Title"
+msgstr ""
+
+#: links_admin.module:228
+msgid "Total clicks"
+msgstr ""
+
+#: links_admin.module:229
+msgid "Referring nodes"
+msgstr ""
+
+#: links_admin.module:252
+msgid "Filter criteria"
+msgstr ""
+
+#: links_admin.module:265;283
+msgid "Show only links where"
+msgstr ""
+
+#: links_admin.module:279
+msgid "Specify a string to match. Metacharacter ^ matches the start of the string, and $ matches the end of the string, so for instance you can use &quot;.com$&quot; to match URLs like &quot;example.com&quot; but not &quot;www.common.example.net&quot;."
+msgstr ""
+
+#: links_admin.module:297
+msgid "Specify an integer value to match against the selected numeric field."
+msgstr ""
+
+#: links_admin.module:301
+msgid "Add filter"
+msgstr ""
+
+#: links_admin.module:307
+msgid "Reset filters"
+msgstr ""
+
+#: links_admin.module:335
+msgid "Update master table only (selection checkboxes ignored)"
+msgstr ""
+
+#: links_admin.module:340
+msgid "Use title from master table for all references to selected links"
+msgstr ""
+
+#: links_admin.module:344
+msgid "Delete selected links"
+msgstr ""
+
+#: links_admin.module:352
+msgid "Update titles only (selection checkboxes ignored)"
+msgstr ""
+
+#: links_admin.module:357
+msgid "Use title from master table for the selected node references"
+msgstr ""
+
+#: links_admin.module:361
+msgid "Delete this link from the selected nodes"
+msgstr ""
+
+#: links_admin.module:377;1052
+msgid "Select"
+msgstr ""
+
+#: links_admin.module:378
+msgid "Link ID"
+msgstr ""
+
+#: links_admin.module:379 links_related.module:303 links_weblink.module:429
+msgid "Title"
+msgstr ""
+
+#: links_admin.module:381
+msgid "Statistics"
+msgstr ""
+
+#: links_admin.module:443
+msgid "Used by %nodes nodes.<br/>%clicks total clicks."
+msgstr ""
+
+#: links_admin.module:456;635
+msgid "Update options"
+msgstr ""
+
+#: links_admin.module:473;652
+msgid "Update"
+msgstr ""
+
+#: links_admin.module:478
+msgid "<p>The <em>Links Package</em> keeps all URLs in a master table, regardless of how many nodes refer to the same URL. This screen allows you to conveniently update the master table, or you can link to sub-pages that let you manage the references to a given link. Refer to the detailed instructions below if you are unfamiliar with this page.</p>"
+msgstr ""
+
+#: links_admin.module:484
+msgid "Detailed instructions"
+msgstr ""
+
+#: links_admin.module:493
+msgid "<p>If you change a URL here, it will be reflected immediately in all nodes that share that link, unless it has been overridden at the node level.</p><p>Any changes you make to titles in this list will update the master table, but by default any node-specific title overrides are not affected. Select the <strong>Use master link title</strong> update option and select one or more links if you want to force all referring nodes to use the title from the master table, for the selected links. Any unselected links will still change only the master table.</p><p>If you <strong>delete</strong> any links from this screen, they will be removed from all nodes that currently use them.</p>"
+msgstr ""
+
+#: links_admin.module:529;896
+msgid "Link #!lid (&quot;!link_title&quot;) is used in !type_name node #!nid. (&quot;!title&quot;)"
+msgstr ""
+
+#: links_admin.module:529
+msgid "Link #!lid (&quot;!link_title&quot;) is not used in any nodes."
+msgstr ""
+
+#: links_admin.module:533;900
+msgid "<br/><strong>The link is required for this content type, so deleting the link will also delete this !type_name.</strong>"
+msgstr ""
+
+#: links_admin.module:539
+msgid "Are you sure you want to delete these links?"
+msgstr ""
+
+#: links_admin.module:540;907
+msgid "This action cannot be undone."
+msgstr ""
+
+#: links_admin.module:541;908
+msgid "Delete all"
+msgstr ""
+
+#: links_admin.module:541;908
+msgid "Cancel"
+msgstr ""
+
+#: links_admin.module:564
+msgid "Edit references for link #!lid (!link)"
+msgstr ""
+
+#: links_admin.module:586
+msgid "<p>These are the node(s) that refer to link #!lid (!link). From this screen you can change the title by which the link is known at the specific node where it is used, which may or may not be the same as its main title in the master links table. You can also delete references to this link in any of the nodes that now refer to it. Be aware that for some node types (such as &quot;weblink&quot;) the link is essential to the node, so deleting the link will also delete the node. You will be warned about this before the nodes are deleted.</p><p><strong>Any records with empty title below are using the title from the master table.</strong>"
+msgstr ""
+
+#: links_admin.module:594
+msgid "!node_link<br/>Type: !type_name, Total clicks: !clicks"
+msgstr ""
+
+#: links_admin.module:596
+msgid "<br/><em>This link is required for the node, so deleting the link will also delete the node.</em>"
+msgstr ""
+
+#: links_admin.module:711
+msgid "Link URL may not be empty (ID=!lid)"
+msgstr ""
+
+#: links_admin.module:714
+msgid "Link title may not be empty in the master table (ID=!lid)"
+msgstr ""
+
+#: links_admin.module:726
+msgid "Forcing master title: !lid"
+msgstr ""
+
+#: links_admin.module:738
+msgid "Forcing master title (lid:nid:module): !lid:!nid:!module"
+msgstr ""
+
+#: links_admin.module:759
+msgid "Updated link !old_lid (new ID is !new_lid)"
+msgstr ""
+
+#: links_admin.module:786;797
+msgid "Adding filter: !filter"
+msgstr ""
+
+#: links_admin.module:807
+msgid "Filters have been removed."
+msgstr ""
+
+#: links_admin.module:906
+msgid "Are you sure you want to delete these link references?"
+msgstr ""
+
+#: links_admin.module:943
+msgid "Missing link ID in request to delete link references"
+msgstr ""
+
+#: links_admin.module:953
+msgid "Deleted reference from link !lid to !type node !nid via module !module"
+msgstr ""
+
+#: links_admin.module:956
+msgid "Deleted node !nid (&quot;!title&quot;)"
+msgstr ""
+
+#: links_admin.module:1014
+msgid "Edit references from nodes"
+msgstr ""
+
+#: links_admin.module:1017
+msgid "Open link"
+msgstr ""
+
+#: links_admin.module:1019
+msgid "Open link in new window"
+msgstr ""
+
+#: links_admin.module:1052
+msgid "Referring Node"
+msgstr ""
+
+#: links_admin.module:1052
+msgid "Used by Module"
+msgstr ""
+
+#: links_admin.module:1052
+msgid "Node-Specific Title"
+msgstr ""
+
+#: links_admin.module:36
+msgid "administer links"
+msgstr ""
+
+#: links_admin.module:36
+msgid "change url globally"
+msgstr ""
+
+#: links_admin.module:0
+msgid "links_admin"
+msgstr ""
+
+#: links_related.module:19
+msgid "list links"
+msgstr ""
+
+#: links_related.module:32
+msgid "related links"
+msgstr ""
+
+#: links_related.module:33
+msgid "Configure settings for related links attached to other content."
+msgstr ""
+
+#: links_related.module:46 links_related.info:0
+msgid "Adds an extra URL field to nodes of admin-specified types."
+msgstr ""
+
+#: links_related.module:78
+msgid "The &quot;links&quot; module is disabled or not installed. Node links will not function until this is corrected. Check the availability of that module, and enable if needed, in the !modules."
+msgstr ""
+
+#: links_related.module:78 links_weblink.module:341
+msgid "modules administration page"
+msgstr ""
+
+#: links_related.module:83 links_weblink.module:346
+msgid "Link display settings"
+msgstr ""
+
+#: links_related.module:84;146
+msgid "Other settings for how the links behave and how they are displayed are available in the !linksettingspage."
+msgstr ""
+
+#: links_related.module:84;146 links_weblink.module:347
+msgid "links module settings page"
+msgstr ""
+
+#: links_related.module:89
+msgid "Displayed links (teaser mode)"
+msgstr ""
+
+#: links_related.module:91;99
+msgid "None"
+msgstr ""
+
+#: links_related.module:91;99
+msgid "All"
+msgstr ""
+
+#: links_related.module:92
+msgid "This setting controls how many links are displayed near the node title (in most themes) for the teaser or listing format."
+msgstr ""
+
+#: links_related.module:97
+msgid "Displayed links (full-page mode)"
+msgstr ""
+
+#: links_related.module:100 links_weblink.module:363
+msgid "This setting controls how many links are displayed near the node title (in most themes) in full-page displays."
+msgstr ""
+
+#: links_related.module:105 links_weblink.module:368
+msgid "Display trim length"
+msgstr ""
+
+#: links_related.module:107 links_weblink.module:370
+msgid "Unlimited"
+msgstr ""
+
+#: links_related.module:108
+msgid "Trims the displayed text (but not the actual URL) for links displayed near the article title. Does not affect display of links as end-notes within the article body."
+msgstr ""
+
+#: links_related.module:113
+msgid "Show end-notes list"
+msgstr ""
+
+#: links_related.module:116
+msgid "If enabled, list of the article's related links will be appended to the end of the content, when in full-page display mode. This listing will also appear as part of the separate links tab (if that feature is enabled)."
+msgstr ""
+
+#: links_related.module:121
+msgid "List embedded links"
+msgstr ""
+
+#: links_related.module:124
+msgid "If enabled, a list of links contained within the article text will be appended to the end of the content, when in full-page display mode. This listing will also appear as part of the separate links tab (if that feature is enabled)."
+msgstr ""
+
+#: links_related.module:129
+msgid "Show links tab"
+msgstr ""
+
+#: links_related.module:132
+msgid "If enabled, a tab will be added to node displays to display the list of related and embedded links on their own separate page."
+msgstr ""
+
+#: links_related.module:137
+msgid "Always expand related links field"
+msgstr ""
+
+#: links_related.module:140
+msgid "This setting causes the related links area in node edit pages to always be expanded by default, although users can still collapse it manually. This can be useful if you want to call attention to the related links area for contributors."
+msgstr ""
+
+#: links_related.module:145
+msgid "Node edit settings"
+msgstr ""
+
+#: links_related.module:151
+msgid "Blank link lines"
+msgstr ""
+
+#: links_related.module:154
+msgid "This setting controls how many blank &quot;Related Links&quot; lines appear after already-defined links during node editing."
+msgstr ""
+
+#: links_related.module:159
+msgid "content types page"
+msgstr ""
+
+#: links_related.module:232;326
+msgid "Related links"
+msgstr ""
+
+#: links_related.module:239
+msgid "Allow related links"
+msgstr ""
+
+#: links_related.module:240
+msgid "Disabled"
+msgstr ""
+
+#: links_related.module:240
+msgid "Optional"
+msgstr ""
+
+#: links_related.module:240
+msgid "Required"
+msgstr ""
+
+#: links_related.module:242
+msgid "This setting enables or disables related links for this content type."
+msgstr ""
+
+#: links_related.module:260;332;453
+msgid "Related Links"
+msgstr ""
+
+#: links_related.module:261
+msgid "Links are stored as part of the !page. Monitoring and dead link detection are centrally managed from there. <strong>To add more links, just click &quot;Preview&quot; to add another blank row. To remove a link from this article, just blank out its URL field or check the Delete box.</strong> If you blank out the title but leave the URL, then the system will suggest a title for you. The Weight allows you to determine the order in which links are displayed; lower numbers float to the top."
+msgstr ""
+
+#: links_related.module:261
+msgid "links management feature"
+msgstr ""
+
+#: links_related.module:281
+msgid "(at least one link required for this content type)"
+msgstr ""
+
+#: links_related.module:303;649
+msgid "URL"
+msgstr ""
+
+#: links_related.module:303
+msgid "Weight"
+msgstr ""
+
+#: links_related.module:303
+msgid "Delete"
+msgstr ""
+
+#: links_related.module:560;603
+msgid "Matched text: !match"
+msgstr ""
+
+#: links_related.module:563
+msgid "Links from Article Text"
+msgstr ""
+
+#: links_related.module:577
+msgid "Embedded Links"
+msgstr ""
+
+#: links_related.module:580
+msgid "These are the links found inside the page content. You can choose to replace the direct URLs with managed links from the site's links catalog (adding new links if necessary), or to replace existing catalog links with the actual direct URLs. Titles added or changed here do not override titles for the same link if it appears on other pages."
+msgstr ""
+
+#: links_related.module:636
+msgid "also known as: %aka"
+msgstr ""
+
+#: links_related.module:642
+msgid "Found title"
+msgstr ""
+
+#: links_related.module:661
+msgid "Make non-catalog link"
+msgstr ""
+
+#: links_related.module:661
+msgid "Make catalog link"
+msgstr ""
+
+#: links_related.module:669
+msgid "Administer link"
+msgstr ""
+
+#: links_related.module:676
+msgid "Detach from this node"
+msgstr ""
+
+#: links_related.module:676
+msgid "Attach to this node"
+msgstr ""
+
+#: links_related.module:685
+msgid "Weblink page"
+msgstr ""
+
+#: links_related.module:685;755
+msgid "Edit"
+msgstr ""
+
+#: links_related.module:691
+msgid "Create weblink page"
+msgstr ""
+
+#: links_related.module:710
+msgid "Save changes"
+msgstr ""
+
+#: links_related.module:752
+msgid "Created a standalone weblink page for the link !page_link. !edit_link"
+msgstr ""
+
+#: links_related.module:772
+msgid "and URL"
+msgstr ""
+
+#: links_related.module:772
+msgid "Operations"
+msgstr ""
+
+#: links_related.module:813
+msgid "links delete references for link !lid failed for links_related module"
+msgstr ""
+
+#: links_related.module:815
+msgid "Deleted references for link !lid for links_related module"
+msgstr ""
+
+#: links_related.module:0
+msgid "links_related"
+msgstr ""
+
+#: links_weblink.module:16
+msgid "<p>This module is used to create links to other resources -- websites, pages, documents, etc. Each click on an outgoing link is logged and counted.</p>"
+msgstr ""
+
+#: links_weblink.module:26
+msgid "weblink"
+msgstr ""
+
+#: links_weblink.module:30
+msgid "A weblink is an article whose main purpose is to catalog a link into a directory, as distinguished from an article of some other type that may or may not have related links. It is possible that a weblink article may <i>also</i> have related links (depending on administrative settings for this site), but the weblink's primary link is a required field that is separate from the optional related links (if any)."
+msgstr ""
+
+#: links_weblink.module:42
+msgid "weblinks"
+msgstr ""
+
+#: links_weblink.module:49
+msgid "weblinks module"
+msgstr ""
+
+#: links_weblink.module:50
+msgid "Configure settings for the weblink content type."
+msgstr ""
+
+#: links_weblink.module:117
+msgid "category administration"
+msgstr ""
+
+#: links_weblink.module:124
+msgid "administer"
+msgstr ""
+
+#: links_weblink.module:179
+msgid "Weblinks: Main Page"
+msgstr ""
+
+#: links_weblink.module:181
+msgid "Weblinks: %topics"
+msgstr ""
+
+#: links_weblink.module:183
+msgid "Weblinks top level"
+msgstr ""
+
+#: links_weblink.module:219
+msgid "<p>There are no weblinks defined at this level of the category tree.</p>\n"
+msgstr ""
+
+#: links_weblink.module:285
+msgid "Categories"
+msgstr ""
+
+#: links_weblink.module:319 links.info:0;0 links_admin.info:0 links_related.info:0 links_weblink.info:0
+msgid "Links"
+msgstr ""
+
+#: links_weblink.module:322
+msgid "(No links in this category)"
+msgstr ""
+
+#: links_weblink.module:340
+msgid "The &quot;links&quot; module is disabled or not installed. Weblinks will not function until this is corrected. Check the availability of\nthat module, and enable if needed, in the %modules."
+msgstr ""
+
+#: links_weblink.module:347
+msgid "Other settings for how weblinks behave and how they are displayed are available in the !linksettingspage."
+msgstr ""
+
+#: links_weblink.module:352
+msgid "Link display for teaser view"
+msgstr ""
+
+#: links_weblink.module:354;362
+msgid "Do not display link"
+msgstr ""
+
+#: links_weblink.module:354;362
+msgid "Display link"
+msgstr ""
+
+#: links_weblink.module:355
+msgid "This setting controls whether the clickable link is displayed near the node title (in most themes) for the teaser or listing format."
+msgstr ""
+
+#: links_weblink.module:360
+msgid "Link display for full-page view"
+msgstr ""
+
+#: links_weblink.module:371
+msgid "Trims the displayed text (but not the actual URL) when the clickable link is displayed near the article title. Does not affect display of the link at the end of the article body."
+msgstr ""
+
+#: links_weblink.module:376
+msgid "Show link at end of body text"
+msgstr ""
+
+#: links_weblink.module:379
+msgid "If enabled, the clickable link will be appended to the end of the content, when in full-page display mode."
+msgstr ""
+
+#: links_weblink.module:384
+msgid "Weblink node titles go to destination page"
+msgstr ""
+
+#: links_weblink.module:387
+msgid "If enabled, then weblink nodes displayed in teaser mode (such as on the default home page) will have their titles linked to the destination URL, rather than going to a full-page view of the weblink node. Note that this means users can never see the body of a weblink node, only the teaser. The &quot;read more&quot; link (typically smaller than the title link) is not altered by this option."
+msgstr ""
+
+#: links_weblink.module:392
+msgid "Weblink catalog settings"
+msgstr ""
+
+#: links_weblink.module:397
+msgid "Enable weblinks directory"
+msgstr ""
+
+#: links_weblink.module:400
+msgid "If enabled, this module will produce a directory of all weblink nodes, organized by category."
+msgstr ""
+
+#: links_weblink.module:405
+msgid "Category display columns"
+msgstr ""
+
+#: links_weblink.module:408
+msgid "If the weblink catalog is enabled, this setting controls the number of columns in the table of catagories that appears at the top of link catalog pages."
+msgstr ""
+
+#: links_weblink.module:413
+msgid "Show links in child categories"
+msgstr ""
+
+#: links_weblink.module:416
+msgid "If enabled, the weblink catalog will list weblinks in both the selected category and its children (if the vocabulary in use is hierarchical)."
+msgstr ""
+
+#: links_weblink.module:432
+msgid "Textual description of the weblink"
+msgstr ""
+
+#: links_weblink.module:441
+msgid "Link URL, either local or remote. The URL will be normalized to remove things like session identifiers, which are not a permanent part of the link address."
+msgstr ""
+
+#: links_weblink.module:447
+msgid "Body"
+msgstr ""
+
+#: links_weblink.module:628;637
+msgid "Top weblinks"
+msgstr ""
+
+#: links_weblink.module:629;642
+msgid "Latest weblinks"
+msgstr ""
+
+#: links_weblink.module:630
+msgid "Weblinks blogroll"
+msgstr ""
+
+#: links_weblink.module:647
+msgid "Weblinks"
+msgstr ""
+
+#: links_weblink.module:648
+msgid "Not yet implemented."
+msgstr ""
+
+#: links_weblink.module:665
+msgid "Weblink filter"
+msgstr ""
+
+#: links_weblink.module:667
+msgid "Filter for weblink tokens,  [weblink:node_id|text] or [weblink:node_id/link_id] or [weblink:http://weblink.example.com/]. If there is more than one link for the specified node_id, the first one will be used unless link_id is specified."
+msgstr ""
+
+#: links_weblink.module:691
+msgid "(Link not found)"
+msgstr ""
+
+#: links_weblink.module:730
+msgid "You may create links to items stored in our weblink registry using a special syntax. The weblink codes will be replaced by a links to visit the real websites. Syntax: <code>[weblink:node_id]</code> (to use the first link for that node), <code>[weblink:node_id/link_id]</code> (to use a specific link for that node) or <code>[weblink:http://a.weblink.example.com/]</code> (to specify a raw URL)."
+msgstr ""
+
+#: links_weblink.module:733
+msgid "You may link to webpages <a href=\"%long-tip\">through the weblinks registry</a>"
+msgstr ""
+
+#: links_weblink.module:753
+msgid "links delete references for link !lid failed for links_weblink module"
+msgstr ""
+
+#: links_weblink.module:755
+msgid "Deleted references for link !lid for links_weblink module"
+msgstr ""
+
+#: links_weblink.module:757
+msgid "Deletion of link !lid requires deletion of nodes !nodes by links_weblink module, because these weblinks will no longer be valid."
+msgstr ""
+
+#: links_weblink.module:331
+msgid "create weblinks"
+msgstr ""
+
+#: links_weblink.module:331
+msgid "view weblinks"
+msgstr ""
+
+#: links_weblink.module:331
+msgid "edit own weblinks"
+msgstr ""
+
+#: links_weblink.module:0
+msgid "links_weblink"
+msgstr ""
+
+#: links.install:19
+msgid "error"
+msgstr ""
+
+#: links.install:19
+msgid "links failed on main query in _links_recalc_all_url_md5()"
+msgstr ""
+
+#: links.info:0
+msgid "Controls Links settings and API. Required for any other Links module."
+msgstr ""
+
+#: links_admin.info:0
+msgid "Links Administration"
+msgstr ""
+
+#: links_admin.info:0
+msgid "Allows links from all over the site to be managed in a centralized way."
+msgstr ""
+
+#: links_related.info:0
+msgid "Links Related"
+msgstr ""
+
+#: links_weblink.info:0
+msgid "Links Weblink"
+msgstr ""
+
+#: links_weblink.info:0
+msgid "Creates articles whose main purpose is to catalog a web link."
+msgstr ""
+

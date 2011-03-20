@@ -1,0 +1,672 @@
+<?php
+// $Id: long_answer.module,v 1.1.2.9 2008/12/09 16:52:15 mbutcher Exp $
+
+/**
+ * This module defines a long answer question type for quizzes.
+ * @file
+ */
+ 
+/**
+ * Implementation of hook_help().
+ */
+function long_answer_help($path, $arg) {
+  if ($path == 'admin/help#long_answer') {
+    return '<p>' . t('This module provides long-answer (essay, multi-paragraph) questions to the quiz module.') .
+      '</p><p>' . t('A long-answer question is designed to provide the quiz taker a lengthy area to expand on ideas.
+      Common forms of long-answer questions include essays, single paragraph responses, hypothesis design problems,
+      outlines and summaries, and lengthier math problems 
+      where the focus is on showing work rather than simply getting the correct answer.') . '</p>';
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function long_answer_menu() {
+  $items['admin/quiz/long_answer'] = array(
+    'title' => t('Long-answer configuration'),
+    'description' => t('Configure long-answer questions for users.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('long_answer_admin_settings_form'),
+    'access arguments' => array(QUIZ_PERM_ADMIN_CONFIG),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'long_answer.admin.inc',
+  );
+  $items['admin/quiz/score-long-answer'] = array(
+    'title' => t('Score long-answer questions'),
+    'description' => t('Score the answers from quizzes that use long answer questions.'),
+    'page callback' => 'long_answer_view_unscored',
+    //'page arguments' => array('long_answer_admin_settings_form'),
+    'access arguments' => array('score long answer'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'long_answer.admin.inc',
+  );
+  // Pass vid and rid to this path.
+  $items['admin/quiz/score-long-answer/%/%'] = array(
+    'title' => t('Score long-answer response'),
+    'description' => t('Score a response to a long-answer question.'),
+    'page callback' => 'long_answer_edit_score',
+    'page arguments' => array(3, 4),
+    'type' => MENU_NORMAL_ITEM,
+    'access arguments' => array('score long answer'),
+    'file' => 'long_answer.admin.inc'
+  );
+  
+  return $items;
+}
+
+/**
+ * Implementation of hook_node_info();
+ */
+function long_answer_node_info() {
+  return array( 
+    'long_answer' => array(
+      'name' => t('Long-answer question'),
+      'description' => t('A long-answer question is quiz question type that provides quiz takers with a text area for inputting multiple lines of text.'),
+      'module' => 'long_answer',
+      'help' => t('Add the question text and set a score for this question.'),
+      'has_body' => TRUE,
+      'has_title' => TRUE,
+      'body_label' => t('Question'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function long_answer_theme() {
+  return array(
+    'long_answer_report' => array(
+      'arguments' => array('question' => NULL, 'show_points' => NULL, 'show_feedback' => NULL),
+      'file' => 'long_answer.theme.inc',
+    ),
+    'long_answer_feedback' => array(
+      'arguments' => array('quiz' => NULL, 'report' => NULL),
+      'file' => 'long_answer.theme.inc',
+    ),
+    'long_answer_view_unscored' => array(
+      'arguments' => array('unscored' => array()),
+      'file' => 'long_answer.admin.inc',
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function long_answer_perm() {
+  return array(
+    // Editing
+    'create long answer', 'edit any long answer', 'edit own long answer', 'delete any long answer', 'delete own long answer',
+    // Scoring
+    'score long answer',
+  );
+}
+
+/**
+ * Implementation of hook_access().
+ */
+function long_answer_access($op, $node, $account) {
+  
+  // Allow admin to do whatever.
+  if (user_access('administer quiz', $account)) {
+    return TRUE;
+  }
+  
+  switch ($op) {
+    case 'view':
+    case 'create':
+      return user_access('create long answer', $account);
+    case 'update':
+      if (user_access('edit any long answer', $account) || user_access('edit own long answer', $account) && ($account->uid == $node->uid)) {
+        return TRUE;
+      }
+    case 'delete':
+      if (user_access('delete any long answer', $account) || user_access('delete own long answer', $account) && ($account->uid == $node->uid)) {
+        return TRUE;
+      }
+  }
+}
+
+/**
+ * Implementation of hook_form().
+ */
+function long_answer_form(&$node) {
+  // Quiz ID used here to tie creation of a question to a specific quiz.
+  $quiz_id = arg(3);
+  if (!empty($quiz_id)) {
+    $quiz = node_load((int)$quiz_id);
+    $form['quiz_id'] = array(
+      '#type' => 'value',
+      '#value' => $quiz_id,
+    );
+    $form['quiz_vid'] = array(
+      '#type' => 'value',
+      '#value' => $quiz->vid,
+    );
+  }
+
+  // Allow user to set title?
+  if (user_access('allow user titles')) {
+    $form['title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#default_value' => $node->title,
+      '#required' => FALSE,
+      '#description' => t('Add a title that will help distinguish this question from other questions. This will not be seen during the quiz.'),
+    );
+  }
+  else {
+    $form['title'] = array(
+      '#type' => 'value',
+      '#value' => $node->title,
+    );
+  }
+  
+  $form['body'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Question'),
+    '#description' => t('Enter the full text of the question that will be shown to the user. Include any special instructions on how to answer.'),
+    '#default_value' => $node->body,
+    '#required' => TRUE,
+  );
+  
+  $form['maximum_score'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum Possible Score'),
+    '#description' => t('Long answer questions are scored manually. This field indicates to the person scoring what the maximum number of points per essay is. Multichoice questions have a score of 1.'),
+    '#default_value' => 1,
+    '#size' => 3,
+    '#maxlength' => 3,
+    '#required' => TRUE,
+  );
+  
+  
+  // If coming from quiz view, go back there on submit.
+  if (!empty($quiz_id)) {
+    $form['#redirect'] = 'node/'. $quiz_id .'/questions';
+  }
+  return $form;
+}
+
+/**
+ * Implementation of hook_validate().
+ */
+function long_answer_validate($node, &$form) {
+  // Check to make sure that there is a question.
+  if (empty($node->body)) {
+    form_set_error('body', t('Question text is empty.'));
+  }
+  
+  // Check to make sure that the maximum score is greater-than or equal-to 0.
+  $maximum_score = $node->maximum_score;
+  if (!ctype_digit($maximum_score) || intval($maximum_score) < 0) {
+    form_set_error('maximum_score', t('Score must be a positive integer (0 or higher).'));
+  }
+}
+
+/**
+ * Question form displayed to the test taker.
+ * 
+ * This form is displayed to the user when the user is taking a quiz.
+ */
+function long_answer_question_form($context, $node) {
+  
+  $form['question'] = array(
+    '#type' => 'markup', 
+    '#value' => $node->body
+  );
+  $form['tries'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Answer'),
+    '#description' => t('Enter your answer here. If you need more space, click on the grey bar at the bottom of this area and drag it down.'),
+    '#rows' => 15,
+    '#cols' => 60,
+    '#required' => FALSE,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+  
+  return $form;
+}
+
+////////////// QUIZ HOOKS /////////////////
+
+/**
+ * Implementation of Quiz's hook_evaluate_question().
+ *
+ * @return
+ *  Object with nid, vid, rid, score, is_correct flags set.
+ */
+function long_answer_evaluate_question($question, $rid, $answer = '') {
+  
+  // Create the initial result object:
+  $result = new stdClass();
+  $result->nid = $question->nid;
+  $result->vid = $question->vid;
+  $result->rid = $rid;
+  $result->score = 0;
+  $result->is_correct = FALSE;
+
+  if (empty($answer)) {
+    $answer = $_POST['tries'];
+  } 
+  unset($_POST['tries']);
+
+  // If a rid is set, we are taking a quiz.
+  if ($rid && !empty($answer)) {
+    
+    // Delete old answers, if any. Since we only have one answer (unlike multichoice), we could streamline this.
+    long_answer_delete_answer($question->nid, $question->vid, $rid);
+    
+    long_answer_save_answer($question->nid, $question->vid, $rid, $answer);
+  }
+
+  return $result;
+}
+
+/**
+ * Implementation of quiz hook_skip_question().
+ */
+function long_answer_skip_question($question, $rid) {
+  // Delete any old answers for this question.
+  long_answer_delete_answer($question->nid, $question->vid, $rid);
+}
+
+/**
+ * Implementation of hook_quiz_question_info
+ */
+function long_answer_quiz_question_info() {
+  return array('long_answer' => array('name' => t('Long answer question'),));
+}
+
+/**
+ * Implementation of hook_list_questions().
+ */
+function long_answer_list_questions($count = 0, $offset = 0) {
+  $sql = "SELECT n.nid, n.vid, r.body, r.format 
+    FROM {node} AS n
+    INNER JOIN {node_revisions} AS r USING(vid) 
+    WHERE n.type = '%s' ORDER BY n.changed";
+  $type = 'long_answer';
+  
+  if ($count == 0) {
+    // Return all results
+    $result = db_query($sql, $type);
+  }
+  else {
+    // return only $count results
+    $result = db_query_range($sql, $type, $offset, $count);
+  }
+  
+  $questions = array();
+  while ($question = db_fetch_object($result)) {
+    $question->question = check_markup($question->body, $question->format);
+    $questions[] = $question;
+  }
+  
+  return $questions;
+}
+
+/**
+ * Implementation of hook_render_question().
+ *
+ * @param $node
+ *  The question node.
+ */
+function long_answer_render_question($node) {
+  //var_dump($node);
+  return drupal_get_form('long_answer_question_form', $node);
+}
+
+/**
+ * Imlementation of hook_get_report().
+ *
+ * @return
+ *  Node containing all of the items from the question plus the user's answer.
+ *  Since a long answer has only one answer, we only return one answer (contrast
+ *  with multichoice.)
+ */
+function long_answer_get_report($nid, $vid, $rid) {
+  $node = node_load($nid, $vid);
+  
+  // Get the results
+  $result = long_answer_get_answer($nid, $vid, $rid);
+  
+  $node->answers[$result['answer_id']] = $result;
+  
+  // If this has been evaluated, we mark it as correct.
+  // FIXME: This needs to be improved substantially.
+  if ($result && $result->is_evaluated && $result->score > 0) {
+    $node->correct = TRUE;
+  }
+  
+  return $node;
+}
+
+/**
+ * Implementation of hook_quiz_question_score()
+ */
+function long_answer_quiz_question_score($quiz, $question_nid, $question_vid, $rid) {
+  $sql = "SELECT ua.score, ua.is_evaluated, np.maximum_score
+    FROM {quiz_long_answer_user_answers} ua 
+    INNER JOIN {quiz_long_answer_node_properties} np ON ua.question_vid = np.vid
+    WHERE result_id = %d
+      AND question_vid = %d";
+  $answer = db_fetch_object(db_query($sql, $rid, $question_vid));
+  
+  $score = new stdClass();
+  $score->possible = $answer->maximum_score;
+  $score->attained = $answer->score;
+  $score->is_evaluated = ($answer->is_evaluated == 1);
+  return $score;
+}
+
+/*
+ * Long answers do not support personality questions.
+ */
+// function long_answer_quiz_personality_question_score($quiz, $question_nid, $question_vid, $rid) {
+//   return NULL;
+// }
+
+////////////// INTERNAL PUBLIC /////////////////
+
+/**
+ * Delete all previous answers for this question during the given result session ($rid).
+ * This is used in cases where a user navigates backwards. In such cases, we delete their old answers before
+ * adding a new answer. 
+ *
+ * This model is carried over from multichoice_clear_answer(). It has been renamed to long_answer_delete_answer()
+ * because the record is deleted, not cleared.
+ *
+ * @param $nid
+ *  Node ID of the question.
+ * @param $vid
+ *  Version ID of the question.
+ * @param $rid
+ *  Result ID for the current quiz.
+ *
+ * @return int
+ *  Number of answers deleted. This should be 0 or 1.
+ */
+function long_answer_delete_answer($nid, $vid, $rid) {
+  db_query('DELETE FROM {quiz_long_answer_user_answers} WHERE question_nid = %d AND question_vid = %d AND result_id = %d', $nid, $vid, $rid);
+  return db_affected_rows();
+}
+
+/**
+ * Save an answer.
+ * Save the long answer during a quiz. This is analogous to multichoice_store_answer, but has been renamed to
+ * something more self-explanatory (to parallel node_save()).
+ * 
+ * @param $nid
+ *  Node ID of question.
+ * @param $vid
+ *  Version ID of question.
+ * @param $rid
+ *  Result ID for the quiz results.
+ * @param $answer
+ *  The text of the answer.
+ * 
+ * @return int
+ *  Answer ID.
+ */
+function long_answer_save_answer($nid, $vid, $rid, $answer) {
+  db_query("INSERT INTO {quiz_long_answer_user_answers} (answer, question_nid, question_vid, result_id) VALUES ('%s', %d, %d, %d)", $answer, $nid, $vid, $rid);
+  return db_last_insert_id('quiz_long_answer_user_answers', 'answer_id');
+}
+
+/**
+ * Set a score for a long answer question.
+ *
+ * This stores a score for a long answer question and marks that question as having been evaluated.
+ * The function updates all of the necessary data sources so that the individual answer results should be
+ * reflected in the total scoring table.
+ *
+ * @param $quiz
+ *  Quiz node.
+ * @param $nid
+ *  Node ID of question.
+ * @param $vid
+ *  Version ID of question.
+ * @param $rid
+ *  Result ID for the quiz results.
+ * @param $score
+ *  The numeric score to assign the result.
+ * 
+ * @return int
+ *  Number of scores adjusted. If a change was made, this should be 1.
+ */
+function long_answer_score_an_answer($quiz, $nid, $vid, $rid, $score) {
+  // Quiz scoring information is spread out across three tables:
+  // 1. The module should retain its own scoring information in any case where scoring is non-trivial.
+  // 2. The Quiz module (needlessly?) retains a limited amount of scoring information. This appears to be used only
+  //    infrequently.
+  // 3. The Quiz module retains an overall score for a quiz. This is the percentage score for the combination of all
+  //    questions on the quiz.
+  //
+  // We update all three.
+  
+  // First, we update the long answer table
+  db_query("UPDATE {quiz_long_answer_user_answers} SET score = %d, is_evaluated = 1 WHERE question_nid = %d AND question_vid = %d AND result_id = %d", $score, $nid, $vid, $rid);
+  $changed = db_affected_rows();
+  
+  if ($changed > 0) {
+    // Second, we update the main quiz answers table
+
+    // What do we do about the quiz_node_results_answers table? It assumes strict
+    // bivalence (is_correct). I guess we consider any essay with over 50% to be correct?
+    $max = db_result(db_query('SELECT maximum_score FROM {quiz_long_answer_node_properties} WHERE vid = %d', $vid));
+    if ($max <= 0) {
+      $is_correct = 0;
+      $points_awarded = 0;
+    }
+    else {
+      $is_correct = (($score * 100) / $max > 50) ? 1 : 0;
+      $points_awarded = $score;
+    }
+    
+    $sql = 'UPDATE {quiz_node_results_answers} 
+      SET points_awarded = %d, is_correct = %d 
+      WHERE question_vid = %d AND result_id = %d';
+    db_query($sql, $points_awarded, $is_correct, $vid, $rid);
+
+    // Third, we update the main quiz results table
+    quiz_update_total_score($quiz, $rid);
+  }
+  
+  return $changed;
+}
+
+/**
+ * Set the answer for a question.
+ *
+ * This stores a score for a long answer question and marks that question as having been evaluated.
+ * @param $nid
+ *  Node ID of question.
+ * @param $vid
+ *  Version ID of question.
+ * @param $rid
+ *  Result ID for the quiz results.
+ * @param $score
+ *  The numeric score to assign the result.
+ * 
+ * @return stdClass
+ *  An object if successful, or FALSE if no result could be found. The object contains the following properties:
+ *  <code>
+ *  $obj->answer_id; // The answer ID
+ *  $obj->answer; // The full text of the answer
+ *  $obj->is_evaluated; // 0 if the question has not been evaluated, 1 if it has
+ *  $obj->score; // The score the evaluator gave the user; this should be 0 if is_evaluated is 0.
+ *  </code>
+ */
+function long_answer_get_answer($question_nid, $question_vid, $result_id) {
+  $sql = "SELECT answer_id, answer, is_evaluated, score, question_vid, question_nid, result_id 
+    FROM {quiz_long_answer_user_answers} 
+    WHERE question_nid = %d AND question_vid = %d AND result_id = %d";
+  $results = db_query($sql, $question_nid, $question_vid, $result_id);
+  
+  if (!$results) {
+    return FALSE;
+  }
+  
+  return db_fetch_array($results);
+}
+
+/**
+ * Given a quiz, return a list of all of the unscored answers.
+ * 
+ * @param $nid
+ *  Node ID for the quiz to check.
+ * @param $vid 
+ *  Version ID for the quiz to check.
+ * @param $count
+ *  Number of items to return (default: 50).
+ * @param $offset
+ *  Where in the results we should start (default: 0).
+ *
+ * @return
+ *  Indexed array of result IDs that need to be scored.
+ */
+function long_answer_get_unscored_answers_by_question($nid, $vid, $count = 50, $offset = 0) {
+  $results = db_query_range('SELECT result_id FROM {quiz_long_answer_user_answers} WHERE is_evaluated = 0 AND question_nid = %d AND question_vid = %d', $nid, $vid, $offset, $count);
+  $unscored = array();
+  foreach (db_fetch_object($results) as $row) {
+    $unscored[] = $row->result_id;
+  }
+  return $unscored;
+}
+
+
+/**
+ * Get all quiz scores that have not yet been evaluated.
+ * 
+ * @param $count
+ *  Number of items to return (default: 50).
+ * @param $offset
+ *  Where in the results we should start (default: 0).
+ *
+ * @return
+ *  Array of objects describing unanswered questions. Each object will have result_id, question_nid, and question_vid.
+ */
+function long_answer_get_all_unscored_answers($count = 50, $offset = 0) {
+  $sql = 'SELECT a.result_id, a.question_nid, a.question_vid, r.title, n.time_end, n.time_start, n.uid
+    FROM {quiz_long_answer_user_answers} AS a 
+    INNER JOIN {node_revisions} AS r ON a.question_vid = r.vid
+    INNER JOIN {quiz_node_results} AS n ON a.result_id = n.result_id 
+    WHERE is_evaluated = 0';
+  $results = db_query_range($sql, $offset, $count);
+  $unscored = array();
+  
+  if ($results) {
+    while ($row = db_fetch_object($results)) {
+      $unscored[] = $row;
+    }
+  }
+  
+  return $unscored;
+}
+
+////////////// INTERNAL PRIVATE /////////////////
+
+
+////////////// NODE API //////////////////
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function long_answer_nodeapi(&$node, $op) {
+  if ($op == 'presave' && $node->type == 'long_answer') {
+    // This handles the case where users are not allowed to enter their 
+    // own titles.
+    if (!user_access('allow user titles') || empty($node->title)) {
+      // If there's a clamouring for the type of title handling in multichoice, we can do that here.
+      // However, we'll just go with a simple case.
+      $node->title = 'Untitled ' . date('m-d-Y'); //theme('multichoice_generate_title', $node);
+    }
+  }
+  
+  if($op == 'delete revision') {
+    db_query('DELETE FROM {quiz_long_answer_node_properties} WHERE nid = %d AND vid = %d', $node->nid, $node->vid);
+  }
+}
+
+/**
+ * Implementation of hook_insert()
+ */
+function long_answer_insert($node) {
+  db_query('INSERT INTO {quiz_long_answer_node_properties} (nid, vid, maximum_score) VALUES (%d, %d, %d)', 
+    $node->nid, 
+    $node->vid, 
+    $node->maximum_score
+  );
+  // If the form says this should be attached to a quiz, attach it.
+  if ($node->quiz_id > 0) {
+    db_query('INSERT INTO {quiz_node_relationship} (parent_nid, parent_vid, child_nid, child_vid, question_status) 
+        VALUES (%d, %d, %d, %d, %d)', 
+      $node->quiz_id, 
+      $node->quiz_vid, 
+      $node->nid, 
+      $node->vid, 
+      QUESTION_ALWAYS
+    );
+  }
+}
+
+/**
+ * Implementation of hook_view()
+ */
+function long_answer_view($node, $teaser = FALSE, $page = FALSE) {
+  $node->content['body']['#value'] = drupal_get_form('long_answer_question_form', $node);
+  return $node;
+}
+
+/**
+ * Implementation of hook_update().
+ */
+function long_answer_update($node) {
+
+  // New revision == insert
+  if ($node->revision == 1) {
+    //drupal_set_message('Inserting new revision');
+    db_query('INSERT INTO {quiz_long_answer_node_properties} (nid, vid, maximum_score) VALUES (%d, %d, %d)', 
+      $node->nid, 
+      $node->vid, 
+      $node->maximum_score
+    );
+  } 
+  // No new revision == update
+  else {
+    //drupal_set_message('Updating existing version');
+    db_query('UPDATE {quiz_long_answer_node_properties} SET maximum_score = %d WHERE nid = %d AND vid = %d',
+      $node->maximum_score, 
+      $node->nid, 
+      $node->vid
+    );
+
+  }
+}
+
+/**
+ * Implementation of hook_delete().
+ */
+function long_answer_delete(&$node) {
+  db_query('DELETE FROM {quiz_long_answer_node_properties} WHERE nid = %d', $node->nid);
+}
+
+/**
+ * Implementation of hook_load().
+ */
+function long_answer_load($node) {
+  
+  $extra = db_fetch_object(db_query(
+    'SELECT maximum_score FROM {quiz_long_answer_node_properties} WHERE nid = %d AND vid = %d', 
+    $node->nid, 
+    $node->vid
+  ));
+  
+  return $extra;
+}

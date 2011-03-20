@@ -1,0 +1,16 @@
+.sortable-item {
+	cursor: move;
+}
+
+div.sortable-item {
+	width: 300px;
+	border: 2px solid blue;
+	margin: 3px;
+}
+
+.sortable-helper
+{
+	border: 2px dashed #a020f0;
+	background: yellow;
+	width: 300px !important;
+}

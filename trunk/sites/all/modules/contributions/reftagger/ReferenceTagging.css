@@ -1,0 +1,90 @@
+/* $Id: ReferenceTagging.css,v 1.1 2008/10/20 18:13:08 nrambeck Exp $ */
+.lbsTooltip
+{
+	background:#fffade;
+	border: 1px solid gray;
+	z-index: 99;
+	text-align: left;
+	text-indent: 0;
+}
+
+.lbsTooltipHeader
+{
+	background:#fff4b8;
+	color: black;
+	font-weight:bold;
+	font-size:15px;
+	line-height: 18px;
+	font-family:Arial,Helvetica,serif;
+	margin: 0;
+	padding:4px;
+	position:relative;
+	border: 0;
+}
+
+.lbsTooltipBody 
+{
+	padding: 4px 8px 0 8px;
+	margin:0;
+	position:relative;
+	z-index: 2;
+	border: 0;
+	line-height:16px;
+}
+
+.lbsTooltipBody p, .lbsTooltipBody span
+{
+	display: inline;
+	color: black;
+	font-family:Arial,Helvetica,serif;
+	font-size: 14px;
+	line-height:16px;
+}
+
+.lbsTooltipFooter
+{
+	font-size:11px;
+	font-family:Helvetica,Arial,serif;
+	bottom:4px;
+	margin-top: 4px;
+	position:absolute;
+	text-align:right;
+	border: 0;
+}
+
+.lbsTooltipFooter a:link, .lbsTooltipFooter a:visited, .lbsTooltipFooter a:hover 
+{
+	color: blue;
+	text-decoration: underline;
+	font-weight: normal;
+	font-size:11px;
+	font-family:Helvetica,Arial,serif;
+}
+
+.lbsTooltipBody .ch-ref, .lbsTooltipBody .verse-ref
+{
+	font-size: 85%;
+	top: -1px;
+	position: relative;
+}
+
+.lbsTooltipBody .ch-ref
+{
+	font-weight: bold;
+}
+
+.lbsTooltipBody .verse-ref
+{
+	color: dimgray;
+}
+
+.lbsTooltip, .lbsTooltipBody span, .lbsTooltip a, .lbsTooltipBody p
+{
+	margin: 0;
+	padding: 0;
+}
+
+.lbsLibronix img
+{
+	float: none !important;
+}

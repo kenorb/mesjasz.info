@@ -1,0 +1,12 @@
+<?php
+// $Id: uc_2checkout.install,v 1.1.2.2 2008/11/07 21:13:29 islandusurper Exp $
+
+/**
+ * @file
+ * Install file for uc_2checkout.module.
+ */
+
+function uc_2checkout_uninstall() {
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_2checkout_%%'");
+}
+

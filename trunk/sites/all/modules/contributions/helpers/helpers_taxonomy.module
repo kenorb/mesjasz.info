@@ -1,0 +1,72 @@
+<?php
+// $Id: helpers_taxonomy.module,v 1.1 2006/08/15 15:58:14 ber Exp $
+
+/**
+ * @file
+ * This is a library of useful taxonomy functions and methods.
+ * please insert the link if you have a patch for core to introduce a function from this lib to core.
+ */
+
+/**
+ * Taxonomy REST API: Build a path to a taxonomy listing page
+ * Patch pending at http://drupal.org/node/64664
+ *
+ * @param $terms
+ *   a single numeric term id, or a single $term object
+ *   or an array of numeric term ids or $term objects
+ * @param $op
+ *   a string "AND" or "OR"
+ * @param $depth
+ *   depth of the taxonomy tree that is to be returned. 0 equals the entire tree
+ * @param $feed
+ *   TRUE for RSS feed, FALSE for page
+ */
+function taxonomy_get_path($terms, $op = 'AND', $depth = 0, $feed = FALSE) {
+  // prepare $tids associative array $tid => $term accounting for the possibility
+  // that $terms is either a tid, a $term, an array of tids, or an array of $term objects
+  if (is_array($terms) && count($array) > 0) {
+    foreach ($terms as $term) {
+      if (is_numeric($term)) {
+        $term = taxonomy_get_term($term);
+      }
+      if (is_object($term)) {
+        $tids[$term->tid] = $term;
+      }
+    }
+  }
+  else {
+    if (is_numeric($terms)) {
+      $tids[$terms] = taxonomy_get_term($terms);
+    }
+    elseif (is_object($terms)) {
+      $tids[$terms->tid] = $terms;
+    }
+  }
+
+  // build the $path
+  $path = 'taxonomy/term';
+  $op = strtolower($op);
+  switch ($op) {
+    case 'and':
+      $path .= '/'. implode(',', array_keys($tids));
+      break;
+
+    case 'or':
+      $path .= '/'. implode('+', array_keys($tids));
+      break;
+  }
+
+  if ($depth > 0) {
+    $path .= "/$depth";
+  }
+
+  if ($feed) {
+    if ($depth > 0) {
+      $path .= '/feed';
+    }
+    else {
+      $path .= '0/feed';
+    }
+  }
+  return $path;
+}

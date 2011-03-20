@@ -1,0 +1,609 @@
+<?php
+/**
+ * @file
+ * Integrates JQuery menu functionality to create a click and expand book block.
+ */
+ 
+ /**
+ * Implementation of hook_menu().
+ */
+function advancedbookblocks_menu() {
+  $items = array();
+  $items['admin/settings/advanced-book-blocks'] = array (
+    'title'            => 'Advanced Book Blocks Configuration',
+    'page callback'    => 'book_blocks_list',
+    'access arguments' => array('administer menu'),
+    'type'             => MENU_NORMAL_ITEM,
+  );
+  $items['admin/settings/advanced-book-blocks/list'] = array(
+    'title'  => 'List',
+    'type'   => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+  $items['admin/settings/advanced-book-blocks/add'] = array(
+    'title' => 'Add New Book Block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('book_blocks_add'),
+    'access arguments' => array('administer menu'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/settings/advanced-book-blocks/configure'] = array(
+    'title' => 'Configure',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('book_blocks_config', 1),
+    'access arguments' => array('administer taxonomy'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/settings/advanced-book-blocks/delete'] = array(
+    'title' => 'Configure',
+    'page callback' => 'book_blocks_delete',
+    'access arguments' => array('administer taxonomy'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/settings/advanced-book-blocks/reset'] = array(
+    'title' => 'Configure',
+    'page callback' => 'book_blocks_reset',
+    'access arguments' => array('administer taxonomy'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  return $items;
+}
+function book_blocks_delete($id) {
+  $delta = $id;
+  if ($delta != 0) {
+    db_query("DELETE FROM {adv_book_block} WHERE delta = %d", $delta);
+    drupal_set_message(t('Your block has been deleted.', $type = 'status', $repeat = FALSE));
+    drupal_goto('admin/settings/advanced-book-blocks');
+  }
+  else{
+    drupal_set_message(t('You cannot delete the default block'), $type = 'error', $repeat = FALSE);
+    drupal_goto('admin/settings/advanced-book-blocks');
+  }
+}
+ 
+function book_blocks_reset($id) {
+  db_query("UPDATE {adv_book_block} SET tids = NULL, custom = 0, omit_nids = NULL, bids = NULL WHERE delta = $id");
+  drupal_set_message(t('Your block has been reset.', $type = 'status', $repeat = FALSE));
+  drupal_goto('admin/settings/advanced-book-blocks');
+}
+
+function book_blocks_list() {
+  $header = array(t('Block title'), t('Actions'));
+  $rows    = array();
+  $result = db_query("SELECT delta, title FROM adv_book_block");
+  while ($book = db_fetch_object($result)) {
+    $row = array();
+    $links = array();
+    $row[]   = $book->title;
+    $links[] = l(t('Configure'), 'admin/settings/advanced-book-blocks/configure/'. $book->delta);
+    $links[] = l(t('Reset'), 'admin/settings/advanced-book-blocks/reset/'. $book->delta);
+    if ($book->delta != 0) {
+      $links[] = l(t(Delete), 'admin/settings/advanced-book-blocks/delete/'. $book->delta);
+    }
+    $row[]   = implode('&nbsp;&nbsp;&nbsp;&nbsp;', $links);
+    $rows[]  = $row;
+  }
+  $output  = theme('table', $header, $rows);
+
+  return $output;
+ }
+ 
+function book_blocks_add($form_state) {
+  $form = array();
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#size' => '64',
+    '#title' => t('New Book Block Title'),
+    '#default_value' => '',
+    '#description' => t('This will create a new book block you can then customize.'),
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create New Block'),
+  );
+  return $form;
+ }
+ function book_blocks_add_submit($form, &$formstate) {
+  $title = check_plain($formstate['values']['title']);
+  $result = db_query("SELECT delta FROM {adv_book_block}");
+  $x = 0;
+  while ($book = db_fetch_object($result)) {
+    if ($x <= $book->delta) {
+      $x = $book->delta;
+    }
+  }
+  $delta = $x + 1;
+  db_query("INSERT INTO {adv_book_block} (delta, title) VALUES (%d, '%s')", $delta, $title);
+  
+  drupal_set_message(t('Your block has been added'), $type = 'status', $repeat = FALSE);
+  drupal_goto('admin/settings/advanced-book-blocks/configure/'. $delta);
+}
+function book_blocks_config() {
+  $args = func_get_args();
+  $delta = (int)$args[2] ;
+  $form = array();
+  $form['ab_config_form'] = array('#tree' => TRUE);
+  //$form['ab_config_form']['book'] = array('#tree' => TRUE);
+  $book_array = books_get_top_level();
+  $result = db_query("SELECT * FROM {adv_book_block} WHERE delta = %d", $delta);
+  while ($block = db_fetch_object($result)) {
+    $custom    = $block->custom;
+    $omit_nids = $block->omit_nids;
+    $tids      = $block->tids;
+    $main_title_def = $block->title;
+  }
+  $bid_array = array();
+  if ($custom == 1) {
+    $result = db_query("SELECT bid FROM {adv_book_custom} WHERE delta = %d", $delta);
+    while ($enabled = db_fetch_object($result)) {
+      $enabled_array[] = $enabled->bid;
+    }
+  }
+  
+  if ($custom == 0) {
+    $book_array = books_get_top_level();
+    $enabled_array = $book_array;
+    $add_mode_def = 1;
+  }
+  else {
+    $book_array = books_get_top_level($delta);
+    $add_mode_def = db_result(db_query("SELECT add_mode FROM {adv_book_block} WHERE delta = %d", $delta));
+    $enabled_array = array();
+    $result = db_query("SELECT bid FROM {adv_book_custom} WHERE delta = %d AND enabled = 1", $delta);
+    while ($enabled = db_fetch_object($result)) {
+      $enabled_array[] = $enabled->bid;
+    }
+    $tid_string = db_result(db_query("SELECT tids FROM {adv_book_block} WHERE delta = %d", $delta));
+    $tid_checked = explode(',', $tid_string);
+  }   
+  foreach ($book_array as $bid) {
+    
+    if (!empty($enabled_array)) {
+      if (in_array($bid, $enabled_array)) {
+        $enabled_def = TRUE;
+      }
+      else {
+        $enabled_def = FALSE;
+      }
+    }
+    else {
+      $enabled_def = TRUE;
+    }
+    $weight_def = db_result(db_query("SELECT weight FROM {adv_book_custom} WHERE delta = %d AND bid = %d", $delta, $bid));
+    if (empty($weight_def)) {
+      $mlid = db_result(db_query("SELECT mlid FROM {book} WHERE bid = %d AND nid = bid", $bid));
+      $weight_def = db_result(db_query("SELECT weight FROM {menu_links} WHERE mlid = %d", $mlid));
+    }
+    $title = db_result(db_query("SELECT title FROM {node} WHERE nid = %d", $bid));
+    $form['ab_config_form']['book'][$bid]['enabled'] = array(
+      '#type' => 'checkbox',
+      '#title' => l($title,'node/'. $bid),
+      '#default_value' => $enabled_def,
+    );
+    $form['ab_config_form']['book'][$bid]['weight'] = array(
+      '#type' => 'weight',
+      '#delta' => 15,
+      '#default_value' => $weight_def,
+     );
+    $form['ab_config_form']['book'][$bid]['weight_reset'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => FALSE,
+    );
+  }
+  $form['ab_config_form']['#theme'] = 'book_blocks_config_list';
+  $form['ab_config_form']['delta']  = array(
+    '#type' => 'value',
+    '#value' => $delta,
+  );
+  $form['ab_config_form']['book_array']  = array(
+    '#type' => 'value',
+    '#value' => $book_array,
+  );
+  $form['ab_config_form']['title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Main Block title'),
+    '#required' => TRUE,
+    '#default_value' => $main_title_def,
+  );
+  $form['ab_config_form']['add_mode'] = array(
+    '#type' => 'select',
+    '#title' => t('Automation Settings'),
+    '#options' => array(t('New books are disabled by default'), t('Automatically enable new books'), t('Automatically enable books with selected terms'), t('Automatically exclude books with selected terms')),
+    '#required' => TRUE,
+    '#description' => t('This setting only applies to top level books and only in this particular block. Child books will be automatically added and enabled if their parent is enabled. Automatic enable or exclude by taxonomy term can be used to determine which books will be automatically enabled in which blocks. Note that this setting only works if you check at least one term in the form below. By default this will only alter the enable settings when books are added or edited, however if you want to apply this setting in mass you can select the "Mass Enable/Disable" checkbox below.'),
+    '#default_value' => $add_mode_def,
+  );
+  $form['ab_config_form']['vocab_options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Taxonomy Automation options'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#tree' => TRUE,
+  );
+  $form['ab_config_form']['vocab_options']['vocab'] = array ('#tree' => TRUE);
+  $result = db_query("SELECT vid, name FROM {vocabulary} WHERE name <> 'Forums'");
+  while ($vocab = db_fetch_object($result)) {
+    $vocab_array[] = $vocab->vid; 
+    $form['ab_config_form']['vocab_options']['vocab'][$vocab->vid]= array(
+      '#type' => 'fieldset',
+      '#title' => $vocab->name,
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#tree' => TRUE,
+    );
+   
+    $sub_result = db_query("SELECT tid, name FROM {term_data} WHERE vid = %d", $vocab->vid);
+    while ($term = db_fetch_object($sub_result)) {
+      $term_array[] = $term->tid;
+      if (!empty($tid_checked)) {
+        if (in_array($term->tid, $tid_checked) != FALSE) {
+          $term_def = TRUE;
+        }
+      }
+      else {
+        $term_def = FALSE;
+      }
+      $form['ab_config_form']['vocab_options']['vocab'][$vocab->vid]['terms'][$term->tid] = array(
+        '#type' => 'checkbox',
+        '#title' => $term->name,
+        '#default_value' => $term_def,
+      );
+     
+    }
+    $form['ab_config_form']['vocab_options']['vocab'][$vocab->vid]['term_array']= array(
+      '#type' => 'value',
+      '#value' => $term_array,
+    ); 
+  }
+  $form['ab_config_form']['vocab_array'] = array(
+      '#type' => 'value',
+      '#value' => $vocab_array,
+  );
+   $form['ab_config_form']['set_now'] = array(
+      '#title' => t('Mass Enable/Disable'),
+      '#type' => 'checkbox',
+      '#default_value' => FALSE,
+      '#description' => t('Use taxonomy automation options to enable and disable books from this block right now. If selected all books will be queried by taxonomy term and by your chosen automation settings and disabled or enabled automatically. This will override manually enabled or disabled books. This setting only affects this block.'),
+  );
+  
+  $form['ab_config_form']['submit']  = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+  );
+  return $form;
+}
+function theme_book_blocks_config_list($form) {
+  //var_dump($form);
+  $delta = $form['delta']['#value'];
+  $header = array(t('Enabled Books'), t('Weight'), t('Reset Weight'));
+  $rows = array();
+  $book_array = $form['book_array']['#value'];
+  $output .= drupal_render($form['title']);
+  
+  foreach ($book_array as $bid) {
+    $row  = array();
+    $row[]  = drupal_render($form['book'][$bid]['enabled']);
+    $row[]  = drupal_render($form['book'][$bid]['weight']);
+    $row[]  = drupal_render($form['book'][$bid]['weight_reset']);
+    $rows[] = $row;
+  }
+  $output .= theme('table', $header, $rows);
+  $output .= drupal_render($form);
+  return $output;
+}
+function book_blocks_config_submit($form, $formstate) {
+  $set_now = $formstate['values']['ab_config_form']['set_now'];
+  $vocab_array = $formstate['values']['ab_config_form']['vocab_array'];
+  foreach ($vocab_array as $vid) {
+    $tid_array = $formstate['values']['ab_config_form']['vocab_options']['vocab'][$vid]['term_array'];   
+    foreach ($tid_array as $tid) {
+      if ($formstate['values']['ab_config_form']['vocab_options']['vocab'][$vid]['terms'][$tid] == TRUE) {
+        $tid_checked[] = $tid;
+      }
+    }
+    
+  }
+  
+  
+  $book_array = $formstate['values']['ab_config_form']['book_array'];
+  $delta      = (int)$formstate['values']['ab_config_form']['delta'];
+  $title      = check_plain($formstate['values']['ab_config_form']['title']);
+  $add_mode   = $formstate['values']['ab_config_form']['add_mode'];
+  if (!empty($tid_checked)) {
+    $tid_string = implode(',', $tid_checked);
+  }
+  db_query("DELETE FROM {adv_book_custom} WHERE delta = %d", $delta);
+  foreach ($book_array as $bid) {
+    $bid = (int)$bid;
+    $enabled = $formstate['values']['ab_config_form']['book'][$bid]['enabled'];
+    $weight_reset = $formstate['values']['ab_config_form']['book'][$bid]['weight_reset'];
+    if (empty($weight_reset)) {
+      $weight = $formstate['values']['ab_config_form']['book'][$bid]['weight'];
+    }
+    else {
+      $weight = 0;
+    }
+    
+    db_query("INSERT INTO {adv_book_custom} (delta, bid, enabled, weight) VALUES (%d, %d, %d, %d)",$delta, $bid, $enabled, $weight);
+    db_query("UPDATE {adv_book_block} SET custom = 1, add_mode = %d, title = '%s', tids = '%s' WHERE delta = %d", $add_mode, $title, $tid_string, $delta);
+    
+  }
+  if ($set_now == TRUE && ($add_mode == 2 || $add_mode == 3 ) && !empty($tid_checked)) {
+      foreach ($book_array as $bid) {
+        $result = db_query("SELECT tid FROM {term_node} WHERE nid = %d", $bid);
+        while ($term = db_fetch_object($result)) {
+          $node_terms[] = $term->tid; 
+        }
+        if (!empty($node_terms)) {
+          if (array_intersect($node_terms, $tid_checked) != NULL && $add_mode == 2) {
+            $enabled_set = 1;
+          }
+          if (array_intersect($node_terms, $tid_checked) == NULL && $add_mode == 2) {
+            $enabled_set = 0;
+          }
+          if (array_intersect($node_terms, $tid_checked) != NULL && $add_mode == 3) {
+            $enabled_set = 0;
+          }
+          if (array_intersect($node_terms, $tid_checked) == NULL && $add_mode == 3) {
+            $enabled_set = 1;
+          }
+          db_query("UPDATE {adv_book_custom} SET enabled = %d WHERE delta = %d and bid = %d", $enabled_set, $delta, $bid);
+        }
+      }
+        
+    } 
+  drupal_set_message(t('Your changes have been saved'), $type = 'status', $repeat = FALSE );
+  drupal_goto('admin/settings/advanced-book-blocks');
+}
+ /**
+ * Implementation of hook_block().
+ */
+ 
+function advancedbookblocks_block($op = 'list', $delta = 0, $edit = array()) {
+  $result = db_query("SELECT delta FROM {adv_book_block}");
+  while ($book = db_fetch_object($result)) {
+    $delta_array[] = $book->delta; 
+  }
+  switch ($op) {
+    case 'list':
+      if (!empty($delta_array)) {
+        foreach ($delta_array as $d) {
+          $block_title = '';
+          $block_title = db_result(db_query("SELECT title FROM {adv_book_block} WHERE delta = %d", $d));
+          $blocks[$d]['info'] = $block_title .'- Advanced book block';
+          $blocks[$d]['cache'] = BLOCK_CACHE_PER_ROLE | BLOCK_CACHE_PER_PAGE;
+        }
+      }
+    return $blocks;  
+    case 'view':
+      $d = '';
+      foreach ($delta_array as $d) {
+        if ($delta == $d) {
+          $d;
+          $toplevel = books_get_top_level($d, 'display');
+          $tree = recursive_book_array_builder($toplevel);
+          $trail = book_trail_builder();
+          if (empty($trail)) {
+            $trail = array();
+          }
+          $block_title = '';
+          $block_title = db_result(db_query("SELECT title FROM {adv_book_block} WHERE delta = %d", $d));
+          $block['subject'] = $block_title;
+          $block['content'] = theme('menu_creation_by_array', $tree, $trail);;
+        }
+      }
+    return $block;
+  }
+}
+
+
+
+function book_trail_builder() {
+  if (arg(0) == 'node') {
+    $nid = arg(1);
+    
+    if (is_numeric($nid)) {
+        $node = node_load($nid);
+    }
+    //check to see if node is a book
+    if (!empty($node->book['bid'])) {
+      // if node is top level book go no further.
+      if ($node->nid != $node->book['bid']) {
+        
+        $parents = book_get_all_parents($node->book['mlid']);
+        if (!empty($parents)) {
+          foreach ($parents as $parent) {
+            $parent_nid = db_result(db_query("SELECT b.nid FROM {book} b, {node} n WHERE b.mlid = %d AND n.nid = b.nid AND n.status = 1", $parent)); 
+            if (!empty($parent_nid)) {
+              $trail[] = 'node/'. $parent_nid;
+            }
+          }
+        }        
+      }
+    }
+  }
+  return $trail;
+}
+function book_get_all_parents($mlid) {
+  $parent = '';
+  $parent = db_result(db_query("SELECT plid FROM {menu_links} WHERE mlid = %d", $mlid));
+  if (!empty($parent)) {
+    $parents[] = $parent;
+    $next = book_get_all_parents($parent);
+    if (!empty($next)) {
+      $parents = array_merge($parents, $next);
+    }
+  }
+  return $parents;
+}
+
+function books_get_top_level($d = NULL, $context = NULL) {
+  $d = (int)$d;
+  if ($d == NULL) {
+    $result = db_query("SELECT DISTINCT b.bid FROM {book} b, {menu_links} m WHERE m.mlid = b.mlid ORDER BY m.weight ASC");
+  }
+  if ($d != NULL && $context == NULL) {
+    $result = db_query("SELECT DISTINCT bid FROM {adv_book_custom} ORDER BY weight ASC");
+  }
+  if ($d != NULL && $context == 'display') {
+    $result = db_query("SELECT bid FROM {adv_book_custom} WHERE delta = %d AND enabled = 1 ORDER BY weight ASC", $d);
+  }
+  while ($book = db_fetch_object($result)) {
+    $books[] = $book->bid;
+  }
+  
+  return $books;
+ 
+}
+function get_book_children($mlid) {
+  $result = db_query("SELECT mlid FROM {menu_links} WHERE plid = %d ORDER by weight, link_title", $mlid);
+  while ($child = db_fetch_object($result)) {
+    if (!empty($child->mlid)) {
+      $mlid_array[] = $child->mlid;
+    }
+  }
+  if (!empty($mlid_array )) {
+    foreach ($mlid_array as $child_mlid) {
+      $child_nid = db_result(db_query("SELECT nid FROM {book} WHERE mlid = %d", $child_mlid));
+      if (!empty($child_nid)) {
+        $nid_array[] = $child_nid;
+      }
+    }
+  }
+  return $nid_array;
+}
+function recursive_book_array_builder($nid_array) {
+  foreach ($nid_array as $nid) {
+    $result = db_query("SELECT n.title, n.status, b.mlid FROM {node} n, {book} b WHERE n.nid = %d AND b.nid = n.nid", $nid);
+    while ($book = db_fetch_object($result)) {
+      $book_title  = $book->title;
+      $status      = $book->status;
+      $mlid        = $book->mlid;
+    }
+    if ($status == 1) {
+      $tree[$mlid]['link']['title'] = $book_title ;
+      $tree[$mlid]['link']['hidden'] = '0';
+      $tree[$mlid]['link']['href'] = 'node/'. $nid;
+      $tree[$mlid]['link']['options']['attributes']['title'] = $book_title;
+    }
+    else {
+      $tree[$mlid]['link']['hidden'] = '1';
+    }
+    $children = array();
+    $tree[$mlid]['below'] = array();
+    $children = get_book_children($mlid);
+    if (!empty($children)) {
+      $tree[$mlid]['link']['has_children'] = '1';
+      
+      $subarray = recursive_book_array_builder($children);
+      if (!empty($subarray)) {
+        $tree[$mlid]['below'] = array_merge($tree[$mlid]['below'], $subarray);
+      }
+      else {
+        $tree[$mlid]['below'] = FALSE;
+      }
+    }
+    else {
+      $tree[$mlid]['link']['has_children'] = '0';
+      $tree[$mlid]['below'] = FALSE;
+    }
+  }
+  return $tree;
+}
+/**
+ * Implementation of hook_theme().
+ */
+function advancedbookblocks_theme() {
+  return array(
+    'book_blocks_config_list' => array(
+      'arguments' => array(
+        'form' => NULL,
+      ),
+    ),    
+  );
+}
+/**
+ * Implementation of hook_nodeapi().
+ */
+function advancedbookblocks_nodeapi(&$node, $op) {
+  
+  
+ 
+  if ($op == 'update' || $op == 'insert' ) {
+    $bid = $node->book['bid'];
+   
+    if (!empty($bid) && ($bid == $node->nid)) {
+      $result = db_query("SELECT delta FROM {adv_book_block} WHERE custom = 1");
+      while ($block = db_fetch_object($result)) {
+        $customized_blocks[] = $block->delta;
+      }
+      if (!empty($customized_blocks)) {
+        foreach ($customized_blocks as $delta) {
+          $tid_string = db_result(db_query("SELECT tids FROM {adv_book_block} WHERE delta = %d", $delta));
+          $tid_trig_array = explode(',', $tid_string);
+          $enable_setting = db_result(db_query("SELECT add_mode FROM {adv_book_block} WHERE delta = %d", $delta));
+          $has_bid = '';
+          $has_bid = db_result(db_query("SELECT enabled FROM {adv_book_custom} WHERE bid = %d AND delta = %d", $bid, $delta));
+          
+          $result = db_query("SELECT vid FROM {vocabulary} WHERE name <> 'FORUMS'");
+          while ($vocab = db_fetch_object($result)) {
+            if (!empty($node->taxonomy[$vocab->vid])) {
+              if (array_intersect($node->taxonomy[$vocab->vid], $tid_trig_array) != NULL) {
+                $check[] = array_intersect($node->taxonomy[$vocab->vid], $tid_trig_array);
+              }
+            }
+            
+          }
+          
+          switch ($enable_setting) {
+            
+            case '0': 
+              $enable_setting = 0; 
+            break;
+          
+            case '1':
+              $enable_setting = 1; 
+            break;
+            
+            case '2':
+              if (!empty($check)) {
+                $enable_setting = 1; 
+              }
+              if (empty($check)) {
+                $enable_setting = 0; 
+              }
+            break;
+            case '3':
+              if (!empty($check)) {
+                $enable_setting =  0; 
+              }
+              if (empty($check)) {
+                $enable_setting = 1; 
+              }
+            break;
+          }
+          if ($has_bid == NULL) {
+            db_query("INSERT INTO {adv_book_custom} (delta, bid, enabled) VALUES (%d, %d, %d)", $delta, $bid, $enable_setting); 
+          }
+          if ($has_bid != NULL) {
+            db_query("UPDATE {adv_book_custom}  SET enabled = %d WHERE delta = %d AND bid = %d", $enable_setting, $delta, $bid); 
+          }
+        }
+      }
+    }
+  }    
+    if ($op == 'delete') {
+      if (!empty($bid) && ($bid == $node->nid)) {
+        $result = db_query("SELECT title FROM {adv_book_block} WHERE custom = 1");
+        while ($block = db_fetch_object($result)) {
+          $customized_blocks[] = $block->delta;
+        }
+        foreach ($customized_blocks as $delta) {
+          db_query("DELETE FROM {adv_book_custom} WHERE delta = %d AND bid = %d", $delta, $bid);
+        }
+      }
+    }
+  
+  
+}

@@ -1,0 +1,71 @@
+<?php
+
+// $Id$
+
+/*
+ * Implementation of hook_install
+ */
+function chatblock_install() {
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      db_query("CREATE TABLE {chatblock} (
+                  message varchar(255),
+                  username varchar(60),
+                  timestamp bigint(14),
+                  messageid int(10) NOT NULL auto_increment,
+                  PRIMARY KEY (messageid)
+                ) /*!40100 DEFAULT CHARACTER SET utf8 */;"
+      );
+      break;
+
+    case 'pgsql':
+      db_query("CREATE TABLE {chatblock} (
+                  message text,
+                  username text,
+                  timestamp bigint,
+                  messageid SERIAL PRIMARY KEY
+                );"
+      );
+      break;
+  }
+
+}
+
+/*
+ * Implementation of hook_uninstall
+ */
+function chatblock_uninstall() {
+  db_query('DROP TABLE {chatblock}');
+  variable_del('chatblock_number_messages');
+  variable_del('chatblock_get_url');
+  variable_del('chatblock_ignore_user_1');
+  variable_del('chatblock_refresh_rate');
+  variable_del('chatboxlastmessage');
+  variable_del('chatblock_show_logouts');
+  variable_del('chatblock_show_logins');
+  variable_del('chatblock_show_empty');
+}
+
+
+function chatblock_update_1() {
+  $items = array();
+  $items[] = update_sql("ALTER TABLE {chatblock} CHANGE timestamp timestamp BIGINT( 14 ) NULL DEFAULT NULL");
+  return $items;
+}
+
+function chatblock_update_2() {
+  $items = array();
+
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      break;
+
+    case 'pgsql':
+      $items[] = update_sql("ALTER TABLE {chatblock} ALTER 'timestamp' TYPE bigint;");
+      break;
+  }
+
+  return $items;
+}

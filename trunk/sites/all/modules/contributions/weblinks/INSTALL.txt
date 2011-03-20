@@ -1,0 +1,28 @@
+ $Id: INSTALL.txt,v 1.1.8.3 2008/08/05 14:46:35 rmiddle Exp $
+ @file
+ INSTALL.txt file for Weblinks.
+
+INSTALL.txt file
+================
+
+1. Standard module installation applies. See http://drupal.org/node/273907
+
+2. The Settings pages can be found at "admin >> site configuration >> weblinks"
+   "http://www.example.com/admin/settings/weblinks"
+
+6. There are three CSS files distributed with the module.
+   weblinks.css       - The standard distributed styling that highlights
+       the data that the developers feel are important to this module.
+   weblinks_minimal.css - A very "vanilla" CSS that does almost no styling
+       so your theme can take over.
+   weblinks_fancy.css - A "fancy" style sheet that "punches up" the module's
+       output. It uses color values chosen from the default Garland color set
+       (Blue Lagoon). This means you may switch the module to the basic file
+       and then copy the "fancy" CSS into the default Garland "styles.css"
+       and the Color module will convert those colors into values that are
+       appropriate for the color set you choose when you configure the theme.
+
+   If you don't like the styling of the module, you may rename
+   one of the others to "weblinks.css".
+
+

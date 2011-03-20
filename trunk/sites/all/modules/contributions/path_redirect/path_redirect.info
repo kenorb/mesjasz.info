@@ -1,0 +1,11 @@
+; $Id$
+name = Path Redirect
+description = Redirect users from one URL to another.
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-06-01
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "path_redirect"
+datestamp = "1212278866"
+

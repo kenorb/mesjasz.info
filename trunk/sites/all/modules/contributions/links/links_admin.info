@@ -1,0 +1,13 @@
+; $Id: links_admin.info,v 1.3 2008/11/01 00:46:30 syscrusher Exp $
+name = Links Administration
+description = Allows links from all over the site to be managed in a centralized way.
+dependencies[] = links
+package = Links
+core = 6.x
+
+; Information added by drupal.org packaging script on 2009-01-22
+version = "6.x-1.0-beta15"
+core = "6.x"
+project = "links"
+datestamp = "1232594723"
+

@@ -1,0 +1,16 @@
+; $Id: jquery_drag_drop.info,v 1.1 2009/01/17 23:43:46 ebizondrupalservices Exp $
+name = JQuery Drag and Drop
+description = This modules enabled drag and drop on blocks.
+package = User Interface
+dependencies[] = jquery_interface
+dependencies[] = interface_sortable
+version = "6.x-1.x-dev"
+core = "6.x"
+
+
+; Information added by drupal.org packaging script on 2009-01-17
+version = "6.x-1.0"
+core = "6.x"
+project = "jquery_drag_drop"
+datestamp = "1232236524"
+

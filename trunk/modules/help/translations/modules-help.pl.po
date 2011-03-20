@@ -1,0 +1,79 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/help/help.admin.inc:15
+msgid "Help topics"
+msgstr "Zagadnienia"
+
+#: modules/help/help.admin.inc:15
+msgid "Help is available on the following items:"
+msgstr "Dostępne są informacje na temat następujących składników:"
+
+#: modules/help/help.admin.inc:30
+msgid "No help is available for module %module."
+msgstr "Brak dokumentacji dla modułu %module."
+
+#: modules/help/help.admin.inc:41
+msgid "@module administration pages"
+msgstr "Strony zarządzania modułem @module"
+
+#: modules/help/help.module:41
+msgid ""
+"This guide provides context sensitive help on the use and configuration of "
+"<a href=\"@drupal\">Drupal</a> and its modules, and is a supplement to the "
+"more extensive online <a href=\"@handbook\">Drupal handbook</a>. The online "
+"handbook may contain more up-to-date information, is annotated with helpful "
+"user-contributed comments, and serves as the definitive reference point for "
+"all Drupal documentation."
+msgstr ""
+"Przewodnik wyjaśnia, do czego służą i jak skonfigurować poszczególne funkcje "
+"i moduły <a href=\"@drupal\">Drupala</a>. Stanowi uzupełnienie <a href="
+"\"@handbook\"><q>Drupal handbook</q></a> dostępnego w internecie oraz jego "
+"polskiego odpowiednika, <a href=\"http://drupal.org.pl/podrecznik"
+"\"><q>Podręcznika Drupala</q></a>. Zamieszczone w sieci podręczniki mogą "
+"zawierać aktualniejsze dane, a także dają możliwość zapoznania się z "
+"komentarzami innych użytkowników. Warto do nich sięgnąć zawsze, gdy "
+"potrzebna jest informacja na temat związany z Drupalem."
+
+#: modules/help/help.module:44
+msgid ""
+"The help module provides context sensitive help on the use and configuration "
+"of <a href=\"@drupal\">Drupal</a> and its modules, and is a supplement to "
+"the more extensive online <a href=\"@handbook\">Drupal handbook</a>. The "
+"online handbook may contain more up-to-date information, is annotated with "
+"helpful user-contributed comments, and serves as the definitive reference "
+"point for all Drupal documentation."
+msgstr ""
+"Moduł pomocy oferuje informacje na temat poszczególnych funkcji i "
+"konfiguracji <a href=\"@drupal\">Drupala</a> oraz jego modułów. Informacje "
+"te, wyświetlane na bieżąco, stanowią uzupełnienie <a href=\"@handbook"
+"\"><q>Drupal handbook</q></a> dostępnego w internecie oraz jego polskiego "
+"odpowiednika, <a href=\"http://drupal.org.pl/podrecznik\"><q>Podręcznika "
+"Drupala</q></a>. Zamieszczone w sieci podręczniki mogą zawierać "
+"aktualniejsze dane, a także dają możliwość zapoznania się z komentarzami "
+"innych użytkowników. Warto do nich sięgnąć zawsze, gdy potrzebna jest "
+"informacja na temat związany z Drupalem."
+
+#: modules/help/help.module:45
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@help"
+"\">Help module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@help\">stronie dotyczącej pomocy</a> w "
+"podręczniku konfiguracji w internecie."
+
+#: modules/help/help.module:0
+msgid "help"
+msgstr "pomoc"

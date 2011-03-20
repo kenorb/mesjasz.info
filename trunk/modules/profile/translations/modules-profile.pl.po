@@ -1,0 +1,485 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/profile/profile.admin.inc:55
+msgid "Add new field"
+msgstr "Dodaj nowe pole"
+
+#: modules/profile/profile.admin.inc:82
+msgid "Profile fields have been updated."
+msgstr "Pola profilów zostały zachowane."
+
+#: modules/profile/profile.admin.inc:115
+msgid ""
+"No fields in this category. If this category remains empty when saved, it "
+"will be removed."
+msgstr "Brak pól w tej kategorii. Puste kategorie są usuwane."
+
+#: modules/profile/profile.admin.inc:144
+msgid "No fields available."
+msgstr "Brak pól."
+
+#: modules/profile/profile.admin.inc:178
+msgid "edit %title"
+msgstr "edytuj %title"
+
+#: modules/profile/profile.admin.inc:196
+msgid "add new %type"
+msgstr "dodaj nowe %type"
+
+#: modules/profile/profile.admin.inc:211
+msgid "Field settings"
+msgstr "Ustawienia pola"
+
+#: modules/profile/profile.admin.inc:217
+msgid ""
+"The category the new field should be part of. Categories are used to group "
+"fields logically. An example category is \"Personal information\"."
+msgstr ""
+"Kategoria, do której należeć będzie nowe pole. Kategorie wykorzystywane są "
+"do grupowania pól w logiczną całość. Na przykład \"Informacje osobiste\"."
+
+#: modules/profile/profile.admin.inc:223
+msgid ""
+"The title of the new field. The title will be shown to the user. An example "
+"title is \"Favorite color\"."
+msgstr ""
+"Tytuł nowego pola. Będzie on pokazywany użytkownikowi. Na przykład "
+"\"Ulubiony kolor\"."
+
+#: modules/profile/profile.admin.inc:227
+msgid "Form name"
+msgstr "Nazwa formularza"
+
+#: modules/profile/profile.admin.inc:229
+msgid ""
+"The name of the field. The form name is not shown to the user but used "
+"internally in the HTML code and URLs.\n"
+"Unless you know what you are doing, it is highly recommended that you prefix "
+"the form name with <code>profile_</code> to avoid name clashes with other "
+"fields. Spaces or any other special characters except dash (-) and "
+"underscore (_) are not allowed. An example name is \"profile_favorite_color"
+"\" or perhaps just \"profile_color\"."
+msgstr ""
+"Nazwa pola. Nazwa formularza nie jest pokazywana użytkownikowi, ale "
+"wykorzystywana wewnątrz kodu HTML i w odnośnikach.\n"
+"Zdecydowanie zalecane jest rozpoczęcie nazwy formularza od <code>profile_</"
+"code>, by uniknąć konfliktów z nazwami innych pól. Spacje i inne znaki "
+"specjalne, z wyjątkiem łącznika (-) i znaku podkreślenia (_), są "
+"niedozwolone. Przykład: \"profile_ulubiony_kolor\" lub \"profile_kolor\"."
+
+#: modules/profile/profile.admin.inc:234
+msgid "Explanation"
+msgstr "Objaśnienie"
+
+#: modules/profile/profile.admin.inc:236
+msgid ""
+"An optional explanation to go with the new field. The explanation will be "
+"shown to the user."
+msgstr ""
+"Objaśnienie pola, które będzie mógł przeczytać użytkownik (opcjonalne)."
+
+#: modules/profile/profile.admin.inc:240
+msgid "Selection options"
+msgstr "Dostępne możliwości"
+
+#: modules/profile/profile.admin.inc:242
+msgid ""
+"A list of all options. Put each option on a separate line. Example options "
+"are \"red\", \"blue\", \"green\", etc."
+msgstr ""
+"Lista wszystkich możliwości.  Każdą należy umieścić w osobnej linii.  "
+"Przykłady: \"czerwony\", \"niebieski\", \"zielony\", itp."
+
+#: modules/profile/profile.admin.inc:246
+msgid "Visibility"
+msgstr "Widoczność"
+
+#: modules/profile/profile.admin.inc:248
+msgid ""
+"Hidden profile field, only accessible by administrators, modules and themes."
+msgstr ""
+"Niewidoczne pole profilu. Dostępne tylko dla administratorów, modułów i "
+"skórek."
+
+#: modules/profile/profile.admin.inc:248
+msgid "Private field, content only available to privileged users."
+msgstr "Pole osobiste. Zawartość dostępna tylko dla upoważnionych."
+
+#: modules/profile/profile.admin.inc:248
+msgid ""
+"Public field, content shown on profile page but not used on member list "
+"pages."
+msgstr ""
+"Pole publiczne. Zawartość dostępna na stronie profilu, ale nie z poziomu "
+"listy użytkowników."
+
+#: modules/profile/profile.admin.inc:248
+msgid "Public field, content shown on profile page and on member list pages."
+msgstr ""
+"Pole publiczne. Zawartość dostępna na stronie profilu i liście użytkowników."
+
+#: modules/profile/profile.admin.inc:252;259
+msgid "Page title"
+msgstr "Tytuł strony"
+
+#: modules/profile/profile.admin.inc:254
+msgid ""
+"To enable browsing this field by value, enter a title for the resulting "
+"page. The word <code>%value</code> will be substituted with the "
+"corresponding value. An example page title is \"People whose favorite color "
+"is %value\". This is only applicable for a public field."
+msgstr ""
+"By umożliwić przeglądanie list użytkowników, którzy wprowadzili określoną "
+"wartość, należy określić tytuł strony z rezultatem zapytania. Wyrażenie "
+"<code>%value</code> zostanie zastąpione przez odpowiednią wartość. Przykład: "
+"\"Ludzie, których ulubionym koloem jest %value\". Dostępne tylko w wypadku, "
+"gdy pole to jest skonfigurowane do pokazywania na liście użytkowników."
+
+#: modules/profile/profile.admin.inc:261
+msgid ""
+"To enable browsing this field by value, enter a title for the resulting "
+"page. An example page title is \"People who are employed\". This is only "
+"applicable for a public field."
+msgstr ""
+"By umożliwić przeglądanie list użytkowników, którzy wprowadzili określoną "
+"wartość, należy określić tytuł strony z rezultatem zapytania. Przykład: "
+"\"Ludzie, których ulubionym koloem jest %value\". Dostępne tylko w wypadku, "
+"gdy pole to jest skonfigurowane do pokazywania na liście użytkowników."
+
+#: modules/profile/profile.admin.inc:267
+msgid ""
+"The weights define the order in which the form fields are shown. Lighter "
+"fields \"float up\" towards the top of the category."
+msgstr ""
+"Waga określa porządek, w jakim wyświetlane są pola formularza. Lżejsze pola "
+"są wyświetlane wyżej."
+
+#: modules/profile/profile.admin.inc:270
+msgid "Form will auto-complete while user is typing."
+msgstr "Słowa wpisywane przez użytkownika będą automatycznie uzupełniane."
+
+#: modules/profile/profile.admin.inc:274
+msgid "The user must enter a value."
+msgstr "Użytkownik musi wprowadzić wartość."
+
+#: modules/profile/profile.admin.inc:278
+msgid "Visible in user registration form."
+msgstr "Widoczne na formularzu rejestracyjnym."
+
+#: modules/profile/profile.admin.inc:282
+msgid "Save field"
+msgstr "Zachowaj ustawienia pola"
+
+#: modules/profile/profile.admin.inc:293
+msgid ""
+"The specified form name contains one or more illegal characters. Spaces or "
+"any other special characters except dash (-) and underscore (_) are not "
+"allowed."
+msgstr ""
+"Wprowadzona nazwa formularza zawiera jeden lub więcej niedozwolonych znaków. "
+"Spacje i inne znaki specjalne, z wyjątkiem łącznika (-) i znaku podkreślenia "
+"(_), są niedozwolone."
+
+#: modules/profile/profile.admin.inc:297
+msgid "The specified form name is reserved for use by Drupal."
+msgstr "Zaproponowana nazwa formularza jest zarezerwowana przez Drupala."
+
+#: modules/profile/profile.admin.inc:304
+msgid "The specified category name is reserved for use by Drupal."
+msgstr "Zaproponowana nazwa kategorii jest zarezerwowana przez Drupala."
+
+#: modules/profile/profile.admin.inc:316
+msgid "The specified title is already in use."
+msgstr "Jest już formularz o takim tytule."
+
+#: modules/profile/profile.admin.inc:319
+msgid "The specified name is already in use."
+msgstr "Podana nazwa już istnieje."
+
+#: modules/profile/profile.admin.inc:323
+msgid "A hidden field cannot be required."
+msgstr "Nie można wymagać wypełniania ukrytego pola."
+
+#: modules/profile/profile.admin.inc:326
+msgid "A hidden field cannot be set to visible on the user registration form."
+msgstr ""
+"Pole ukryte nie może być wyświetlane w formularzu dodawania konta "
+"użytkownika."
+
+#: modules/profile/profile.admin.inc:344
+msgid "The field has been created."
+msgstr "Pole zostało utworzone."
+
+#: modules/profile/profile.admin.inc:350
+msgid "The field has been updated."
+msgstr "Pole zostało zaktualizowane."
+
+#: modules/profile/profile.admin.inc:372
+msgid "Are you sure you want to delete the field %field?"
+msgstr "Czy na pewno usunąć pole %field?"
+
+#: modules/profile/profile.admin.inc:373
+msgid ""
+"This action cannot be undone. If users have entered values into this field "
+"in their profile, these entries will also be deleted. If you want to keep "
+"the user-entered data, instead of deleting the field you may wish to <a href="
+"\"@edit-field\">edit this field</a> and change it to a hidden profile field "
+"so that it may only be accessed by administrators."
+msgstr ""
+"Operacja jest nieodwracalna. Jeśli użytkownicy wprowadzili już jakieś "
+"wartości do tego pola, również i one zostaną usunięte. By je zachować, pole "
+"można <a href=\"@edit-field\">wyedytować</a> i ukryć (tak by jedynie "
+"administratorzy mieli do niego dostęp), zamiast usuwać."
+
+#: modules/profile/profile.admin.inc:386
+msgid "The field %field has been deleted."
+msgstr "Pole %field zostało usunięte."
+
+#: modules/profile/profile.admin.inc:345;387 modules/profile/profile.module:0
+msgid "profile"
+msgstr "profil"
+
+#: modules/profile/profile.admin.inc:345
+msgid "Profile field %field added under category %category."
+msgstr "Do kategorii %category dodano pole %field."
+
+#: modules/profile/profile.admin.inc:387
+msgid "Profile field %field deleted."
+msgstr "Pole profilu %field zostało usunięte."
+
+#: modules/profile/profile.pages.inc:102 modules/profile/profile.module:80
+msgid "User list"
+msgstr "Lista użytkowników"
+
+#: modules/profile/profile.module:35
+msgid ""
+"The profile module allows custom fields (such as country, full name, or age) "
+"to be defined and displayed in the <em>My Account</em> section. This permits "
+"users of a site to share more information about themselves, and can help "
+"community-based sites organize users around specific information."
+msgstr ""
+"Moduł obsługi profilów umożliwia dodawanie do strony dostępnej pod "
+"odnośnikiem <em>Moje konto</em> własnych pól formularza. Pozwala to "
+"użytkownikom witryny podzielić się większą ilością informacji na swój temat, "
+"a także może pomóc witrynom stawiającym na skupioną wokół nich społeczność w "
+"organizowaniu ludzi wokół ich wspólnych cech czy zainteresowań."
+
+#: modules/profile/profile.module:36
+msgid "The following types of fields can be added to a user profile:"
+msgstr "Do profilów użytkowników mogą być dodane następujące rodzaje pól:"
+
+#: modules/profile/profile.module:37;545
+msgid "single-line textfield"
+msgstr "jednowierszowe pole tekstowe"
+
+#: modules/profile/profile.module:38;546
+msgid "multi-line textfield"
+msgstr "wielowierszowe pole tekstowe"
+
+#: modules/profile/profile.module:39;547
+msgid "checkbox"
+msgstr "pole wyboru"
+
+#: modules/profile/profile.module:40;548
+msgid "list selection"
+msgstr "lista wyboru"
+
+#: modules/profile/profile.module:41;549
+msgid "freeform list"
+msgstr "tekstowe pole listy"
+
+#: modules/profile/profile.module:43;551
+msgid "date"
+msgstr "data"
+
+#: modules/profile/profile.module:44
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@profile"
+"\">Profile module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@profile\">stronie dotyczącej profilów</a> w "
+"podręczniku konfiguracji w internecie."
+
+#: modules/profile/profile.module:47
+msgid ""
+"This page displays a list of the existing custom profile fields to be "
+"displayed on a user's <em>My Account</em> page. To provide structure, "
+"similar or related fields may be placed inside a category. To add a new "
+"category (or edit an existing one), edit a profile field and provide a new "
+"category name. To change the category of a field or the order of fields "
+"within a category, grab a drag-and-drop handle under the Title column and "
+"drag the field to a new location in the list. (Grab a handle by clicking and "
+"holding the mouse while hovering over a handle icon.) Remember that your "
+"changes will not be saved until you click the <em>Save configuration</em> "
+"button at the bottom of the page."
+msgstr ""
+"Na poniższej liście znajdują się wszystkie niestandardowe pola profilów, "
+"które wyświetlane są na stronie <em>Moje konto</em>. Do grupowania podobnych "
+"pól służą kategorie. Kategorię można stworzyć, edytując pole i wprowadzając "
+"żądaną nazwę kategorii. Przesunięcia pola do innej kategorii lub zmiany "
+"kolejności pól można dokonać metodą \"przeciągnij i upuść\", za pomocą "
+"uchwytu znajdującego się w kolumnie <em>Tytuł</em>. Zmiany zostaną "
+"wprowadzone dopiero po skorzystaniu z przycisku <em>Zachowaj konfigurację</"
+"em> u dołu strony."
+
+#: modules/profile/profile.module:141
+msgid "Author information"
+msgstr "Informacje o autorze"
+
+#: modules/profile/profile.module:152
+msgid "Link to full user profile"
+msgstr "Odnośnik do pełnych informacji o użytkowniku"
+
+#: modules/profile/profile.module:154
+msgid "Profile fields to display"
+msgstr "Pola profilu, które mają być wyświetlane"
+
+#: modules/profile/profile.module:157
+msgid ""
+"Select which profile fields you wish to display in the block. Only fields "
+"designated as public in the <a href=\"@profile-admin\">profile field "
+"configuration</a> are available."
+msgstr ""
+"Umożliwia wybór pól profilu, które mają się pojawić w bloku. Widoczne są "
+"jedynie te pola, które w <a href=\"@profile-admin\">konfiguracji pól "
+"profilów</a> określono jako publicznie dostępne."
+
+#: modules/profile/profile.module:189
+msgid "View full user profile"
+msgstr "Pełne informacje o użytkowniku"
+
+# użytkowniku czy o czymś innym także?
+#: modules/profile/profile.module:194
+msgid "About %name"
+msgstr "Informacje o użytkowniku %name"
+
+#: modules/profile/profile.module:337
+msgid ""
+"Put each item on a separate line or separate them by commas. No HTML allowed."
+msgstr ""
+"Każdy element umieszcza się w osobnej linii lub oddziela przecinkami. "
+"Wykorzystywanie HTML jest niedozwolone."
+
+#: modules/profile/profile.module:439
+msgid "The value provided for %field is not a valid URL."
+msgstr "Adres wprowadzony w polu %field jest nieprawidłowy."
+
+#: modules/profile/profile.module:444
+msgid "The field %field is required."
+msgstr "Wypełnienie pola %field jest wymagane."
+
+#: modules/profile/profile.module:87
+msgid "Profiles"
+msgstr "Profile"
+
+#: modules/profile/profile.module:88
+msgid "Create customizable fields for your users."
+msgstr "Służy do tworzenia dodatkowych pól formularzy kont użytkowników."
+
+#: modules/profile/profile.module:95
+msgid "Add field"
+msgstr "Dodaj pole"
+
+#: modules/profile/profile.module:103
+msgid "Profile category autocomplete"
+msgstr "Autouzupełnianie pól kategorii profilu"
+
+#: modules/profile/profile.module:110
+msgid "Edit field"
+msgstr "Edycja pola"
+
+#: modules/profile/profile.module:118
+msgid "Delete field"
+msgstr "Usuń pole"
+
+#: modules/profile/profile.module:126
+msgid "Profile autocomplete"
+msgstr "Autouzupełnianie pól profilu"
+
+#: modules/profile/profile.install:27
+msgid "Stores profile field information."
+msgstr ""
+
+#: modules/profile/profile.install:32
+msgid "Primary Key: Unique profile field ID."
+msgstr ""
+
+#: modules/profile/profile.install:38
+msgid "Title of the field shown to the end user."
+msgstr ""
+
+#: modules/profile/profile.install:45
+msgid "Internal name of the field used in the form HTML and URLs."
+msgstr ""
+
+#: modules/profile/profile.install:50
+msgid "Explanation of the field to end users."
+msgstr ""
+
+#: modules/profile/profile.install:56
+msgid "Profile category that the field will be grouped under."
+msgstr ""
+
+#: modules/profile/profile.install:62
+msgid "Title of page used for browsing by the field's value"
+msgstr "Tytuł strony wyświetlającej wartości pola"
+
+#: modules/profile/profile.install:68
+msgid "Type of form field."
+msgstr ""
+
+#: modules/profile/profile.install:75
+msgid "Weight of field in relation to other profile fields."
+msgstr ""
+
+#: modules/profile/profile.install:82
+msgid "Whether the user is required to enter a value. (0 = no, 1 = yes)"
+msgstr ""
+
+#: modules/profile/profile.install:89
+msgid ""
+"Whether the field is visible in the user registration form. (1 = yes, 0 = no)"
+msgstr ""
+
+#: modules/profile/profile.install:96
+msgid ""
+"The level of visibility for the field. (0 = hidden, 1 = private, 2 = public "
+"on profile but not member list pages, 3 = public on profile and list pages)"
+msgstr ""
+
+#: modules/profile/profile.install:103
+msgid "Whether form auto-completion is enabled. (0 = disabled, 1 = enabled)"
+msgstr ""
+
+#: modules/profile/profile.install:108
+msgid "List of options to be used in a list selection field."
+msgstr ""
+
+#: modules/profile/profile.install:117
+msgid "Stores values for profile fields."
+msgstr ""
+
+#: modules/profile/profile.install:124
+msgid "The {profile_fields}.fid of the field."
+msgstr ""
+
+#: modules/profile/profile.install:131
+msgid "The {users}.uid of the profile user."
+msgstr ""
+
+#: modules/profile/profile.install:136
+msgid "The value for the field."
+msgstr ""

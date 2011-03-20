@@ -1,0 +1,52 @@
+<?php
+// $Id: helpers_node.module,v 1.1.4.1.2.1 2008/02/14 17:43:30 nancyw Exp $
+
+/**
+ * @file
+ * This is a library of useful node functions and methods.
+ * please insert the link if you have a patch for core to introduce a function from this lib to core.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function helpers_node_help($path, $args) {
+  $output = null;
+  switch ($path) {
+    case 'admin/help#helpers_node':
+      $output .= t('A development library for nodes. Contains useful functions and methods for node manipulation and node queries.');
+      $output .= '<dl>';
+      $output .= '<dt>'.'is_node_page'.'</dt><dd>'. t('Find out if the current page is a node page.') .'</dd>';
+      $output .= '<dt>'.'node_load_current'.'</dt><dd>'. t('Grab the current "active" node.') .'</dd>';
+      $output .= '</dl>';
+  }
+  return $output;
+}
+
+/**
+ * Find out if the current page is a node page.
+ * @return TRUE if the page is a node, FALSE if it is another page.
+ */
+function is_node_page() {
+  if (arg(0) == 'node' && is_numeric(arg(1))) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Grab the current 'active' node.
+ * An active node is the one node 123 as shown on page with path node/123, or
+ * its aliased path(s).
+ * @return $node object if the page is a node, empty $node object if it is not a
+ * node, or if we cannot see it, for any valid reason.
+ */
+function node_load_current() {
+  $node = new stdClass();
+
+  if (is_node_page()) {
+    $node = node_load(arg(1));
+  }
+
+  return $node;
+}

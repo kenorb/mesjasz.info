@@ -1,0 +1,154 @@
+<?php
+// $Id: xmlsitemap.install,v 1.5 2008/05/20 17:48:46 darrenoh Exp $
+
+/**
+ * Implementation of hook_schema().
+ */
+function xmlsitemap_schema() {
+  $schema['xmlsitemap_additional'] = array(
+    'description' => t('The base table for xmlsitemap.'),
+    'fields' => array(
+      'path' => array(
+        'description' => t('The path of this node.'),
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'pid' => array(
+        'description' => t('The id of the path.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'default' => 0,
+      ),
+      'last_changed' => array(
+        'description' => t('Keeps track of new changes.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'previously_changed' => array(
+        'description' => t('Keeps track of old changes.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'priority' => array(
+        'description' => t('Stores the index value.'),
+        'type' => 'float',
+        'not null' => FALSE,
+      ),
+    ),
+    'indexes' => array(
+      'pid' => array('pid'),
+    ),
+    'primary key' => array('path'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function xmlsitemap_install() {
+  // Create my tables.
+  db_query("DELETE FROM {url_alias} WHERE dst LIKE 'sitemap%.xml'");
+  drupal_install_schema('xmlsitemap');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function xmlsitemap_uninstall() {
+  // Drop my tables.
+  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'xmlsitemap\_%'");
+  while ($variable = db_fetch_object($settings)) {
+    variable_del($variable->name);
+  }
+  drupal_uninstall_schema('xmlsitemap');
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function xmlsitemap_enable() {
+  global $base_path;
+  $xsl = file_get_contents(drupal_get_path('module', 'xmlsitemap') .'/gss/gss.xsl');
+
+  $css_start = strpos($xsl, '<link href="') + strlen('<link href="');
+  $css_length = strpos($xsl, '" type="text/css" rel="stylesheet"/>') - $css_start;
+  $xsl = substr_replace($xsl, $base_path . drupal_get_path('module', 'xmlsitemap') .'/gss/gss.css', $css_start, $css_length);
+
+  $js_start = strpos($xsl, '<script src="') + strlen('<script src="');
+  $js_length = strpos($xsl, '"></script>') - $js_start;
+  $xsl = substr_replace($xsl, $base_path . drupal_get_path('module', 'xmlsitemap') .'/gss/gss.js', $js_start, $js_length);
+
+  if (file_check_directory(($path = file_directory_path() .'/xmlsitemap'), FILE_CREATE_DIRECTORY)) {
+    file_save_data($xsl, "$path/gss.xsl", FILE_EXISTS_REPLACE);
+  }
+  _xmlsitemap_gsitemap_replace();
+}
+
+/**
+ * Replace Google Sitemap if it is installed.
+ */
+function _xmlsitemap_gsitemap_replace() {
+  if (db_result(db_query("
+    SELECT 1 FROM {system}
+    WHERE type = 'module' AND name = 'gsitemap' AND (status = 1 OR schema_version >= 0)
+  "))) {
+    db_query("
+      INSERT INTO {xmlsitemap_additional} (path, pid, last_changed, previously_changed, priority)
+      SELECT path, pid, last_changed, previously_changed, priority FROM {gsitemap_additional}
+    ");
+    $modules = array('xmlsitemap_node', 'xmlsitemap_engines');
+    if (variable_get('gsitemap_showterms', FALSE)) {
+      $modules[] = 'xmlsitemap_term';
+      variable_del('gsitemap_showterms');
+    }
+    if (variable_get('gsitemap_showusers', FALSE)) {
+      $modules[] = 'xmlsitemap_user';
+      variable_del('gsitemap_showusers');
+    }
+    drupal_install_modules($modules);
+    $settings = db_query("SELECT * FROM {variable} WHERE name LIKE 'gsitemap\_%'");
+    while ($variable = db_fetch_object($settings)) {
+      switch ($variable->name) {
+        case 'gsitemap_frontpage':
+          $name = 'xmlsitemap_front_page_priority';
+          break;
+        case 'gsitemap_priority':
+          $name = 'xmlsitemap_additional_links_priority';
+          break;
+        case 'gsitemap_logacc':
+          $name = 'xmlsitemap_log_access';
+          break;
+        default:
+          $name = 'xmlsitemap'. strstr($variable->name, '_');
+          break;
+      }
+      variable_set($name, (float) unserialize($variable->value));
+    }
+    module_disable(array('gsitemap'));
+    drupal_uninstall_module('gsitemap');
+  }
+}
+
+/**
+ * Implementation of hook_disable().
+ */
+function xmlsitemap_disable() {
+  $path = file_directory_path() .'/xmlsitemap';
+  if ($dir = @opendir($path)) {
+    while (($file = readdir($dir)) !== FALSE) {
+      if ($file != '.' && $file != '..') {
+        unlink("$path/$file");
+      }
+    }
+    closedir($dir);
+    rmdir($path);
+  }
+}

@@ -1,0 +1,14 @@
+<?php
+// $Id: date_php4.module,v 1.4.6.1 2008/08/30 13:57:39 karens Exp $
+
+/**
+ * @file
+ * Include PHP 4 date handling files on systems where native date and
+ * timezone handling won't work. This module will create the functions
+ * date_create(), date_offset_get(), etc. that will work in PHP 4.
+ *
+ * This module is not needed on systems using PHP 5.2+ and won't be needed once
+ * Drupal requires PHP 5.2.
+ */
+
+require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4.inc');

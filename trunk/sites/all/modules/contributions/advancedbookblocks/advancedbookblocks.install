@@ -1,0 +1,73 @@
+<?php
+// $Id: advancedbookblocks.install,v 1.1 2009/01/04 19:57:12 aaronhawkins Exp $
+
+function advancedbookblocks_install() {
+  drupal_install_schema('advancedbookblocks');
+  db_query("INSERT INTO {adv_book_block} (delta, custom, title) VALUES (0, 0, 'Book Navigation')");
+}
+
+function advancedbookblocks_uninstall() {
+  drupal_uninstall_schema('advancedbookblocks');
+}
+function advancedbookblocks_schema() {
+  $schema['adv_book_block'] = array(
+    'fields' => array(
+      'delta' => array(
+        'type'      => 'int',
+        'unsigned'  => TRUE,
+        'not null'  => TRUE,
+      ),
+      'custom' => array(
+        'type'      => 'int',
+        'unsigned'  => TRUE,
+        'not null'  => TRUE,
+      ),
+      'title' => array(
+        'type'      => 'varchar',
+        'length'    => 255,
+        'not null'  => TRUE,
+      ),
+      'omit_nids' => array(
+        'type'      => 'varchar',
+        'length'    => 255,
+        'not null'  => FALSE,
+      ),
+      'tids' => array(
+        'type'      => 'varchar',
+        'length'    => 255,
+        'not null'  => FALSE,
+      ),
+      'add_mode' => array(
+        'type'      => 'int',
+        'unsigned'  => TRUE,
+        'not null'  => TRUE,
+        'default'     => 1,
+      ),
+    ),
+  );
+  $schema['adv_book_custom'] = array(
+    'fields' => array(
+      'delta' => array(
+        'type'      => 'int',
+        'unsigned'  => TRUE,
+        'not null'  => TRUE,
+      ),
+      'bid' => array(
+        'type'      => 'int',
+        'unsigned'  => TRUE,
+        'not null'  => TRUE,
+      ),
+      'enabled' => array(
+        'type'      => 'int',
+        'unsigned'  => TRUE,
+        'not null'  => TRUE,
+        'default'     => 1,
+      ),
+      'weight' => array(
+        'type'      => 'int',
+        'not null'  => FALSE,
+      ),
+    ),
+  );
+  return $schema;
+}

@@ -1,0 +1,14 @@
+; $Id: user_stats.info,v 1.2.2.3.2.1 2008/03/28 11:10:52 liammcdermott Exp $
+
+name = User Stats
+dependencies[] = profile
+description = "Provides post count and other user statistics. Integrates well with Workflow NG and Token (if installed)."
+package = "User goodies"
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-10-14
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "user_stats"
+datestamp = "1223986523"
+

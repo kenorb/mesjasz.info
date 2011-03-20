@@ -1,0 +1,261 @@
+<?php
+// $Id: reftagger.module,v 1.1.4.1 2008/10/20 20:21:53 nrambeck Exp $
+
+/*
+ * Drupal Module: RefTagger
+ * Adds the required Javascript to the bottom of all your Drupal pages
+ * to add tooltip popups to all Bible verse references on a page.
+ *
+ * @author: Nathan Rambeck <www.rambeck.com>
+ */
+
+function reftagger_help($path, $arg) {
+  switch ($path) {
+    case 'admin/settings/reftagger':
+      return t('<a href="@rt_url">RefTagger</a> is an amazing, free new web tool that instantly makes all the Bible references on your site come alive! Bare links turn into hyperlinks to the full text of the passage at Bible.Logos.com, making it easy for your readers to access the text of Scripture with just a click. Even better, RefTagger brings the text right to your readers by generating a tooltip window that pops up instantly when they hover over the reference. You can also have RefTagger add an  icon that is hyperlinked to the passage in Libronix.', array('@rt_url' => 'http://www.logos.com/reftagger'));
+  }
+}
+
+function reftagger_perm() {
+  return array('administer reftagger');
+}
+
+function reftagger_menu() {
+  $items['admin/settings/reftagger'] = array(
+    'title' => 'RefTagger',
+    'description' => t('Configure the settings for RefTagger on your site.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reftagger_admin_settings_form'),
+    'access arguments' => array('administer reftagger'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_admin_settings() for configuring the module
+ */
+function reftagger_admin_settings_form() {
+  $version_options = reftagger_bible_versions();
+  $form['reftagger_bible_version'] = array(
+    '#type' => 'select',
+    '#title' => t('Bible Version'),
+    '#options' => $version_options,
+    '#default_value' => variable_get('reftagger_bible_version', 'KJV'),
+    '#description' => t('Select a Bible version to use. RefTagger may not support some Bible versions in the ToolTip feature.'),
+  );
+  $form['reftagger_link_target'] = array(
+    '#type' => 'radios',
+    '#title' => t('Links open in'),
+    '#options' => array(
+      t('Existing window'),
+      t('New window'),
+    ),
+    '#default_value' => variable_get('reftagger_link_target', 1),
+  );
+  $form['libronix'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Libronix'),
+    '#collapsible' => FALSE,
+  );
+  $form['libronix']['reftagger_libronix_icon_link'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add Libronix Links'),
+    '#default_value' => variable_get('reftagger_libronix_icon_link', 0),
+    '#description' => t('Insert an icon linking to the verse in Libronix DLS.'),
+  );
+  $form['libronix']['reftagger_libronix_bible_version'] = array(
+    '#type' => 'select',
+    '#title' => t('Libronix Bible Version'),
+    '#options' => reftagger_libronix_versions(),
+    '#default_value' => variable_get('reftagger_libronix_bible_version', 'KJV'),
+    '#description' => t('Select a Bible version to use for Libronix links'),
+  );
+  $form['libronix']['reftagger_libronix_icon_add'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add Libronix Icon'),
+    '#default_value' => variable_get('reftagger_libronix_icon_add', 0),
+    '#description' => t('Add Libronix icon to pre-existing Libronix links'),
+  );
+  $dark_icon = '<img src="http://www.logos.com/images/Corporate/LibronixLink_dark.png" style="padding-right:4px;" />';
+  $light_icon = '<img src="http://www.logos.com/images/Corporate/LibronixLink_light.png" style="padding-right:4px;" />';
+  $form['libronix']['reftagger_libronix_icon_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Libronix Link Icons'),
+    '#options' => array(
+      $dark_icon . t('Dark (for sites with light backgrounds)'),
+      $light_icon . t('Light (for sites with dark backgrounds)'),
+    ),
+    '#default_value' => variable_get('reftagger_libronix_icon_type', 0),
+  );
+  $form['reftagger_tooltip_enable'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show ToolTips'),
+    '#default_value' => variable_get('reftagger_tooltip_enable', 1),
+    '#description' => t('Show a tooltip containing verse text when the mouse hovers over a reference.'),
+  );
+
+
+  $tag_checkboxes = reftagger_tags();
+  $form['reftagger_exclude_tags'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Exclude tags'),
+    '#default_value' => variable_get('reftagger_exclude_tags', array('h1', 'h2', 'h3')),
+    '#options' => $tag_checkboxes,
+    '#description' => t('Do not search these HTML tags.'),
+  );
+  $form['reftagger_exclude_classes'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Exclude classes'),
+    '#default_value' => variable_get('reftagger_exclude_classes', ''),
+    '#description' => t('A comma-separated list of HTML tag classes that should exclude RefTagger functionality'),
+  );
+  $form['reftagger_css_override'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Override CSS'),
+    '#default_value' => variable_get('reftagger_css_override', 0),
+    '#description' => t('Override the default styling. To modify tooltip styling, check this and edit the ReferenceTagging.css stylesheet.'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Return an array of options for HTML tags to exclude
+ */
+function reftagger_tags() {
+  return array(
+    'b' => 'Bold/Strong',
+    'i' => 'Italic/Emphasis',
+    'u' => 'Underline',
+    'ol' => 'Ordered List',
+    'ul' => 'Unordered List',
+    'span' => 'Span',
+    'h1' => 'Header 1',
+    'h2' => 'Header 2',
+    'h3' => 'Header 3',
+    'h4' => 'Header 4',
+    'h5' => 'Header 5',
+    'h6' => 'Header 6'
+  );
+}
+
+/**
+ * Implementation of hook_footer()  to insert Javascript at the end of the page
+ */
+function reftagger_footer($main = 0) {
+  $script_ln[] = '<!-- RefTagger from Logos. Visit http://www.logos.com/reftagger. -->';
+  $script_ln[] = 'Logos.ReferenceTagging.lbsBibleVersion = "'. variable_get('reftagger_bible_version', 'KJV') .'";';
+  if (variable_get('reftagger_link_target', 1)) {
+    $script_ln[] = 'Logos.ReferenceTagging.lbsLinksOpenNewWindow = true;'; 
+  }
+  if (variable_get('reftagger_libronix_icon_link', 0)) {
+    $script_ln[] = 'Logos.ReferenceTagging.lbsAddLibronixDLSLink = true;'; 
+    $script_ln[] = 'Logos.ReferenceTagging.lbsLibronixBibleVersion = "'. variable_get('reftagger_libronix_bible_version', 'KJV') .'";';
+  }
+  if (variable_get('reftagger_libronix_icon_add', 0)) {
+    $script_ln[] = 'Logos.ReferenceTagging.lbsAppendIconToLibLinks = true;'; 
+  }
+  $icon_type = variable_get('reftagger_libronix_icon_type', 0) ? 'light' : 'dark';
+  $script_ln[] = 'Logos.ReferenceTagging.lbsLibronixLinkIcon = "'. $icon_type .'";';
+  $exclude_tags = reftagger_exclude_tags();
+  if (count($exclude_tags)) {
+    $script_ln[] = 'Logos.ReferenceTagging.lbsNoSearchTagNames  = [ "'. implode('", "', $exclude_tags) .'" ];'; 
+  }
+  if (trim(variable_get('reftagger_exclude_classes', ''))) {
+    $class_list = variable_get('reftagger_exclude_classes', '');
+    str_replace(' ', '', $class_list);
+    $exclude_classes = explode(',', $class_list);
+    $script_ln[] = 'Logos.ReferenceTagging.lbsNoSearchClassNames  = [ "'. implode('", "', $exclude_classes) .'" ];'; 
+  }
+  if (!variable_get('reftagger_tooltip_enable', 1)) {
+    $script_ln[] = 'Logos.ReferenceTagging.lbsUseTooltip = false;'; 
+  }
+  if(variable_get('reftagger_css_override', 0)) {
+    drupal_add_css(drupal_get_path('module', 'reftagger') . '/ReferenceTagging.css', 'module', 'screen');
+    $script_ln[] = 'Logos.ReferenceTagging.lbsCssOverride = true;';
+  }
+  
+  $script_ln[] = 'Logos.ReferenceTagging.tag();';
+  $script = implode("\n", $script_ln);
+  $ext_script = 'document.write(unescape("%3Cscript src=\'" + "http://bible.logos.com/jsapi/referencetagging.js\' type=\'text/javascript\'%3E%3C/script%3E"));';
+  drupal_add_js($ext_script, 'inline', 'footer');
+  drupal_add_js($script, 'inline', 'footer');
+  
+}
+
+/**
+ * Grab the exclude tags and add synonym tags
+ */
+function reftagger_exclude_tags() {
+  $exclude_tags = variable_get('reftagger_exclude_tags', array('h1', 'h2', 'h3'));
+  foreach ($exclude_tags AS $tag) {
+    if ($tag) {
+      $tags[] = $tag;
+      if ($tag == 'b') {
+        $tags[] = 'strong';
+      }
+      if ($tag == 'i') {
+        $tags[] = 'em';
+      }
+    }
+  }
+  return $tags;  
+}
+
+/**
+ * Return an array list of Bible version options for tooltips
+ */
+function reftagger_bible_versions() {
+  return array(
+    'NIV' => 'NIV',
+    'NASB' => 'NASB',
+    'KJV' => 'KJV',
+    'ESV' => 'ESV',
+    'ASV' => 'ASV',
+    'TM' => 'MSG',
+    'AB' => 'AMP',
+    'NLT' => 'NLT',
+    'CEV' => 'CEV',
+    'NKJV' => 'NKJV',
+    'NCV' => 'NCV',
+    'KJ21' => 'KJ21',
+    'YLT' => 'YLT',
+    'DAR' => 'DARBY',
+    'NLV' => 'NLV',
+    'HCSB' => 'HCSB',
+    'NIRV' => 'NIRV',
+    'NIVUK' => 'NIVUK',
+    'TNIV' => 'TNIV'
+  );
+}
+
+/**
+ * Return an array list of Bible version options for Libronix links
+ */
+function reftagger_libronix_versions() {
+  return array(
+    'DEFAULT' => 'User\'s Default',
+    'NIV' => 'NIV',
+    'NASB95' => 'NASB95',
+    'NASB77' => 'NASB77',
+    'KJV' => 'KJV',
+    'ESV' => 'ESV',
+    'ASV' => 'ASV',
+    'MESSAGE' => 'MSG',
+    'AMP' => 'AMP',
+    'NRSV' => 'NRSV',
+    'NLT' => 'NLT',
+    'CEV' => 'CEV',
+    'NKJV' => 'NKJV',
+    'NCV' => 'NCV',
+    'KJ21' => 'KJ21',
+    'YLT' => 'YLT',
+    'DAR' => 'DARBY',
+    'HCSB' => 'HCSB',
+    'NIRV' => 'NIRV',
+    'ANIV' => 'ANIV',
+    'TNIV' => 'TNIV'
+  );
+}

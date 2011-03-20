@@ -1,0 +1,39 @@
+<?php
+// $Id: argentina_32_1.cif,v 1.2.2.5 2008/11/07 21:13:24 islandusurper Exp $
+
+function argentina_install() {
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (32, 'Argentina', 'AR', 'ARG', 1)");
+
+  // VALUES = %d for ID, Parent Country ID, Zone Abbreviation, Zone Name
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+      ."(32, 'A', 'Salta'),"
+      ."(32, 'B', 'Buenos Aires Province'),"
+      ."(32, 'C', 'Capital Federal'),"
+      ."(32, 'D', 'San Luis'),"
+      ."(32, 'E', 'Entre Ríos'),"
+      ."(32, 'F', 'La Rioja'),"
+      ."(32, 'G', 'Santiago del Estero'),"
+      ."(32, 'H', 'Chaco'),"
+      ."(32, 'J', 'San Juan'),"
+      ."(32, 'K', 'Catamarca'),"
+      ."(32, 'L', 'La Pampa'),"
+      ."(32, 'M', 'Mendoza'),"
+      ."(32, 'N', 'Misiones'),"
+      ."(32, 'P', 'Formosa'),"
+      ."(32, 'Q', 'Neuquén'),"
+      ."(32, 'R', 'Río Negro'),"
+      ."(32, 'S', 'Santa Fe'),"
+      ."(32, 'T', 'Tucumán'),"
+      ."(32, 'U', 'Chubut'),"
+      ."(32, 'V', 'Tierra del Fuego'),"
+      ."(32, 'W', 'Corrientes'),"
+      ."(32, 'X', 'Córdoba'),"
+      ."(32, 'Y', 'Jujuy'),"
+      ."(32, 'Z', 'Santa Cruz')");
+
+  uc_set_address_format(32, "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+              ."\r\n!postal_code !zone_name\r\n!country_name");
+
+}
+

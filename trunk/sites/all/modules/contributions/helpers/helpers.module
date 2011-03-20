@@ -1,0 +1,292 @@
+<?php
+// $Id: helpers.module,v 1.18.4.5.2.2 2008/08/28 20:16:00 nancyw Exp $
+
+/**
+ * @file
+ * This is a library of useful functions and methods.
+ * please insert the link if you have a patch for core to introduce a function from this lib to core.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function helpers_help($path, $args) {
+  switch ($path) {
+    case 'admin/help#helpers':
+      return t('A development library. Contains numerous useful functions and methods.');
+  }
+}
+
+/**
+ * Implementation of hook_menu()
+ */
+function helpers_menu() {
+  $items = array();
+  $items['helpers/void'] = array(
+		'title' => 'Void page',
+    'page callback' => 'void_page',
+    'access arguments' => array(true),
+    'type' => MENU_CALLBACK,
+    );
+  return $items;
+}
+
+/**
+ * String and array functions.
+ */
+
+/**
+ * Test if a string is empty, or equals another string. If so, return a themed
+ empty placeholder. Else return the input string.
+ * @param $string: The string we want to find out if its empty;
+ * @param $test: Optionally you can test against this string; In case you want to redefine "empty".
+ */
+function test_empty_string($string, $test = '') {
+  if ($string == $test) {
+    return theme('empty_placeholder');
+  }
+  return $string;
+}
+
+/**
+ * Formats a chopped off string of a certain length. Calls a theme function to
+ * do the actual formatting. By default it will return strings in the form of
+ * verylongstringwithsomecoo...
+ * @param $string the original string.
+ * @param $length Optional provide a length for the string
+ * @param $count_addition Optional provide an amount for the additional
+ * charachters. Giving this parameter, for example a value of 5, you will
+ * receive a shortened string in the form of verylongstringwithsomec.....
+ */
+function format_shorten_string($string, $length = 15, $count_addition = 3) {
+  if (drupal_strlen($string) > $length) {
+    $out = theme('shorten_string', drupal_substr($string, 0, ($length - $count_addition)), $string, $count_addition);
+  }
+  else {
+    $out = $string;
+  }
+
+  return $out;
+}
+
+ /**
+ * Pluralizes English nouns.
+ * @param $word English noun to pluralize
+ * @return Plural noun
+ */
+function pluralize_en($word) {
+  $plural = array(
+    '/(quiz)$/i' => '\1zes',
+    '/^(ox)$/i' => '\1en',
+    '/([m|l])ouse$/i' => '\1ice',
+    '/(matr|vert|ind)ix|ex$/i' => '\1ices',
+    '/(x|ch|ss|sh)$/i' => '\1es',
+    '/([^aeiouy]|qu)ies$/i' => '\1y',
+    '/([^aeiouy]|qu)y$/i' => '\1ies',
+    '/(hive)$/i' => '\1s',
+    '/(?:([^f])fe|([lr])f)$/i' => '\1\2ves',
+    '/sis$/i' => 'ses',
+    '/([ti])um$/i' => '\1a',
+    '/(buffal|tomat)o$/i' => '\1oes',
+    '/(bu)s$/i' => '\1ses',
+    '/(alias|status)/i'=> '\1es',
+    '/(octop|vir)us$/i'=> '\1i',
+    '/(ax|test)is$/i'=> '\1es',
+    '/s$/i'=> 's',
+    '/$/'=> 's',
+  );
+
+  $uncountables = array('equipment', 'information', 'rice', 'money', 'species', 'series', 'fish', 'sheep');
+
+  $irregular = array(
+    'person' => 'people',
+    'man' => 'men',
+    'child' => 'children',
+    'sex' => 'sexes',
+    'move' => 'moves',
+  );
+
+  $lowercased_word = strtolower($word);
+
+  foreach ($uncountables as $uncountable) {
+    if(substr($lowercased_word, (-1 * strlen($uncountable))) == $uncountable) {
+      return $word;
+    }
+  }
+
+  foreach ($irregular as $plural => $singular) {
+    if (preg_match('/('.$plural.')$/i',  $word, $arr)) {
+      return preg_replace('/('.$plural.')$/i', substr($arr[0], 0, 1).substr($singular, 1), $word);
+    }
+  }
+
+  foreach ($plural as $rule => $replacement) {
+    if (preg_match($rule, $word)) {
+      return preg_replace($rule, $replacement, $word);
+    }
+  }
+  
+  return false;
+}
+
+/**
+ * Singularizes English nouns.
+ * @param $word English noun to singularize
+ * @return Singular noun.
+ */
+function singularize_en($word) {
+  $singular = array (
+    '/(quiz)zes$/i' => '\\1',
+    '/(matr)ices$/i' => '\\1ix',
+    '/(vert|ind)ices$/i' => '\\1ex',
+    '/^(ox)en/i' => '\\1',
+    '/(alias|status)es$/i' => '\\1',
+    '/([octop|vir])i$/i' => '\\1us',
+    '/(cris|ax|test)es$/i' => '\\1is',
+    '/(shoe)s$/i' => '\\1',
+    '/(o)es$/i' => '\\1',
+    '/(bus)es$/i' => '\\1',
+    '/([m|l])ice$/i' => '\\1ouse',
+    '/(x|ch|ss|sh)es$/i' => '\\1',
+    '/(m)ovies$/i' => '\\1ovie',
+    '/(s)eries$/i' => '\\1eries',
+    '/([^aeiouy]|qu)ies$/i' => '\\1y',
+    '/([lr])ves$/i' => '\\1f',
+    '/(tive)s$/i' => '\\1',
+    '/(hive)s$/i' => '\\1',
+    '/([^f])ves$/i' => '\\1fe',
+    '/(^analy)ses$/i' => '\\1sis',
+    '/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$/i' => '\\1\\2sis',
+    '/([ti])a$/i' => '\\1um',
+    '/(n)ews$/i' => '\\1ews',
+    '/s$/i' => '',
+  );
+
+  $uncountables = array('equipment', 'information', 'rice', 'money', 'species', 'series', 'fish', 'sheep');
+
+  $irregular = array(
+    'person' => 'people',
+    'man' => 'men',
+    'child' => 'children',
+    'sex' => 'sexes',
+    'move' => 'moves',
+  );
+
+  $lowercased_word = strtolower($word);
+  foreach ($uncountables as $uncountable) {
+    if(substr($lowercased_word, (-1 * strlen($uncountable))) == $uncountable) {
+      return $word;
+    }
+  }
+
+  foreach ($irregular as $plural=> $singular) {
+    if (preg_match('/('.$singular.')$/i', $word, $arr)) {
+      return preg_replace('/('.$singular.')$/i', substr($arr[0], 0, 1).substr($plural, 1), $word);
+    }
+  }
+
+  foreach ($singular as $rule => $replacement) {
+    if (preg_match($rule, $word)) {
+      return preg_replace($rule, $replacement, $word);
+    }
+  }
+
+  return $word;
+}
+
+/*
+ * Function to parse tags (HTML) string into an array suitable for drupal_attributes.
+ * @param $tags
+ *   string containing HTML to be parsed.
+ * @return
+ *   array with attribute as key and value as value.
+ */
+function drupal_parse_html($tags) {
+  $attrs = array();
+  $arr = explode(' ', $tags);
+  foreach ($arr as $tag) {
+    if (!empty($tag)) { // Ignore extra blanks.
+      $key_len = strpos($tag, '=');
+      $attrs[substr($tag, 0, $key_len)] = trim(substr($tag, $key_len + 1), '\'"');
+    }
+  }
+  return $attrs;
+}
+
+/*
+ * Function to display an array.
+ * @param $array
+ *   array to be displayed.
+ * @param $title
+ *   heading to be displayed.
+ * @return
+ *   HTML string.
+ */
+function show_array($array, $title = null) {
+  $output = null;
+  if ($title) {
+    $output .= theme('heading', $title, 2, array('class' => 'show_array'));
+  }
+  foreach($array as $key => $value) {
+    $output .= theme('paragraph', $key .' => '. (is_string($value) ? $value : print_r($value, true)), array('class' => 'show_array'));
+  }
+  return $output;
+}
+
+/*
+ * Function to display an object.
+ * @param $array
+ *   array to be displayed.
+ * @param $title
+ *   heading to be displayed. The object class will be appended.
+ * @return
+ *   HTML string.
+ */
+function show_object($object, $title = null) {
+  $output = show_array((array) $object, $title .' ('. get_class($object) .')');
+  return $output;
+}
+
+/**
+ * Page functions. Render pages
+ */
+
+/**
+ * Void. Render nothing. A blank page.
+ */
+function void_page() {
+  return '';
+}
+
+/**
+ * Common API functions
+ */
+/**
+ * Get a block as object prepared to use in the theme_block function
+ * @param $name the modulename (block name) to get the block from.
+ * @param $delta the block delta. Each block in each module has a unique delta value. A number indicating that block.
+ */
+function get_block($name, $delta = 0) {
+  if ($result = module_invoke($name, 'block', 'view', $delta)) {
+    $block = (object)$result;
+    $block->module = $name;
+    $block->delta = $delta;
+    return $block;
+  }
+}
+
+/**
+ * Find out if a user has a certain role or roles.
+ * @param $user a user object. Must only contain the $user->roles array.
+ * @param $roles an array of roles to check for.
+ * @return TRUE if the user has a role you checked for, FALSE if the user is not
+ * within any of the requested roles.
+ */
+function user_has_role($user, $roles) {
+  foreach ($roles as $rid) {
+    if (in_array($rid, array_keys($user->roles))) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}

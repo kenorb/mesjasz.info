@@ -1,0 +1,13 @@
+; $Id: xmlsitemap_user.info,v 1.2 2008/05/20 17:48:47 darrenoh Exp $
+name = XML Sitemap: User
+description = Adds user profiles to the site map.
+package = XML Sitemap
+dependencies[] = xmlsitemap
+core = "6.x"
+
+; Information added by drupal.org packaging script on 2008-06-09
+version = "6.x-0.x-dev"
+core = "6.x"
+project = "xmlsitemap"
+datestamp = "1213013710"
+

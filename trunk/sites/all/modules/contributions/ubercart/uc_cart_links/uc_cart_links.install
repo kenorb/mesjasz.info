@@ -1,0 +1,66 @@
+<?php
+// $Id: uc_cart_links.install,v 1.2.2.5 2008/11/07 21:13:24 islandusurper Exp $
+
+/**
+ * @file
+ * uc_cart_links module install file.
+ */
+
+/**
+ * Define the table structures.
+ *
+ * @return
+ *   The schema which contains the structure for the uc_cart_links module's tables.
+ */
+function uc_cart_links_schema() {
+  $schema['uc_cart_link_clicks'] = array(
+    'description' => t('A table containing tracking information for cart links, including the number of times they were clicked and the time of the last click.'),
+    'fields' => array(
+      'cart_link_id' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '0',
+        'description' => t('The cart link identifier.'),
+      ),
+      'clicks' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('The number of times this cart link was clicked.'),
+      ),
+      'last_click' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('The time of the last click on this cart link, stored as a UNIX timestamp.'),
+      ),
+    ),
+    'primary key' => array(
+      'cart_link_id'
+    ),
+  );
+
+  return $schema;
+}
+
+
+/**
+ * Implementation of hook_install().
+ *
+ * Inserts the uc_cart_links module's schema in the SQL database.
+ */
+function uc_cart_links_install() {
+  drupal_install_schema('uc_cart_links');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ *
+ * Remove the variables and schema corresponding to the uc_cart_links module.
+ */
+function uc_cart_links_uninstall() {
+  drupal_uninstall_schema('uc_cart_links');
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_cart_links_%%'");
+  cache_clear_all('variables', 'cache');
+}

@@ -1,0 +1,2144 @@
+# Russian translation of adsense (6.x-1.1)
+# Copyright (c) 2009 by the Russian translation team
+# Generated from files:
+#  adsense.admin.inc,v 1.1.2.5 2009/03/31 14:41:01 jcnventura
+#  adsense_cse.module,v 1.1.2.8 2009/02/10 01:35:20 jcnventura
+#  adsense_search.module,v 1.1.2.10 2009/03/31 14:41:02 jcnventura
+#  adsense.module,v 1.68.2.18 2009/03/31 14:41:01 jcnventura
+#  adsense_oldcode.admin.inc,v 1.1.2.2 2008/09/11 22:52:00 jcnventura
+#  adsense_search.admin.inc,v 1.1.2.3 2009/05/13 00:04:20 jcnventura
+#  adsense.help.inc,v 1.1.2.7 2009/03/31 14:41:02 jcnventura
+#  adsense_managed.module,v 1.1.2.7 2009/03/31 14:41:02 jcnventura
+#  adsense_oldcode.module,v 1.1.2.7 2009/03/31 14:41:02 jcnventura
+#  adsense_click.logs.inc,v 1.1.4.2 2008/12/19 01:32:37 jcnventura
+#  revenue_sharing_basic.admin.inc,v 1.3.2.5 2009/05/12 23:37:34 jcnventura
+#  adsense_click.module,v 1.2.2.10 2008/12/19 01:32:37 jcnventura
+#  adsense_cse.admin.inc,v 1.1.2.5 2009/05/13 00:04:20 jcnventura
+#  adsense.search_options.inc,v 1.1.2.1 2008/08/10 22:26:34 jcnventura
+#  adsense_managed.admin.inc,v 1.1.2.2 2008/09/11 22:52:00 jcnventura
+#  adsense_click.admin.inc,v 1.1.4.2 2008/12/19 01:32:37 jcnventura
+#  adsense_search.results.inc,v 1.1.2.3 2009/03/31 14:41:02 jcnventura
+#  adsense.info,v 1.6 2008/07/21 00:21:33 kbahey
+#  adsense_click.info,v 1.2.2.1 2008/12/19 01:32:37 jcnventura
+#  adsense_cse.info,v 1.1 2008/07/21 00:21:34 kbahey
+#  adsense_managed.info,v 1.1 2008/07/21 00:21:34 kbahey
+#  adsense_oldcode.info,v 1.1.2.1 2008/08/11 02:19:15 jcnventura
+#  revenue_sharing_basic.info,v 1.1.2.3 2009/05/12 23:37:34 jcnventura
+#  adsense_search.info,v 1.1 2008/07/21 00:21:34 kbahey
+#  revenue_sharing_basic.module,v 1.4.2.11 2009/05/13 00:04:20 jcnventura
+#  adsense.install,v 1.10.2.5 2009/03/31 14:41:01 jcnventura
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: adsense (6.x-1.1)\n"
+"POT-Creation-Date: 2009-05-13 01:59+0200\n"
+"PO-Revision-Date: 2009-06-15 23:59+0100\n"
+"Last-Translator: Joao Ventura <jcnventura@drupal.org>\n"
+"Language-Team: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+
+#: adsense.admin.inc:25;152
+#: cse/adsense_cse.admin.inc:26
+#: managed/adsense_managed.admin.inc:24
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:25
+msgid "Help and instructions"
+msgstr "Помощь и инструкции"
+
+#: adsense.admin.inc:37
+msgid "Visibility"
+msgstr "Видимость"
+
+#: adsense.admin.inc:42
+msgid "Show AdSense on specific pages"
+msgstr "Показывать AdSense на определенных страницах"
+
+#: adsense.admin.inc:44
+msgid "Show on every page except the listed pages."
+msgstr "Показывать на всех страницах кроме перечисленных."
+
+#: adsense.admin.inc:44
+msgid "Show on only the listed pages."
+msgstr "Показывать только на перечисленных страницах."
+
+#: adsense.admin.inc:51
+msgid "Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are  %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page."
+msgstr "Введите на одной странице в строку как Drupal пути. '*' знак - метасимвол. Пример пути %blog для страниц блога и %blog-wildcard для каждого персонального блога.  %front для главной страницы."
+
+#: adsense.admin.inc:61
+msgid "Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only)."
+msgstr "Показать, если данный PHP-код возвращает <strong>TRUE</strong> (PHP-режим, только для экспертов)."
+
+#: adsense.admin.inc:62
+msgid "If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site."
+msgstr "Если выбран PHP-режим, введите PHP-код между %php. Обратите внимание, исполнение некорректного PHP-кода может нарушить работу вашего сайта."
+
+#: adsense.admin.inc:69
+msgid "Advanced options"
+msgstr "Дополнительные настройки"
+
+#: adsense.admin.inc:74
+msgid "Enable test mode?"
+msgstr "Включить тестовый тежим?"
+
+#: adsense.admin.inc:76
+msgid "This enables you to test the AdSense module settings. This can be useful in some situations: for example, testing whether revenue sharing is working properly or not without having to display real ads on your site. It is best to test this after you log out."
+msgstr "Это позволяет вам тестировать настройки модуля AdSense. Бывает полезно в некоторых ситуациях, например, для проверки - правильно или нет работает разделение дохода без показа реальной рекламы на вашем сайте. Это лучше проверять после того, как вы выйдете из административного интерфейса."
+
+#: adsense.admin.inc:81
+msgid "Disable Google AdSense ads?"
+msgstr "Отключить рекламу Google AdSense?"
+
+#: adsense.admin.inc:83
+msgid "This disables all display of Google AdSense ads from your web site. This is useful in certain situations, such as site upgrades, or if you make a copy of the site for development and test purposes."
+msgstr "Это отключает показ всей рекламы Google AdSense для вашего сайта. Бывает полезно в некоторых ситуациях, таких как обновление сайта, или если вы делаете копию сайта для тестирования или разработки."
+
+#: adsense.admin.inc:88
+msgid "Placeholder when ads are disabled?"
+msgstr "Места в которых реклама отключена?"
+
+#: adsense.admin.inc:90
+msgid "This causes an empty box to be displayed in place of the ads when they are disabled."
+msgstr "Показывается пустой прямоугольник вместо рекламы, когда она отключена."
+
+#: adsense.admin.inc:95
+msgid "Placeholder text to display"
+msgstr "Текст на месте расположения рекламы"
+
+#: adsense.admin.inc:98
+msgid "Enter any text to display as a placeholder when ads are disabled."
+msgstr "Введите любой текст для показа на месте размещения рекламы, когда она отключена."
+
+#: adsense.admin.inc:103
+msgid "Enable AdSense section targeting?"
+msgstr "Включить настройку AdSense на раздел?"
+
+#: adsense.admin.inc:105
+msgid "This better targets Google ads to the teaser and body of nodes."
+msgstr "Лучше всего встраивать рекламу Google в тело документа или в его анонс."
+
+#: adsense.admin.inc:112
+msgid "Undocumented options"
+msgstr "Недокументированная опция"
+
+#: adsense.admin.inc:113
+msgid "Warning: Use of these options is AT YOUR OWN RISK. Google will never generate an ad with any of these options, so using one of them is a violation of Google AdSense's Terms and Conditions. USE OF THESE OPTIONS MAY RESULT IN GETTING BANNED FROM THE PROGRAM. You may lose all the revenue accumulated in your account. FULL RESPONSABILITY FOR THE USE OF THESE OPTIONS IS YOURS. In other words, don't complain to the authors about getting banned, even if using one of these options was provided as a solution to a reported problem."
+msgstr "Внимание: Используйте эти варианты НА СВОЙ СТРАХ И РИСК. Google никогда не будет создавать объявления с любой из этих опций, так что с помощью одной из них является нарушением Google AdSense Условия. ИСПОЛЬЗОВАНИЕ ЭТИХ ВАРИАНТОВ МОЖЕТ ПРИВЕСТИ К БАНУ ПРОГРАММЫ. Вы можете потерять все доходы, накапливающиеся в вашей учетной записи. ПОЛНАЯ ОТВЕТСТВЕННОСТЬ ЗА ИСПОЛЬЗОВАНИЕ ЭТИХ ВАРИАНТОВ ЛЕЖИТ НА ВАС. Иными словами, не следует жаловаться на автора о получении бана, даже если используется один из этих вариантов были представлены в качестве решения проблемы."
+
+#: adsense.admin.inc:120
+msgid "I agree"
+msgstr "Я согласен"
+
+#: adsense.admin.inc:125
+msgid "Use Google's AdSense test option?"
+msgstr "Использовать Google's AdSense тестовые опции?"
+
+#: adsense.admin.inc:127
+msgid "With this option set, Google will not count any clicks or page impressions. Revenue is not generated. Make sure that you disable this option in production servers. [!statement]"
+msgstr "С этой опцией, Google не будет рассчитывать любые клики или показы страниц. Доход не генерируется. Убедитесь, что вы отключите эту опцию на работающем сервере. [!statement]"
+
+#: adsense.admin.inc:127
+msgid "Unofficial statement"
+msgstr "Неофициальный отчёт"
+
+#: adsense.admin.inc:132
+msgid "Language to display ads"
+msgstr "Язык для показа рекламы"
+
+#: adsense.admin.inc:162
+msgid "Site Google AdSense Publisher ID"
+msgstr "Установить Google AdSense Publisher ID"
+
+#: adsense.admin.inc:165
+msgid "This is the Google AdSense Publisher ID for the site owner. It is used if no other ID is suitable. Get this in your Google Adsense account. It should be similar to %id."
+msgstr "Это Google AdSense Publisher ID для владельца сайта. Он используется, если нет других ID. Получите его в вашей учетной записи Google Adsense. Он должна быть аналогичный %id."
+
+#: adsense.admin.inc:172
+msgid "Publisher ID module"
+msgstr "Publisher ID модуль"
+
+#: adsense.module:54
+msgid "4-links 120x90"
+msgstr "4-ссылки 120x90"
+
+#: adsense.module:55
+msgid "4-links 160x90"
+msgstr "4-ссылки 160x90"
+
+#: adsense.module:56
+msgid "4-links 180x90"
+msgstr "4-ссылки 180x90"
+
+#: adsense.module:57
+msgid "4-links 200x90"
+msgstr "4-ссылки 200x90"
+
+#: adsense.module:58
+msgid "4-links 468x15"
+msgstr "4-ссылки 468x15"
+
+#: adsense.module:59
+msgid "4-links 728x15"
+msgstr "4-ссылки 728x15"
+
+#: adsense.module:60
+msgid "5-links 120x90"
+msgstr "5-ссылок 120x90"
+
+#: adsense.module:61
+msgid "5-links 160x90"
+msgstr "5-ссылок 160x90"
+
+#: adsense.module:62
+msgid "5-links 180x90"
+msgstr "5-ссылок 180x90"
+
+#: adsense.module:63
+msgid "5-links 200x90"
+msgstr "5-ссылок 200x90"
+
+#: adsense.module:64
+msgid "5-links 468x15"
+msgstr "5-ссылок 468x15"
+
+#: adsense.module:65
+msgid "5-links 728x15"
+msgstr "5-ссылок 728x15"
+
+#: adsense.module:66
+msgid "Vertical banner"
+msgstr "Вертикальный баннер"
+
+#: adsense.module:67
+msgid "Skyscraper"
+msgstr "Небоскреб"
+
+#: adsense.module:68
+msgid "Button"
+msgstr "Кнопка"
+
+#: adsense.module:69
+msgid "Wide Skyscraper"
+msgstr "Широкий небоскрёб"
+
+#: adsense.module:70
+msgid "Small Rectangle"
+msgstr "Маленький прямоуголькний"
+
+#: adsense.module:71
+msgid "Small Square"
+msgstr "Маленький квадрат"
+
+#: adsense.module:72
+msgid "Half Banner"
+msgstr "Половина банера"
+
+#: adsense.module:73
+msgid "Square"
+msgstr "Квадрат"
+
+#: adsense.module:74
+msgid "Medium Rectangle"
+msgstr "Средний прямоугольник"
+
+#: adsense.module:75
+msgid "Large Rectangle"
+msgstr "Большой прямоугольник"
+
+#: adsense.module:76
+msgid "Banner"
+msgstr "Баннер"
+
+#: adsense.module:77
+msgid "Leaderboard"
+msgstr "Большая доска объявлений"
+
+#: adsense.module:85
+msgid "AdSense for Search"
+msgstr "AdSense для поиска"
+
+#: adsense.module:179
+msgid "AdSense tag"
+msgstr "AdSense тег"
+
+#: adsense.module:183
+msgid "Substitutes an AdSense special tag with an ad."
+msgstr "Заменяет специальный код AdSence на рекламном месте."
+
+#: adsense.module:219
+msgid "The HTML corrector filter has a bug that causes problems with the use of the AdSense tag. Disabling the HTML corrector filter is recommended."
+msgstr "Фильтр HTML-корректора содержит ошибку, что вызывает проблемы с использованием тегов в AdSense.  Рекомендуется отключение фильтра HTML корректора."
+
+#: adsense.module:228
+msgid "Use the special tag [adsense:<em>format</em>:<em>slot</em>] or [adsense:<em>format</em>:<em>[group]</em>:<em>[channel]</em><em>[:slot]</em>] or [adsense:block:<em>location</em>] to display Google AdSense ads."
+msgstr "Используйте специальные теги [adsense:<em>format</em>:<em>slot</em>] или [adsense:<em>format</em>:<em>[group]</em>:<em>[channel]</em><em>[:slot]</em>] или [adsense:block:<em>location</em>] для показа Google AdSense ads."
+
+#: (duplicate) adsense.module:162
+#: ;120
+#: old/search/adsense_search.results.inc:17
+msgid "AdSense"
+msgstr "AdSense"
+
+#: (duplicate) adsense.module:163
+msgid "Publisher ID is not set."
+msgstr "ID публикации не установлен."
+
+#: (duplicate) adsense.module:164
+msgid "Please configure it in the <a href=\"@url\">AdSense settings page</a>."
+msgstr "Пожалуйста настройте это на <a href=\"@url\">AdSense странице конфигурации</a>."
+
+#: adsense.module:99
+msgid "administer adsense"
+msgstr "управление adsense"
+
+#: adsense.module:99
+msgid "hide adsense"
+msgstr "скрыть adsense"
+
+#: adsense.module:99
+msgid "use PHP for ad visibility"
+msgstr "используйте PHP для видимости рекламы"
+
+#: adsense.module:121
+msgid "Configure Google AdSense Ads."
+msgstr "Настройка рекламы Google AdSense."
+
+#: adsense.module:128
+msgid "Settings"
+msgstr "Настройки"
+
+#: adsense.module:133
+msgid "Publisher ID"
+msgstr "ID публикации"
+
+#: adsense.module:142
+msgid "Site ID"
+msgstr "ID сайта"
+
+#: adsense.info:0
+msgid "AdSense core"
+msgstr "AdSense ядро"
+
+#: adsense.info:0
+msgid "Displays Google AdSense ads on your site to earn revenue. Requires at least one additional ad unit generator module."
+msgstr "Отображает объявления Google AdSense на своём сайте, чтобы зарабатывать. Требуется как минимум один дополнительный рекламный блок для работы."
+
+#: adsense.info:0
+#: contrib/adsense_click/adsense_click.info:0
+#: cse/adsense_cse.info:0
+#: managed/adsense_managed.info:0
+#: old/oldcode/adsense_oldcode.info:0
+#: old/revenue_sharing_basic/revenue_sharing_basic.info:0
+#: old/search/adsense_search.info:0
+msgid "Adsense"
+msgstr "Adsense"
+
+#: contrib/adsense_click/adsense_click.admin.inc:15
+msgid "Click tracking"
+msgstr "Трассировка кликов"
+
+#: contrib/adsense_click/adsense_click.admin.inc:20
+msgid "Enable AdSense click tracking?"
+msgstr "Включить трассировку кликов AdSense?"
+
+#: contrib/adsense_click/adsense_click.admin.inc:22
+msgid "Logs IP and time of <a href=!url>AdSense clicks</a>. This can be very useful in tracking which of your pages generate the most clicks, as well as help if click fraud is suspected."
+msgstr "Записывает IP и время <a href=!url>AdSense кликов</a>. Это может быть полезно при трассировке страниц генерирующих много кликов, а также помощь, если подозревается мошенничество."
+
+#: contrib/adsense_click/adsense_click.admin.inc:26
+msgid "Enable name resolution of IP addresses?"
+msgstr "Включить преобразование IP адреса в названия доменов?"
+
+#: contrib/adsense_click/adsense_click.admin.inc:28
+msgid "Display the domain name instead of the IP address. This can slow down the display of the logs page and tie up a PHP process for several seconds. On some hosting providers it may not be available."
+msgstr "Показ доменного имени вместо IP адреса. Это может замедлить показ страницы логов и продление процесса работы PHP на несколько секунд. У некоторых хостинговых провайдеров это может быть недоступно."
+
+#: contrib/adsense_click/adsense_click.logs.inc:14
+msgid "Timestamp"
+msgstr "Дата/время"
+
+#: contrib/adsense_click/adsense_click.logs.inc:15;46
+msgid "Path"
+msgstr "Путь"
+
+#: contrib/adsense_click/adsense_click.logs.inc:16
+msgid "IP/Host"
+msgstr "IP/Хост"
+
+#: contrib/adsense_click/adsense_click.logs.inc:17
+msgid "Referrer"
+msgstr "Источник отсылки"
+
+#: contrib/adsense_click/adsense_click.logs.inc:47;70
+#: contrib/adsense_click/adsense_click.module:22
+msgid "Clicks"
+msgstr "Кликов"
+
+#: contrib/adsense_click/adsense_click.logs.inc:48
+msgid "Last"
+msgstr "Последний"
+
+#: contrib/adsense_click/adsense_click.logs.inc:69
+msgid "Day"
+msgstr "День"
+
+#: contrib/adsense_click/adsense_click.module:66
+msgid "view clicks"
+msgstr "показ кликов"
+
+#: contrib/adsense_click/adsense_click.module:23
+msgid "Track the clicks on Adsense ads."
+msgstr "Отслеживание кликов на Adsense."
+
+#: contrib/adsense_click/adsense_click.module:32
+msgid "AdSense clicks"
+msgstr "Кликов AdSense"
+
+#: contrib/adsense_click/adsense_click.module:33
+msgid "Track AdSense clicks."
+msgstr "Следить за кликами AdSence"
+
+#: contrib/adsense_click/adsense_click.module:40
+msgid "Top pages"
+msgstr "Популярные страницы"
+
+#: contrib/adsense_click/adsense_click.module:47
+msgid "By day"
+msgstr "В день"
+
+#: contrib/adsense_click/adsense_click.info:0
+msgid "AdSense Click Tracking"
+msgstr "Отслеживание кликов AdSense"
+
+#: contrib/adsense_click/adsense_click.info:0
+msgid "Tracks clicks to Google Adsense"
+msgstr "Отслеживание кликов на Google Adsense"
+
+#: cse/adsense_cse.admin.inc:38
+#: old/search/adsense_search.admin.inc:25
+msgid "Search Box Options"
+msgstr "Параметры поиска"
+
+#: cse/adsense_cse.admin.inc:43
+#: old/search/adsense_search.admin.inc:61
+msgid "Logo Type"
+msgstr "Логотип"
+
+#: cse/adsense_cse.admin.inc:46
+msgid "Watermark on search box (requires JavaScript)"
+msgstr "Водяной знак на поиск (требуется JavaScript)"
+
+#: cse/adsense_cse.admin.inc:47
+msgid "Next to the search box"
+msgstr "Рядом с окном поиска"
+
+#: cse/adsense_cse.admin.inc:48
+msgid "Below the search box"
+msgstr "Ниже окна поиска"
+
+#: cse/adsense_cse.admin.inc:54
+#: old/oldcode/adsense_oldcode.admin.inc:92
+#: old/search/adsense_search.admin.inc:78
+msgid "Background color"
+msgstr "Цвет фона"
+
+#: cse/adsense_cse.admin.inc:57
+#: old/search/adsense_search.admin.inc:81;93
+msgid "White"
+msgstr "Белый"
+
+#: cse/adsense_cse.admin.inc:58
+#: old/search/adsense_search.admin.inc:83
+msgid "Gray"
+msgstr "Серый"
+
+#: cse/adsense_cse.admin.inc:59
+#: old/search/adsense_search.admin.inc:82;92
+msgid "Black"
+msgstr "Черный"
+
+#: cse/adsense_cse.admin.inc:65
+#: old/search/adsense_search.admin.inc:106
+msgid "Site Encoding"
+msgstr "Кодировка сайта"
+
+#: cse/adsense_cse.admin.inc:72
+msgid "Text Box Length"
+msgstr "Длинна текстового блока"
+
+#: cse/adsense_cse.admin.inc:80
+msgid "Watermark Language"
+msgstr "Язык водяного знака"
+
+#: cse/adsense_cse.admin.inc:89
+#: old/search/adsense_search.admin.inc:123
+msgid "Search Results Style"
+msgstr "Стиль результатов поиска"
+
+#: cse/adsense_cse.admin.inc:94
+#: old/search/adsense_search.admin.inc:128
+msgid "Country or territory for Google domain"
+msgstr "Страна или территория для домена Google"
+
+#: cse/adsense_cse.admin.inc:101
+#: old/search/adsense_search.admin.inc:135
+msgid "Width of results area"
+msgstr "Ширина области результатов"
+
+#: cse/adsense_cse.admin.inc:109
+msgid "Ad Location"
+msgstr "Ad местонахождение"
+
+#: cse/adsense_cse.admin.inc:112
+msgid "Top and Right"
+msgstr "Верх и Справа"
+
+#: cse/adsense_cse.admin.inc:113
+msgid "Top and Bottom"
+msgstr "Верх и Низ"
+
+#: cse/adsense_cse.admin.inc:114
+#: managed/adsense_managed.module:94
+#: old/oldcode/adsense_oldcode.module:120
+msgid "Right"
+msgstr "Право"
+
+#: cse/adsense_cse.admin.inc:122
+#: managed/adsense_managed.admin.inc:36
+#: old/oldcode/adsense_oldcode.admin.inc:22
+#: old/search/adsense_search.admin.inc:226
+msgid "AdSense Blocks"
+msgstr "AdSense Блок"
+
+#: cse/adsense_cse.admin.inc:127
+#: managed/adsense_managed.admin.inc:41
+#: old/oldcode/adsense_oldcode.admin.inc:27
+#: old/search/adsense_search.admin.inc:231
+msgid "Number of blocks"
+msgstr "Количество блоков"
+
+#: cse/adsense_cse.admin.inc:146
+#: old/search/adsense_search.admin.inc:268
+msgid "Text Box Length must be between !min and !max"
+msgstr "Текстовые блок должен быть между !min и !max"
+
+#: cse/adsense_cse.admin.inc:152
+msgid "Results area width must be between !min and !max"
+msgstr "Ширина области результатов должна быть между !min и !max"
+
+#: cse/adsense_cse.admin.inc:156
+#: managed/adsense_managed.admin.inc:58
+#: old/oldcode/adsense_oldcode.admin.inc:168
+#: old/search/adsense_search.admin.inc:273
+msgid "Number of blocks can't be a negative number"
+msgstr "Количество блоков не может быть отрицательным числом"
+
+#: cse/adsense_cse.module:65
+msgid "AdSense CSE: unconfigured "
+msgstr "AdSense CSE: ненастроенное "
+
+#: cse/adsense_cse.module:76
+#: managed/adsense_managed.module:61
+#: old/oldcode/adsense_oldcode.module:82
+#: old/search/adsense_search.module:92
+msgid "Block description"
+msgstr "Описание блока"
+
+#: cse/adsense_cse.module:79
+#: managed/adsense_managed.module:64
+#: old/oldcode/adsense_oldcode.module:85
+#: old/search/adsense_search.module:95
+msgid "A brief description of your block. Used on the <a href=\"@overview\">block overview page</a>."
+msgstr "Краткое описание вашего блока. Используется на <a href=\"@overview\">странице обзора блоков</a>."
+
+#: cse/adsense_cse.module:86
+#: managed/adsense_managed.module:80
+msgid "Ad Slot ID"
+msgstr "Канал ID"
+
+#: cse/adsense_cse.module:88
+msgid "This is the provided by the AdSense site in the Search Box Code \"cx\" field. This is usually provided in the form partner-<em>Publisher ID</em>:<em>Slot Id</em>. If the code provided is, for example, partner-pub-0123456789:<strong>abcdef-ghij</strong>, then insert only <strong>abcdef-ghij</strong> here."
+msgstr "Это предусмотрено в AdSense на сайте в  Search Box Code  \"cx\" поле. Это, как правило, предоставляется в виде pertner-<em>Publisher ID</em>:<em>slot ID</em>. Если код оказывается, например,  partner-pub-0123456789:<strong>abcdef-ghij</strong>, нужно вставить только <strong> abcdef-ghij</strong> здесь."
+
+#: cse/adsense_cse.module:101
+#: managed/adsense_managed.module:109
+#: old/oldcode/adsense_oldcode.module:135
+#: old/search/adsense_search.module:116
+msgid "AdSense unconfigured block. <a href=!url>Click to configure.</a>"
+msgstr "AdSense блок не настроен . <a href=!url>Нажать для настройки.</a>"
+
+#: cse/adsense_cse.module:143
+#: old/search/adsense_search.module:187;45
+msgid "Search"
+msgstr "Поиск"
+
+#: cse/adsense_cse.module:144;34
+msgid "Custom Search"
+msgstr "Пользовательский поиск"
+
+#: cse/adsense_cse.module:43
+#: old/search/adsense_search.module:54
+msgid "Search Results"
+msgstr "Результаты поиска"
+
+#: cse/adsense_cse.info:0
+msgid "CSE Search"
+msgstr "CSE Поииск"
+
+#: cse/adsense_cse.info:0
+msgid "AdSense for Search generator module. This module uses the new Custom Search Engine code created via the Adsense interface."
+msgstr "AdSense для поиска. Этот модуль использует новую систему пользовательского поиска созданную с помощью Adsense интерфейса."
+
+#: help/adsense.help.inc:23
+msgid "Format"
+msgstr "Формат"
+
+#: help/adsense.help.inc:23
+msgid "Description"
+msgstr "Описание"
+
+#: help/adsense.help.inc:23
+msgid "Width"
+msgstr "Ширина"
+
+#: help/adsense.help.inc:23
+msgid "Height"
+msgstr "Высота"
+
+#: help/adsense.help.inc:35
+msgid "Custom search help"
+msgstr "Справка по пользовательскому поиску"
+
+#: help/adsense.help.inc:38
+msgid "Adsense CSE module (which must be enabled; !link) and refer to its help"
+msgstr "Adsense CSE модуль (который должен быть включён; !link) и ссылка на справку"
+
+#: help/adsense.help.inc:38
+msgid "modules"
+msgstr "Модули"
+
+#: includes/adsense.search_options.inc:17
+msgid "West European Latin-1 (ISO-8859-1)"
+msgstr "Западноевропейская Latin-1 (ISO-8859-1)"
+
+#: includes/adsense.search_options.inc:18
+msgid "West European Latin-9 (ISO-8859-15)"
+msgstr "Западноевропейская Latin-9 (ISO-8859-15)"
+
+#: includes/adsense.search_options.inc:19
+msgid "Western (Windows-1252)"
+msgstr "Западная (Windows-1252)"
+
+#: includes/adsense.search_options.inc:20
+msgid "Nordic Latin-6 (ISO-8859-10)"
+msgstr "Северный Latin-6 (ISO-8859-10)"
+
+#: includes/adsense.search_options.inc:21
+msgid "Greek (ISO-8859-7)"
+msgstr "Греция (ISO-8859-7)"
+
+#: includes/adsense.search_options.inc:22
+msgid "Japanese (Shift_JIS)"
+msgstr "Япония (Shift_JIS)"
+
+#: includes/adsense.search_options.inc:23
+msgid "Japanese (EUC-JP)"
+msgstr "Япония (EUC-JP)"
+
+#: includes/adsense.search_options.inc:24
+msgid "Japanese (ISO-2022-JP)"
+msgstr "Япония (ISO-2022-JP)"
+
+#: includes/adsense.search_options.inc:25
+msgid "Chinese Simplified (GB2312)"
+msgstr "Китайский упрощенный (GB2312)"
+
+#: includes/adsense.search_options.inc:26
+msgid "Chinese Simplified (GB18030)"
+msgstr "Китайский упрощенный (GB18030)"
+
+#: includes/adsense.search_options.inc:27
+msgid "Chinese Traditional (Big5)"
+msgstr "Китайский традиционный (Big5)"
+
+#: includes/adsense.search_options.inc:28
+msgid "Korean (EUC-KR)"
+msgstr "Корейский (EUC-KR)"
+
+#: includes/adsense.search_options.inc:29
+msgid "Thai (Windows-874)"
+msgstr "Таи (Windows-874)"
+
+#: includes/adsense.search_options.inc:30
+msgid "Vietnamese (Windows-1258)"
+msgstr "Вьетнамский (Windows-1258)"
+
+#: includes/adsense.search_options.inc:31
+msgid "Central European Latin-2 (ISO-8859-2)"
+msgstr "Центрально-Европейский Latin-2 (ISO-8859-2)"
+
+#: includes/adsense.search_options.inc:32
+msgid "Central European (Windows-1250)"
+msgstr "Центрально-Европейский (Windows-1250)"
+
+#: includes/adsense.search_options.inc:33
+msgid "Central European (CP852)"
+msgstr "Центрально-Европейский (CP852)"
+
+#: includes/adsense.search_options.inc:34
+msgid "Turkish Latin-5 (ISO-8859-9)"
+msgstr "Турецкий Latin-5 (ISO-8859-9)"
+
+#: includes/adsense.search_options.inc:35
+msgid "Turkish (Windows-1254)"
+msgstr "Турецкий (Windows-1254)"
+
+#: includes/adsense.search_options.inc:36
+msgid "South European Latin-3 (ISO-8859-3)"
+msgstr "Южно-Европейский Latin-3 (ISO-8859-3)"
+
+#: includes/adsense.search_options.inc:37
+msgid "Hebrew (ISO-8859-8-I)"
+msgstr "Иврит (ISO-8859-8-I)"
+
+#: includes/adsense.search_options.inc:38
+msgid "Hebrew (Windows-1255)"
+msgstr "Иврит (Windows-1255)"
+
+#: includes/adsense.search_options.inc:39
+msgid "Arabic (Windows-1256)"
+msgstr "Арабский (Windows-1256)"
+
+#: includes/adsense.search_options.inc:40
+msgid "Cyrillic (ISO-8859-5)"
+msgstr "Кириллица (ISO-8859-5)"
+
+#: includes/adsense.search_options.inc:41
+msgid "Cyrillic (KOI8-R)"
+msgstr "Кириллица (KOI8-R)"
+
+#: includes/adsense.search_options.inc:42
+msgid "Cyrillic (Windows-1251)"
+msgstr "Кириллица (Windows-1251)"
+
+#: includes/adsense.search_options.inc:43
+msgid "Cyrillic/Russian (CP-866)"
+msgstr "Кириллица/Русский (CP-866)"
+
+#: includes/adsense.search_options.inc:44
+msgid "Unicode (UTF-8)"
+msgstr "Юникод (UTF-8)"
+
+#: includes/adsense.search_options.inc:56
+msgid "United Kingdom"
+msgstr "Соединённое Королевство"
+
+#: includes/adsense.search_options.inc:57
+msgid "Canada"
+msgstr "Канада"
+
+#: includes/adsense.search_options.inc:58
+msgid "Germany"
+msgstr "Германия"
+
+#: includes/adsense.search_options.inc:59
+msgid "Japan"
+msgstr "Япония"
+
+#: includes/adsense.search_options.inc:60
+msgid "France"
+msgstr "Франция"
+
+#: includes/adsense.search_options.inc:61
+msgid "Australia"
+msgstr "Австралия"
+
+#: includes/adsense.search_options.inc:62
+msgid "Italy"
+msgstr "Италия"
+
+#: includes/adsense.search_options.inc:63
+msgid "Austria"
+msgstr "Австрия"
+
+#: includes/adsense.search_options.inc:64
+msgid "Switzerland"
+msgstr "Швейцария"
+
+#: includes/adsense.search_options.inc:65
+msgid "Spain"
+msgstr "Испания"
+
+#: includes/adsense.search_options.inc:66
+msgid "Netherlands"
+msgstr "Нидерланды"
+
+#: includes/adsense.search_options.inc:67
+msgid "Belgium"
+msgstr "Бельгия"
+
+#: includes/adsense.search_options.inc:68
+msgid "Denmark"
+msgstr "Дания"
+
+#: includes/adsense.search_options.inc:69
+msgid "Sweden"
+msgstr "Швеция"
+
+#: includes/adsense.search_options.inc:70
+msgid "Norway"
+msgstr "Норвегия"
+
+#: includes/adsense.search_options.inc:71
+msgid "Brazil"
+msgstr "Бразилия"
+
+#: includes/adsense.search_options.inc:72
+msgid "Portugal"
+msgstr "Португалия"
+
+#: includes/adsense.search_options.inc:73
+msgid "Finland"
+msgstr "Финляндия"
+
+#: includes/adsense.search_options.inc:74
+msgid "South Korea"
+msgstr "Южная Корея"
+
+#: includes/adsense.search_options.inc:75
+msgid "China"
+msgstr "Китай"
+
+#: includes/adsense.search_options.inc:76
+msgid "Hong Kong"
+msgstr "Гонконг"
+
+#: includes/adsense.search_options.inc:77
+msgid "Taiwan"
+msgstr "Тайвань"
+
+#: includes/adsense.search_options.inc:78
+msgid "Singapore"
+msgstr "Сингапур"
+
+#: includes/adsense.search_options.inc:79
+msgid "Afghanistan"
+msgstr "Афганистан"
+
+#: includes/adsense.search_options.inc:80
+msgid "Albania"
+msgstr "Албания"
+
+#: includes/adsense.search_options.inc:81
+msgid "Algeria"
+msgstr "Алжир"
+
+#: includes/adsense.search_options.inc:82
+msgid "American Samoa"
+msgstr "Восточное Самоа"
+
+#: includes/adsense.search_options.inc:83
+msgid "Andorra"
+msgstr "Андорра"
+
+#: includes/adsense.search_options.inc:84
+msgid "Angola"
+msgstr "Ангола"
+
+#: includes/adsense.search_options.inc:85
+msgid "Anguilla"
+msgstr "Ангилья"
+
+#: includes/adsense.search_options.inc:86
+msgid "Antarctica"
+msgstr "Антарктида"
+
+#: includes/adsense.search_options.inc:87
+msgid "Antigua and Barbuda"
+msgstr "Антигуа и Барбуда"
+
+#: includes/adsense.search_options.inc:88
+msgid "Argentina"
+msgstr "Аргентина"
+
+#: includes/adsense.search_options.inc:89
+msgid "Armenia"
+msgstr "Армения"
+
+#: includes/adsense.search_options.inc:90
+msgid "Aruba"
+msgstr "Аруба"
+
+#: includes/adsense.search_options.inc:91
+msgid "Azerbaijan"
+msgstr "Азербайджан"
+
+#: includes/adsense.search_options.inc:92
+msgid "Bahamas"
+msgstr "Багамские острова"
+
+#: includes/adsense.search_options.inc:93
+msgid "Bahrain"
+msgstr "Бахрейн"
+
+#: includes/adsense.search_options.inc:94
+msgid "Bangladesh"
+msgstr "Бангладеш"
+
+#: includes/adsense.search_options.inc:95
+msgid "Barbados"
+msgstr "Барбадос"
+
+#: includes/adsense.search_options.inc:96
+msgid "Belarus"
+msgstr "Белоруссия"
+
+#: includes/adsense.search_options.inc:97
+msgid "Belize"
+msgstr "Белиз"
+
+#: includes/adsense.search_options.inc:98
+msgid "Benin"
+msgstr "Бенин"
+
+#: includes/adsense.search_options.inc:99
+msgid "Bermuda"
+msgstr "Бермудские острова"
+
+#: includes/adsense.search_options.inc:100
+msgid "Bhutan"
+msgstr "Бутан"
+
+#: includes/adsense.search_options.inc:101
+msgid "Bolivia"
+msgstr "Боливия"
+
+#: includes/adsense.search_options.inc:102
+msgid "Bosnia and Herzegovina"
+msgstr "Босния и Герцеговина"
+
+#: includes/adsense.search_options.inc:103
+msgid "Botswana"
+msgstr "Ботсвана"
+
+#: includes/adsense.search_options.inc:104
+msgid "Bouvet Island"
+msgstr "Острова Буве"
+
+#: includes/adsense.search_options.inc:105
+msgid "British Indian Ocean Territory"
+msgstr "Британская территория в Индийском океане"
+
+#: includes/adsense.search_options.inc:106
+msgid "Brunei Darussalam"
+msgstr "Бруней"
+
+#: includes/adsense.search_options.inc:107
+msgid "Bulgaria"
+msgstr "Болгария"
+
+#: includes/adsense.search_options.inc:108
+msgid "Burkina Faso"
+msgstr "Буркина-Фасо"
+
+#: includes/adsense.search_options.inc:109
+msgid "Burundi"
+msgstr "Бурунди"
+
+#: includes/adsense.search_options.inc:110
+msgid "Cambodia"
+msgstr "Камбоджа"
+
+#: includes/adsense.search_options.inc:111
+msgid "Cameroon"
+msgstr "Камерун"
+
+#: includes/adsense.search_options.inc:112
+msgid "Cape Verde"
+msgstr "Кабо-Верде"
+
+#: includes/adsense.search_options.inc:113
+msgid "Cayman Islands"
+msgstr "Кайманские острова"
+
+#: includes/adsense.search_options.inc:114
+msgid "Central African Republic"
+msgstr "Центральноафриканская Республика"
+
+#: includes/adsense.search_options.inc:115
+msgid "Chad"
+msgstr "Чад"
+
+#: includes/adsense.search_options.inc:116
+msgid "Chile"
+msgstr "Чили"
+
+#: includes/adsense.search_options.inc:117
+msgid "Christmas Island"
+msgstr "остров Рождества (Индийский океан)"
+
+#: includes/adsense.search_options.inc:118
+msgid "Cocos (Keeling) Islands"
+msgstr "Кокосовые (Килинг) острова"
+
+#: includes/adsense.search_options.inc:119
+msgid "Colombia"
+msgstr "Колумбия"
+
+#: includes/adsense.search_options.inc:120
+msgid "Comoros"
+msgstr "Коморские острова"
+
+#: includes/adsense.search_options.inc:121
+msgid "Congo"
+msgstr "Конго"
+
+#: includes/adsense.search_options.inc:122
+msgid "Congo,Democratic Republic"
+msgstr "Конго, Демократическая Республика"
+
+#: includes/adsense.search_options.inc:123
+msgid "Cook Islands"
+msgstr "острова Кука"
+
+#: includes/adsense.search_options.inc:124
+msgid "Costa Rica"
+msgstr "Коста-Рика"
+
+#: includes/adsense.search_options.inc:125
+msgid "Cote d'Ivoire"
+msgstr "Кот-д'Ивуар"
+
+#: includes/adsense.search_options.inc:126
+msgid "Croatia"
+msgstr "Хорватия"
+
+#: includes/adsense.search_options.inc:127
+msgid "Cuba"
+msgstr "Куба"
+
+#: includes/adsense.search_options.inc:128
+msgid "Cyprus"
+msgstr "Кипр"
+
+#: includes/adsense.search_options.inc:129
+msgid "Czech Republic"
+msgstr "Чехия"
+
+#: includes/adsense.search_options.inc:130
+msgid "Djibouti"
+msgstr "Джибути"
+
+#: includes/adsense.search_options.inc:131
+msgid "Dominica"
+msgstr "Доминика"
+
+#: includes/adsense.search_options.inc:132
+msgid "Dominican Republic"
+msgstr "Доминиканская Республика"
+
+#: includes/adsense.search_options.inc:133
+msgid "East Timor"
+msgstr "Восточный Тимор"
+
+#: includes/adsense.search_options.inc:134
+msgid "Ecuador"
+msgstr "Эквадор"
+
+#: includes/adsense.search_options.inc:135
+msgid "Egypt"
+msgstr "Египет"
+
+#: includes/adsense.search_options.inc:136
+msgid "El Salvador"
+msgstr "Сальвадор"
+
+#: includes/adsense.search_options.inc:137
+msgid "Equatorial Guinea"
+msgstr "Экваториальная Гвинея"
+
+#: includes/adsense.search_options.inc:138
+msgid "Eritrea"
+msgstr "Эритрея"
+
+#: includes/adsense.search_options.inc:139
+msgid "Estonia"
+msgstr "Эстония"
+
+#: includes/adsense.search_options.inc:140
+msgid "Ethiopia"
+msgstr "Эфиопия"
+
+#: includes/adsense.search_options.inc:141
+msgid "Falkland Islands (Malvinas)"
+msgstr "Фолклендские (Мальвинские) острова"
+
+#: includes/adsense.search_options.inc:142
+msgid "Faroe Islands"
+msgstr "Фарерские острова"
+
+#: includes/adsense.search_options.inc:143
+msgid "Fiji"
+msgstr "Фиджи"
+
+#: includes/adsense.search_options.inc:144
+msgid "French Guiana"
+msgstr "(Французская) Гвиана"
+
+#: includes/adsense.search_options.inc:145
+msgid "French Polynesia"
+msgstr "Французская полинезия"
+
+#: includes/adsense.search_options.inc:146
+msgid "French Southern Territories"
+msgstr "французские южные территории"
+
+#: includes/adsense.search_options.inc:147
+msgid "Gabon"
+msgstr "Габон"
+
+#: includes/adsense.search_options.inc:148
+msgid "Gambia"
+msgstr "Гамбия"
+
+#: includes/adsense.search_options.inc:149
+msgid "Georgia"
+msgstr "Грузия"
+
+#: includes/adsense.search_options.inc:150
+msgid "Ghana"
+msgstr "Гана"
+
+#: includes/adsense.search_options.inc:151
+msgid "Gibraltar"
+msgstr "Гибралтар"
+
+#: includes/adsense.search_options.inc:152
+msgid "Greece"
+msgstr "Греция"
+
+#: includes/adsense.search_options.inc:153
+msgid "Greenland"
+msgstr "Гренландия"
+
+#: includes/adsense.search_options.inc:154
+msgid "Grenada"
+msgstr "Гренада"
+
+#: includes/adsense.search_options.inc:155
+msgid "Guadeloupe"
+msgstr "Гваделупа"
+
+#: includes/adsense.search_options.inc:156
+msgid "Guam"
+msgstr "о-в Гуам"
+
+#: includes/adsense.search_options.inc:157
+msgid "Guatemala"
+msgstr "Гватемала"
+
+#: includes/adsense.search_options.inc:158
+msgid "Guinea"
+msgstr "Гвинея"
+
+#: includes/adsense.search_options.inc:159
+msgid "Guinea-Bissau"
+msgstr "Гвинея-Бисау"
+
+#: includes/adsense.search_options.inc:160
+msgid "Guyana"
+msgstr "Гайана"
+
+#: includes/adsense.search_options.inc:161
+msgid "Haiti"
+msgstr "Гаити"
+
+#: includes/adsense.search_options.inc:162
+msgid "Heard and McDonald Islands"
+msgstr "Херд и Острова Макдоналд"
+
+#: includes/adsense.search_options.inc:163
+msgid "Honduras"
+msgstr "Гондурас"
+
+#: includes/adsense.search_options.inc:164
+msgid "Hungary"
+msgstr "Венгрия"
+
+#: includes/adsense.search_options.inc:165
+msgid "Iceland"
+msgstr "Исландия"
+
+#: includes/adsense.search_options.inc:166
+msgid "India"
+msgstr "Индия"
+
+#: includes/adsense.search_options.inc:167
+msgid "Indonesia"
+msgstr "Индонезия"
+
+#: includes/adsense.search_options.inc:168
+msgid "Iran"
+msgstr "Иран"
+
+#: includes/adsense.search_options.inc:169
+msgid "Iraq"
+msgstr "Ирак"
+
+#: includes/adsense.search_options.inc:170
+msgid "Ireland"
+msgstr "Ирландия, Ирландская Республика"
+
+#: includes/adsense.search_options.inc:171
+msgid "Israel"
+msgstr "Израиль"
+
+#: includes/adsense.search_options.inc:172
+msgid "Jamaica"
+msgstr "Ямайка"
+
+#: includes/adsense.search_options.inc:173
+msgid "Jordan"
+msgstr "Иордания"
+
+#: includes/adsense.search_options.inc:174
+msgid "Kazakhstan"
+msgstr "Казахстан"
+
+#: includes/adsense.search_options.inc:175
+msgid "Kenya"
+msgstr "Кения"
+
+#: includes/adsense.search_options.inc:176
+msgid "Kiribati"
+msgstr "Кирибати"
+
+#: includes/adsense.search_options.inc:177
+msgid "Kuwait"
+msgstr "Кувейт"
+
+#: includes/adsense.search_options.inc:178
+msgid "Kyrgyzstan"
+msgstr "Киргизия"
+
+#: includes/adsense.search_options.inc:179
+msgid "Lao People's Democratic Republic"
+msgstr "Лаосская Народно-Демократическая Республика"
+
+#: includes/adsense.search_options.inc:180
+msgid "Latvia"
+msgstr "Латвия"
+
+#: includes/adsense.search_options.inc:181
+msgid "Lebanon"
+msgstr "Ливан"
+
+#: includes/adsense.search_options.inc:182
+msgid "Lesotho"
+msgstr "Лесото"
+
+#: includes/adsense.search_options.inc:183
+msgid "Liberia"
+msgstr "Либерия"
+
+#: includes/adsense.search_options.inc:184
+msgid "Libya"
+msgstr "Ливия"
+
+#: includes/adsense.search_options.inc:185
+msgid "Liechtenstein"
+msgstr "Лихтенштейн"
+
+#: includes/adsense.search_options.inc:186
+msgid "Lithuania"
+msgstr "Литва"
+
+#: includes/adsense.search_options.inc:187
+msgid "Luxembourg"
+msgstr "Люксембург"
+
+#: includes/adsense.search_options.inc:188
+msgid "Macau"
+msgstr "Макао"
+
+#: includes/adsense.search_options.inc:189
+msgid "Macedonia"
+msgstr "Македония"
+
+#: includes/adsense.search_options.inc:190
+msgid "Madagascar"
+msgstr "Мадагаскар"
+
+#: includes/adsense.search_options.inc:191
+msgid "Malawi"
+msgstr "Малави"
+
+#: includes/adsense.search_options.inc:192
+msgid "Malaysia"
+msgstr "Малайзия"
+
+#: includes/adsense.search_options.inc:193
+msgid "Maldives"
+msgstr "Мальдивы"
+
+#: includes/adsense.search_options.inc:194
+msgid "Mali"
+msgstr "Мали"
+
+#: includes/adsense.search_options.inc:195
+msgid "Malta"
+msgstr "Мальта"
+
+#: includes/adsense.search_options.inc:196
+msgid "Marshall Islands"
+msgstr "Маршалловы острова"
+
+#: includes/adsense.search_options.inc:197
+msgid "Martinique"
+msgstr "о-в Мартиника"
+
+#: includes/adsense.search_options.inc:198
+msgid "Mauritania"
+msgstr "Мавритания"
+
+#: includes/adsense.search_options.inc:199
+msgid "Mauritius"
+msgstr "Маврикий"
+
+#: includes/adsense.search_options.inc:200
+msgid "Mayotte"
+msgstr "Майотта"
+
+#: includes/adsense.search_options.inc:201
+msgid "Mexico"
+msgstr "Мексика"
+
+#: includes/adsense.search_options.inc:202
+msgid "Micronesia"
+msgstr "Микронезия"
+
+#: includes/adsense.search_options.inc:203
+msgid "Moldova"
+msgstr "Молдавия"
+
+#: includes/adsense.search_options.inc:204
+msgid "Monaco"
+msgstr "Монако"
+
+#: includes/adsense.search_options.inc:205
+msgid "Mongolia"
+msgstr "Монголия"
+
+#: includes/adsense.search_options.inc:206
+msgid "Montserrat"
+msgstr "Монтсеррат"
+
+#: includes/adsense.search_options.inc:207
+msgid "Morocco"
+msgstr "Марокко"
+
+#: includes/adsense.search_options.inc:208
+msgid "Mozambique"
+msgstr "Мозамбик"
+
+#: includes/adsense.search_options.inc:209
+msgid "Myanmar"
+msgstr "Мьянма"
+
+#: includes/adsense.search_options.inc:210
+msgid "Namibia"
+msgstr "Намибия"
+
+#: includes/adsense.search_options.inc:211
+msgid "Nauru"
+msgstr "Науру"
+
+#: includes/adsense.search_options.inc:212
+msgid "Nepal"
+msgstr "Непал"
+
+#: includes/adsense.search_options.inc:213
+msgid "Netherlands Antilles"
+msgstr "Антильские острова"
+
+#: includes/adsense.search_options.inc:214
+msgid "New Caledonia"
+msgstr "Новая Каледония"
+
+#: includes/adsense.search_options.inc:215
+msgid "New Zealand"
+msgstr "Новая Зеландия"
+
+#: includes/adsense.search_options.inc:216
+msgid "Nicaragua"
+msgstr "Никарагуа"
+
+#: includes/adsense.search_options.inc:217
+msgid "Niger"
+msgstr "Нигер"
+
+#: includes/adsense.search_options.inc:218
+msgid "Nigeria"
+msgstr "Нигерия"
+
+#: includes/adsense.search_options.inc:219
+msgid "Niue"
+msgstr "Ниуэ"
+
+#: includes/adsense.search_options.inc:220
+msgid "Norfolk Island"
+msgstr "Остров Норфолк"
+
+#: includes/adsense.search_options.inc:221
+msgid "Northern Mariana Islands"
+msgstr "Марианские острова"
+
+#: includes/adsense.search_options.inc:222
+msgid "North Korea"
+msgstr "Северная Корея"
+
+#: includes/adsense.search_options.inc:223
+msgid "Oman"
+msgstr "Оман"
+
+#: includes/adsense.search_options.inc:224
+msgid "Pakistan"
+msgstr "Пакистан"
+
+#: includes/adsense.search_options.inc:225
+msgid "Palau"
+msgstr "Палау"
+
+#: includes/adsense.search_options.inc:226
+msgid "Palestinian Territory"
+msgstr "Палестинская автономия"
+
+#: includes/adsense.search_options.inc:227
+msgid "Panama"
+msgstr "Панама"
+
+#: includes/adsense.search_options.inc:228
+msgid "Papua New Guinea"
+msgstr "Папуа - Новая Гвинея"
+
+#: includes/adsense.search_options.inc:229
+msgid "Paraguay"
+msgstr "Парагвай"
+
+#: includes/adsense.search_options.inc:230
+msgid "Peru"
+msgstr "Перу"
+
+#: includes/adsense.search_options.inc:231
+msgid "Philippines"
+msgstr "Филиппины"
+
+#: includes/adsense.search_options.inc:232
+msgid "Pitcairn"
+msgstr "Питкерн"
+
+#: includes/adsense.search_options.inc:233
+msgid "Poland"
+msgstr "Польша"
+
+#: includes/adsense.search_options.inc:234
+msgid "Puerto Rico"
+msgstr "Пуэрто-Рико"
+
+#: includes/adsense.search_options.inc:235
+msgid "Qatar"
+msgstr "Катар"
+
+#: includes/adsense.search_options.inc:236
+msgid "Reunion"
+msgstr "Реюньон"
+
+#: includes/adsense.search_options.inc:237
+msgid "Romania"
+msgstr "Румыния"
+
+#: includes/adsense.search_options.inc:238
+msgid "Russian Federation"
+msgstr "Российская Федерация"
+
+#: includes/adsense.search_options.inc:239
+msgid "Rwanda"
+msgstr "Руанда"
+
+#: includes/adsense.search_options.inc:240
+msgid "Saint Kitts and Nevis"
+msgstr "Сент-Китс и Невис"
+
+#: includes/adsense.search_options.inc:241
+msgid "Saint Lucia"
+msgstr "Сент-Люсия"
+
+#: includes/adsense.search_options.inc:242
+msgid "Saint Vincent and the Grenadines"
+msgstr "Сент-Винсент и Гренадины"
+
+#: includes/adsense.search_options.inc:243
+msgid "Samoa"
+msgstr "Самоа"
+
+#: includes/adsense.search_options.inc:244
+msgid "San Marino"
+msgstr "Сан-Марино"
+
+#: includes/adsense.search_options.inc:245
+msgid "Sao Tome and Principe"
+msgstr "Сан-Томе и Принсипи"
+
+#: includes/adsense.search_options.inc:246
+msgid "Saudi Arabia"
+msgstr "Саудовская Аравия"
+
+#: includes/adsense.search_options.inc:247
+msgid "Senegal"
+msgstr "Сенегал"
+
+#: includes/adsense.search_options.inc:248
+msgid "Serbia and Montenegro"
+msgstr "Сербия и Черногория"
+
+#: includes/adsense.search_options.inc:249
+msgid "Seychelles"
+msgstr "Сейшельские острова"
+
+#: includes/adsense.search_options.inc:250
+msgid "Sierra Leone"
+msgstr "Сьерра-Леоне"
+
+#: includes/adsense.search_options.inc:251
+msgid "Slovakia"
+msgstr "Словакия"
+
+#: includes/adsense.search_options.inc:252
+msgid "Slovenia"
+msgstr "Словения"
+
+#: includes/adsense.search_options.inc:253
+msgid "Solomon Islands"
+msgstr "Соломоновы Острова"
+
+#: includes/adsense.search_options.inc:254
+msgid "Somalia"
+msgstr "Сомали"
+
+#: includes/adsense.search_options.inc:255
+msgid "South Africa"
+msgstr "ЮАР"
+
+#: includes/adsense.search_options.inc:256
+msgid "South Georgia and The South Sandwich Islands"
+msgstr "Южная Джорджия и Южные Сандвичевы Острова"
+
+#: includes/adsense.search_options.inc:257
+msgid "Sri Lanka"
+msgstr "Шри-Ланка"
+
+#: includes/adsense.search_options.inc:258
+msgid "St. Helena"
+msgstr "Остров Св. Елены"
+
+#: includes/adsense.search_options.inc:259
+msgid "St. Pierre and Miquelon"
+msgstr "Сен-Пьер и Микелон"
+
+#: includes/adsense.search_options.inc:260
+msgid "Sudan"
+msgstr "Судан"
+
+#: includes/adsense.search_options.inc:261
+msgid "Suriname"
+msgstr "Суринам"
+
+#: includes/adsense.search_options.inc:262
+msgid "Svalbard and Jan Mayen Islands"
+msgstr "Шпицберген и Ян-Майен острова"
+
+#: includes/adsense.search_options.inc:263
+msgid "Swaziland"
+msgstr "Свазиленд"
+
+#: includes/adsense.search_options.inc:264
+msgid "Syria"
+msgstr "Сирия"
+
+#: includes/adsense.search_options.inc:265
+msgid "Tajikistan"
+msgstr "Таджикистан"
+
+#: includes/adsense.search_options.inc:266
+msgid "Tanzania"
+msgstr "Танзания"
+
+#: includes/adsense.search_options.inc:267
+msgid "Thailand"
+msgstr "Таиланд"
+
+#: includes/adsense.search_options.inc:268
+msgid "Togo"
+msgstr "Того"
+
+#: includes/adsense.search_options.inc:269
+msgid "Tokelau"
+msgstr "острова Токелау"
+
+#: includes/adsense.search_options.inc:270
+msgid "Tonga"
+msgstr "Tonga"
+
+#: includes/adsense.search_options.inc:271
+msgid "Trinidad and Tobago"
+msgstr "Тринидад и Тобаго"
+
+#: includes/adsense.search_options.inc:272
+msgid "Tunisia"
+msgstr "Тунис"
+
+#: includes/adsense.search_options.inc:273
+msgid "Turkey"
+msgstr "Турция"
+
+#: includes/adsense.search_options.inc:274
+msgid "Turkmenistan"
+msgstr "Туркменистан"
+
+#: includes/adsense.search_options.inc:275
+msgid "Turks and Caicos Islands"
+msgstr "Острова Теркс и Кайкос"
+
+#: includes/adsense.search_options.inc:276
+msgid "Tuvalu"
+msgstr "Тувалу"
+
+#: includes/adsense.search_options.inc:277
+msgid "Uganda"
+msgstr "Уганда"
+
+#: includes/adsense.search_options.inc:278
+msgid "Ukraine"
+msgstr "Украина"
+
+#: includes/adsense.search_options.inc:279
+msgid "United Arab Emirates"
+msgstr "ОАЭ"
+
+#: includes/adsense.search_options.inc:280
+msgid "United States Minor Outlying Islands"
+msgstr "US внешние малые острова"
+
+#: includes/adsense.search_options.inc:281
+msgid "Uruguay"
+msgstr "Уругвай"
+
+#: includes/adsense.search_options.inc:282
+msgid "Uzbekistan"
+msgstr "Узбекистан"
+
+#: includes/adsense.search_options.inc:283
+msgid "Vanuatu"
+msgstr "Вануату"
+
+#: includes/adsense.search_options.inc:284
+msgid "Vatican"
+msgstr "Ватикан"
+
+#: includes/adsense.search_options.inc:285
+msgid "Venezuela"
+msgstr "Венесуэла"
+
+#: includes/adsense.search_options.inc:286
+msgid "Viet Nam"
+msgstr "Вьетнам"
+
+#: includes/adsense.search_options.inc:287
+msgid "Virgin Islands (British)"
+msgstr "Виргинские острова (Британские)"
+
+#: includes/adsense.search_options.inc:288
+msgid "Virgin Islands (U.S.)"
+msgstr "Виргинские острова (U.S.)"
+
+#: includes/adsense.search_options.inc:289
+msgid "Wallis and Futuna Islands"
+msgstr "Уоллис и Футуна"
+
+#: includes/adsense.search_options.inc:290
+msgid "Western Sahara"
+msgstr "Западная Сахара"
+
+#: includes/adsense.search_options.inc:291
+msgid "Yemen"
+msgstr "Йемен"
+
+#: includes/adsense.search_options.inc:292
+msgid "Zambia"
+msgstr "Замбия"
+
+#: includes/adsense.search_options.inc:293
+msgid "Zimbabwe"
+msgstr "Зимбабве"
+
+#: includes/adsense.search_options.inc:294
+msgid "United States"
+msgstr "США"
+
+#: includes/adsense.search_options.inc:306
+msgid "Arabic"
+msgstr "Арабский"
+
+#: includes/adsense.search_options.inc:307
+msgid "Bulgarian"
+msgstr "Болгария"
+
+#: includes/adsense.search_options.inc:308
+msgid "Chinese (simplified)"
+msgstr "Китайский (упрощенный)"
+
+#: includes/adsense.search_options.inc:309
+msgid "Chinese (traditional)"
+msgstr "Китайский (традиционный)"
+
+#: includes/adsense.search_options.inc:310
+msgid "Croatian"
+msgstr "Хорватский"
+
+#: includes/adsense.search_options.inc:311
+msgid "Czech"
+msgstr "Чешский"
+
+#: includes/adsense.search_options.inc:312
+msgid "Danish"
+msgstr "Датский"
+
+#: includes/adsense.search_options.inc:313
+msgid "Dutch"
+msgstr "Голландский"
+
+#: includes/adsense.search_options.inc:314
+msgid "English"
+msgstr "Английский"
+
+#: includes/adsense.search_options.inc:315
+msgid "Finnish"
+msgstr "Финский"
+
+#: includes/adsense.search_options.inc:316
+msgid "French"
+msgstr "Французский"
+
+#: includes/adsense.search_options.inc:317
+msgid "German"
+msgstr "Немецкий"
+
+#: includes/adsense.search_options.inc:318
+msgid "Greek"
+msgstr "Греческий"
+
+#: includes/adsense.search_options.inc:319
+msgid "Hebrew"
+msgstr "Иврит"
+
+#: includes/adsense.search_options.inc:320
+msgid "Hungarian"
+msgstr "Венгерский"
+
+#: includes/adsense.search_options.inc:321
+msgid "Indonesian"
+msgstr "Индонезийский"
+
+#: includes/adsense.search_options.inc:322
+msgid "Italian"
+msgstr "Итальянский"
+
+#: includes/adsense.search_options.inc:323
+msgid "Japanese"
+msgstr "Японский"
+
+#: includes/adsense.search_options.inc:324
+msgid "Korean"
+msgstr "Корейский"
+
+#: includes/adsense.search_options.inc:325
+msgid "Norwegian"
+msgstr "Норвежский"
+
+#: includes/adsense.search_options.inc:326
+msgid "Polish"
+msgstr "Польский"
+
+#: includes/adsense.search_options.inc:327
+msgid "Portuguese"
+msgstr "Португальский"
+
+#: includes/adsense.search_options.inc:328
+msgid "Romanian"
+msgstr "Румынский"
+
+#: includes/adsense.search_options.inc:329
+msgid "Russian"
+msgstr "Русский"
+
+#: includes/adsense.search_options.inc:330
+msgid "Serbian"
+msgstr "Сербский"
+
+#: includes/adsense.search_options.inc:331
+msgid "Slovak"
+msgstr "Словацкий"
+
+#: includes/adsense.search_options.inc:332
+msgid "Spanish"
+msgstr "Испанский"
+
+#: includes/adsense.search_options.inc:333
+msgid "Swedish"
+msgstr "Шведский"
+
+#: includes/adsense.search_options.inc:334
+msgid "Thai"
+msgstr "Тайский"
+
+#: includes/adsense.search_options.inc:335
+msgid "Turkish"
+msgstr "Турецкий"
+
+#: includes/adsense.search_options.inc:336
+msgid "Vietnamese"
+msgstr "Вьетнамский"
+
+#: managed/adsense_managed.module:46
+msgid "AdSense: unconfigured "
+msgstr "AdSense: не настроен "
+
+#: managed/adsense_managed.module:71
+#: old/oldcode/adsense_oldcode.module:92
+msgid "Ad format"
+msgstr "Формат рекламы"
+
+#: managed/adsense_managed.module:74
+#: old/oldcode/adsense_oldcode.module:95
+msgid "Select the ad dimensions you want for this block."
+msgstr "Выберите размер рекламного блока, который вы хотите использовать."
+
+#: managed/adsense_managed.module:82
+msgid "This is the Ad Slot ID from your Google Adsense account, such as 0123456789."
+msgstr "Это AD канал ID от Google Adsense аккаунта, например, 0123456789."
+
+#: managed/adsense_managed.module:88
+#: old/oldcode/adsense_oldcode.module:114
+msgid "Ad alignment"
+msgstr "Выравнивание рекламы"
+
+#: managed/adsense_managed.module:91
+#: old/oldcode/adsense_oldcode.admin.inc:118
+#: old/oldcode/adsense_oldcode.module:75;117
+#: old/search/adsense_search.module:85
+msgid "None"
+msgstr "Нет"
+
+#: managed/adsense_managed.module:92
+#: old/oldcode/adsense_oldcode.module:118
+msgid "Left"
+msgstr "Лево"
+
+#: managed/adsense_managed.module:93
+#: old/oldcode/adsense_oldcode.module:119
+msgid "Centered"
+msgstr "По сентру"
+
+#: managed/adsense_managed.module:96
+#: old/oldcode/adsense_oldcode.module:122
+msgid "Select the horizontal alignment of the ad within the block."
+msgstr "Выберите горизонтальное выравнивание рекламы внутри блока."
+
+#: managed/adsense_managed.module:22
+msgid "Managed Ads"
+msgstr "Управлять рекламой"
+
+#: managed/adsense_managed.info:0
+msgid "Managed ads"
+msgstr "Управлять рекламой"
+
+#: managed/adsense_managed.info:0
+msgid "Ad unit generator module using the new managed ads feature available in the Google AdSense site."
+msgstr "Модуль генератор рекламы с использованием нового управления доступен на сайте Google AdSense."
+
+#: old/oldcode/adsense_oldcode.admin.inc:37
+msgid "Ad groups"
+msgstr "Группы рекламы"
+
+#: old/oldcode/adsense_oldcode.admin.inc:50
+msgid "Group @group attributes"
+msgstr "Параметры группы @group"
+
+#: old/oldcode/adsense_oldcode.admin.inc:55
+#: old/search/adsense_search.admin.inc:168
+msgid "Title"
+msgstr "Заголовок"
+
+#: old/oldcode/adsense_oldcode.admin.inc:59
+msgid "Title of the group."
+msgstr "Заголовок группы"
+
+#: old/oldcode/adsense_oldcode.admin.inc:64
+msgid "Ad type"
+msgstr "Тип рекламы"
+
+#: old/oldcode/adsense_oldcode.admin.inc:66
+#: old/search/adsense_search.admin.inc:184
+msgid "Text"
+msgstr "Текст"
+
+#: old/oldcode/adsense_oldcode.admin.inc:66
+msgid "Image"
+msgstr "Изображение"
+
+#: old/oldcode/adsense_oldcode.admin.inc:66
+msgid "Both"
+msgstr "Оба"
+
+#: old/oldcode/adsense_oldcode.admin.inc:76
+#: old/search/adsense_search.admin.inc:89
+msgid "Text color"
+msgstr "Цвет текста"
+
+#: old/oldcode/adsense_oldcode.admin.inc:84
+msgid "Border color"
+msgstr "Цвет рамки"
+
+#: old/oldcode/adsense_oldcode.admin.inc:100
+msgid "Title color"
+msgstr "Цвет заголовка"
+
+#: old/oldcode/adsense_oldcode.admin.inc:108
+msgid "URL color"
+msgstr "Цвет URL"
+
+#: old/oldcode/adsense_oldcode.admin.inc:116
+msgid "Alternate URL color"
+msgstr "Чередовать цвет URL"
+
+#: old/oldcode/adsense_oldcode.admin.inc:118
+msgid "Alternate URL"
+msgstr "Чередовать URL"
+
+#: old/oldcode/adsense_oldcode.admin.inc:118
+msgid "Alternate color"
+msgstr "Чередовать цвет"
+
+#: old/oldcode/adsense_oldcode.admin.inc:123
+msgid "Alternate info"
+msgstr "Изменить информацию"
+
+#: old/oldcode/adsense_oldcode.admin.inc:127
+msgid "Enter either 6 letter alternate color code, or alternate URL to use"
+msgstr "Введите или другой шестизначный цветовой код, или измените URL для использования"
+
+#: old/oldcode/adsense_oldcode.admin.inc:132
+msgid "Rounded corners"
+msgstr "Закругоенные углы"
+
+#: old/oldcode/adsense_oldcode.admin.inc:135
+msgid "Choose type of round corners"
+msgstr "Выберите тип круглых уголков"
+
+#: old/oldcode/adsense_oldcode.admin.inc:143
+#: old/search/adsense_search.admin.inc:241
+msgid "Custom channels"
+msgstr "Заказные (custom) каналы"
+
+#: old/oldcode/adsense_oldcode.admin.inc:144
+#: old/search/adsense_search.admin.inc:242
+msgid "Enter up to !channels custom channels that you have configured in Google AdSense. If you are not using custom channels, or you are only using URL channels, then leave this empty."
+msgstr "Зафиксируйте !channels которые вы хотите настроить в Google AdSense. Если вы не используете обычные каналы, или если вы испоьзуете URL каналы, оставьте эти поля пустыми."
+
+#: old/oldcode/adsense_oldcode.admin.inc:150
+#: old/search/adsense_search.admin.inc:248
+msgid "Custom channel ID"
+msgstr "Пользовательский ID канала"
+
+#: old/oldcode/adsense_oldcode.admin.inc:184
+#: old/search/adsense_search.admin.inc:291
+msgid "Color must be between #000000 and #FFFFFF"
+msgstr "Цвет должен быть между #000000 и #FFFFFF"
+
+#: old/oldcode/adsense_oldcode.module:58
+msgid "AdSense old code: unconfigured "
+msgstr "AdSense старый код: не настроенно "
+
+#: old/oldcode/adsense_oldcode.module:100
+msgid "Group"
+msgstr "Группа"
+
+#: old/oldcode/adsense_oldcode.module:107
+#: old/search/adsense_search.module:102
+msgid "Channel"
+msgstr "Канал"
+
+#: old/oldcode/adsense_oldcode.module:34
+msgid "Old Code Ads"
+msgstr "Старый код Ads"
+
+#: old/oldcode/adsense_oldcode.info:0
+msgid "Ads (old)"
+msgstr "Ads (старый)"
+
+#: old/oldcode/adsense_oldcode.info:0
+msgid "Ad unit generator module using the old format code in which the colours are specified in the ad's JavaScript."
+msgstr "Модуль генератор рекламного блока, использующих старый формат кода, в котором цвета, указанного в объявлении в JavaScript."
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:37
+msgid "Required parameters"
+msgstr "Обязательные параметры"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:42
+msgid "Google AdSense client ID profile field"
+msgstr "Поле в анкете пользователя для ввода ID клиента Google AdSense"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:46
+msgid "This is the profile field that holds the AdSense Client ID for the site owner as well as (optionally) for site users who participate in revenue sharing. You must enabled the profile module and create a new field for this."
+msgstr "Это поле анкеты пользователя владельца сайта для ID клиента AdSense и также для лиц участвующих в разделении доходов (если такие есть). Вы должны вставить новый раздел в модуле анкеты и создать новое поле для этого."
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:53
+msgid "Revenue sharing percentage"
+msgstr "Процент распределения доходов"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:60
+msgid "Percentage of node views going to author"
+msgstr "Процент от просмотров публикаций поступающих автору"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:67
+msgid "Percentage of node views going to author with the following roles"
+msgstr "Процент просмотра материалов автора для данной роли"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:68
+msgid "When the author belongs to one or more roles, the percentage of node views using his AdSense Client ID will be the maximum between the author value and the following settings for each role."
+msgstr "Когда автор принадлежит к одной или нескольким ролям, доля просмотра материалов с использованием своего AdSense Client ID будет максимальным между автором, а также следующие параметры для каждой роли."
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:86
+msgid "Percentage of node views going to user who referred the author"
+msgstr "Процент от просмотра публикации поступающий пользователю, который дал ссылку"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:96
+msgid "Content types"
+msgstr "Типы материалов"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:122
+msgid "Role"
+msgstr "Роль"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:122
+msgid "Percentage"
+msgstr "Процент"
+
+#: (duplicate) old/revenue_sharing_basic/revenue_sharing_basic.module:56
+#: ;22
+msgid "Revenue Sharing"
+msgstr "Распределение доходов в"
+
+#: (duplicate) old/revenue_sharing_basic/revenue_sharing_basic.module:57
+msgid "Drupal page cache is enabled."
+msgstr "Drupal кеш страниц включён."
+
+#: (duplicate) old/revenue_sharing_basic/revenue_sharing_basic.module:58
+msgid "This causes conflicts with revenue sharing, since the pages are stored in the cache and are not dynamically generated. If you experience issues with revenue sharing, then disable the page cache."
+msgstr "Это приводит к конфликтам с распределением доходов, поскольку на страницах сохраняются в кэш-памяти и не генерируются динамически. Если у вас возникли проблемы с доходами, отключите кэш страниц."
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.info:0
+msgid "Revenue sharing basic (old)"
+msgstr "Распределение доходов основное (старое)"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.info:0
+msgid "Revenue sharing for the Google Adsense module"
+msgstr "Распределение доходов в Google Adsense модуле"
+
+#: old/search/adsense_search.admin.inc:26
+msgid "Allows users to search the web or the specific site(s) of your choice. Enter the site's URL without the last '/'"
+msgstr "Позволяет пользователям выполнять поиск в Интернете или с конкретного сайта(ов) по вашему выбору. Введите URL сайта без завершающего '/'"
+
+#: old/search/adsense_search.admin.inc:55
+msgid "Use SafeSearch"
+msgstr "Использовать SafeSearch"
+
+#: old/search/adsense_search.admin.inc:64
+msgid "Google Logo"
+msgstr "Логотип Google"
+
+#: old/search/adsense_search.admin.inc:65
+msgid "Logo above text box"
+msgstr "Логотип над текстовым полем"
+
+#: old/search/adsense_search.admin.inc:66
+msgid "\"Google Search\" on button"
+msgstr "Кнопка \"Поиск в Google\""
+
+#: old/search/adsense_search.admin.inc:72
+msgid "Search button below text box"
+msgstr "Кнопка поиска под текстовым блоком"
+
+#: old/search/adsense_search.admin.inc:99
+msgid "Site Language"
+msgstr "Язык сайта"
+
+#: old/search/adsense_search.admin.inc:113
+msgid "Length of text box (Max 64)"
+msgstr "Длина текстового блока (Мак. 64)"
+
+#: old/search/adsense_search.admin.inc:145
+msgid "Color attributes"
+msgstr "Атрибуты цвета"
+
+#: old/search/adsense_search.admin.inc:160
+msgid "Border"
+msgstr "Рамка"
+
+#: old/search/adsense_search.admin.inc:176
+msgid "Background"
+msgstr "Фон"
+
+#: old/search/adsense_search.admin.inc:192
+msgid "URL"
+msgstr "URL"
+
+#: old/search/adsense_search.admin.inc:200
+msgid "Visited URL"
+msgstr "Посещенные URL"
+
+#: old/search/adsense_search.admin.inc:208
+msgid "Light URL"
+msgstr "Легкий URL"
+
+#: old/search/adsense_search.admin.inc:216
+msgid "Logo Background"
+msgstr "Фоновый логотип"
+
+#: old/search/adsense_search.results.inc:17
+msgid "Search keywords: %keyword"
+msgstr "Поиск ключевых слов: %keyword"
+
+#: old/search/adsense_search.module:76
+msgid "AdSense Search: unconfigured "
+msgstr "AdSense поиск: не настроен "
+
+#: old/search/adsense_search.module:210
+msgid "Google Search"
+msgstr "Поиск Google"
+
+#: old/search/adsense_search.info:0
+msgid "Search (old)"
+msgstr "Поиск (старый)"
+
+#: old/search/adsense_search.info:0
+msgid "AdSense for Search generator module. This module uses the 'old' code in which the user can select to search the entire Web or 1 to 3 user-defined domains."
+msgstr "AdSense для поискового модуля. Этот модуль использует \"старый\" код, в котором пользователь может выбрать поиск в Интернете или с 1 - 3 пользовательских доменов."
+
+#~ msgid "AdSense settings are available under !link"
+#~ msgstr "AdSense настройки доступны на !link"
+#~ msgid "Administer > Site configuration > AdSense"
+#~ msgstr "Администрирование &gt; Конфигурация сайта &gt; AdSense"
+

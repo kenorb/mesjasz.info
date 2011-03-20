@@ -1,0 +1,433 @@
+# $Id: nl.po,v 1.1 2008/05/20 17:49:48 darrenoh Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  xmlsitemap.module,v 1.1.2.5 2007/11/15 01:10:25 darrenoh
+#  xmlsitemap.info,v 1.1 2007/11/09 17:56:04 darrenoh
+#  xmlsitemap_engines.info,v 1.1 2007/11/09 17:56:05 darrenoh
+#  xmlsitemap_node.info,v 1.1 2007/11/09 17:56:05 darrenoh
+#  xmlsitemap_term.info,v 1.1 2007/11/09 17:56:05 darrenoh
+#  xmlsitemap_user.info,v 1.1 2007/11/09 17:56:05 darrenoh
+#  xmlsitemap_node.module,v 1.1.2.9 2007/11/19 22:13:24 darrenoh
+#  xmlsitemap_user.module,v 1.1.2.5 2007/11/19 19:20:43 darrenoh
+#  xmlsitemap.php,v 1.2 2007/11/09 18:44:49 darrenoh
+#  xmlsitemap_engines.module,v 1.1.2.1 2007/11/20 14:19:04 darrenoh
+#  xmlsitemap_term.module,v 1.1.2.4 2007/11/19 22:13:25 darrenoh
+msgid ""
+msgstr ""
+"Project-Id-Version: XML sitemap 5.x-1.3\n"
+"POT-Creation-Date: 2007-11-20 10:18-0500\n"
+"PO-Revision-Date: 2007-12-04 11:31+0100\n"
+"Last-Translator: Joep Bär <info@promes.nl>\n"
+"Language-Team: PROMES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: xmlsitemap.module:15
+msgid "Configure the site map. Your site map is at !url."
+msgstr "Configureer het site overzicht. Uw site overzicht staat op !url."
+
+#: xmlsitemap.module:17
+msgid "Configure behavior for search engines."
+msgstr "Configureer het gedrag voor zoekmachines."
+
+#: xmlsitemap.module:19
+msgid "Set up additional links for your site map."
+msgstr "Maak extra links aan voor uw site overzicht."
+
+#: xmlsitemap.module:33
+#: xmlsitemap.info:0;0
+#: xmlsitemap_engines/xmlsitemap_engines.info:0
+#: xmlsitemap_node/xmlsitemap_node.info:0
+#: xmlsitemap_term/xmlsitemap_term.info:0
+#: xmlsitemap_user/xmlsitemap_user.info:0
+msgid "XML Sitemap"
+msgstr "XML Site overzicht"
+
+#: xmlsitemap.module:34;42
+msgid "Configure site map."
+msgstr "Stel het site overzicht in."
+
+#: xmlsitemap.module:41;342
+#: xmlsitemap_node/xmlsitemap_node.module:198
+msgid "Site map"
+msgstr "Site overzicht"
+
+#: xmlsitemap.module:48
+msgid "Search engines"
+msgstr "Zoek machines"
+
+#: xmlsitemap.module:49
+msgid "Configure search engines."
+msgstr "Stel zoekmachines in."
+
+#: xmlsitemap.module:56
+msgid "Additional"
+msgstr "Extra"
+
+#: xmlsitemap.module:57
+msgid "Configure additional links."
+msgstr "Stel extra links in."
+
+#: xmlsitemap.module:65;342
+msgid "Site map index"
+msgstr "Index site overzicht"
+
+#: xmlsitemap.module:76
+msgid "Site map !number"
+msgstr "Site overzicht !number"
+
+#: xmlsitemap.module:93
+msgid "Chunk size"
+msgstr "Blok grootte"
+
+#: xmlsitemap.module:97
+msgid "This is the number of links to include in one site map. Values can range between 1 and 50,000. If the total number of links exceeds the chunk size, multiple site maps will be generated."
+msgstr "Dit is het aantal links per site overzicht. De waarde kan varieren tussen 1 en 50.000. Als het aantal links de blok grootte overschreidt, dan worden meerdere site overzichten aangemaakt."
+
+#: xmlsitemap.module:102
+msgid "Front page priority"
+msgstr "Prioriteit voorpagina"
+
+#: xmlsitemap.module:105
+msgid "This is the absolute priority for the front page."
+msgstr "Dit is de absolute prioriteit van de voorpagina."
+
+#: xmlsitemap.module:116
+msgid "Cannot send more than 50,000 links at one time."
+msgstr "Het is niet mogelijk meer dan 50.000 links per keer verzenden."
+
+#: xmlsitemap.module:134
+msgid "Submission settings"
+msgstr "Verzend instellingen"
+
+#: xmlsitemap.module:138
+msgid "Submit site map when updated."
+msgstr "Verstuur het site overzicht na update."
+
+#: xmlsitemap.module:140
+msgid "If enabled, search engines will be notified of changes to the site map each time it is updated."
+msgstr "Als ingeschakeld worden de zoekmachines steeds op de hoogte gesteld van wijzigingen in het site overzicht als er iets is gewijzigd."
+
+#: xmlsitemap.module:144
+msgid "Submit site map on cron run."
+msgstr "Stuur het site overzicht met de cron-run."
+
+#: xmlsitemap.module:146
+msgid "If enabled, search engines will be notified of changes to the site map each time cron is run."
+msgstr "Als ingeschakeld worden de zoekmachines geinformeerd over wijzigingen in het site overzicht als de cron-run draait."
+
+#: xmlsitemap.module:150
+msgid "Log access."
+msgstr "Toegang tot logging."
+
+#: xmlsitemap.module:152
+msgid "If enabled, a watchdog entry will be made each time the site map is accessed, containing information about the requestor."
+msgstr "Als ingeschakeld dan wordt iedere keer dat het site overzicht wordt benaderd vastgelegd in de logging met informatie wie dit heeft gedaan."
+
+#: xmlsitemap.module:176
+msgid "Link priority"
+msgstr "Link prioriteit"
+
+#: xmlsitemap.module:179
+msgid "This is the default priority for additional links."
+msgstr "Dit is de verstek prioriteit voor extra links."
+
+#: xmlsitemap.module:187
+msgid "Enter a Drupal path to add to the site map."
+msgstr "Voer een Drupal pad in om aan het site overzicht toe te voegen."
+
+#: xmlsitemap.module:218
+msgid "Delete"
+msgstr "Verwijder"
+
+#: xmlsitemap.module:218
+msgid "Path"
+msgstr "Pad"
+
+#: xmlsitemap.module:218
+msgid "Priority"
+msgstr "Prioriteit"
+
+#: xmlsitemap.module:239
+msgid "Save configuration"
+msgstr "Sla configuratie op"
+
+#: xmlsitemap.module:301
+msgid "Default"
+msgstr "Standaard"
+
+#: xmlsitemap.module:310
+msgid "Not in site map"
+msgstr "Niet in site overzicht "
+
+#: xmlsitemap.module:336
+msgid "Site map @chunk"
+msgstr "Site overzicht @chunk"
+
+#: xmlsitemap.module:359
+msgid "!sitemap downloaded by @user-agent at @address."
+msgstr "!sitemap opgevraagd door @user-agent op @address."
+
+#: xmlsitemap.module:420
+msgid "Unable to load site map. Make sure your temporary directory exists and is writable by Drupal."
+msgstr "Het site overzicht kan niet worden geladen. Controleer of de tijdelijke map bestaat en door Drupal kan worden beschreven."
+
+#: xmlsitemap.module:364
+#: docs/xmlsitemap.php:175;178
+#: xmlsitemap_engines/xmlsitemap_engines.module:67;70;119;122;157;160;196;199
+msgid "xmlsitemap"
+msgstr "XML Site overzicht"
+
+#: xmlsitemap.info:0
+msgid "Creates an XML site map in accordance with the sitemaps.org specification."
+msgstr "Creëer een XML site overzicht volgens de specificaties van sitemaps.org."
+
+#: docs/xmlsitemap.php:149
+#: xmlsitemap_engines/xmlsitemap_engines.module:41
+msgid "Google"
+msgstr "Google"
+
+#: docs/xmlsitemap.php:155
+#: xmlsitemap_engines/xmlsitemap_engines.module:47
+msgid "Submit site map to Google."
+msgstr "Stuur het site overzicht naar Google."
+
+#: docs/xmlsitemap.php:160
+#: xmlsitemap_engines/xmlsitemap_engines.module:52;98;148;187
+msgid "Submission URL"
+msgstr "Verzend URL"
+
+#: docs/xmlsitemap.php:162
+#: xmlsitemap_engines/xmlsitemap_engines.module:54;100;150;189
+msgid "The URL to submit the site map to."
+msgstr "De URL waar het site overzicht naar toe wordt gezonden."
+
+#: docs/xmlsitemap.php:166
+#: xmlsitemap_engines/xmlsitemap_engines.module:58;104
+msgid "Verification link"
+msgstr "Controle link"
+
+#: docs/xmlsitemap.php:168
+#: xmlsitemap_engines/xmlsitemap_engines.module:60
+msgid "In order to show statistics, Google will ask you to verify that you control this site by creating a file with a certain name. Enter that name here and the XML Sitemap module will create a path to that file name. This will only work if you have clean URLs enabled."
+msgstr "Om statistieken te tonen, zal Google u vragen om aan te tonen dat u deze website beheert. U moet een bestand met een door Google op te geven naam aanmaken. Vul deze naam hier in. De XML Site overzicht module zal aan deze naam worden gelinkt. Attentie: dit werkt alleen als u schone URL's hebt ingeschakeld."
+
+#: docs/xmlsitemap.php:175
+#: xmlsitemap_engines/xmlsitemap_engines.module:67
+msgid "Sitemap successfully submitted to Google."
+msgstr "Site overzicht met succes naar Google gestuurd."
+
+#: docs/xmlsitemap.php:178
+#: xmlsitemap_engines/xmlsitemap_engines.module:70
+msgid "Error occurred submitting sitemap to Google: @code"
+msgstr "Fout @code bij verzenden van het site overzicht naar Google"
+
+#: docs/xmlsitemap.php:184
+#: xmlsitemap_engines/xmlsitemap_engines.module:75
+msgid "!sitemap downloaded by Google."
+msgstr "!sitemap opgevraagd door Google."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:87
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:93
+msgid "Submit site map to Yahoo."
+msgstr "Stuur site overzicht naar Yahoo."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:106
+msgid "Before allowing you to view additional information, Yahoo will ask you to verify that you control this site by creating a file with a certain name. Enter that name here and the XML Sitemap module will create a path to that file name. This will only work if you have clean URLs enabled."
+msgstr "Voordat u extra informatie kunt opvragen zal Yahoo u vragen om aan te tonen dat u deze website beheert. U moet een bestand met een door Yahoo op te geven naam aanmaken. Vul deze naam hier in. De XML site overzicht module zal een pad naar dat bestand maken. Attentie: dit werkt alleen als u schone URL's hebt ingeschakeld."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:110
+msgid "Authentication key"
+msgstr "Verificatie sleutel"
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:112
+msgid "Yahoo will ask you to put an authentication key in the verification file. Enter it here."
+msgstr "Yahoo zal u vragen een verificatie sleutel (authentication key) in het Verificatie bestand te zetten. Voer deze hier in."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:119
+msgid "Site map successfully submitted to Yahoo."
+msgstr "Site overzicht met succes naar Yahoo gestuurd."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:122
+msgid "Error occurred submitting site map to Yahoo: @code"
+msgstr "Fout @code bij verzenden van het site overzicht naar Yahoo"
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:137
+msgid "Ask.com"
+msgstr "Ask.com"
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:143
+msgid "Submit site map to Ask.com."
+msgstr "Stuur site overzicht naar Ask.com."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:157
+msgid "Site map successfully submitted to Ask.com."
+msgstr "Site overzicht met succes naar Ask.com gestuurd."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:160
+msgid "Error occurred submitting site map to Ask.com: @code"
+msgstr "Fout @code bij verzenden van het site overzicht naar Ask.com"
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:175
+msgid "Moreover"
+msgstr "Moreover"
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:181
+msgid "Submit site map to Moreover."
+msgstr "Stuur site overzicht naar Moreover."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:183
+msgid "At the time this module was written, MSN required site submission to be done manually at !link. Moreover supplies site update alerts to MSN and so provides a way to submit your site map to MSN automatically."
+msgstr "Toen deze module werd geschreven, vereiste MSN handmatige invoer van een site overzicht via !link. Moreover levert site wijzigings meldingen aan MSN. Dit is een manier om uw site overzicht automatisch naar MSN te sturen."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:196
+msgid "Site map successfully submitted to Moreover."
+msgstr "Site overzicht met succes naar Moreover gestuurd."
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:199
+msgid "Error occurred submitting site map to Moreover: @code"
+msgstr "Fout @code bij verzenden van het site overzicht naar Moreover"
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:216
+msgid "Google verification page"
+msgstr "Google verificatie pagina"
+
+#: xmlsitemap_engines/xmlsitemap_engines.module:226
+msgid "Yahoo verification page"
+msgstr "Yahoo verificatie pagina"
+
+#: xmlsitemap_engines/xmlsitemap_engines.info:0
+msgid "XML Sitemap: Engines"
+msgstr "XML Site overzicht: Zoekmachines"
+
+#: xmlsitemap_engines/xmlsitemap_engines.info:0
+msgid "Submits site map to search engines."
+msgstr "Stuurt site overzichten naar zoekmachines"
+
+#: xmlsitemap_node/xmlsitemap_node.module:173
+#: xmlsitemap_user/xmlsitemap_user.module:142
+msgid "Site map settings"
+msgstr "Instellingen site overzicht"
+
+#: xmlsitemap_node/xmlsitemap_node.module:182
+#: xmlsitemap_term/xmlsitemap_term.module:143;158
+#: xmlsitemap_user/xmlsitemap_user.module:154
+msgid "Site map priority"
+msgstr "Prioriteit site overzicht"
+
+#: xmlsitemap_node/xmlsitemap_node.module:185
+#: xmlsitemap_term/xmlsitemap_term.module:146
+#: xmlsitemap_user/xmlsitemap_user.module:157
+msgid "The default priority is %priority"
+msgstr "De standaard prioriteit is %priority"
+
+#: xmlsitemap_node/xmlsitemap_node.module:204
+msgid "Priority adjustment"
+msgstr "Prioriteit aanpassing"
+
+#: xmlsitemap_node/xmlsitemap_node.module:207
+msgid "This number will be added to the priority of this content type."
+msgstr "Dit getal wordt bij de prioriteit van dit inhoudstype geteld."
+
+#: xmlsitemap_node/xmlsitemap_node.module:216
+msgid "Content priority"
+msgstr "Inhouds prioriteit"
+
+#: xmlsitemap_node/xmlsitemap_node.module:217
+msgid "The default priority for specific content types can be set on the !link pages."
+msgstr "De standaard prioriteit voor specifieke inhoudstypes kan op de !link pagina's worden ingeschakeld."
+
+#: xmlsitemap_node/xmlsitemap_node.module:218
+msgid "content type settings"
+msgstr "Instellingen inhoudstypes"
+
+#: xmlsitemap_node/xmlsitemap_node.module:224
+msgid "Promotion adjustment"
+msgstr "Promotie aanpassing"
+
+#: xmlsitemap_node/xmlsitemap_node.module:227
+msgid "This number will be added to the priority of each post that is promoted to the front page."
+msgstr "Dit getal wordt opgeteld bij de prioriteit van ieder commentaar dat op de voorpagina staat."
+
+#: xmlsitemap_node/xmlsitemap_node.module:231
+msgid "Comment ratio weight"
+msgstr "Gewichtsverhouding commentaar"
+
+#: xmlsitemap_node/xmlsitemap_node.module:234
+msgid "This number will be multiplied by the ratio of the number of comments on a post to the highest number of comments on any post&#8212;that is, this number will be added to the priority of the post with the most comments."
+msgstr "Dit getal wordt vermenigvuldigd met de verhouding van het aantal commentaren op een pagina tot het grootste aantal commentaren op een pagina&#8212;ofwel: dit getal wordt bij de prioriteit van de pagina met het meeste commentaar geteld."
+
+#: xmlsitemap_node/xmlsitemap_node.module:238
+msgid "Count comments in change date and frequency"
+msgstr "Tel commentaren in wijzigingsdatum en frequentie"
+
+#: xmlsitemap_node/xmlsitemap_node.module:240
+msgid "If enabled, the frequency of comments on a post will affect its change frequency and last modification date."
+msgstr "Als ingeschakeld, de frequentie van commentaren op een pagina zal de wijzigingsfrequentie en laatste wijzigingsdatum beïnvloeden."
+
+#: xmlsitemap_node/xmlsitemap_node.module:325
+msgid "Save content type"
+msgstr "Sla inhoudstype op"
+
+#: xmlsitemap_node/xmlsitemap_node.module:325
+msgid "Reset to defaults"
+msgstr "Terug naar de verstekwaardes"
+
+#: xmlsitemap_node/xmlsitemap_node.info:0
+msgid "XML Sitemap: Node"
+msgstr "XML Site overzicht: Node"
+
+#: xmlsitemap_node/xmlsitemap_node.info:0
+msgid "Adds nodes to the site map."
+msgstr "Voegt nodes toe aan het site overzicht."
+
+#: xmlsitemap_term/xmlsitemap_term.module:161
+msgid "This will be the default priority of terms in this vocabulary."
+msgstr "Dit is de standaard prioriteit van termen in deze woordenschat."
+
+#: xmlsitemap_term/xmlsitemap_term.info:0
+msgid "XML Sitemap: Term"
+msgstr "XML Site overzicht: Termen"
+
+#: xmlsitemap_term/xmlsitemap_term.info:0
+msgid "Adds taxonomy terms to the site map."
+msgstr "Voegt categorie termen aan het site overzicht toe."
+
+#: xmlsitemap_user/xmlsitemap_user.module:104
+msgid "Default user priority"
+msgstr "Standaard gebruikers prioriteit"
+
+#: xmlsitemap_user/xmlsitemap_user.module:107
+msgid "Choose the default priority for users who have only the authenticated user role."
+msgstr "Kies de standaard prioriteit voor gebruikers die alleen de rol geverifieerde gebruiker hebben."
+
+#: xmlsitemap_user/xmlsitemap_user.module:115
+msgid "Default site map priority"
+msgstr "Standaard prioriteit site overzicht"
+
+#: xmlsitemap_user/xmlsitemap_user.module:99
+msgid "This number will be added to the priority of this user role."
+msgstr "Dit getal wordt bij de prioriteit van deze gebruikersrol geteld."
+
+#: xmlsitemap_user/xmlsitemap_user.module:113
+msgid "Delete role"
+msgstr "Verwijder rol"
+
+#: xmlsitemap_user/xmlsitemap_user.info:0
+msgid "XML Sitemap: User"
+msgstr "XML Site overzicht: Gebruikers"
+
+#: xmlsitemap_user/xmlsitemap_user.info:0
+msgid "Adds user profiles to the site map."
+msgstr "Voegt gebruikersprofielen toe aan het site overzicht."
+

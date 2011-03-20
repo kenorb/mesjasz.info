@@ -1,0 +1,56 @@
+<?php
+// $Id: romania_642_1.cif,v 1.4.4.1 2008/11/03 21:33:50 islandusurper Exp $
+
+function romania_install() {
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (642, 'Romania', 'RO', 'ROM', 1)");
+
+  // VALUES = %d for ID, Parent Country ID, Zone Abbreviation, Zone Name
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+      ."(642, 'AB', 'Alba'),"
+      ."(642, 'AR', 'Arad'),"
+      ."(642, 'AG', 'Arges'),"
+      ."(642, 'BC', 'Bacau'),"
+      ."(642, 'BH', 'Bihor'),"
+      ."(642, 'BN', 'Bistrita-Nasaud'),"
+      ."(642, 'BT', 'Botosani'),"
+      ."(642, 'BV', 'Brasov'),"
+      ."(642, 'BR', 'Braila'),"
+      ."(642, 'B', 'Bucuresti'),"
+      ."(642, 'BZ', 'Buzau'),"
+      ."(642, 'CS', 'Caras-Severin'),"
+      ."(642, 'CL', 'Calarasi'),"
+      ."(642, 'CJ', 'Cluj'),"
+      ."(642, 'CT', 'Constanta'),"
+      ."(642, 'CV', 'Covasna'),"
+      ."(642, 'DB', 'Dimbovita'),"
+      ."(642, 'DJ', 'Dolj'),"
+      ."(642, 'GL', 'Galati'),"
+      ."(642, 'GR', 'Giurgiu'),"
+      ."(642, 'GJ', 'Gorj'),"
+      ."(642, 'HR', 'Harghita'),"
+      ."(642, 'HD', 'Hunedoara'),"
+      ."(642, 'IL', 'Ialomita'),"
+      ."(642, 'IS', 'Iasi'),"
+      ."(642, 'IF', 'Ilfov'),"
+      ."(642, 'MM', 'Maramures'),"
+      ."(642, 'MH', 'Mehedinti'),"
+      ."(642, 'MS', 'Mures'),"
+      ."(642, 'NT', 'Neamt'),"
+      ."(642, 'OT', 'Olt'),"
+      ."(642, 'PH', 'Prahova'),"
+      ."(642, 'SM', 'Satu-Mare'),"
+      ."(642, 'SJ', 'Salaj'),"
+      ."(642, 'SB', 'Sibiu'),"
+      ."(642, 'SV', 'Suceava'),"
+      ."(642, 'TR', 'Teleorman'),"
+      ."(642, 'TM', 'Timis'),"
+      ."(642, 'TL', 'Tulcea'),"
+      ."(642, 'VS', 'Vaslui'),"
+      ."(642, 'VL', 'Valcea'),"
+      ."(642, 'VN', 'Vrancea')");
+
+  variable_set('uc_address_format_642',
+               "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+              ."\r\n!city, !postal_code\r\n!zone_name, !country_name_if");
+}

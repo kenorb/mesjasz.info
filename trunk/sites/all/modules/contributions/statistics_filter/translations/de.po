@@ -1,0 +1,94 @@
+# $Id: de.po,v 1.1.2.1 2008/09/16 14:56:53 frankralf Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  statistics_filter.module,v 1.11 2008/09/15 15:53:25 frankralf
+#  statistics_filter.install,v 1.2 2008/09/15 15:53:25 frankralf
+#  statistics_filter.info,v 1.2 2008/09/15 15:53:25 frankralf
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Statistics filtering 6.x.-1.0\n"
+"POT-Creation-Date: 2008-09-16 13:07+0200\n"
+"PO-Revision-Date: 2008-09-16 16:55+0100\n"
+"Last-Translator: Frank Ralf <webmaster@grundschule-heidhorst.de>\n"
+"Language-Team: Frank Ralf <webmaster@grundschule-heidhorst.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+
+#: statistics_filter.module:16
+msgid "Filter out admin and search engine hits on your site."
+msgstr "Filtert Administratoren und Suchmaschinen aus der Statistik aus."
+
+#: statistics_filter.module:138
+msgid "Ignore administrator"
+msgstr "Administrator ignorieren"
+
+#: statistics_filter.module:140
+msgid "Ignore the special administrator account's accesses to this site."
+msgstr "Das Spezialadministrator-Konto ignorieren."
+
+#: statistics_filter.module:153
+msgid "Roles to ignore"
+msgstr "Zu ignorierende Rollen"
+
+#: statistics_filter.module:156
+msgid "Ignore accesses by users in any of the checked roles."
+msgstr "Ignoriere Zugriffe von Benutzern der markierten Rollen."
+
+#: statistics_filter.module:162
+msgid "Ignore crawlers"
+msgstr "Crawler ignorieren"
+
+#: statistics_filter.module:164
+msgid "Ignore search engine crawlers' accesses to this site."
+msgstr "Ignoriere den Zugriff von Suchmaschinen-Crawlern auf diese Website."
+
+#: statistics_filter.module:122
+msgid "administer statistics filter"
+msgstr "Statistik-Filter verwalten"
+
+#: statistics_filter.module:105
+msgid "Statistics filter settings"
+msgstr "Einstellungen für Statistik-Filter"
+
+#: statistics_filter.module:106
+msgid "Set up which types of site access you don't want to get logged."
+msgstr "Seitenzugriffe von welchen Benutzern sollen nicht protokollierte werden?"
+
+#: statistics_filter.module:0
+msgid "statistics_filter"
+msgstr "statistics_filter"
+
+#: statistics_filter.install:12
+msgid "Stores browser details for statistics filtering"
+msgstr "Speichert Browserdetails für Statistik-Filter."
+
+#: statistics_filter.install:20
+msgid "Name of browser"
+msgstr "Browsername"
+
+#: statistics_filter.install:27
+msgid "Counter"
+msgstr "Zähler"
+
+#: statistics_filter.install:35
+msgid "Flag for crawlers"
+msgstr "Flag für Crawler"
+
+#: statistics_filter.info:0
+msgid "Statistics filter"
+msgstr "Statistik-Filter"
+
+#: statistics_filter.info:0
+msgid "Filters unwanted entries out of statistics modules' stats."
+msgstr "Filtert unerwünschte Einträge aus den Daten des Statistik-Moduls."
+
+#: statistics_filter.info:0
+msgid "Statistics"
+msgstr "Statistik"
+

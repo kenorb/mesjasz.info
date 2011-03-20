@@ -1,0 +1,623 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/aggregator/aggregator-feed-source.tpl.php:30
+msgid "URL:"
+msgstr "URL:"
+
+#: modules/aggregator/aggregator-feed-source.tpl.php:33
+msgid "Updated:"
+msgstr "Zaktualizowano:"
+
+#: modules/aggregator/aggregator-item.tpl.php:42
+#: modules/aggregator/aggregator.pages.inc:63
+#: modules/aggregator/aggregator.module:151
+msgid "Categories"
+msgstr "Kategorie"
+
+#: modules/aggregator/aggregator-summary-items.tpl.php:23
+msgid "More"
+msgstr "Więcej"
+
+#: modules/aggregator/aggregator.admin.inc:25
+msgid "Feed overview"
+msgstr "Kanały"
+
+#: modules/aggregator/aggregator.admin.inc:27;38
+msgid "Items"
+msgstr "Elementy"
+
+#: modules/aggregator/aggregator.admin.inc:27
+msgid "Last update"
+msgstr "Ostatnia aktualizacja"
+
+#: modules/aggregator/aggregator.admin.inc:27
+msgid "Next update"
+msgstr "Kolejna aktualizacja"
+
+#: modules/aggregator/aggregator.admin.inc:30
+msgid "%time left"
+msgstr "jeszcze %time"
+
+#: modules/aggregator/aggregator.admin.inc:30
+msgid "remove items"
+msgstr "usuń"
+
+#: modules/aggregator/aggregator.admin.inc:30
+msgid "update items"
+msgstr "aktualizuj"
+
+#: modules/aggregator/aggregator.admin.inc:36
+msgid "Category overview"
+msgstr "Kategorie"
+
+#: modules/aggregator/aggregator.admin.inc:66
+msgid "The name of the feed (or the name of the website providing the feed)."
+msgstr "Nazwa kanału (lub witryny, która go udostępnia)."
+
+#: modules/aggregator/aggregator.admin.inc:73
+msgid "The fully-qualified URL of the feed."
+msgstr "Pełen adres kanału."
+
+#: modules/aggregator/aggregator.admin.inc:77
+msgid "Update interval"
+msgstr "Czas między aktualizacjami"
+
+#: modules/aggregator/aggregator.admin.inc:80
+msgid ""
+"The length of time between feed updates. (Requires a correctly configured <a "
+"href=\"@cron\">cron maintenance task</a>.)"
+msgstr ""
+"Czas pomiędzy aktualizacjami kanału. Wymagane jest prawidłowe "
+"skonfigurowanie <a href=\"@cron\">zadań cron</a>."
+
+#: modules/aggregator/aggregator.admin.inc:93
+msgid "Categorize news items"
+msgstr "Przypisywanie wiadomości do kategorii"
+
+#: modules/aggregator/aggregator.admin.inc:96
+msgid "New feed items are automatically filed in the checked categories."
+msgstr ""
+"Wiadomości z kanału będą automatycznie dodawane do wybranych kategorii."
+
+#: modules/aggregator/aggregator.admin.inc:116
+msgid ""
+"The URL %url is invalid. Please enter a fully-qualified URL, such as http://"
+"www.example.com/feed.xml."
+msgstr ""
+"Adres %url jest nieprawidłowy. Należy wprowadzić pełen adres, taki jak "
+"http://www.example.com/feed.xml."
+
+#: modules/aggregator/aggregator.admin.inc:127
+msgid "A feed named %feed already exists. Please enter a unique title."
+msgstr "Kanał o nazwie %feed już istnieje. Proszę wprowadzić inną nazwę."
+
+#: modules/aggregator/aggregator.admin.inc:130
+msgid "A feed with this URL %url already exists. Please enter a unique URL."
+msgstr "Kanał o adresie %url już istnieje. Proszę podać inny adres."
+
+#: modules/aggregator/aggregator.admin.inc:150
+msgid "The feed %feed has been updated."
+msgstr "Kanał %feed został zaktualizowany."
+
+#: modules/aggregator/aggregator.admin.inc:162
+msgid "The feed %feed has been deleted."
+msgstr "Kanał %feed został usunięty."
+
+#: modules/aggregator/aggregator.admin.inc:175
+msgid "The feed %feed has been added."
+msgstr "Kanał %feed został dodany."
+
+#: modules/aggregator/aggregator.admin.inc:187
+msgid "Are you sure you want to remove all items from the feed %feed?"
+msgstr "Czy na pewno usunąć kanał %feed?"
+
+#: modules/aggregator/aggregator.admin.inc:190
+#: modules/aggregator/aggregator.module:108
+msgid "Remove items"
+msgstr "Usuń elementy"
+
+#: modules/aggregator/aggregator.admin.inc:230
+msgid ""
+"A space-separated list of HTML tags allowed in the content of feed items. "
+"(Tags in this list are not removed by Drupal.)"
+msgstr ""
+"Lista znaczników HTML dozwolonych w wiadomościach z kanałów informacyjnych. "
+"Znaczniki podaje się, oddzielając je za pomocą spacji. Nie będą one usuwane "
+"przez Drupala podczas wyświetlania wiadomości."
+
+#: modules/aggregator/aggregator.admin.inc:234
+msgid "Items shown in sources and categories pages"
+msgstr "Liczba elementów na stronach źródeł i kategorii"
+
+#: modules/aggregator/aggregator.admin.inc:236
+msgid "Number of feed items displayed in feed and category summary pages."
+msgstr ""
+"Liczba wiadomości z kanałów wyświetlanych na stronach z podsumowaniami "
+"kanałów i ich kategorii."
+
+#: modules/aggregator/aggregator.admin.inc:240
+msgid "Discard items older than"
+msgstr "Usuń elementy starsze niż"
+
+#: modules/aggregator/aggregator.admin.inc:242
+msgid ""
+"The length of time to retain feed items before discarding. (Requires a "
+"correctly configured <a href=\"@cron\">cron maintenance task</a>.)"
+msgstr ""
+"Czas, po którym wiadomość jest usuwana. Wymagane jest prawidłowe "
+"skonfigurowanie <a href=\"@cron\">zadań cron</a>."
+
+#: modules/aggregator/aggregator.admin.inc:246
+msgid "Category selection type"
+msgstr "Kategorie wybierane za pomocą"
+
+#: modules/aggregator/aggregator.admin.inc:247
+msgid "checkboxes"
+msgstr "pole wyboru"
+
+#: modules/aggregator/aggregator.admin.inc:247
+msgid "multiple selector"
+msgstr "lista"
+
+#: modules/aggregator/aggregator.admin.inc:248
+msgid ""
+"The type of category selection widget displayed on categorization pages. "
+"(For a small number of categories, checkboxes are easier to use, while a "
+"multiple selector work well with large numbers of categories.)"
+msgstr ""
+"Typ pola formularza stosowanego do przypisywania elementów do kategorii. "
+"Pola wyboru są łatwiejsze w obsłudze w przypadku mniejszej liczby kategorii, "
+"natomiast listy - w przypadku dużej liczby kategorii."
+
+#: modules/aggregator/aggregator.admin.inc:295
+msgid "A category named %category already exists. Please enter a unique title."
+msgstr "Kategoria o nazwie %category już istnieje. Należy podać inną."
+
+#: modules/aggregator/aggregator.admin.inc:314
+msgid "The category %category has been updated."
+msgstr "Kategoria %category została zaktualizowana."
+
+#: modules/aggregator/aggregator.admin.inc:326
+msgid "The category %category has been deleted."
+msgstr "Kategoria %category została usunięta."
+
+#: modules/aggregator/aggregator.admin.inc:339
+msgid "The category %category has been added."
+msgstr "Kategoria %category została dodana."
+
+#: modules/aggregator/aggregator.admin.inc:161;174;325;338
+#: modules/aggregator/aggregator.pages.inc:16
+#: modules/aggregator/aggregator.module:607;641;648;718;0
+msgid "aggregator"
+msgstr "subskrybent"
+
+#: modules/aggregator/aggregator.admin.inc:161
+msgid "Feed %feed deleted."
+msgstr "Usunięto kanał %feed."
+
+#: modules/aggregator/aggregator.admin.inc:174
+msgid "Feed %feed added."
+msgstr "Dodano kanał %feed."
+
+#: modules/aggregator/aggregator.admin.inc:325
+msgid "Category %category deleted."
+msgstr "Kategoria %category usunięta."
+
+#: modules/aggregator/aggregator.admin.inc:338
+msgid "Category %category added."
+msgstr "Kategoria %category dodana."
+
+#: modules/aggregator/aggregator.admin.inc:30;41
+#: modules/aggregator/aggregator.module:928
+msgid "1 item"
+msgid_plural "@count items"
+msgstr[0] "1 element"
+msgstr[1] "@count elementy"
+msgstr[2] "@count elementów"
+
+#: modules/aggregator/aggregator.pages.inc:68
+msgid "aggregator - @title"
+msgstr "subskrybent - @title"
+
+#: modules/aggregator/aggregator.pages.inc:175
+msgid "Save categories"
+msgstr "Zachowaj kategorie"
+
+#: modules/aggregator/aggregator.pages.inc:185
+msgid "You are not allowed to categorize this feed item."
+msgstr "Brak uprawnień do przypisywania kategorii tej wiadomości."
+
+#: modules/aggregator/aggregator.pages.inc:203
+msgid "The categories have been saved."
+msgstr "Kategorie zostały zachowane."
+
+#: modules/aggregator/aggregator.pages.inc:228
+#: modules/aggregator/aggregator.module:185;214
+msgid "Categorize"
+msgstr "Przypisz do kategorii"
+
+#: modules/aggregator/aggregator.pages.inc:262
+msgid "%ago ago"
+msgstr "%ago temu"
+
+#: modules/aggregator/aggregator.pages.inc:293
+#: modules/aggregator/aggregator.module:164
+msgid "OPML feed"
+msgstr "Kanał OPML"
+
+#: modules/aggregator/aggregator.pages.inc:377
+msgid "@site_name - aggregated feeds in category @title"
+msgstr "@site_name - subskrybowane kanały z kategorii @title"
+
+#: modules/aggregator/aggregator.pages.inc:377
+msgid "@site_name - aggregated feeds"
+msgstr "@site_name - subskrybowane kanały"
+
+#: modules/aggregator/aggregator.pages.inc:381
+msgid "@site_name aggregator"
+msgstr "Subskrybent witryny @site_name"
+
+#: modules/aggregator/aggregator.pages.inc:459
+msgid "%age old"
+msgstr "wiek: %age"
+
+#: modules/aggregator/aggregator.pages.inc:477
+msgid "!title feed"
+msgstr "Kanał !title"
+
+#: modules/aggregator/aggregator.module:15
+msgid ""
+"The aggregator is a powerful on-site syndicator and news reader that gathers "
+"fresh content from RSS-, RDF-, and Atom-based feeds made available across "
+"the web. Thousands of sites (particularly news sites and blogs) publish "
+"their latest headlines and posts in feeds, using a number of standardized "
+"XML-based formats. Formats supported by the aggregator include <a href=\"@rss"
+"\">RSS</a>, <a href=\"@rdf\">RDF</a>, and <a href=\"@atom\">Atom</a>."
+msgstr ""
+"Subskrybent jest potężnym narzędziem umożliwiającym pobieranie najświeższych "
+"wiadomości z kanałów RSS, RDF i Atom rozsianych po całej sieci. Tysiące "
+"witryn (szczególnie tych, które publikują aktualności bądź blogi) udostępnia "
+"swoje artykuły poprzez kanały informacyjne korzystające z kilku "
+"ustandaryzowanych formatów opierających się na XML. Moduł obsługuje formaty "
+"<a href=\"@rss\">RSS</a>, <a href=\"@rdf\">RDF</a> i <a href=\"@atom\">Atom</"
+"a>."
+
+#: modules/aggregator/aggregator.module:16
+msgid ""
+"Feeds contain feed items, or individual posts published by the site "
+"providing the feed. Feeds may be grouped in categories, generally by topic. "
+"Users view feed items in the <a href=\"@aggregator\">main aggregator "
+"display</a> or by <a href=\"@aggregator-sources\">their source</a>. "
+"Administrators can <a href=\"@feededit\">add, edit and delete feeds</a> and "
+"choose how often to check each feed for newly updated items. The most recent "
+"items in either a feed or category can be displayed as a block through the "
+"<a href=\"@admin-block\">blocks administration page</a>. A <a href="
+"\"@aggregator-opml\">machine-readable OPML file</a> of all feeds is "
+"available. A correctly configured <a href=\"@cron\">cron maintenance task</"
+"a> is required to update feeds automatically."
+msgstr ""
+"Kanały zawierają wiadomości lub poszczególne wpisy witryny, która kanał "
+"udostępnia. Kanały informacyjne można dzielić na kategorie, zazwyczaj wedle "
+"tematyki. Użytkownicy mogą czytać wiadomości z kanałów za pomocą <a href="
+"\"@aggregator\">głównej strony subskrybenta</a> lub <a href=\"@aggregator-"
+"sources\">wedle źródła, z którego pochodzą</a>. Administratorzy mają "
+"możliwość <a href=\"@feededit\">dodawania, edycji i usuwania kanałów</a>, a "
+"także określenia, jak często subskrybent ma sprawdzać, czy w kanałach "
+"dostępne są nowe wiadomości. Ostatnie wiadomości z danego kanału lub "
+"kategorii można wyświetlać za pomocą bloku, który należy włączyć na <a href="
+"\"@admin-block\">stronie zarządzania blokami</a>. Dostępny jest plik OPML ze "
+"wszystkimi subskrybowanymi kanałami. Do automatycznej aktualizacji kanałów "
+"konieczne są prawidłowo skonfigurowane <a href=\"@cron\">zadania cron</a>."
+
+#: modules/aggregator/aggregator.module:17
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@aggregator"
+"\">Aggregator module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@aggregator\">stronie poświęconej "
+"subskrybentowi</a> w podręczniku konfiguracji w internecie."
+
+#: modules/aggregator/aggregator.module:20
+msgid ""
+"Thousands of sites (particularly news sites and blogs) publish their latest "
+"headlines and posts in feeds, using a number of standardized XML-based "
+"formats. Formats supported by the aggregator include <a href=\"@rss\">RSS</"
+"a>, <a href=\"@rdf\">RDF</a>, and <a href=\"@atom\">Atom</a>."
+msgstr ""
+"Tysiące witryn (szczególnie tych, które publikują aktualności bądź blogi) "
+"udostępnia swoje artykuły poprzez kanały informacyjne korzystające z kilku "
+"ustandaryzowanych formatów opierających się na XML. Obsługiwane formaty to "
+"<a href=\"@rss\">RSS</a>, <a href=\"@rdf\">RDF</a> i <a href=\"@atom\">Atom</"
+"a>."
+
+#: modules/aggregator/aggregator.module:21
+msgid ""
+"Current feeds are listed below, and <a href=\"@addfeed\">new feeds may be "
+"added</a>. For each feed or feed category, the <em>latest items</em> block "
+"may be enabled at the <a href=\"@block\">blocks administration page</a>."
+msgstr ""
+"Poniższa lista przedstawia aktualnie subskrybowane kanały. Można do niej <a "
+"href=\"@addfeed\">dodać nowe</a>. Dla każdego kanału i kategorii kanałów "
+"dostępny jest blok wyświetlający ich <em>ostatnie wiadomości</em>. Można go "
+"włączyć na <a href=\"@block\">stronie zarządzania blokami</a>."
+
+#: modules/aggregator/aggregator.module:24
+msgid "Add a feed in RSS, RDF or Atom format. A feed may only have one entry."
+msgstr ""
+"Strona umożliwia dodanie kanału informacyjnego w formacie RSS, RDF lub Atom. "
+"Tego samego kanału nie można dodać dwa razy."
+
+#: modules/aggregator/aggregator.module:26
+msgid ""
+"Categories allow feed items from different feeds to be grouped together. For "
+"example, several sport-related feeds may belong to a category named "
+"<em>Sports</em>. Feed items may be grouped automatically (by selecting a "
+"category when creating or editing a feed) or manually (via the "
+"<em>Categorize</em> page available from feed item listings). Each category "
+"provides its own feed page and block."
+msgstr ""
+"Kategorie służą do grupowania wiadomości z kanałów informacyjnych. Kategoria "
+"<em>Sport</em> może na przykład zawierać  wiadomości z kanałów o tematyce "
+"sportowej. Wiadomości mogą trafiać do danej kategorii automatycznie (poprzez "
+"przypisanie kanału do kategorii) lub być do niej dodawane ręcznie (za pomocą "
+"odnośnika <em>Przypisz do kategorii</em> na stronach z listami wiadomości). "
+"Każda kategoria daje dostęp do swej własnej strony i bloku."
+
+#: modules/aggregator/aggregator.module:306
+msgid "!title category latest items"
+msgstr "Ostatnie wiadomości w kategorii !title"
+
+#: modules/aggregator/aggregator.module:310
+msgid "!title feed latest items"
+msgstr "Ostatnie wiadomości z kanału !title"
+
+#: modules/aggregator/aggregator.module:321
+msgid "Number of news items in block"
+msgstr "Liczba elementów w bloku"
+
+#: modules/aggregator/aggregator.module:340
+msgid "View this feed's recent news."
+msgstr "Wyświetla ostatnie wiadomości z kanału."
+
+#: modules/aggregator/aggregator.module:348
+msgid "View this category's recent news."
+msgstr "Wyświetla ostatnie wiadomości w kategorii."
+
+#: modules/aggregator/aggregator.module:462
+msgid "The news items from %site have been removed."
+msgstr "Wiadomości z %site zostały usunięte."
+
+#: modules/aggregator/aggregator.module:603
+msgid "There is no new syndicated content from %site."
+msgstr "Nie ma żadnych nowych wiadomości z witryny %site."
+
+#: modules/aggregator/aggregator.module:642;641
+msgid "There is new syndicated content from %site."
+msgstr "Nowe wiadomości z witryny %site."
+
+#: modules/aggregator/aggregator.module:645
+msgid "feed not parseable"
+msgstr "nie można przetworzyć kanału"
+
+#: modules/aggregator/aggregator.module:649
+msgid "The feed from %site seems to be broken, because of error \"%error\"."
+msgstr ""
+"Wydaje się, że kanał RSS ze strony %site został uszkodzony w wyniku błędu \"%"
+"error%\"."
+
+#: modules/aggregator/aggregator.module:719
+msgid ""
+"The feed from %site seems to be broken, because of error \"%error\" on line %"
+"line."
+msgstr ""
+"Wydaje się, że kanał RSS ze strony %site został uszkodzony w wyniku błędu \"%"
+"error%\" w linii %line."
+
+#: modules/aggregator/aggregator.module:896;896
+msgid "blog it"
+msgstr "umieść w blogu"
+
+#: modules/aggregator/aggregator.module:897
+msgid "Comment on this news item in your personal blog."
+msgstr "Pozwala skomentować wiadomość na stronach blogu."
+
+#: modules/aggregator/aggregator.module:607
+msgid "Updated URL for feed %title to %url."
+msgstr "Adres kanału %title zmieniono na %url."
+
+#: modules/aggregator/aggregator.module:648
+msgid "The feed from %site seems to be broken, due to \"%error\"."
+msgstr "Kanał RSS ze strony %site wydaje się uszkodzony (\"%error%\")."
+
+#: modules/aggregator/aggregator.module:718
+msgid ""
+"The feed from %site seems to be broken, due to an error \"%error\" on line %"
+"line."
+msgstr ""
+"Kanał RSS ze strony %site wydaje się uszkodzony (błąd \"%error%\" w linii %"
+"line)."
+
+#: modules/aggregator/aggregator.module:281
+msgid "administer news feeds"
+msgstr "zarządzanie kanałami informacyjnymi"
+
+#: modules/aggregator/aggregator.module:281
+msgid "access news feeds"
+msgstr "dostęp do kanałów informacyjnych"
+
+#: modules/aggregator/aggregator.module:83;138
+msgid "Feed aggregator"
+msgstr "Subskrybent kanałów"
+
+#: modules/aggregator/aggregator.module:84
+msgid ""
+"Configure which content your site aggregates from other sites, how often it "
+"polls them, and how they're categorized."
+msgstr ""
+"Subskrybowanie kanałów informacyjnych innych witryn, zmiana częstości ich "
+"sprawdzania oraz przypisywanie ich do kategorii."
+
+#: modules/aggregator/aggregator.module:90
+msgid "Add feed"
+msgstr "Dodaj kanał"
+
+#: modules/aggregator/aggregator.module:116
+msgid "Update items"
+msgstr "Aktualizuj elementy"
+
+#: modules/aggregator/aggregator.module:145
+msgid "Sources"
+msgstr "Źródła"
+
+#: modules/aggregator/aggregator.module:231
+msgid "Edit feed"
+msgstr "Edycja kanału"
+
+#: modules/aggregator/aggregator.module:239
+msgid "Edit category"
+msgstr "Edycja kategorii"
+
+#: modules/aggregator/aggregator.install:30
+msgid "Stores categories for aggregator feeds and feed items."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:35
+msgid "Primary Key: Unique aggregator category ID."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:42
+msgid "Title of the category."
+msgstr "Nazwa kategorii."
+
+#: modules/aggregator/aggregator.install:48
+msgid "Description of the category"
+msgstr "Opis kategorii."
+
+#: modules/aggregator/aggregator.install:55
+msgid "The number of recent items to show within the category block."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:63
+msgid "Bridge table; maps feeds to categories."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:69
+msgid "The feed's {aggregator_feed}.fid."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:75
+msgid "The {aggregator_category}.cid to which the feed is being assigned."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:83
+msgid "Bridge table; maps feed items to categories."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:89
+msgid "The feed item's {aggregator_item}.iid."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:95
+msgid "The {aggregator_category}.cid to which the feed item is being assigned."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:103
+msgid "Stores feeds to be parsed by the aggregator."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:108
+msgid "Primary Key: Unique feed ID."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:115
+msgid "Title of the feed."
+msgstr "Nazwa kanału."
+
+#: modules/aggregator/aggregator.install:122
+msgid "URL to the feed."
+msgstr "Adres URL kanału."
+
+#: modules/aggregator/aggregator.install:128
+msgid "How often to check for new feed items, in seconds."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:134
+msgid "Last time feed was checked for new items, as Unix timestamp."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:141
+msgid ""
+"The parent website of the feed; comes from the <link> element in the feed."
+msgstr ""
+"Witryna źródłowa kanału. Informacja pobierana jest z elementu <link> kanału."
+
+#: modules/aggregator/aggregator.install:147
+msgid ""
+"The parent website's description; comes from the <description> element in "
+"the feed."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:153
+msgid "An image representing the feed."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:160
+msgid "Entity tag HTTP response header, used for validating cache."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:166
+msgid "When the feed was last modified, as a Unix timestamp."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:173
+msgid "Number of items to display in the feed's block."
+msgstr "Liczba wiadomości wyświetlanych w bloku kanału."
+
+#: modules/aggregator/aggregator.install:184
+msgid "Stores the individual items imported from feeds."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:189
+msgid "Primary Key: Unique ID for feed item."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:195
+msgid "The {aggregator_feed}.fid to which this item belongs."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:202
+msgid "Title of the feed item."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:209
+msgid "Link to the feed item."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:216
+msgid "Author of the feed item."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:222
+msgid "Body of the feed item."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:227
+msgid "Post date of feed item, as a Unix timestamp."
+msgstr ""
+
+#: modules/aggregator/aggregator.install:233
+msgid "Unique identifier for the feed item."
+msgstr ""

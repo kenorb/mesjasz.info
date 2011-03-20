@@ -1,0 +1,600 @@
+<?php
+// $Id: textsize.module,v 1.1.1.2.2.4 2008/04/10 13:22:09 christianzwahlen Exp $
+
+/**
+ * @file
+ * Display a text size changer on the page for better web accessibility.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function textsize_help($path, $arg) {
+$path_textsize = drupal_get_path('module', 'textsize');
+  switch ($path) {
+    case 'admin/help#textsize':
+      $output = '<p><img src="'. $path_textsize .'/images/textsize_list.png" alt="'. t('Screenshot of text size changing in the website with the select menu.') .'" class="float-right" />'. t('This module display a text size changer in a block for better web accessibility. The module is a <abbr title="PHP: Hypertext Preprocessor">PHP</abbr> module and use JavaScript if supported,  but no <abbr title="MySQL">MySQL</abbr>. Cookies are required, for saving the style durable and in old browsers.') .'</p>'."\n";
+      $output .= '<h3>'. t('Features') .'</h3>'."\n";
+      $output .= '<ul>'."\n";
+      $output .= '<li>'. t('<abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> conform. More Information on: ') . l('bundesrecht.juris.de', 'http://bundesrecht.juris.de/bitv/anlage_8.html') .'. '. t('Keep the conditions: ') ."\n";
+      $output .= '  <ol>'."\n";
+      $output .= '  <li>'. t('<abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 1.1 (alt text in the images).') .'</li>'."\n";
+      $output .= '  <li>'. t('<abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 3.1 (standard links with text and not images).') .'</li>'."\n";
+      $output .= '  <li>'. t('<abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 6.3 (no JavaScript rquired).') .'</li>'."\n";
+      $output .= '  <li>'. t('<abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 11.1 (open and standard code).') .'</li>'."\n";
+      $output .= '  <li>'. t('<abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 13.6 (links in a list).') .'</li>'."\n";
+      $output .= '  </ol>'."\n";
+      $output .= '</li>'."\n";
+      $output .= '<li>'. t('No JavaScript required.') .'</li>'."\n";
+      $output .= '<li>'. t('jQuery suppport!') .'</li>'."\n";
+      $output .= '<li>'. t('Using Session for speed!') .'</li>'."\n";
+      $output .= '<li>'. t('No <abbr xml:lang="en" title="Cascading Style Sheet" lang="en">CSS</abbr> required.') .'</li>'."\n";
+      $output .= '  <li>'. t('Block type') ."\n";
+      $output .= '    <ol>'."\n";
+      $output .= '    <li>'. t('Variable links') .' <a href="'. $path_textsize .'/images/textsize_list.png" title="'. t('View lager image of: ') . t('Screenshot of text size changing in the website with the variable link list.') .'">textsize_list.png</a></li>'."\n";
+      $output .= '    <li>'. t('Fixed links') .'</li>'."\n";
+      $output .= '    <li>'. t('Variable image links') .'</li>'."\n";
+      $output .= '    <li>'. t('Variable image links not in a list') .'  <a href="'. $path_textsize .'/images/textsize_img.png" title="'. t('View lager image of: ') . t('Screenshot of text size changing in the website with image links.') .'">textsize_img.png</a></li>'."\n";
+      $output .= '    <li>'. t('Select menu') .' <a href="'. $path_textsize .'/images/textsize_select.png" title="'. t('View lager image of: ') . t('Screenshot of text size changing in the website with the select menu.') .'">textsize_select.png</a></li>'."\n";
+      $output .= '    </ol>'."\n";
+      $output .= '  </li>'."\n";
+      $output .= '<li>'. t('No images in the code (<abbr xml:lang="en" title="Cascading Style Sheet" lang="en">CSS</abbr> generated), only one link text (for example "Increase").') .'</li>'."\n";
+      $output .= '<li>'. t('Uniform markin of menu, based on the open source browser <a href="http://www.mozilla.com/en-US/firefox/">Firefox 2.0</a>.') .'</li>'."\n";
+      $output .= '<li>'. t('<abbr lang="en" xml:lang="en" title="Portable Network Graphics">PNG</abbr> images for new browsers and <abbr lang="en" xml:lang="en" title="Graphic Interchange Format">GIF</abbr> images for old browsers (Internet Explorer 6).') .'</li>'."\n";
+      $output .= '<li>'. t('Tested themes: Bluemarine, Garland.') .'</li>'."\n";
+      $output .= '<li>'. t('Design editable with the function: "theme_textsize_html()" in template.php.') .'</li>'."\n";
+      $output .= '</ul>'."\n";
+      $output .= '<h3>'. t('Global settings') .'</h3>'."\n";
+      $output .= '<h4>'. t('Block type') .'</h4>'."\n";
+      $output .= '<p>'. t('Select the type of block.') .'</p>'."\n";
+      $output .= '<dl>'."\n";
+      $output .= '  <dt>'. t('Variable links') .'</dt>'."\n";
+      $output .= '  <dd><img src="'. $path_textsize .'/images/textsize_list.png" alt="'. t('Screenshot of text size changing in the website with the select menu.') .'" class="float-right" />'. t('Images are showed with <abbr lang="en" xml:lang="en" title="Cascading Style Sheets">CSS</abbr>.') .' <span class="ok">'. t('For Web Accessibility.') .'</span></dd>'."\n";
+      $output .= '  <dt>'. t('Fixed links') .'</dt>'."\n";
+      $output .= '  <dd>'. t('Two static increase/decrease links and one standard link.') .' '. t('Images are showed with <abbr lang="en" xml:lang="en" title="Cascading Style Sheets">CSS</abbr>.') .' <span class="ok">'. t('For Web Accessibility.') .'</span>.</dd>'."\n";
+      $output .= '  <dt>'. t('Variable image links') .'.</dt>'."\n";
+      $output .= '  <dd>'. t('No Link text, only images in the <abbr lang="en" xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</abbr> source code with standard 0 pixel margin.') .' <span class="warning">'. t('Warning: Not for: <abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 3.1! If JavaScript is not activated: No image change action if the cursor move over the images!') .'</span></dd>'."\n";
+      $output .= '  <dt>'. t('Variable image links not in a list') .'.</dt>'."\n";
+      $output .= '  <dd><img src="'. $path_textsize .'/images/textsize_img.png" alt="'. t('Screenshot of text size changing in the website with image links.') .'" class="float-right" /><span class="warning">'. t('Warning: Not for: <abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 3.1! If JavaScript is not activated: No image change action if the cursor move over the images!') .' <br />'.
+      t('Warning: Links ar not in a list! Not for: <abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 13.6!') .'</span></dd>'."\n";
+      $output .= '  <dt>'. t('Select menu') .'.</dt>'."\n";
+      $output .= '  <dd><img src="'. $path_textsize .'/images/textsize_select.png" alt="'. t('Screenshot of text size changing in the website with the select menu.') .'" class="" /></dd>'."\n";
+      $output .= '</dl>'."\n";
+      $output .= '<p>'. t('List display') .': '. t('Set the display of the list.') .' '. t('Style') .': '. t('normal') .' '. t('or') .' '. t('inline') .'.</p>'."\n";
+      $output .= '<p>'. t('Text display') .': '. t('By hide text in the links, it shows only the logos.') .' <span class="warning">'. t('Hide text in the links') .': '. t('Not for links with images in the <abbr lang="en" xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</abbr> source code.') .'</span></p>'."\n";
+      $output .= '<p>'. t('Current text size display') .': '. t('By hide current text size, it shows no text and code.') .'</p>'."\n";
+      $output .= '<h3>'. t('Advanced settings') .'</h3>'."\n";
+      $output .= '<p>'. t('Increases/decreases step') .': '. t('Percentage by which each click increases/decreases the text size. The value have to be between 10-100&#037; and a number.') .'</p><p>'. t('Text Size Normal') .': '. t('The default normal text size is 100&#037;. The value have to be between 50-200&#037; and a number.') .'</p>'."\n";
+      $output .= '<p>'. t('Link separator') .': '. t('If you set the links not in a list, you can enter a hidden link seperator (like &brvbar;) or leave it blank for none. Standard is " | ". The value have to be text or special characters.') .'</p>'."\n";
+      $output .= '<h3>'. t('Important informations') .'</h3>'."\n";
+      $output .= '<p class="warning">'. t('Warning: For Internet Explorer: Your theme have to use font sitze with "em" or "%", not pixel or points!') .'</p>'."\n";
+      $output .= '<p class="warning">'. t('If you are using a theme with "font-size 0.9em" in the CSS (like the garland theme), set the text size normal to 90% or delete the "font-size" and "line-height" values for the body in your theme.') .'</p>'."\n";
+      $output .= '<p class="warning">'. t('Alternate fix for the Garland Theme. Open the file "themes/garland/style.css" and edit the code on line 15 for the body element. Delete the code:') ."\n";
+      $output .= ' <code><del>font: 12px/170% Verdana, sans-serif; line-height:1.5;</del></code>, '."\n";
+      $output .=  t('and add:') ."\n";
+      $output .= ' <code><ins>font-family: Verdana, sans-serif;</ins></code></p>'."\n";
+      $output .= '<h3>'. t('Source') .'</h3>'."\n";
+      $output .= '<p>'. t('The <abbr lang="en" xml:lang="en" title="Portable Network Graphics">PNG</abbr> and <abbr lang="en" xml:lang="en" title="Graphic Interchange Format">GIF</abbr> images are in the directory "/modules/textsize/images/" and the source file in "/modules/textsize/images/source/".') .'</p>'."\n";
+      break;
+  }
+  return $output;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function textsize_perm() {
+  return array('administer textsize', 'access textsize content');
+}
+
+/**
+ *  Implementation of hook_menu()
+ */
+function textsize_menu() {
+  $items = array();
+  $items['admin/settings/textsize'] = array(
+    'title' => t('Text Size configuration'),
+    'description' => t('Settings for the display and values.'),
+    'access callback'   => 'user_access',
+    'access arguments' => array('administer textsize'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('textsize_admin_settings')
+  );
+  return $items;
+}
+
+/**
+ *  Administration page (menu callback)
+ */
+function textsize_admin_settings() {
+  $textsize_text = array(
+    'increase' => t('Increase'),
+    'decrease' => t('Decrease'),
+    'normal' => t('Normal')
+  );
+  $form['textsize'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Global settings'),
+    '#collapsible' => true,
+    '#collapsed' => false,
+  );
+  $form['textsize']['textsize_block_type'] = array(
+    '#type' => 'select',
+    '#title' => t('Block type'),
+    '#options' => array(
+      t('Variable links'),
+      t('Fixed links'),
+      t('Variable image links') .' [1]',
+      t('Variable image links not in a list') .' [1][2]',
+      t('Select menu'),
+    ),
+    '#default_value' => variable_get('textsize_block_type', 0),
+    '#description' => t('Select the type of block.') .'&#160;'. t('Images are showed with <abbr lang="en" xml:lang="en" title="Cascading Style Sheets">CSS</abbr>.') .' <span class="ok">'. t('For Web Accessibility.') .'</span><br />[1] '. t('No Link text, only images in the <abbr lang="en" xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</abbr> source code with standard 0 pixel margin.') .' <span class="warning">'. t('Warning: Not for: <abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 3.1! No hover action if JavaScript is not activated!') .'</span><br />[2] '.'<span class="warning">'. t('Warning: Links ar not in a list! Not for: <abbr lang="de" xml:lang="de" title="Barrierefreie Informationstechnik-Verordnung">BITV</abbr> 13.6!') .'</span>',
+  );
+  $form['textsize']['textsize_list_inline'] = array(
+    '#type' => 'select',
+    '#title' => t('List display'),
+    '#options' => array(
+      '' => t('normal'),
+      '_inline' => t('inline'),
+    ),
+    '#default_value' => variable_get('textsize_list_inline', ''),
+    '#description' => t('Set the display of the list.'),
+  );
+  $form['textsize']['textsize_hidden'] = array(
+    '#type' => 'radios',
+    '#title' => t('Text display'),
+    '#options' => array(
+      '' => t('Show text in the links'),
+      'display_hidden' => t('Hide text in the links') .' [4]',
+    ),
+    '#default_value' => variable_get('textsize_hidden', ''), // default to show text links.
+    '#description' => t('By hide text in the links, it shows only the logos.') .' <br/>[4] <span class="warning">'. t('Not for links with images in the <abbr lang="en" xml:lang="en" title="Extensible Hypertext Markup Language">XHTML</abbr> source code.') .'</span>',
+  );
+  $form['textsize']['textsize_current'] = array(
+    '#type' => 'radios',
+    '#title' => t('Current text size display'),
+    '#options' => array(
+      t('Show current text size'),
+      t('Hide current text size'),
+    ),
+    '#default_value' => variable_get('textsize_current', 0), // default to show current text size
+    '#description' => t('By hide current text size, it shows no text and code.'),
+  );
+  $form['textsize_adv'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Advanced settings'),
+    '#collapsible' => true,
+    '#collapsed' => true,
+  );
+  $form['textsize_adv']['textsize_increment'] = array(
+    '#type' => 'select',
+    '#title' => t('Increases/decreases step'),
+    '#options' => array(
+      '10' => '10%',
+      '20' => '20%',
+      '30' => '30%',
+      '40' => '40%',
+      '50' => '50%',
+      '60' => '60%',
+      '70' => '70%',
+      '80' => '80%',
+      '90' => '90%',
+      '100' => '100%',
+    ),
+    '#default_value' => variable_get('textsize_increment', 10),
+    '#description' => t("Percentage by which each click increases/decreases the text size. The default increases/decreases step is 10&#037; and the value have to be between 10-100&#037; and a number.")
+  );
+  $form['textsize_adv']['textsize_normal'] = array(
+    '#type' => 'select',
+    '#title' => t('Text Size Normal'),
+    '#default_value' => variable_get('textsize_normal', 100),
+    '#options' => array(
+      '50' => '50%',
+      '60' => '60%',
+      '70' => '70%',
+      '80' => '80%',
+      '90' => '90%',
+      '100' => '100%',
+      '110' => '110%',
+      '120' => '120%',
+      '130' => '130%',
+      '140' => '140%',
+      '150' => '150%',
+      '160' => '160%',
+      '170' => '170%',
+      '180' => '180%',
+      '190' => '190%',
+      '200' => '200%',
+    ),
+    '#description' => t("The default normal text size is 100&#037;. The value have to be between 50-200&#037; and a number.")
+  );
+  $form['textsize_adv']['textsize_link_separator'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Link separator'),
+    '#default_value' => variable_get('textsize_link_separator', ' | '),
+    '#size' => 8,
+    '#maxlength' => 8,
+    '#description' => t('If you set the links not in a list, you can enter a hidden link seperator (like &brvbar;) or leave it blank for none. Standard is " | ". The value have to be text or special characters.'),
+  );
+  $form['#validate'][] = 'textsize_validate_form';
+  return system_settings_form($form);
+}
+
+/**
+ *  Validate the administration form with drupal_validate_form
+ */
+function textsize_validate_form($form, &$form_state) {
+  static $validated_forms = array();
+  if (isset($validated_forms[$form_id])) {
+    return;
+  }
+  if (isset($form['textsize'])) {
+    if (!is_numeric($form_state['values']['textsize_normal'])) {
+    form_set_error('textsize_normal', t('Please enter a number in "Text Size Normal".'));
+    }
+    if ($form_state['values']['textsize_normal'] < 50 || $form_state['values']['textsize_normal'] > 200) {
+    form_set_error($prefix .'_default', t('Default font size setting should between 10-200&#037;.'));
+    }
+    if (!is_numeric($form_state['values']['textsize_increment'])) {
+    form_set_error('textsize_increment', t('Please enter a number in "Increases/decreases step".'));
+    }
+    if ($form_state['values']['textsize_increment'] < 10 || $form_state['values']['textsize_increment'] > 100) {
+    form_set_error('textsize_increment', t('Increase/decreases steps value setting should between 10-100&#037;.'));
+    }
+    if (is_numeric($form_state['values']['textsize_link_separator'])) {
+    form_set_error('textsize_link_separator', t('Please enter text or special characters in "Link seperator".'));
+    }
+  }
+  _form_validate($form, $form_state, $form_id);
+  $validated_forms[$form_id] = TRUE;
+}
+
+/**
+ * Generate HTML for the block
+ */
+function textsize_block($op='list', $delta=0) {
+$textsize_list = variable_get('textsize_list', '');
+$textsize_current = variable_get('textsize_current', 0);
+$textsize_normal = variable_get('textsize_normal', 100);
+$textsize_increment = variable_get('textsize_increment', 10);
+$textsize_text = array(
+    'increase' => t('Increase'),
+    'decrease' => t('Decrease'),
+    'normal' => t('Normal')
+);
+$current = array( 'text' => t('Current Size'));
+$prefix = array( 'title' => t('Text Size'));
+
+  if ($op == "list") {
+    $block[0]["info"] = t("Text Size");
+    return $block;
+  }
+  else if ($op == 'view') {
+    if (user_access('access textsize content')) {
+    $textsize_block_type = variable_get('textsize_block_type', 0);
+
+      switch ($textsize_block_type) {
+        case 0:
+        $block_content = theme_textsize_html();
+        break;
+        case 1:
+        $block_content = theme_textsize_html1();
+        break;
+        case 2:
+        $block_content = theme_textsize_html2();
+        break;
+        case 3:
+        $block_content = theme_textsize_html3();
+        break;
+        case 4:
+        $block_content = drupal_get_form('textsize_form');
+        break;
+        default:
+        $block_content = theme_textsize_html();
+      }
+    // set up the block
+    $block['subject'] = t('Text Size');
+    $block['content'] = $block_content;
+    return $block;
+    }
+  }
+}
+
+/**
+ * Generate the execute block form.
+ */
+function textsize_form() {
+$textsize_normal = variable_get('textsize_normal', 100);
+$textsize = $_SESSION['textsize'];
+  $form['textsize_form'] = array(
+    '#type' => 'select',
+   // '#title' => t('Text Size'),
+    '#default_value' => variable_get('textsize_form', $textsize),
+    '#options' => array(
+      '50' => '50%',
+      '60' => '60%',
+      '70' => '70%',
+      '80' => '80%',
+      '90' => '90%',
+      '100' => '100%',
+      '110' => '110%',
+      '120' => '120%',
+      '130' => '130%',
+      '140' => '140%',
+      '150' => '150%',
+      '160' => '160%',
+      '170' => '170%',
+      '180' => '180%',
+      '190' => '190%',
+      '200' => '200%',
+    ),
+    '#description' => textsize_current_content(),
+  );
+  $form['ts'] = array('#type' => 'submit', '#value' => t('Save'));
+  $form['#redirect'] = FALSE;
+  $form['#skip_duplicate_check'] = TRUE;
+  return $form;
+}
+
+/**
+ * Display the current text size as HTML text
+ */
+function textsize_current_content() {
+$textsize_current = variable_get('textsize_current', 0);
+$textsize_normal = variable_get('textsize_normal', 100);
+$textsize = $_SESSION['textsize'];
+$current = array( 'text' => t('Current Size'));
+
+  if (isset($_SESSION['textsize'])) {
+    $textsize = $_SESSION['textsize'];
+  }
+  else {$textsize = $textsize_normal;
+  }
+  switch ($textsize_current) {
+    case 0:
+    $textsize_current_content = '<p>'. $current['text'] .': <span id="textsize_current">'. $textsize .'%</span></p>'."\n";
+    break;
+    case 1:
+    $textsize_current_content = '';
+    break;
+    default:
+    $textsize_current_content = '<p>'. $current['text'] .': <span id="textsize_current">'. $textsize .'%</span></p>'."\n";
+    break;
+  }
+  return $textsize_current_content;
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function textsize_html_theme() {
+  return array(
+    'textsize_html' => array(
+      'file'      => 'textsize_html.inc',
+      'template'  => 'textsize_html',
+      'arguments' => array('content'),
+    ),
+    'textsize_html1' => array(
+      'file'      => 'textsize_html1.inc',
+      'template'  => 'textsize_html1',
+      'arguments' => array('content'),
+    ),
+    'textsize_html2' => array(
+      'file'      => 'textsize_html2.inc',
+      'template'  => 'textsize_html2',
+      'arguments' => array('content'),
+    ),
+    'textsize_html3' => array(
+      'file'      => 'textsize_html3.inc',
+      'template'  => 'textsize_html3',
+      'arguments' => array('content'),
+    ),
+  );
+}
+
+/**
+ * Theme Standard. Links in a list.
+ */
+function theme_textsize_html() {
+$textsize_hidden = variable_get('textsize_hidden', '');
+$textsize_list_inline = variable_get('textsize_list_inline', '');
+$textsize_current = variable_get('textsize_current', 0);
+$textsize_normal = variable_get('textsize_normal', 100);
+$textsize_increment = variable_get('textsize_increment', 10);
+$textsize_increase = ($_SESSION['textsize'] + $textsize_increment);
+$textsize_decrease = ($_SESSION['textsize'] - $textsize_increment);
+$textsize_text = array(
+    'increase' => t('Increase'),
+    'decrease' => t('Decrease'),
+    'normal' => t('Normal')
+);
+$current = array( 'text' => t('Current Size'));
+$prefix = array( 'title' => t('Text Size'));
+$ps_url = base_path() .''; /* or base_path() .'index.php'; */
+  $output = '<ul class="textsize'. $textsize_list_inline .'">'."\n";
+  $output .= '<li><a title="'. $prefix['title'] .': '. $textsize_text['increase'] .'" class="icon textsize_increase textsize_'. $textsize_increase .'" href="'. $ps_url .'?textsize=+'. $textsize_increment .'" ><span class="'. $textsize_hidden .'">'. $textsize_text['increase'] .'</span></a></li>'."\n";
+  $output .= '<li><a title="'. $prefix['title'] .': '. $textsize_text['decrease'] .'" class="icon textsize_decrease textsize_'. $textsize_decrease .'" href="'. $ps_url .'?textsize=-'. $textsize_increment .'" ><span class="'. $textsize_hidden .'">'. $textsize_text['decrease'] .'</span></a></li>'."\n";
+  $output .= '<li><a title="'. $prefix['title'] .': '. $textsize_text['normal'] .'" class="icon textsize_normal textsize_'. $textsize_normal .'" href="'. $ps_url .'?textsize_normal='. $textsize_normal .'" ><span class="'. $textsize_hidden .'">'. $textsize_text['normal'] .'</span></a></li>'."\n";
+  $output .= '</ul>'."\n";
+  $output .= textsize_current_content();
+  return $output;
+}
+
+function theme_textsize_html1() {
+$textsize_hidden = variable_get('textsize_hidden', '');
+$textsize_list_inline = variable_get('textsize_list_inline', '');
+$textsize_current = variable_get('textsize_current', 0);
+$textsize_normal = variable_get('textsize_normal', 100);
+$textsize_increment = variable_get('textsize_increment', 10);
+$textsize_increase = ($textsize_normal + $textsize_increment);
+$textsize_decrease = ($textsize_normal - $textsize_increment);
+$textsize_text = array(
+    'increase' => t('Increase'),
+    'decrease' => t('Decrease'),
+    'normal' => t('Normal')
+);
+$current = array( 'text' => t('Current Size'));
+$prefix = array( 'title' => t('Text Size'));
+$ps_url = base_path() .''; /* or base_path() .'index.php'; */
+
+  $output = '<ul class="textsize'. $textsize_list_inline .'">'."\n";
+  $output .= '<li><a title="'. $prefix['title'] .': '. $textsize_text['increase'] .'" class="icon textsize_increase textsize_'. $textsize_increase .'" href="'. $ps_url .'?textsize_increase='. $textsize_increase .'" ><span class="'. $textsize_hidden .'">'. $textsize_text['increase'] .'</span></a></li>'."\n";
+  $output .= '<li><a title="'. $prefix['title'] .': '. $textsize_text['decrease'] .'" class="icon textsize_decrease textsize_'. $textsize_decrease .'" href="'. $ps_url .'?textsize_decrease='. $textsize_decrease .'" ><span class="'. $textsize_hidden .'">'. $textsize_text['decrease'] .'</span></a></li>'."\n";
+  $output .= '<li><a title="'. $prefix['title'] .': '. $textsize_text['normal'] .'" class="icon textsize_normal textsize_'. $textsize_normal .'" href="'. $ps_url .'?textsize_normal='. $textsize_normal .'" ><span class="'. $textsize_hidden .'">'. $textsize_text['normal'] .'</span></a></li>'."\n";
+  $output .= '</ul>'."\n";
+  $output .= textsize_current_content();
+  return $output;
+}
+
+
+/**
+ * Theme 2. Links in a list, images in the XHTML source code.
+ */
+function theme_textsize_html2() {
+$textsize_list = variable_get('textsize_list', 0);
+$textsize_list_inline = variable_get('textsize_list_inline', '');
+$textsize_current = variable_get('textsize_current', 0);
+$textsize_normal = variable_get('textsize_normal', 100);
+$textsize_increment = variable_get('textsize_increment', 10);
+$textsize_increase = ($_SESSION['textsize'] + $textsize_increment);
+$textsize_decrease = ($_SESSION['textsize'] - $textsize_increment);
+$textsize_text = array(
+    'increase' => t('Increase'),
+    'decrease' => t('Decrease'),
+    'normal' => t('Normal')
+);
+$current = array( 'text' => t('Current Size'));
+$prefix = array( 'title' => t('Text Size'));
+$ps_url = base_path() .''; /* or base_path() .'index.php'; */
+$path_textsize = drupal_get_path('module', 'textsize');
+
+  $output = '<ul class="textsize'. $textsize_list_inline .'">'."\n";
+  $output .= '<li><a title="'. $prefix['title'] .': '. $textsize_text['increase'] .'" class="textsize_increase textsize_'. $textsize_increase .'" href="'. $ps_url .'?textsize=+'. $textsize_increment .'" ><img src="'. base_path() . $path_textsize .'/images/increase_16.gif" alt="'. $textsize_text['increase'] .'" class="rollover" /></a></li>'."\n";
+  $output .= '<li><a title="'. $prefix['title'] .': '. $textsize_text['decrease'] .'" class="textsize_decrease textsize_'. $textsize_decrease .'" href="'. $ps_url .'?textsize=-'. $textsize_increment .'" ><img src="'. base_path() . $path_textsize .'/images/decrease_16.gif" alt="'. $textsize_text['decrease'] .'" class="rollover" /></a></li>'."\n";
+  $output .= '<li><a title="'. $prefix['title'] .': '. $textsize_text['normal'] .'" class="textsize_normal textsize_'. $textsize_normal .'" href="'. $ps_url .'?textsize_normal='. $textsize_normal .'" ><img src="'. base_path() . $path_textsize .'/images/normal_16.gif" alt="'. $textsize_text['normal'] .'" class="rollover" /></a></li>'."\n";
+  $output .= '</ul>'."\n";
+  $output .= textsize_current_content();
+  return $output;
+}
+/**
+ * Theme 3. Links not in a list, images in the XHTML source code.
+ */
+function theme_textsize_html3() {
+$textsize_list = variable_get('textsize_list', 0);
+$textsize_list_inline = variable_get('textsize_list_inline', '');
+$textsize_current = variable_get('textsize_current', 0);
+$textsize_normal = variable_get('textsize_normal', 100);
+$textsize_increment = variable_get('textsize_increment', 10);
+$textsize_increase = ($_SESSION['textsize'] + $textsize_increment);
+$textsize_decrease = ($_SESSION['textsize'] - $textsize_increment);
+$textsize_text = array(
+    'increase' => t('Increase'),
+    'decrease' => t('Decrease'),
+    'normal' => t('Normal')
+);
+$current = array( 'text' => t('Current Size'));
+$prefix = array( 'title' => t('Text Size'));
+$textsize_link_separator = variable_get('textsize_link_separator', ' | ');
+$ps_url = base_path() .''; /* or base_path() .'index.php'; */
+$path_textsize = drupal_get_path('module', 'textsize');
+
+  $output = '<p class="textsize'. $textsize_list_inline .'">'."\n";
+  $output .= '<a title="'. $prefix['title'] .': '. $textsize_text['increase'] .'" class="textsize_'. $textsize_increase .'" href="'. $ps_url .'?textsize=+'. $textsize_increment .'" ><img src="'. base_path() . $path_textsize .'/images/increase_16.gif" alt="'. $textsize_text['increase'] .'" class="rollover" /></a>';
+  $output .= '<span class="display_hidden">'. $textsize_link_separator .'</span>';
+  $output .= '<a title="'. $prefix['title'] .': '. $textsize_text['decrease'] .'" class="textsize_'. $textsize_decrease .'" href="'. $ps_url .'?textsize=-'. $textsize_increment .'" ><img src="'. base_path() . $path_textsize .'/images/decrease_16.gif" alt="'. $textsize_text['decrease'] .'" class="rollover" /></a>';
+  $output .= '<span class="display_hidden">'. $textsize_link_separator .'</span>';
+  $output .= '<a title="'. $prefix['title'] .': '. $textsize_text['normal'] .'" class="textsize_'. $textsize_normal .'" href="'. $ps_url .'?textsize_normal='. $textsize_normal .'" ><img src="'. base_path() . $path_textsize .'/images/normal_16.gif" alt="'. $textsize_text['normal'] .'" class="rollover" /></a>';
+  $output .= '</p>'."\n";
+  $output .= textsize_current_content();
+  return $output;
+}
+
+function theme_textsize_html4() {
+$textsize_hidden = variable_get('textsize_hidden', '');
+$textsize_list_inline = variable_get('textsize_list_inline', '');
+$textsize_current = variable_get('textsize_current', 0);
+$textsize_normal = variable_get('textsize_normal', 100);
+$textsize_increment = variable_get('textsize_increment', 10);
+$textsize_increase = ($_SESSION['textsize'] + $textsize_increment);
+$textsize_decrease = ($_SESSION['textsize'] - $textsize_increment);
+$textsize_text = array(
+    'increase' => t('Increase'),
+    'decrease' => t('Decrease'),
+    'normal' => t('Normal')
+);
+$current = array( 'text' => t('Current Size'));
+$prefix = array( 'title' => t('Text Size'));
+$ps_url = base_path() .''; /* or base_path() .'index.php'; */
+  $block['subject'] = t('Text Size');
+  $block['content'] = drupal_get_form('textsize_form');
+  return $block;
+}
+
+/**
+ * Set the style
+ *
+ * Note: use session or cookie like: "setcookie("pagestyle", $_GET['pagestyle'], time()+31536000, "/", "");"
+ */
+function textsize_session() {
+$textsize_normal = variable_get('textsize_normal', 100);
+session_start();
+  if ( isset($_GET['textsize']) ) {
+    $_SESSION['textsize'] = ($_SESSION['textsize'] + $_GET['textsize']);
+  }
+  else if ( isset($_GET['textsize_normal']) ) {
+    $_SESSION['textsize'] = $_GET['textsize_normal'];
+  }
+  else if ( isset($_GET['textsize_increase']) ) {
+    $_SESSION['textsize'] = $_GET['textsize_increase'];
+  }
+  else if ( isset($_GET['textsize_decrease']) ) {
+    $_SESSION['textsize'] = $_GET['textsize_decrease'];
+  }
+  else if ( isset($_POST['textsize_form']) ) {
+    $_SESSION['textsize'] = $_POST['textsize_form'];
+  }
+  else if ( !isset($_SESSION['textsize']) ) {
+    $_SESSION['textsize'] = $textsize_normal;
+  }
+}
+textsize_session();
+
+/**
+ * Print HTMl code in the head
+ */
+function textsize_printhtml() {
+$host  = $_SERVER['HTTP_HOST'];
+$uri  = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+//global $textsize;
+$textsize_normal = variable_get('textsize_normal', 100);
+
+  if (isset($_SESSION['textsize'])) {
+    $textsize = $_SESSION['textsize'];
+    $textsize_head = '<style type="text/css" media="screen, projection, tty, tv, print">
+<!--
+/* <![CDATA[ */
+body {
+  font-size: '. $textsize .'% !important;
+}
+/* ]]>*/
+-->
+</style>';
+    drupal_set_html_head($textsize_head);
+  }
+  else {
+    $textsize_head = '<style type="text/css" media="screen, projection, tty, tv, print">
+<!--
+/* <![CDATA[ */
+body {
+  font-size: '. $textsize_normal .'% !important;
+}
+/* ]]>*/
+-->
+</style>';
+    drupal_set_html_head($textsize_head);
+  }
+}
+textsize_printhtml();
+drupal_add_js(drupal_get_path('module', 'textsize') .'/jquery.textsize.js');
+drupal_add_css(drupal_get_path('module', 'textsize') .'/textsize.css');

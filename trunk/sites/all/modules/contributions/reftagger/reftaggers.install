@@ -1,0 +1,18 @@
+<?php
+// $Id: reftaggers.install,v 1.1.4.1 2008/10/20 20:21:53 nrambeck Exp $
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function reftagger_uninstall() {
+  variable_del('reftagger_bible_version');
+  variable_del('reftagger_link_target');
+  variable_del('reftagger_libronix_icon_link');
+  variable_del('reftagger_libronix_bible_version');
+  variable_del('reftagger_libronix_icon_add');
+  variable_del('reftagger_libronix_icon_type');
+  variable_del('reftagger_tooltip_enable');
+  variable_del('reftagger_exclude_tags');
+  variable_del('reftagger_exclude_classes');
+  variable_del('reftagger_css_override');
+}

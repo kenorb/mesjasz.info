@@ -1,0 +1,62 @@
+<?php
+// $Id: peru_604_1.cif,v 1.2.2.4 2008/11/03 21:33:50 islandusurper Exp $
+
+function peru_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (604, 'Perú', 'PE', 'PER', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(604, 'AMA', 'Amazonas'),"
+          ."(604, 'ANC', 'Ancash'),"
+          ."(604, 'APU', 'Apurímac'),"
+          ."(604, 'ARE', 'Arequipa'),"
+          ."(604, 'AYA', 'Ayacucho'),"
+          ."(604, 'CAJ', 'Cajamarca'),"
+          ."(604, 'CAL', 'Callao'),"
+          ."(604, 'CUS', 'Cusco'),"
+          ."(604, 'HUV', 'Huancavelica'),"
+          ."(604, 'HUC', 'Huánuco'),"
+          ."(604, 'ICA', 'Ica'),"
+          ."(604, 'JUN', 'Junín'),"
+          ."(604, 'LAL', 'La Libertad'),"
+          ."(604, 'LAM', 'Lambayeque'),"
+          ."(604, 'LIM', 'Lima'),"
+          ."(604, 'LOR', 'Loreto'),"
+          ."(604, 'MDD', 'Madre de Dios'),"
+          ."(604, 'MOQ', 'Moquegua'),"
+          ."(604, 'PAS', 'Pasco'),"
+          ."(604, 'PIU', 'Piura'),"
+          ."(604, 'PUN', 'Puno'),"
+          ."(604, 'SAM', 'San Martín'),"
+          ."(604, 'TAC', 'Tacna'),"
+          ."(604, 'TUM', 'Tumbes'),"
+          ."(604, 'UCA', 'Ucayali')");
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.  Documentation on address formats
+  // is available at:
+  // http://www.ubercart.org/ubercart_users_guide/country_settings#address_format_docs
+  uc_set_address_format(604,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+   ."\r\n!city !zone_name !postal_code\r\n!country_name_if");
+}
+
+/**
+ * If necessary, implement hook_update() with $version being the only argument.
+ * Add a new case for each version update, and be sure to always include the
+ * latest changes in the install function.
+ */
+function peru_update($version) {
+}
+
+/**
+ * If necessary, implement hook_uninstall().  This requires no argument.  The
+ * store module automatically removes rows from the country and zones tables
+ * related to the country, and it unsets the address format.  This function is
+ * only necessary for other things you may have included in your country's
+ * installation process.
+ */
+function peru_uninstall() {
+}

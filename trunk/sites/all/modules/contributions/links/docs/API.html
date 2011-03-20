@@ -1,0 +1,458 @@
+<html>
+<!--
+$Id: API.html,v 1.1.2.1 2009/01/22 03:07:36 syscrusher Exp $
+-->
+<head>
+<title>Links Package API Documentation</title>
+</head>
+<body>
+<h1>Links Package API Documentation</h1>
+
+<h2>INTRODUCTION</h2>
+<p>
+The links package provides a number of application modules, but it also is
+specifically intended to provide an application programming interface (API)
+that can be used by other modules. The API is intended to be relatively
+stable, and over time additions will be more likely than changes to exisitng
+functions. Every reasonable effort will be made to maintain as much backward
+compatibility as possible, though of course some changes are inevitable.
+<p>
+Any modules that rely on the links API should respect the setting of system
+and user-specific configuration variables that are set by this package, so
+that modules will behave consistently. These variables control preferences
+such as whether links display as a title or as a raw URL, opening of new
+browser windows when links are clicked, and so on.
+<p>
+Modules are, of course, permitted to set their own variables. The string
+"links_" as a variable prefix should be reserved to modules that are an
+official part of this package. If your add on module isn't, please pick a
+different variable prefix.
+<p>
+It is also permitted for an add-on module to offer a setting that
+overrides what the basic links package has defined. In such cases, it is
+strongly recommended that the add-on module use the links-package-defined
+value for that option as its default, and document that fact accordingly.
+
+<h2>API CATEGORIES</h2>
+<p>
+<dl>
+<dt>Hooks</dt>
+<dd>At certain times, the Links API will offer an opportunity for other
+  modules to inject their own behavior or activity into the process.
+  See the section "HOOKS" below for details.
+</dd>
+<dt>URL functions</dt>
+<dd>These are the functions that operate on the URL string itself, rather than
+  being related to the link as a destination web page. These functions are
+  largely concerned with "normalizing" URLs so that they are as uniform as
+  possible. This is of critical importance to the package, because every
+  effort is made to merge URLs that point to the same page into a single
+  row in the {links} table, even if they are referenced from multiple nodes.
+  This saves time when validating or updating links.
+</dd>
+<dt>Text search and edit functions</dt>
+<dd>x These functions are concerned with finding, cataloging, and manipulating
+  links that are found within an arbitrary text string, such as a node body.
+</dd>
+<dt>URL hash functions</dt>
+<dd>The database maintains an MD5 hash of each normalized URL, to allow more
+  rapid searches for a record matching a new URL. Remember that URLs with
+  a lot of GET parameters can be very long, which means inefficiency of
+  database searches when the URL itself is the key. The hash doesn't help
+  with ordered listing of multiple rows, but that is an unusual case
+  when the URL is the key. Generally, in that situation, you are looking
+  for just a single exact match, and the MD5 greatly speeds that lookup.
+</dd>
+<dt>Database functions</dt>
+<dd>These functions manage the process of retrieving links from the database,
+  and of adding, modifying, or removing links. They also manage the mapping
+  of links to nodes, which is potentially a many-to-many mapping. That is,
+  any given link may be mapped to zero, one, or many nodes, and any given
+  node may map to zero, one, or many link records.
+</dd>
+<dt>Link redirection functions</dt>
+<dd>These are used to "trap" the process of the browser actually visiting
+  a link, so that the link's tally can be updated or a "you are leaving this
+  website" message can be presented to the user for legal disclaimers or
+  similar reasons.
+</dd>
+</dl>
+
+<h2>DATABASE SCHEMA DESCRIPTION</h2>
+<p>
+The database schema for the links package uses only a couple of tables.
+This section explains those tables field-by-field, though it should be
+emphasized that it is STRONGLY encouraged for add-on modules to rely on
+the API calls to access the database (especially for updates) rather than
+doing SQL directly. The APIs are specifically designed to insulate modules
+from the details of the schema. The maintainer of this package is open
+to adding or enhancing APIs if there is missing but needed functionality,
+in preference to having modules do a lot of direct SQL on these tables.
+
+<h2>{links} TABLE</h2>
+<p><pre>
++-----------------+------------------+----------------------------------------+
+| Field           | Type             |        Description                     |
++-----------------+------------------+----------------------------------------+
+| lid             | int(10) unsigned | Link ID, tracked by the sequence       |
+|                 |                  | "links_lid" in table {sequences}.      |
+| url_md5         | char(32)         | MD5 hash of the value from the "url"   |
+|                 |                  | column                                 |
+| url             | text             | URL after normalization. DO NOT put    |
+|                 |                  | any un-normalized URLs in this field.  |
+| link_title      | varchar(255)     | The default title for this link, for   |
+|                 |                  | nodes that do not assign their own.    |
+| last_click_time | int(11) unsigned | Drupal-standard timestamp for the last |
+|                 |                  | time someone followed this link.       |
++-----------------+------------------+----------------------------------------+
+</pre>
+<h2>{links_node} TABLE</h2>
+<p><pre>
++-----------------+------------------+----------------------------------------+
+| Field           | Type             |        Description                     |
++-----------------+------------------+----------------------------------------+
+| lid             | int(10) unsigned | Foreign key to the {links} table       |
+|                 |                  |                                        |
+| nid             | int(10) unsigned | Drupal-standard node ID                |
+|                 |                  |                                        |
+| link_title      | varchar(255)     | Node-specific link title, or NULL to   |
+|                 |                  | use the default from {links}. The API  |
+|                 |                  | nulls this field if it matches the     |
+|                 |                  | default from {links}.                  |
+| weight          | int(4)           | Determines order of links listed with  |
+|                 |                  | the node. Lower number "float up".     |
+| clicks          | int(10) unsigned | Tallies the number of clicks of this   |
+|                 |                  | link from this node.                   |
+| module          | varchar(60)      | A context-limiting value; see below.   |
++-----------------+------------------+----------------------------------------+
+</pre>
+<h2>{links_monitor} TABLE *** TENTATIVE SCHEMA ***</h2>
+<p><pre>
++-----------------------+------------------+----------------------------------+
+| Field                 | Type             |            Description           |
++-----------------------+------------------+----------------------------------+
+| lid                   | int(10) unsigned | Foreign key to the {links} table |
+| check_interval        | int(10) unsigned | Seconds between monitor scans    |
+| last_check            | int(11)          | Timestamp of last scan attempt   |
+| fail_count            | int(11)          | Number of *consecutive* failures |
+| alternate_monitor_url | text             | Scan this URL instead of the one |
+|                       |                  | in the {links} table. (see below)|
+| redirect_propose_url  | text             | Redirect URL found by scanner    |
+| redirect_saved_url    | text             | Old URL (for undo) after redirect|
+|                       |                  | proposal accepted by site admin  |
+| change_threshold      | int(11)          | Relative tolerance of delta w/o  |
+|                       |                  | declaring the page "modified"    |
+| change_flag           | int(1)           | Nonzero means modification found |
+| change_last_data      | text             | Comparison data from last scan   |
++-----------------------+------------------+----------------------------------+
+</pre>
+<p>
+<h2>Additional database notes</h2>
+
+<h3>{links} and {links_node} Tables</h3>
+
+<h4>NORMALIZING URLS</h4>
+<p>
+As indicated above, it is *imperative* that no URL be put into the {links}
+table unless it has first been processed by links_normalize_url(), else many
+things break. The design of the links package presumes that all links in the
+database are normalized by this particular function. Modules that need things
+to be otherwise will need their own tables. It is *strongly* recommended to
+perform database updates using only the API functions rather than SQL.
+<p>
+<h4>GLOBAL (DEFAULT) AND NODE-SPECIFIC LINK TITLES</h4>
+<p>
+The title field here is assigned the first time each link is cataloged into
+the table, but can be changed by someone with appropriate administrative
+level. The API has a function to assign a reasonable title based on whatever
+information the application module can give it (up to and including a specific
+title to assign, or down to making a cleaned-up version of the raw URL if that
+is all that is available). Nodes that attach this link to themselves can either
+supply their own title (which is stored in {links_node}) or can accept the
+default. The first node that catalogs a link gets to establish the default.
+All of these semantics are handled in the API.
+<p>
+Note that the localization of title to node also allows for translations.
+It is suggested that the default for any given link URL (that is, the
+link_title field in {links} should be the title of the web page in the
+native language of the page itself, but that is not mandated by the API.
+If, for example, a web page in French is cataloged initially by a French-
+speaking contributor, he or she would establish the default language of
+that link. Later on, that node could be translated into English (for
+example) as a new node, and when that new node attaches the same link,
+it can choose to retitle the link -- locally only -- in English, or can
+allow the title to remain French even though the rest of the node is English.
+<p>
+There is potential here for an add-on module that does what editasnew.module
+does, but with the added twist of copying the {links_node} references and
+allowing them to be optionally retitled for the new node.
+<p>
+Translation is not the only situation where retitling makes sense. In some
+cases, the way a link is "called out" within a node is not its canonical
+title. For example, suppose someone is creating a links directory and adds
+a link about the history of tweedle glomping, http://example.com/tweedles.html.
+The title of that page is "Intro to Tweedle Glomping", and so it's added to
+the database in that way. Later on, one of the site's members may refer to
+the same URL in a blog post, as "A terrific article about tweedle glomping",
+and may want it to appear that way in the blog post. The node-local title
+of the link allows this to happen without requiring that the URL itself be
+replicated in the database.
+<p>
+This may seem like a fanatical level of link-duplication avoidance, but the
+scanning process for dead, redirected, and changed links consumes both time
+and server resources, and it is therefore worthwhile to avoid scanning the
+same page multiple times.
+<p>
+<h4>OUTBOUND CLICK TRACKING</h4>
+<p>
+Clicks of links are counted in the {links_node} table rather than directly
+in {links} so that administrative tools can tell not only how many times
+a link is followed, but also from where it was clicked. It is easy enough
+to use the SQL function SUM() to tally all the clicks for a given link,
+e.g., "SELECT SUM(clicks) FROM {links_node} WHERE lid=...".
+<p>
+The last_click_time field exists to allow site administrators to easily
+identify outbound links that are never used, as possible candidates for
+pruning. It is intended that in the future a comprehensive links management
+module will intelligently analyze how many clicks each link has, what nodes
+generated those clicks, and how recently each link has been followed, to
+help administrators manage large links catalogs rationally.
+<p>
+<h4>MODULE-LOCAL LINK REFERENCES</h4>
+<p>
+The module reference in {links_node} is intended to localize link references
+to the module that creates and manages them. This allows the same node to
+reference a given link in multiple ways without collisions. For example,
+you may have a site in which the node type "weblink" (which intrinsically
+defines a single primary link because that's what the node is all about)
+can also have optional related links, or may have embedded links within
+the node body.
+<p>
+Add-on modules are free to use a suffix after their name in the module
+column, so for example, my_module could use "my_module", "my_module.xyz",
+"my_module.something_else", and so on. The period is the recommended
+delimiter between a module's official name and any internal suffix it
+uses in the {links_node} table.
+<p>
+<h3>{links_monitor} Table</h3>
+<p>
+The links monitoring function is still under development, so this table's
+schema is subject to change. Conceptually, the plan for links monitoring
+is that it scans each link at intervals set by the site administrator,
+either specifically stored with the link or a site-wide default, to find
+destination pages that:
+<ol type="1">
+<li>Have moved (i.e., looking for an HTTP redirect)</li>
+<li>Have disappeared (looking for a "404" HTTP error)</li>
+<li>Have changed (looking for modification date in the HTTP headers, or
+   actually comparing the content of the page since our last scan.</li>
+</ol>
+<p>
+The {links_monitor} table supports these three functions. Here is the intended
+semantics of each column:
+<dl>
+<dt>lid</dt>
+<dd>Points back to the {links} table.
+</dd>
+<dt>check_interval</dt>
+<dd>How many seconds are recommended between scans of this
+particular link? Zero implies use of a system default
+for this link. A link that should not be monitored at
+all is implied by a missing row from {links_monitor}.
+</dd>
+<dt>last_check</dt>
+<dd>The timestamp (Drupal-standard format) of the last time
+a scan of this link completed, whether or not the page
+was successfully retrieved.
+</dd>
+<dt>fail_count</dt>
+<dd>The number of failed retrieval attempts consecutively;
+that is, this counter is reset by successful retrieval.
+</dd>
+<dt>alternate_monitor_url</dt>
+<dd>In some situations, we want to store a "friendly" URL in
+the database even though it redirects to somewhere else.
+For example, suppose http://example.com/myblog redirects
+to http://blogs.example.net/blogs/user/23587/blog.jsp.
+Or a URL may point to a load-sharing redirector that
+redirects to a randomly-selected mirror, or a locale-
+or language-specific mirror, in which case we want to
+catalog only the "published" version of the URL. This
+field tells the monitoring software to scan *this*
+URL rather than the displayable one stored in {links}.
+</dd>
+<dt>redirect_proposed_url</dt>
+<dd>When the scanner finds an HTTP redirect, it can either
+automatically update the URL in {links}, or it can
+make a note of the new URL from the redirect, and store
+it in this field for administrator approval before it
+replaces the {links} URL. This field is nulled out once
+the redirection is accepted.
+</dd>
+<dt>redirect_saved_url</dt>
+<dd>If a redirected URL is accepted (automatically or by
+administrative approval), the old URL from {links} is
+stored here to allow a single level of "undo" in case
+of trouble. NOTE: It may be desirable to inhibit auto-
+update from redirect on any link if this field is
+non-empty, to prevent looping redirects on the same
+link from load-sharing systems. If that is done, then
+the site administrative interface may want to flag as
+high priority any link that has this field *and* the
+redirect_proposed_url field populated, so that the
+site admin can figure out what is going on.
+</dd>
+<dt>change_threshold</dt>
+<dd>This field's interpretation depends on the change-
+detection algorithm employed by the monitor logic. It
+could be as simple as a byte-count delta, as it was in
+older versions of weblink.module, or it could be more
+sophisticated. The content of this field, in any case,
+represents how large the "computed change amount" must
+be in order to consider the page "changed". This is
+designed to allow ignoring trivial changes, such as a
+site that puts the current date and time near the top
+of the page and therefore "changes" -- but not in any
+meaningful way -- every minute.
+</dd>
+<dt>change_flag</dt>
+<dd>When a monitor scan detects a meaningful level of
+change to the destination page, it sets this flag to
+a nonzero value. The links package does not act on this
+information, but add-on modules could take some action
+such as automatically creating and promoting a "story"
+node to announce the change.
+</dd>
+<dt>change_last_data</dt>
+<dd>This field contains whatever arbitrary information is
+needed by the monitor logic, as a baseline comparison.
+It is updated the first time a page is successfully
+retrieved, or any time the change_threshold is met.
+In effect, the semantics of this field are "this is
+the page's fingerprint from the last time it changed",
+which is not necessarily the same as its fingerprint the
+last time it was scanned.
+</dd>
+</dl>
+
+<p>
+<h2>HOOK DETAILS</h2>
+<p>
+These are the hooks that are invoked by the Links modules at certain times
+to allow other modules to interact with the process.
+<p>
+Note that when you declare a hook function you need to precede it with
+the name of your own module. For example, to implement the hook
+links_delete_link_reference in my_app module, you would declare:
+<code>function my_app_links_delete_link_reference($lid)</code>.
+
+<h3>links_delete_link_reference</h3>
+<p>
+This hook is invoked by links.inc whenever it needs to delete references
+to a particular link from any modules. This may be because the link is about
+to be removed from the master table. In any case, the modules MUST remove their
+references; there is no option to abort. Modules may decide for themselves what
+fallback action to take if a link reference is removed that they still needed.
+<p>
+Parameters:
+<dl>
+<dt>$lid</dt>
+<dd>The link ID of the link whose references are to be deleted. The module
+MUST delete all of its references in tables other than {links_node}. It
+SHOULD also delete its own references -- but not others! -- that are in
+{links_node}. However, links.inc itself will delete any remaining references
+in {links_node} after it calls this hook. So if your module only uses
+{links_node} and has no custom tables with link IDs in them, it may not
+be necessary to implement this hook. See links_related.module for a
+typical implementation of this hook, and links_weblink.module for a
+more complex implementation.
+</dd>
+</dl>
+<p>
+Return value: NONE
+
+<h3>links_update_link_reference</h3>
+<p>
+This hook is invoked by links.inc to indicate that all references to one link
+ID should be updated to another link ID. This can happen if someone edits the
+master {links} table and changes a URL for a link into one that matches another
+existing link. In this case, links.inc will merge the links' references using
+this hook.
+<p>
+links.inc itself will update all rows in {links_node}, so if your module
+does not store link references elsewhere and it does not need to intercept
+the event for other reasons, you may not need to implement this hook.
+<p>
+Parameters:
+<dl>
+<dt>$old_lid</dt>
+<dd>The link ID of the old link whose references are to be changed.
+</dd>
+<dt>$new_lid</dt>
+<dd>The new link ID to which the references should be changed.
+</dd>
+</dl>
+<p>
+Return value: NONE
+
+<h3>links_admin_operations</h3>
+<p>
+This hook is defined by links_admin.module to allow other modules to inject
+new behaviors into its "update options" selection dialog. If the user selects
+one of the added behaviors, links_admin.module will call a specified callback
+function and pass it a simple array of the selected link IDs.
+<p>
+Parameters:
+<dl>
+<dt>$section</dt>
+<dd>The form section (screen name) for which link operations are being
+requested. Current values are 'links' for the master link edit screen
+and 'links_node' for the screen that edits references to a single link.
+If a module does not implement a section, it should return NULL or an
+empty array for that section by default.
+</dd>
+<p>
+Return value: A nested associative array where the outer array keys are
+the internal names of the operation. Your module should begin its keys with
+the module name, e.g., "my_module_do_something", "my_module_do_other", etc.
+The elements of the array are associative inner arrays, where the keys
+are "label" and "callback". "label" should contain the human-readable
+description of the operation, pre-passed through t() by your module. "callback"
+should be the name of a function that you wish called if the user selects
+your operation. You may pass multiple operations. Refer to admin.module,
+function links_admin_links_admin_operations(), for an example of this
+hook's implementation.
+
+<h3>links_admin_link_required</h3>
+<p>
+When links_admin.module is about to delete a link, it calls this hook to
+allow node modules to indicate that their link is required in order for the
+node itself to be valid. The quintessential example of this is links_weblink.module,
+because of course a "weblink" node is useless if its link is gone. The hook allows
+a single module to return multiple such declarations, and these are used to warn
+the user before they continue deleting the link(s). The warnings are issued only
+if your module happens to have references in {links_node} for the link that is
+being deleted.
+<p>
+If your module does not define node types, or if (like links_related.module) the
+node types do not require the links in order to be viable, then you do not have
+to implement this hook.
+<p>
+Parameters: NONE
+<p>
+Return value: An associative array of the form $node_type=>$module, with zero
+or more entries. $module should be the name of your module as it is known to
+Drupal (not the human-readable name). $node_type is the internal type of the
+node as it would appear in the "type" column of the {node} table.
+
+<h2>FUNCTION DETAILS</h2>
+<p>
+Many of the API functions accept a paramter $module that limits the context of
+their actions. This parameter is very important, and is discussed in detail in
+the MODULE-LOCAL LINK REFERENCES section of the database schema description
+(see above).
+<p>
+(More to be added)
+
+</body>
+</html>

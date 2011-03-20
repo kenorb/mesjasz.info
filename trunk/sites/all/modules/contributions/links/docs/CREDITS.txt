@@ -1,0 +1,39 @@
+$Id: CREDITS.txt,v 1.1.2.1 2009/01/22 03:07:36 syscrusher Exp $
+
+Links package developed by Syscrusher (Scott Courtney,	http://drupal.org/user/9184).
+The links_weblink module is based on the weblink module by Ber Kessels and Nic Ivy.
+
+Special credit and thanks go to:
+
+xqus		http://drupal.org/user/8737
+		For code contributions to the links edit function, and
+		for general bug reports.
+
+Eaton		http://drupal.org/user/16496
+		This good soul did the vast majority of the work of
+		updating the entire package to Drupal 4.7's new forms API.
+		Eaton also made the first big step toward 5.0 compatibility.
+
+mok000		http://drupal.org/user/36946
+		Contributed the entire Postgres support for this module.
+
+webchick	http://drupal.org/user/24967
+		Multiple patches and bug reports.
+
+RayZ		http://drupal.org/user/43324
+		Investigation of new features like CCK integration, and
+		various bug/feature patches and test reports.
+
+drewish		http://drupal.org/user/34869
+		Help with forms API conversion, and answering support questions
+		from users.
+
+Steve Dondley	http://drupal.org/user/4131
+		Bug fix patches.
+
+dman		http://drupal.org/user/33240
+		Contributed to development of "links management" tab in Related
+		Links, as well as miscellaneous bug fixes.
+
+elondaits	http://drupal.org/user/131525
+		Contributed bug fixes and the Spanish translation.

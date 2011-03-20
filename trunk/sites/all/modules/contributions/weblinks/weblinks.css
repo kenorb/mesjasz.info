@@ -1,0 +1,177 @@
+/* $Id: weblinks.css,v 1.11.2.11 2008/12/27 08:17:47 nancyw Exp $ */
+/**
+* @file
+*   Style sheet for the Weblinks module.
+*/
+
+.weblinks-pagedesc {
+  display: block;
+  border: 1px ridge black;
+  text-align: center;
+}
+
+.weblinks-info {
+  font-style: italic;
+  font-size: 89%;
+  margin-left: 2em;
+}
+
+.weblinks-radios .form-item label.option {
+  float: left;
+  margin-right: 1.5em;
+  white-space: normal;
+}
+
+.weblinks-radios .form-item .description {
+  clear: both;
+}
+
+.block-weblinks {
+  font-size: 89%;
+  line-height: 100%;
+}
+
+.block-weblinks .description p {
+  margin: 0 0 0 -2em;
+  font-size: 89%;
+}
+
+h2.weblinks, h3.weblinks {
+  margin-top: 1em;
+  font-weight: bold;
+}
+
+h2.weblinks img, h3.weblinks img {
+  margin-right: 1em;
+  float: left; 
+}
+
+li.weblinks {
+  clear: both;
+}
+
+li.weblinks-item a {;
+  font-size: 110%;
+  font-weight: bold;  
+}
+
+li.weblinks-item .description {
+  margin: 0 0 0 2em;
+  font-size: 109%;
+  line-height: 100%;
+  color: #000000;
+}
+
+.item-list ul .weblinks {
+  margin-left: 0;
+}
+
+.weblinkCat fieldset.collapsible {
+  border: 1px ridge #896969;
+}
+
+.weblinkCat {
+  clear: both;
+}
+
+.weblinkCat img {
+  clear: left;
+}
+
+.weblinkCat fieldset legend a {
+  line-height: 140%; /* added for Zen */
+}
+
+.weblinkCat-depth-1 fieldset legend {
+  font-size: 89%;
+}
+
+.weblinkCat-depth-0 fieldset legend a {
+  font-weight: bold;
+  font-size: 140%;
+}
+
+.weblinks-cat-desc p {
+  font-size: 120%;
+  color: #222222;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+}
+
+.weblinks-cat-image {
+  float: left;
+  margin-right: 5px;
+}
+
+.weblinks-ops {
+  display: inline;
+}
+
+.weblinks-linkview {
+  font-size: 112%;
+  font-weight: bold;
+}
+
+.weblinks-comment-links {
+  margin-left: 5em;
+  font-size: 75%;
+}
+
+.weblinks-status-warning {
+  margin-left: 2em;
+  color: red;
+  font-size: 89%;
+  display: inline;
+}
+
+.weblinks-status-notice {
+  margin-left: 2em;
+  color: green;
+  font-size: 89%;
+  display: inline;
+}
+
+.weblinks-title {
+  display: inline;
+}
+
+.weblinks-link {
+  /* If not showing URL, remove the margin. */
+/*  margin-left: 2em; */
+  display: inline;
+  /* to put the link on the next line, remove the previous and use this instead: */
+  /* display: block; */
+}
+
+.block-weblinks .weblinks-link {
+  margin-left: 0;
+  display: inline;
+}
+
+.weblinks-more a {
+  margin-left: 4em;
+  font-weight: bold;
+}
+
+.weblinks-user-link {
+  margin-left: 3em;
+}
+
+.weblinks-admin-tabs li a {
+  /* border: 1px ridge #000000; 
+  background-color: #eeeeee;
+  font-size: 89%; */
+  padding: 2px;
+}
+
+table#weblinks-groups {
+  font-size: 100%;
+}
+
+table#weblinks-groups td .description {
+  white-space: normal;
+}
+
+.weblinks-indented {
+  padding-left: 1em;
+}

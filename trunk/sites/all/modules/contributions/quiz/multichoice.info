@@ -1,0 +1,12 @@
+; $Id: multichoice.info,v 1.8 2008/10/06 16:41:04 mbutcher Exp $
+name = Multichoice
+package = Quiz
+description = This provides multiple choice questions for use by the Quiz module.
+dependencies[] = quiz
+core = 6.x
+; Information added by drupal.org packaging script on 2008-12-10
+version = "6.x-3.x-dev"
+core = "6.x"
+project = "quiz"
+datestamp = "1228867930"
+

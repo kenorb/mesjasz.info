@@ -1,0 +1,9 @@
+; $Id$
+
+To install this module, you need to do three things.
+
+1.  Upload the module to your modules directory.
+2.  Enable the module as usual.
+3.  Navigate to admin/settings/chatblock and enter your base_url.  This is the full url that your index.php file is located in.  For example, if your index.php file is in www.yourdomain.com, you should enter http://www.yourdomain.com.  Note that you should definitely NOT include a trailing forward slash.  You can also set the number of messages to display in the chatblock which defaults to 100.
+
+Note that this module comes with a hook_uninstall function, which means that if you uninstall the module,   

@@ -1,0 +1,64 @@
+$Id: PREFIXES.txt,v 1.1.2.1 2009/01/22 03:07:36 syscrusher Exp $
+
+This file is an informally-maintained registry of the module prefixes that are
+used in the Links API calls for the $module parameter.
+
+The actual URLs cataloged by the Links API are global to all Drupal modules,
+but the references in the {links_node} table that map these URLs to individual
+nodes can be made local to a specific module or module package.
+
+Module developers who use the Links API may request a namespace prefix string
+that allows their modules to create such application-specific link references.
+Once you have a prefix, anything "under" that prefix is yours to name as you
+wish.
+
+Suppose, for instance, that you register the prefix "example". You can then
+store links with $module="example" and be (reasonably) assured that no other
+module will tinker with the link-node mapping (the URL itself, however, is
+managed by links.module globally).
+
+The underscore can be used to create sub-namespaces within your registered prefix,
+to any desired nesting depth. So if instead of just example.module you are
+creating "the Example package" with modules example.module, example_view.module,
+example_taxonomy.module, and so on, you can (if you wish) carve up your
+namespace with $module="example", $module="example_view", and
+$module="example_taxonomy". You are not *required* to do this -- it is purely
+up to you, depending on whether your modules should share link references or
+treat them separately. Basically, you may place any string after the "example_"
+prefix that you wish as long as it fits into the database column.
+
+Prefix registrations should be considered case-insensitive; that is, if you
+reserve "example" no one else can reserve "Example" or "EXAMPLE" because they
+are treated as equal by the API. Also, ownership of "example" implies ownership
+of "example_*" but NOT of "example*" (so, for instance, you don't get
+"examples" or "examplemania" or "examplethemes").
+
+
+REGISTRATION PROCEDURE:
+
+	Please DO NOT update the following lists. This information is kept by
+	the Links Package maintainer, Syscrusher (http://drupal.org/user/9184).
+	To request a new prefix registry, or remove one no longer needed,
+	use the Drupal contact form for Syscrusher.
+
+RESERVED PREFIXES:
+
+	(empty string)		Reserved to indicate a "don't care" or "any"
+				selection criterion for finding links for a
+				node.
+
+	links			Reserved for the Links Package and its included
+				modules.
+
+	drupal			Reserved for future use.
+
+	example			As in domain names, the word "example" in this
+				context is reserved for illustrative purposes
+				in documentation.
+
+REGISTERED PREFIXES:
+
+	tagmark			budda (http://drupal.org/user/13164)
+
+	cck			Content Construction Kit (CCK)
+

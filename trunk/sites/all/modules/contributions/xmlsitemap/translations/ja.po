@@ -1,0 +1,551 @@
+# $Id: ja.po,v 1.2 2008/05/31 08:23:17 imagine Exp $
+#
+# Japanese translation of Drupal (xmlsitemap)
+# Copyright 2008 0829 <hixarg+0829@gmail.com>
+# Generated from files:
+#  xmlsitemap_user.info,v 1.2 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_user.install,v 1.5 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_user.module,v 1.12 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_term.info,v 1.2 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_term.install,v 1.4 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_term.module,v 1.11 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_node.info,v 1.2 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_node.install,v 1.8 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_node.module,v 1.18 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_engines.info,v 1.2 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap_engines.module,v 1.5 2008/05/20 17:48:47 darrenoh Exp
+#  xmlsitemap.php,v 1.5 2008/05/20 17:48:46 darrenoh Exp
+#  xmlsitemap.info,v 1.2 2008/05/20 17:48:46 darrenoh Exp
+#  xmlsitemap.install,v 1.5 2008/05/20 17:48:46 darrenoh Exp
+#  xmlsitemap.module,v 1.17 2008/05/20 17:48:46 darrenoh Exp
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Drupal 6.x\n"
+"POT-Creation-Date: 2008-05-21 21:54+0900\n"
+"PO-Revision-Date: 2008-05-21 22:40+0900\n"
+"Last-Translator: 0829 <hixarg+0829@gmail.com>\n"
+"Language-Team: DRUPAL*DRUPAL <hixarg+0829@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.info:0
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.install:12
+msgid "XML Sitemap: User"
+msgstr "XML サイトマップ： ユーザ"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.info:0
+msgid "Adds user profiles to the site map."
+msgstr "ユーザプロフィールページの URL をサイトマップに追加します。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.info:0
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.info:0
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.info:0
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.info:0
+#: modules/xmlsitemap/xmlsitemap.info:0;0
+#: modules/xmlsitemap/xmlsitemap.module:31
+msgid "XML Sitemap"
+msgstr "XML サイトマップ"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.install:25;68
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.install:25
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:33
+#: modules/xmlsitemap/xmlsitemap.install:9
+msgid "The base table for xmlsitemap."
+msgstr "XML サイトマップのベーステーブルです。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.install:28;35;71
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.install:28;35
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:43
+#: modules/xmlsitemap/xmlsitemap.install:19
+msgid "The id of the path."
+msgstr "パスの ID です。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.install:42
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.install:42
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:50
+#: modules/xmlsitemap/xmlsitemap.install:25
+msgid "Keeps track of new changes."
+msgstr "新しい変更の軌跡を記録します。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.install:49
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.install:49
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:57
+#: modules/xmlsitemap/xmlsitemap.install:32
+msgid "Keeps track of old changes."
+msgstr "古い変更の軌跡を記録します。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.install:56;78
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.install:56
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:78
+#: modules/xmlsitemap/xmlsitemap.install:39
+msgid "Stores the index value."
+msgstr "インデックス値を保存します。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.install:13
+msgid "Your MySQL version is too low. &ldquo;XML Sitemap: User&rdquo; requires MySQL 4.0.14 or higher."
+msgstr "MySQL のバージョンが古すぎます。 &ldquo;XML サイトマップ： ユーザ&rdquo; は MySQL 4.0.14 以上を必要とします。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:99
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:198
+#: modules/xmlsitemap/xmlsitemap.module:347;38
+msgid "Site map"
+msgstr "サイトマップ"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:105
+msgid "Default user priority"
+msgstr "デフォルトのユーザの重要度"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:108
+msgid "Choose the default priority for users who have only the authenticated user role."
+msgstr "authenticated user のロールを持つユーザのみに対するデフォルトの重要度を選択してください。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:116
+msgid "Default site map priority"
+msgstr "デフォルトのサイトマップ重要度"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:119
+msgid "This number will be added to the priority of this user role."
+msgstr "この数値は、このユーザロールの重要度に追加されます。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:141
+msgid "Delete role"
+msgstr "ロールの削除"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:172
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:173
+msgid "Site map settings"
+msgstr "サイトマップの設定"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:185
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.module:143;158
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:182
+msgid "Site map priority"
+msgstr "サイトマップ重要度"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:188
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.module:146
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:185
+msgid "The default priority is %priority."
+msgstr "デフォルトの重要度は %priority です。"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:159
+msgid "override profile priority"
+msgstr "プロフィールの重要度を上書き"
+
+#: modules/xmlsitemap/xmlsitemap_user/xmlsitemap_user.module:0
+msgid "xmlsitemap_user"
+msgstr "XML サイトマップ： ユーザ"
+
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.info:0
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.install:12
+msgid "XML Sitemap: Term"
+msgstr "XML サイトマップ： ターム"
+
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.info:0
+msgid "Adds taxonomy terms to the site map."
+msgstr "タクソノミータームの URL をサイトマップに追加します。"
+
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.install:13
+msgid "Your MySQL version is too low. &ldquo;XML Sitemap: Term&rdquo; requires MySQL 4.0.14 or higher."
+msgstr "MySQL のバージョンが古すぎます。 &ldquo;XML サイトマップ： ターム&rdquo; は MySQL 4.0.14 以上を必要とします。"
+
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.module:161
+msgid "This will be the default priority of terms in this vocabulary."
+msgstr "このボキャブラリに属するタームのデフォルトの重要度です。"
+
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.module:127
+msgid "override term priority"
+msgstr "タームの重要度を上書き"
+
+#: modules/xmlsitemap/xmlsitemap_term/xmlsitemap_term.module:0
+msgid "xmlsitemap_term"
+msgstr "XML サイトマップ： ターム"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.info:0
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:12
+msgid "XML Sitemap: Node"
+msgstr "XML サイトマップ： ノード"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.info:0
+msgid "Adds nodes to the site map."
+msgstr "ノードの URL をサイトマップに追加します。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:36
+#: modules/xmlsitemap/xmlsitemap.install:12
+msgid "The path of this node."
+msgstr "このノードのパスです。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:64
+msgid "Link to last comment."
+msgstr "最新のコメントへのリンクです。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:71
+msgid "Link to previous comment."
+msgstr "前のコメントへのリンクです。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.install:13
+msgid "Your MySQL version is too low. &ldquo;XML Sitemap: Node&rdquo; requires MySQL 4.0.14 or higher."
+msgstr "MySQL のバージョンが古すぎます。 &ldquo;XML サイトマップ： ノード&rdquo; は MySQL 4.0.14 以上を必要とします。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:204
+msgid "Priority adjustment"
+msgstr "重要度の調整"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:207
+msgid "This number will be added to the priority of this content type."
+msgstr "この数値は、このコンテンツタイプの重要度に追加されます。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:218
+msgid "Content priority"
+msgstr "コンテンツの重要度"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:219
+msgid "The default priority for specific content types can be set on the !link pages."
+msgstr "特定のコンテンツタイプに対するデフォルトの重要度は !link ページで設定できます。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:220
+msgid "content type settings"
+msgstr "コンテンツタイプの設定"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:225
+msgid "Promotion adjustment"
+msgstr "プロモーションの調整"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:228
+msgid "This number will be added to the priority of each post that is promoted to the front page."
+msgstr "この数値は、フロントページに公開された各コンテンツの重要度に追加されます。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:232
+msgid "Comment ratio weight"
+msgstr "コメント比率の重み"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:235
+msgid "This number will be multiplied by the ratio of the number of comments on a post to the highest number of comments on any post&#8212;that is, this number will be added to the priority of the post with the most comments."
+msgstr "この数値は、投稿に対するコメント数とすべての投稿に対するコメント数の最大値の比率に乗算されます。 つまり、この数値は最もコメントの多いコンテンツの重要度に追加されることになります。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:239
+msgid "Count comments in change date and frequency"
+msgstr "更新日時と頻度としてコメントもカウントする"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:241
+msgid "If enabled, the frequency of comments on a post will affect its change frequency and last modification date."
+msgstr "有効にした場合、コンテンツに対するコメントの頻度は、そのコンテンツの更新頻度と最終更新日に影響を与えます。"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:345
+msgid "Save content type"
+msgstr "コンテンツタイプの保存"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:345
+msgid "Reset to defaults"
+msgstr "デフォルトに戻す"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:405
+msgid "XML Sitemap: Sitemap"
+msgstr "XML サイトマップ： サイトマップ"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:409
+msgid "XML Sitemap: News"
+msgstr "XML サイトマップ： ニュース"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:159
+msgid "override node priority"
+msgstr "ノードの重要度を上書き"
+
+#: modules/xmlsitemap/xmlsitemap_node/xmlsitemap_node.module:0
+msgid "xmlsitemap_node"
+msgstr "XML サイトマップ： ノード"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.info:0
+msgid "XML Sitemap: Engines"
+msgstr "XML サイトマップ： エンジン"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.info:0
+msgid "Submits site map to search engines."
+msgstr "サイトマップを検索エンジンに送信します。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:41
+#: modules/xmlsitemap/docs/xmlsitemap.php:150
+msgid "Google"
+msgstr "Google"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:47
+#: modules/xmlsitemap/docs/xmlsitemap.php:156
+msgid "Submit site map to Google."
+msgstr "Google へサイトマップを送信する。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:52;98;148;186
+#: modules/xmlsitemap/docs/xmlsitemap.php:161
+msgid "Submission URL"
+msgstr "送信先 URL"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:54;100;150;188
+#: modules/xmlsitemap/docs/xmlsitemap.php:163
+msgid "The URL to submit the site map to."
+msgstr "サイトマップの送信先 URL です。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:58;104
+#: modules/xmlsitemap/docs/xmlsitemap.php:167
+msgid "Verification link"
+msgstr "確認リンク"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:60
+#: modules/xmlsitemap/docs/xmlsitemap.php:169
+msgid "In order to show statistics, Google will ask you to verify that you control this site by creating a file with a certain name. Enter that name here and the XML Sitemap module will create a path to that file name. This will only work if you have clean URLs enabled."
+msgstr "Google では、統計情報などを利用する前に、指定した名前のファイルをアップロードして、サイトの所有者であることを確認する必要があります。 このフィールドに指定されたファイル名を入力することで、そのファイルまでのパスが生成されます。 この機能は、クリーン URL の設定が有効になっている場合のみ動作します。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:75
+#: modules/xmlsitemap/docs/xmlsitemap.php:185
+msgid "!sitemap downloaded by Google."
+msgstr "Google が !sitemap をダウンロードしました。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:87
+msgid "Yahoo!"
+msgstr "Yahoo!"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:93
+msgid "Submit site map to Yahoo!"
+msgstr "Yahoo! へサイトマップを送信する。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:106
+msgid "Before allowing you to view additional information, Yahoo! will ask you to verify that you control this site by creating a file with a certain name. Enter that name here, and XML Sitemap will create a path to that file name. This will only work if you have clean URLs enabled."
+msgstr "Yahoo! では、追加情報を表示する前に、指定した名前のファイルをアップロードして、サイトの所有者であることを確認する必要があります。 このフィールドに指定されたファイル名を入力することで、そのファイルまでのパスが生成されます。 この機能は、クリーン URL の設定が有効になっている場合のみ動作します。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:110
+msgid "Authentication key"
+msgstr "認証キー"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:112
+msgid "Yahoo! will ask you to put an authentication key in the verification file."
+msgstr "Yahoo! では、認証ファイルに認証キーを記載する必要があります。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:137
+msgid "Ask.com"
+msgstr "Ask.com"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:143
+msgid "Submit site map to Ask.com."
+msgstr "Ask.com へサイトマップを送信する。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:175
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:181
+msgid "Submit site map to Windows Live."
+msgstr "Windows Live へサイトマップを送信する。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:192
+msgid "Authentication file"
+msgstr "認証ファイル"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:194
+msgid "Before allowing you to view additional information, Windows Live will ask you to verify that you control this site by creating a file with a certain name. Enter that name here, and XML Sitemap will create a path to that file name. This will only work if you have clean URLs enabled."
+msgstr "Windows Live では、追加情報を表示する前に、指定した名前のファイルをアップロードして、サイトの所有者であることを確認する必要があります。 このフィールドに指定されたファイル名を入力することで、そのファイルまでのパスが生成されます。 この機能は、クリーン URL の設定が有効になっている場合のみ動作します。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:198
+msgid "Authentication tag"
+msgstr "認証タグ"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:200
+msgid "Windows Live will give you an authentication tag."
+msgstr "Windows Live では、認証タグが発行されます。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:67;70;119;122;157;160;207;210
+#: modules/xmlsitemap/docs/xmlsitemap.php:176;179
+#: modules/xmlsitemap/xmlsitemap.module:368;0
+msgid "xmlsitemap"
+msgstr "XML サイトマップ"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:67
+#: modules/xmlsitemap/docs/xmlsitemap.php:176
+msgid "Sitemap successfully submitted to Google."
+msgstr "Google へのサイトマップの送信が成功しました。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:70
+#: modules/xmlsitemap/docs/xmlsitemap.php:179
+msgid "Error occurred submitting sitemap to Google: @code"
+msgstr "Google へのサイトマップ送信でエラーが発生しました。： @code"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:119
+msgid "Site map successfully submitted to Yahoo!."
+msgstr "Yahoo! へのサイトマップの送信が成功しました。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:122
+msgid "Error occurred submitting site map to Yahoo!: @code"
+msgstr "Yahoo! へのサイトマップ送信でエラーが発生しました。： @code"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:157
+msgid "Site map successfully submitted to Ask.com."
+msgstr "Ask.com へのサイトマップの送信が成功しました。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:160
+msgid "Error occurred submitting site map to Ask.com: @code"
+msgstr "Ask.com へのサイトマップ送信でエラーが発生しました。： @code"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:207
+msgid "Site map successfully submitted to Windows Live."
+msgstr "Windows Live へのサイトマップの送信が成功しました。"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:210
+msgid "Error occurred submitting site map to Windows Live: @code"
+msgstr "Windows Live へのサイトマップ送信でエラーが発生しました。： @code"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:225
+msgid "Google verification page"
+msgstr "Google 認証ページ"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:234
+msgid "Yahoo! verification page"
+msgstr "Yahoo! 認証ページ"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:243
+msgid "Windows Live verification page"
+msgstr "Windows Live 認証ページ"
+
+#: modules/xmlsitemap/xmlsitemap_engines/xmlsitemap_engines.module:0
+msgid "xmlsitemap_engines"
+msgstr "XML サイトマップ： エンジン"
+
+#: modules/xmlsitemap/xmlsitemap.info:0
+msgid "Creates an XML site map in accordance with the sitemaps.org specification."
+msgstr "sitemaps.org の仕様に準じた XML サイトマップを作成します。"
+
+#: modules/xmlsitemap/xmlsitemap.module:15
+msgid "Configure the site map. Your site map is at !url."
+msgstr "サイトマップの設定を行います。 このサイトのサイトマップは !url です。"
+
+#: modules/xmlsitemap/xmlsitemap.module:17
+msgid "Configure behavior for search engines."
+msgstr "検索エンジンに対する対応を設定してください。"
+
+#: modules/xmlsitemap/xmlsitemap.module:19
+msgid "Set up additional links for your site map."
+msgstr "サイトマップに追加するリンクを設定してください。"
+
+#: modules/xmlsitemap/xmlsitemap.module:87
+msgid "Chunk size"
+msgstr "チャンクサイズ"
+
+#: modules/xmlsitemap/xmlsitemap.module:91
+msgid "This is the number of links to include in one site map. Values can range between 1 and 50,000. If the total number of links exceeds the chunk size, multiple site maps will be generated."
+msgstr "ひとつのサイトマップに含むことのできるリンクの数を入力してください。 入力できる値の範囲は 1 から 50,000 までです。 リンクの総数がチャンクサイズを上回る場合、サイトマップは複数作成されます。"
+
+#: modules/xmlsitemap/xmlsitemap.module:96
+msgid "Front page priority"
+msgstr "フロントページの重要度"
+
+#: modules/xmlsitemap/xmlsitemap.module:99
+msgid "This is the absolute priority for the front page."
+msgstr "フロントページの絶対的な重要度を選択してください。"
+
+#: modules/xmlsitemap/xmlsitemap.module:110
+msgid "Cannot send more than 50,000 links at one time."
+msgstr "一度に 50,000 以上のリンクを送信することはできません。"
+
+#: modules/xmlsitemap/xmlsitemap.module:128
+msgid "Submission settings"
+msgstr "送信の設定"
+
+#: modules/xmlsitemap/xmlsitemap.module:132
+msgid "Submit site map when updated."
+msgstr "更新時にサイトマップを送信する"
+
+#: modules/xmlsitemap/xmlsitemap.module:134
+msgid "If enabled, search engines will be notified of changes to the site map each time it is updated."
+msgstr "有効にした場合、更新されるたびに検索エンジンへサイトマップの変更を通知します。"
+
+#: modules/xmlsitemap/xmlsitemap.module:138
+msgid "Submit site map on cron run."
+msgstr "Cron 実行時にサイトマップを送信する"
+
+#: modules/xmlsitemap/xmlsitemap.module:140
+msgid "If enabled, search engines will be notified of changes to the site map each time cron is run."
+msgstr "有効にした場合、Cron が実行されるたびに検索エンジンへサイトマップの変更を通知します。"
+
+#: modules/xmlsitemap/xmlsitemap.module:144
+msgid "Log access."
+msgstr "ログアクセス"
+
+#: modules/xmlsitemap/xmlsitemap.module:146
+msgid "If enabled, a watchdog entry will be made each time the site map is accessed, containing information about the requestor."
+msgstr "有効にした場合、サイトマップがアクセスされるたびにリクエスト情報を含んだアクセスのログ情報を追加します。"
+
+#: modules/xmlsitemap/xmlsitemap.module:170
+msgid "Link priority"
+msgstr "リンクの重要度"
+
+#: modules/xmlsitemap/xmlsitemap.module:173
+msgid "This is the default priority for additional links."
+msgstr "追加したリンクのデフォルトの重要度です。"
+
+#: modules/xmlsitemap/xmlsitemap.module:181
+msgid "Enter a Drupal path to add to the site map."
+msgstr "サイトマップに追加するサイト内のパスを入力してください。"
+
+#: modules/xmlsitemap/xmlsitemap.module:222
+msgid "Delete"
+msgstr "削除"
+
+#: modules/xmlsitemap/xmlsitemap.module:222
+msgid "Path"
+msgstr "パス"
+
+#: modules/xmlsitemap/xmlsitemap.module:222
+msgid "Priority"
+msgstr "重要度"
+
+#: modules/xmlsitemap/xmlsitemap.module:244
+msgid "Save configuration"
+msgstr "設定の保存"
+
+#: modules/xmlsitemap/xmlsitemap.module:306
+msgid "Default"
+msgstr "デフォルト"
+
+#: modules/xmlsitemap/xmlsitemap.module:315
+msgid "Not in site map"
+msgstr "サイトマップに追加しない"
+
+#: modules/xmlsitemap/xmlsitemap.module:341
+msgid "Site map @chunk"
+msgstr "サイトマップ @chunk"
+
+#: modules/xmlsitemap/xmlsitemap.module:347;62
+msgid "Site map index"
+msgstr "サイトマップインデックス"
+
+#: modules/xmlsitemap/xmlsitemap.module:429
+msgid "Unable to load site map. Make sure that there is an xmlsitemap directory in your files directory and that it is writable by Drupal."
+msgstr "サイトマップをロードできません。 files ディレクトリ内に xmlsitemap が存在し、Drupal から書き込み可能になっていることを確認してください。"
+
+#: modules/xmlsitemap/xmlsitemap.module:368
+msgid "!sitemap downloaded by @user-agent at @address."
+msgstr "!sitemap がダウンロードされました。 ユーザエージェント： @user-agent IP： @address"
+
+#: modules/xmlsitemap/xmlsitemap.module:32;39
+msgid "Configure site map."
+msgstr "サイトマップの設定を行います。"
+
+#: modules/xmlsitemap/xmlsitemap.module:44
+msgid "Search engines"
+msgstr "検索エンジン"
+
+#: modules/xmlsitemap/xmlsitemap.module:45
+msgid "Configure search engines."
+msgstr "検索エンジンの設定を行います。"
+
+#: modules/xmlsitemap/xmlsitemap.module:52
+msgid "Additional"
+msgstr "追加"
+
+#: modules/xmlsitemap/xmlsitemap.module:53
+msgid "Configure additional links."
+msgstr "追加リンクの設定を行います。"
+
+#: modules/xmlsitemap/xmlsitemap.module:70
+msgid "Site map !number"
+msgstr "サイトマップ !number"
+

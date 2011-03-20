@@ -1,0 +1,13 @@
+; $Id$
+name = JQuery Interface Library
+description = An API and central location for modules that use the JQuery Interface library.
+package = User Interface
+version = "$Name$"
+; dependencies = jquery_update
+; Information added by drupal.org packaging script on 2007-05-17
+version = "5.x-1.0"
+project = "jquery_interface"
+datestamp = "1179433505"
+core = 6.x
+
+

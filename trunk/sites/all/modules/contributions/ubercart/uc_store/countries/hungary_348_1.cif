@@ -1,0 +1,38 @@
+<?php
+// $Id: hungary_348_1.cif,v 1.2.2.4 2008/11/03 21:33:50 islandusurper Exp $ 1.0.0
+
+/**
+ * First implement hook_install() using the name of the country as the base of
+ * the function name.
+ */
+function hungary_install() {
+  db_query("INSERT INTO {uc_countries} VALUES (348, 'Hungary', 'HU', 'HUN', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(348, 'BUD', 'Budapest'),"
+          ."(348, 'BAR', 'Baranya'),"
+          ."(348, 'BKK', 'Bács-Kiskun'),"
+          ."(348, 'BÉK', 'Békés'),"
+          ."(348, 'BAZ', 'Borsod-Abaúj-Zemplén'),"
+          ."(348, 'CSO', 'Csongrád'),"
+          ."(348, 'FEJ', 'Fejér'),"
+          ."(348, 'GYS', 'Gyõr-Sopron'),"
+          ."(348, 'HAB', 'Hajdú-Bihar'),"
+          ."(348, 'HEV', 'Heves'),"
+          ."(348, 'JNS', 'Jász-Nagykun-Szolnok'),"
+          ."(348, 'KOE', 'Komárom-Esztergom'),"
+          ."(348, 'NOG', 'Nógrád'),"
+          ."(348, 'PES', 'Pest'),"
+          ."(348, 'SOM', 'Somogy'),"
+          ."(348, 'SSB', 'Szabolcs-Szatmár-Bereg'),"
+          ."(348, 'TOL', 'Tolna'),"
+          ."(348, 'VAS', 'Vas'),"
+          ."(348, 'VES', 'Veszprém'),"
+          ."(348, 'ZAL', 'Zala')");
+
+  uc_set_address_format(348,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+   ."\r\n!city !zone_code !postal_code\r\n!country_name_if");
+}
+

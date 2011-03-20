@@ -1,0 +1,18 @@
+$Id: INSTALL.txt,v 1.2 2008/05/20 17:48:45 darrenoh Exp $
+XML Sitemap Module
+
+If you are upgrading from Google Sitemap, make sure you are using the latest
+version.
+
+Installation Instructions:
+
+1. Place the xmlsitemap directory in sites/all/modules.
+
+2. Go to the XML Sitemap section at
+   http://www.example.com/?q=admin/build/modules and enable the modules for the
+   types of links you want in your site map. Enable XML Sitemap: Engines if you
+   want to be able to automatically submit your site map to search engines.
+
+3. The sitemap is now operational at http://www.example.com/?q=sitemap.xml.
+   Configure advanced options at
+   http://www.example.com/?q=admin/settings/xmlsitemap.

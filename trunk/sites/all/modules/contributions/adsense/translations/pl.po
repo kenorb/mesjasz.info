@@ -1,0 +1,2171 @@
+# $Id: pl.po,v 1.1.2.2 2009/06/16 19:16:19 jcnventura Exp $
+#
+# POLISH translation of Drupal (general)
+# Copyright 2009 MAŁYSZ <BARTLOMIEJMALYSZ@GMAIL.COM>
+# Generated from files:
+#  adsense.admin.inc,v 1.5.2.2 2008/08/18 23:34:43 jcnventura
+#  adsense_cse.admin.inc,v 1.2.2.2 2008/08/18 23:34:43 jcnventura
+#  adsense_managed.admin.inc,v 1.2.2.2 2008/08/18 23:34:43 jcnventura
+#  revenue_sharing_basic.admin.inc,v 1.3.4.2 2008/08/18 23:34:44 jcnventura
+#  adsense.module,v 1.66.2.9.2.1 2008/08/18 23:34:43 jcnventura
+#  adsense_cse.results.inc,v 1.2.2.2 2008/08/18 23:34:43 jcnventura
+#  adsense_search.results.inc,v 1.2.2.2 2008/08/18 23:34:44 jcnventura
+#  adsense.install,v 1.8.4.1 2008/08/18 23:34:43 jcnventura
+#  adsense.info,v 1.4.4.1 2008/08/18 23:34:43 jcnventura
+#  adsense_cse.info,v 1.1.4.2 2008/08/18 23:34:43 jcnventura
+#  adsense_managed.info,v 1.1.4.2 2008/08/18 23:34:43 jcnventura
+#  adsense_oldcode.info,v 1.2.2.2 2008/08/18 23:34:44 jcnventura
+#  revenue_sharing_basic.info,v 1.1.4.2 2008/08/18 23:34:44 jcnventura
+#  adsense_search.info,v 1.1.4.2 2008/08/18 23:34:44 jcnventura
+#  adsense_search.admin.inc,v 1.2.2.4 2008/08/20 22:24:42 jcnventura
+#  adsense_oldcode.admin.inc,v 1.2.2.4 2008/08/20 22:24:42 jcnventura
+#  adsense_cse.module,v 1.5.2.3 2008/08/19 23:42:03 jcnventura
+#  adsense_search.module,v 1.4.2.3 2008/08/19 23:42:04 jcnventura
+#  adsense_managed.module,v 1.5.2.2 2008/08/18 23:34:43 jcnventura
+#  adsense_oldcode.module,v 1.4.2.3 2008/08/19 23:42:04 jcnventura
+#  adsense.help.inc,v 1.1.4.2 2008/08/18 23:34:43 jcnventura
+#  adsense.search_options.inc,v 1.2.2.2 2008/08/18 23:34:43 jcnventura
+#  revenue_sharing_basic.module,v 1.4.4.2 2008/08/18 23:34:44 jcnventura
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1POT-Creation-Date: 2008-08-21 03:22+0200\n"
+"POT-Creation-Date: 2009-05-13 01:59+0200\n"
+"PO-Revision-Date: 2009-06-16 18:14+0100\n"
+"Last-Translator: Joao Ventura <jcnventura@drupal.org>\n"
+"Language-Team: POLISH <BARTŁOMIEJMAŁYSZ@GMAIL.COM>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: adsense.admin.inc:25;152
+#: cse/adsense_cse.admin.inc:26
+#: managed/adsense_managed.admin.inc:24
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:25
+msgid "Help and instructions"
+msgstr "Pomoc i instrukcje"
+
+#: adsense.admin.inc:37
+msgid "Visibility"
+msgstr "Widzialność"
+
+#: adsense.admin.inc:42
+msgid "Show AdSense on specific pages"
+msgstr "Pokaż AdSense na wybranych stronach"
+
+#: adsense.admin.inc:44
+msgid "Show on every page except the listed pages."
+msgstr "Pokaż na każdej stronie prócz wymienionych poniżej"
+
+#: adsense.admin.inc:44
+msgid "Show on only the listed pages."
+msgstr "Pokaż tylko na poniższych stronach"
+
+#: adsense.admin.inc:51
+msgid "Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are  %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page."
+msgstr "Wstaw jedną stronę na linię jako ścieżki do Drupala. Znak '*' zastępuje inne znaki. Przykładowe ścieżki: %blog dla strony blogu i %blog-* dla każdego bloga. %front to Strona Główna."
+
+#: adsense.admin.inc:61
+msgid "Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only)."
+msgstr ""
+
+#: adsense.admin.inc:62
+msgid "If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site."
+msgstr ""
+
+#: adsense.admin.inc:69
+msgid "Advanced options"
+msgstr "Zaawansowane opcje"
+
+#: adsense.admin.inc:74
+msgid "Enable test mode?"
+msgstr "Włączyć tryb testowy?"
+
+#: adsense.admin.inc:76
+msgid "This enables you to test the AdSense module settings. This can be useful in some situations: for example, testing whether revenue sharing is working properly or not without having to display real ads on your site. It is best to test this after you log out."
+msgstr "To pozwala przetestować ustawienia modułu AdSense. Może to być bardzo użyteczne w pewnych sytuacjach. Np. testujesz czy podział zysków działa prawidłowo bez konieczności pokazywania reklam na stronie. Najlepiej przetestować to po wylogowaniu. "
+
+#: adsense.admin.inc:81
+msgid "Disable Google AdSense ads?"
+msgstr "Wyłączyć reklamy AdSense?"
+
+#: adsense.admin.inc:83
+msgid "This disables all display of Google AdSense ads from your web site. This is useful in certain situations, such as site upgrades, or if you make a copy of the site for development and test purposes."
+msgstr "To wyłącza widok reklam AdSense na Twojej stronie. Jest to użyteczne w pewnych sytuacjach, jak. np. aktualizacja strony albo jeśli robisz kopię strony dla celów wdrożeniowych i testowych."
+
+#: adsense.admin.inc:88
+msgid "Placeholder when ads are disabled?"
+msgstr ""
+
+#: adsense.admin.inc:90
+msgid "This causes an empty box to be displayed in place of the ads when they are disabled."
+msgstr "Wyświetla puste pudełko w miejscu, gdzie powinny być reklamy, jeśli te są wyłączone."
+
+#: adsense.admin.inc:95
+msgid "Placeholder text to display"
+msgstr "Tekst do wyświetlenia (placeholder)."
+
+#: adsense.admin.inc:98
+msgid "Enter any text to display as a placeholder when ads are disabled."
+msgstr "Wprowadź tekst, który będzie wyświetlany kiedy reklamy są wyłączone."
+
+#: adsense.admin.inc:103
+msgid "Enable AdSense section targeting?"
+msgstr "Włączyć namierzanie sekcji AdSense?"
+
+#: adsense.admin.inc:105
+msgid "This better targets Google ads to the teaser and body of nodes."
+msgstr "Ta opcja umożliwi lepsze dobieranie reklam dla zajawek i zawartości."
+
+#: adsense.admin.inc:112
+msgid "Undocumented options"
+msgstr ""
+
+#: adsense.admin.inc:113
+msgid "Warning: Use of these options is AT YOUR OWN RISK. Google will never generate an ad with any of these options, so using one of them is a violation of Google AdSense's Terms and Conditions. USE OF THESE OPTIONS MAY RESULT IN GETTING BANNED FROM THE PROGRAM. You may lose all the revenue accumulated in your account. FULL RESPONSABILITY FOR THE USE OF THESE OPTIONS IS YOURS. In other words, don't complain to the authors about getting banned, even if using one of these options was provided as a solution to a reported problem."
+msgstr ""
+
+#: adsense.admin.inc:120
+msgid "I agree"
+msgstr ""
+
+#: adsense.admin.inc:125
+msgid "Use Google's AdSense test option?"
+msgstr ""
+
+#: adsense.admin.inc:127
+msgid "With this option set, Google will not count any clicks or page impressions. Revenue is not generated. Make sure that you disable this option in production servers. [!statement]"
+msgstr ""
+
+#: adsense.admin.inc:127
+msgid "Unofficial statement"
+msgstr ""
+
+#: adsense.admin.inc:132
+msgid "Language to display ads"
+msgstr ""
+
+#: adsense.admin.inc:162
+msgid "Site Google AdSense Publisher ID"
+msgstr "Numer identyfikacyjny Google AdSense (Publisher ID)"
+
+#: adsense.admin.inc:165
+msgid "This is the Google AdSense Publisher ID for the site owner. It is used if no other ID is suitable. Get this in your Google Adsense account. It should be similar to %id."
+msgstr "To jest numer identyfikacyjny publicysty AdSense (Google AdSense Publisher ID) dla strony właściciela. Będzie on używany, jeśli dostarczone  ID jest błędne. Ten kod widnieje w Twoim koncie AdSense. Powinien być analogiczny do %id."
+
+#: adsense.admin.inc:172
+msgid "Publisher ID module"
+msgstr "Moduł Publisher ID"
+
+#: adsense.module:54
+msgid "4-links 120x90"
+msgstr "4-linki 120x90"
+
+#: adsense.module:55
+msgid "4-links 160x90"
+msgstr "4-linki 160x90"
+
+#: adsense.module:56
+msgid "4-links 180x90"
+msgstr "4-linki 180x90"
+
+#: adsense.module:57
+msgid "4-links 200x90"
+msgstr "4-linki 200x90"
+
+#: adsense.module:58
+msgid "4-links 468x15"
+msgstr "4-linki 468x15"
+
+#: adsense.module:59
+msgid "4-links 728x15"
+msgstr "4-linki 728x15"
+
+#: adsense.module:60
+msgid "5-links 120x90"
+msgstr "5 linków 120x9"
+
+#: adsense.module:61
+msgid "5-links 160x90"
+msgstr "5 linków 160x09"
+
+#: adsense.module:62
+msgid "5-links 180x90"
+msgstr "5 linków 180x90"
+
+#: adsense.module:63
+msgid "5-links 200x90"
+msgstr "5 linków 200x90"
+
+#: adsense.module:64
+msgid "5-links 468x15"
+msgstr "5 linków 468x15"
+
+#: adsense.module:65
+msgid "5-links 728x15"
+msgstr "5 linków 728x15"
+
+#: adsense.module:66
+msgid "Vertical banner"
+msgstr "Baner Pionowy"
+
+#: adsense.module:67
+msgid "Skyscraper"
+msgstr "Wieżowiec"
+
+#: adsense.module:68
+msgid "Button"
+msgstr "Przycisk"
+
+#: adsense.module:69
+msgid "Wide Skyscraper"
+msgstr "Szeroki Wieżowiec"
+
+#: adsense.module:70
+msgid "Small Rectangle"
+msgstr "Mały Prostokąt"
+
+#: adsense.module:71
+msgid "Small Square"
+msgstr "Mały Kwadrat"
+
+#: adsense.module:72
+msgid "Half Banner"
+msgstr "Pół-baner"
+
+#: adsense.module:73
+msgid "Square"
+msgstr "Kwadrat"
+
+#: adsense.module:74
+msgid "Medium Rectangle"
+msgstr "Średni Prostokąt"
+
+#: adsense.module:75
+msgid "Large Rectangle"
+msgstr "Duży Prostokąt"
+
+#: adsense.module:76
+msgid "Banner"
+msgstr "Baner"
+
+#: adsense.module:77
+msgid "Leaderboard"
+msgstr "Długi Baner"
+
+#: adsense.module:85
+msgid "AdSense for Search"
+msgstr "AdSense dla wyszukiwania"
+
+#: adsense.module:179
+msgid "AdSense tag"
+msgstr "słowo kluczowe / podpis AdSense"
+
+#: adsense.module:183
+msgid "Substitutes an AdSense special tag with an ad."
+msgstr "Zastępuje znak specjalny AdSense reklamą"
+
+#: adsense.module:219
+msgid "The HTML corrector filter has a bug that causes problems with the use of the AdSense tag. Disabling the HTML corrector filter is recommended."
+msgstr ""
+
+#: adsense.module:228
+msgid "Use the special tag [adsense:<em>format</em>:<em>slot</em>] or [adsense:<em>format</em>:<em>[group]</em>:<em>[channel]</em><em>[:slot]</em>] or [adsense:block:<em>location</em>] to display Google AdSense ads."
+msgstr "Użyj specjalny kod [adsense:<em>format</em>:<em>okienko</em>] lub [adsense:<em>format</em>:<em>[grupa]</em>:<em>[kanał]</em><em>[:okienko]</em>] or [adsense:blok:<em>lokacja</em>] do wyświetlania reklam AdSense."
+
+#: (duplicate) adsense.module:162
+#: ;120
+#: old/search/adsense_search.results.inc:17
+msgid "AdSense"
+msgstr "AdSense"
+
+#: (duplicate) adsense.module:163
+msgid "Publisher ID is not set."
+msgstr "Identyfikator wydawcy jest nieustawiony."
+
+#: (duplicate) adsense.module:164
+msgid "Please configure it in the <a href=\"@url\">AdSense settings page</a>."
+msgstr "Proszę skonfiguruj go na : <a href=\"@url\">stronie ustawień Adsense</a>"
+
+#: adsense.module:99
+msgid "administer adsense"
+msgstr "zarządzaj AdSense"
+
+#: adsense.module:99
+msgid "hide adsense"
+msgstr "ukryj AdSense"
+
+#: adsense.module:99
+msgid "use PHP for ad visibility"
+msgstr ""
+
+#: adsense.module:121
+msgid "Configure Google AdSense Ads."
+msgstr "Skonfiguruj reklamy Google Adsense"
+
+#: adsense.module:128
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: adsense.module:133
+msgid "Publisher ID"
+msgstr "Identyfikacja (Publisher ID)"
+
+#: adsense.module:142
+msgid "Site ID"
+msgstr "Ndentyfikacja strony (Site ID)"
+
+#: adsense.info:0
+msgid "AdSense core"
+msgstr "jądro AdSense"
+
+#: adsense.info:0
+msgid "Displays Google AdSense ads on your site to earn revenue. Requires at least one additional ad unit generator module."
+msgstr "Wyświetla reklamy Google AdSense na Twojej stronie. Wymaga to co najmniej jednego dodatkowego modułu jednostek reklam."
+
+#: adsense.info:0
+#: contrib/adsense_click/adsense_click.info:0
+#: cse/adsense_cse.info:0
+#: managed/adsense_managed.info:0
+#: old/oldcode/adsense_oldcode.info:0
+#: old/revenue_sharing_basic/revenue_sharing_basic.info:0
+#: old/search/adsense_search.info:0
+msgid "Adsense"
+msgstr "AdSense"
+
+#: contrib/adsense_click/adsense_click.admin.inc:15
+msgid "Click tracking"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.admin.inc:20
+msgid "Enable AdSense click tracking?"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.admin.inc:22
+msgid "Logs IP and time of <a href=!url>AdSense clicks</a>. This can be very useful in tracking which of your pages generate the most clicks, as well as help if click fraud is suspected."
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.admin.inc:26
+msgid "Enable name resolution of IP addresses?"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.admin.inc:28
+msgid "Display the domain name instead of the IP address. This can slow down the display of the logs page and tie up a PHP process for several seconds. On some hosting providers it may not be available."
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.logs.inc:14
+msgid "Timestamp"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.logs.inc:15;46
+msgid "Path"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.logs.inc:16
+msgid "IP/Host"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.logs.inc:17
+msgid "Referrer"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.logs.inc:47;70
+#: contrib/adsense_click/adsense_click.module:22
+msgid "Clicks"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.logs.inc:48
+msgid "Last"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.logs.inc:69
+msgid "Day"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.module:66
+msgid "view clicks"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.module:23
+msgid "Track the clicks on Adsense ads."
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.module:32
+msgid "AdSense clicks"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.module:33
+msgid "Track AdSense clicks."
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.module:40
+msgid "Top pages"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.module:47
+msgid "By day"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.info:0
+msgid "AdSense Click Tracking"
+msgstr ""
+
+#: contrib/adsense_click/adsense_click.info:0
+msgid "Tracks clicks to Google Adsense"
+msgstr ""
+
+#: cse/adsense_cse.admin.inc:38
+#: old/search/adsense_search.admin.inc:25
+msgid "Search Box Options"
+msgstr "Opcje pola wyszukiwań"
+
+#: cse/adsense_cse.admin.inc:43
+#: old/search/adsense_search.admin.inc:61
+msgid "Logo Type"
+msgstr "Typ logo"
+
+#: cse/adsense_cse.admin.inc:46
+msgid "Watermark on search box (requires JavaScript)"
+msgstr "Znak wodny na polu wyszukiwania (wymaga JavaScript)"
+
+#: cse/adsense_cse.admin.inc:47
+msgid "Next to the search box"
+msgstr "Następne po polu wyszukiwania"
+
+#: cse/adsense_cse.admin.inc:48
+msgid "Below the search box"
+msgstr "Poniżej pola wyszukiwania"
+
+#: cse/adsense_cse.admin.inc:54
+#: old/oldcode/adsense_oldcode.admin.inc:92
+#: old/search/adsense_search.admin.inc:78
+msgid "Background color"
+msgstr "kolor tła"
+
+#: cse/adsense_cse.admin.inc:57
+#: old/search/adsense_search.admin.inc:81;93
+msgid "White"
+msgstr "Biały"
+
+#: cse/adsense_cse.admin.inc:58
+#: old/search/adsense_search.admin.inc:83
+msgid "Gray"
+msgstr "Szary"
+
+#: cse/adsense_cse.admin.inc:59
+#: old/search/adsense_search.admin.inc:82;92
+msgid "Black"
+msgstr "Czarny"
+
+#: cse/adsense_cse.admin.inc:65
+#: old/search/adsense_search.admin.inc:106
+msgid "Site Encoding"
+msgstr "Kodowanie strony"
+
+#: cse/adsense_cse.admin.inc:72
+msgid "Text Box Length"
+msgstr "Długość pola tekstowego"
+
+#: cse/adsense_cse.admin.inc:80
+msgid "Watermark Language"
+msgstr ""
+
+#: cse/adsense_cse.admin.inc:89
+#: old/search/adsense_search.admin.inc:123
+msgid "Search Results Style"
+msgstr "Wygląd Wyników Wyszukiwania"
+
+#: cse/adsense_cse.admin.inc:94
+#: old/search/adsense_search.admin.inc:128
+msgid "Country or territory for Google domain"
+msgstr "Kraj lub terytorium domeny"
+
+#: cse/adsense_cse.admin.inc:101
+#: old/search/adsense_search.admin.inc:135
+msgid "Width of results area"
+msgstr "Szerokość pola wyników"
+
+#: cse/adsense_cse.admin.inc:109
+msgid "Ad Location"
+msgstr "Lokalizacja reklam"
+
+#: cse/adsense_cse.admin.inc:112
+msgid "Top and Right"
+msgstr "Top i na prawo"
+
+#: cse/adsense_cse.admin.inc:113
+msgid "Top and Bottom"
+msgstr "Góra i Dół"
+
+#: cse/adsense_cse.admin.inc:114
+#: managed/adsense_managed.module:94
+#: old/oldcode/adsense_oldcode.module:120
+msgid "Right"
+msgstr "Prawo"
+
+#: cse/adsense_cse.admin.inc:122
+#: managed/adsense_managed.admin.inc:36
+#: old/oldcode/adsense_oldcode.admin.inc:22
+#: old/search/adsense_search.admin.inc:226
+msgid "AdSense Blocks"
+msgstr "Bloki AdSense"
+
+#: cse/adsense_cse.admin.inc:127
+#: managed/adsense_managed.admin.inc:41
+#: old/oldcode/adsense_oldcode.admin.inc:27
+#: old/search/adsense_search.admin.inc:231
+msgid "Number of blocks"
+msgstr "Liczba bloków"
+
+#: cse/adsense_cse.admin.inc:146
+#: old/search/adsense_search.admin.inc:268
+msgid "Text Box Length must be between !min and !max"
+msgstr "Długość Pola Tekstowego musi być pomiędzy !min a !max"
+
+#: cse/adsense_cse.admin.inc:152
+msgid "Results area width must be between !min and !max"
+msgstr "Szerokość obszaru wyników musi być pomiędzy !min a !max"
+
+#: cse/adsense_cse.admin.inc:156
+#: managed/adsense_managed.admin.inc:58
+#: old/oldcode/adsense_oldcode.admin.inc:168
+#: old/search/adsense_search.admin.inc:273
+msgid "Number of blocks can't be a negative number"
+msgstr "Liczba bloków nie może być ujemna"
+
+#: cse/adsense_cse.module:65
+msgid "AdSense CSE: unconfigured "
+msgstr "Nieskonfigurowano AdSense CSE"
+
+#: cse/adsense_cse.module:76
+#: managed/adsense_managed.module:61
+#: old/oldcode/adsense_oldcode.module:82
+#: old/search/adsense_search.module:92
+msgid "Block description"
+msgstr "Opis bloku"
+
+#: cse/adsense_cse.module:79
+#: managed/adsense_managed.module:64
+#: old/oldcode/adsense_oldcode.module:85
+#: old/search/adsense_search.module:95
+msgid "A brief description of your block. Used on the <a href=\"@overview\">block overview page</a>."
+msgstr "Krótki opis Twojego bloku. Używany na stronie <a href=\"@overview\">zarządzania blokami</a>."
+
+#: cse/adsense_cse.module:86
+#: managed/adsense_managed.module:80
+msgid "Ad Slot ID"
+msgstr "Identyfikator Kanału reklamy"
+
+#: cse/adsense_cse.module:88
+msgid "This is the provided by the AdSense site in the Search Box Code \"cx\" field. This is usually provided in the form partner-<em>Publisher ID</em>:<em>Slot Id</em>. If the code provided is, for example, partner-pub-0123456789:<strong>abcdef-ghij</strong>, then insert only <strong>abcdef-ghij</strong> here."
+msgstr "Ten kod znajduje się w polu \"cx\" kodu wyszukiwania. Zazwyczaj jest dostarczone w formie <em>identyfikator wydawcy</em>:<em>identyfikator kanału</em>"
+
+#: cse/adsense_cse.module:101
+#: managed/adsense_managed.module:109
+#: old/oldcode/adsense_oldcode.module:135
+#: old/search/adsense_search.module:116
+msgid "AdSense unconfigured block. <a href=!url>Click to configure.</a>"
+msgstr "Nieskonfigurowany blok AdSense. <a href=!url>Kliknij by przejść do konfiguracji.</a>"
+
+#: cse/adsense_cse.module:143
+#: old/search/adsense_search.module:187;45
+msgid "Search"
+msgstr "Szukaj"
+
+#: cse/adsense_cse.module:144;34
+msgid "Custom Search"
+msgstr "Custom Search"
+
+#: cse/adsense_cse.module:43
+#: old/search/adsense_search.module:54
+msgid "Search Results"
+msgstr "Wyniki wyszukiwania"
+
+#: cse/adsense_cse.info:0
+msgid "CSE Search"
+msgstr "CSE Search"
+
+#: cse/adsense_cse.info:0
+msgid "AdSense for Search generator module. This module uses the new Custom Search Engine code created via the Adsense interface."
+msgstr "AdSense for Search generator module. This module uses the new Custom Search Engine code created via the Adsense interface"
+
+#: help/adsense.help.inc:23
+msgid "Format"
+msgstr "Format"
+
+#: help/adsense.help.inc:23
+msgid "Description"
+msgstr "Opis"
+
+#: help/adsense.help.inc:23
+msgid "Width"
+msgstr "Szerokość"
+
+#: help/adsense.help.inc:23
+msgid "Height"
+msgstr "Wysokość"
+
+#: help/adsense.help.inc:35
+msgid "Custom search help"
+msgstr ""
+
+#: help/adsense.help.inc:38
+msgid "Adsense CSE module (which must be enabled; !link) and refer to its help"
+msgstr ""
+
+#: help/adsense.help.inc:38
+msgid "modules"
+msgstr ""
+
+#: includes/adsense.search_options.inc:17
+msgid "West European Latin-1 (ISO-8859-1)"
+msgstr "zachodnioeuropejski"
+
+#: includes/adsense.search_options.inc:18
+msgid "West European Latin-9 (ISO-8859-15)"
+msgstr "zachodnioeuropejski"
+
+#: includes/adsense.search_options.inc:19
+msgid "Western (Windows-1252)"
+msgstr "zachodni"
+
+#: includes/adsense.search_options.inc:20
+msgid "Nordic Latin-6 (ISO-8859-10)"
+msgstr "nordycki"
+
+#: includes/adsense.search_options.inc:21
+msgid "Greek (ISO-8859-7)"
+msgstr "grecki"
+
+#: includes/adsense.search_options.inc:22
+msgid "Japanese (Shift_JIS)"
+msgstr "japoński"
+
+#: includes/adsense.search_options.inc:23
+msgid "Japanese (EUC-JP)"
+msgstr "japoński"
+
+#: includes/adsense.search_options.inc:24
+msgid "Japanese (ISO-2022-JP)"
+msgstr "japoński"
+
+#: includes/adsense.search_options.inc:25
+msgid "Chinese Simplified (GB2312)"
+msgstr "chiński uproszczony"
+
+#: includes/adsense.search_options.inc:26
+msgid "Chinese Simplified (GB18030)"
+msgstr "chiński uproszczon"
+
+#: includes/adsense.search_options.inc:27
+msgid "Chinese Traditional (Big5)"
+msgstr "chiński tradycyjny"
+
+#: includes/adsense.search_options.inc:28
+msgid "Korean (EUC-KR)"
+msgstr "koreański"
+
+#: includes/adsense.search_options.inc:29
+msgid "Thai (Windows-874)"
+msgstr "tajski"
+
+#: includes/adsense.search_options.inc:30
+msgid "Vietnamese (Windows-1258)"
+msgstr "wietnamski"
+
+#: includes/adsense.search_options.inc:31
+msgid "Central European Latin-2 (ISO-8859-2)"
+msgstr "środkowo-europejski"
+
+#: includes/adsense.search_options.inc:32
+msgid "Central European (Windows-1250)"
+msgstr "środkowo-europejski"
+
+#: includes/adsense.search_options.inc:33
+msgid "Central European (CP852)"
+msgstr "środkowo-europejski"
+
+#: includes/adsense.search_options.inc:34
+msgid "Turkish Latin-5 (ISO-8859-9)"
+msgstr "turecki"
+
+#: includes/adsense.search_options.inc:35
+msgid "Turkish (Windows-1254)"
+msgstr "turecki"
+
+#: includes/adsense.search_options.inc:36
+msgid "South European Latin-3 (ISO-8859-3)"
+msgstr "południowo-europejski"
+
+#: includes/adsense.search_options.inc:37
+msgid "Hebrew (ISO-8859-8-I)"
+msgstr "hebrajski"
+
+#: includes/adsense.search_options.inc:38
+msgid "Hebrew (Windows-1255)"
+msgstr "hebrajski"
+
+#: includes/adsense.search_options.inc:39
+msgid "Arabic (Windows-1256)"
+msgstr "arabski"
+
+#: includes/adsense.search_options.inc:40
+msgid "Cyrillic (ISO-8859-5)"
+msgstr "cyrylica"
+
+#: includes/adsense.search_options.inc:41
+msgid "Cyrillic (KOI8-R)"
+msgstr "cyrylica"
+
+#: includes/adsense.search_options.inc:42
+msgid "Cyrillic (Windows-1251)"
+msgstr "cyrylica"
+
+#: includes/adsense.search_options.inc:43
+msgid "Cyrillic/Russian (CP-866)"
+msgstr "cyrylica"
+
+#: includes/adsense.search_options.inc:44
+msgid "Unicode (UTF-8)"
+msgstr "Unicode (UTF-8)"
+
+#: includes/adsense.search_options.inc:56
+msgid "United Kingdom"
+msgstr "Wielka Brytania"
+
+#: includes/adsense.search_options.inc:57
+msgid "Canada"
+msgstr "Kanada"
+
+#: includes/adsense.search_options.inc:58
+msgid "Germany"
+msgstr "Niemcy"
+
+#: includes/adsense.search_options.inc:59
+msgid "Japan"
+msgstr "Japonia"
+
+#: includes/adsense.search_options.inc:60
+msgid "France"
+msgstr "Francja"
+
+#: includes/adsense.search_options.inc:61
+msgid "Australia"
+msgstr "Australia"
+
+#: includes/adsense.search_options.inc:62
+msgid "Italy"
+msgstr "Włochy"
+
+#: includes/adsense.search_options.inc:63
+msgid "Austria"
+msgstr "Austria"
+
+#: includes/adsense.search_options.inc:64
+msgid "Switzerland"
+msgstr "Szwajacaria"
+
+#: includes/adsense.search_options.inc:65
+msgid "Spain"
+msgstr "Hiszpania"
+
+#: includes/adsense.search_options.inc:66
+msgid "Netherlands"
+msgstr "Holandia"
+
+#: includes/adsense.search_options.inc:67
+msgid "Belgium"
+msgstr "Belgia"
+
+#: includes/adsense.search_options.inc:68
+msgid "Denmark"
+msgstr "Dania"
+
+#: includes/adsense.search_options.inc:69
+msgid "Sweden"
+msgstr "Szwecja"
+
+#: includes/adsense.search_options.inc:70
+msgid "Norway"
+msgstr "Norwegia"
+
+#: includes/adsense.search_options.inc:71
+msgid "Brazil"
+msgstr "Brazylia"
+
+#: includes/adsense.search_options.inc:72
+msgid "Portugal"
+msgstr "Portugalia"
+
+#: includes/adsense.search_options.inc:73
+msgid "Finland"
+msgstr "Finlandia"
+
+#: includes/adsense.search_options.inc:74
+msgid "South Korea"
+msgstr "Południowa Korea"
+
+#: includes/adsense.search_options.inc:75
+msgid "China"
+msgstr "Chiny"
+
+#: includes/adsense.search_options.inc:76
+msgid "Hong Kong"
+msgstr "Hong Kong"
+
+#: includes/adsense.search_options.inc:77
+msgid "Taiwan"
+msgstr "Tajwan"
+
+#: includes/adsense.search_options.inc:78
+msgid "Singapore"
+msgstr "Singapur"
+
+#: includes/adsense.search_options.inc:79
+msgid "Afghanistan"
+msgstr "Afganistan"
+
+#: includes/adsense.search_options.inc:80
+msgid "Albania"
+msgstr "Albania"
+
+#: includes/adsense.search_options.inc:81
+msgid "Algeria"
+msgstr "Algieria"
+
+#: includes/adsense.search_options.inc:82
+msgid "American Samoa"
+msgstr "Samoa amerykańska"
+
+#: includes/adsense.search_options.inc:83
+msgid "Andorra"
+msgstr "Andora"
+
+#: includes/adsense.search_options.inc:84
+msgid "Angola"
+msgstr "Angola"
+
+#: includes/adsense.search_options.inc:85
+msgid "Anguilla"
+msgstr "Anguila"
+
+#: includes/adsense.search_options.inc:86
+msgid "Antarctica"
+msgstr "Antarktyda"
+
+#: includes/adsense.search_options.inc:87
+msgid "Antigua and Barbuda"
+msgstr "Antigua i Barbuda"
+
+#: includes/adsense.search_options.inc:88
+msgid "Argentina"
+msgstr "Argentyna"
+
+#: includes/adsense.search_options.inc:89
+msgid "Armenia"
+msgstr "Armenia"
+
+#: includes/adsense.search_options.inc:90
+msgid "Aruba"
+msgstr "Aruba"
+
+#: includes/adsense.search_options.inc:91
+msgid "Azerbaijan"
+msgstr "Azerbejdżan"
+
+#: includes/adsense.search_options.inc:92
+msgid "Bahamas"
+msgstr "Bahamy"
+
+#: includes/adsense.search_options.inc:93
+msgid "Bahrain"
+msgstr "Bahrajn"
+
+#: includes/adsense.search_options.inc:94
+msgid "Bangladesh"
+msgstr "Bangladesz"
+
+#: includes/adsense.search_options.inc:95
+msgid "Barbados"
+msgstr "Barbados"
+
+#: includes/adsense.search_options.inc:96
+msgid "Belarus"
+msgstr "Białoruś"
+
+#: includes/adsense.search_options.inc:97
+msgid "Belize"
+msgstr "Belise"
+
+#: includes/adsense.search_options.inc:98
+msgid "Benin"
+msgstr ""
+
+#: includes/adsense.search_options.inc:99
+msgid "Bermuda"
+msgstr "Bermudy"
+
+#: includes/adsense.search_options.inc:100
+msgid "Bhutan"
+msgstr "Butan"
+
+#: includes/adsense.search_options.inc:101
+msgid "Bolivia"
+msgstr "Boliwia"
+
+#: includes/adsense.search_options.inc:102
+msgid "Bosnia and Herzegovina"
+msgstr "Bośnia i Hercegowina"
+
+#: includes/adsense.search_options.inc:103
+msgid "Botswana"
+msgstr "Botswana"
+
+#: includes/adsense.search_options.inc:104
+msgid "Bouvet Island"
+msgstr ""
+
+#: includes/adsense.search_options.inc:105
+msgid "British Indian Ocean Territory"
+msgstr "Terytorium Brytyjskie na Oceani Indyjskim"
+
+#: includes/adsense.search_options.inc:106
+msgid "Brunei Darussalam"
+msgstr ""
+
+#: includes/adsense.search_options.inc:107
+msgid "Bulgaria"
+msgstr "Bułgaria"
+
+#: includes/adsense.search_options.inc:108
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#: includes/adsense.search_options.inc:109
+msgid "Burundi"
+msgstr "Burundi"
+
+#: includes/adsense.search_options.inc:110
+msgid "Cambodia"
+msgstr "Kambodża"
+
+#: includes/adsense.search_options.inc:111
+msgid "Cameroon"
+msgstr "Kamrun"
+
+#: includes/adsense.search_options.inc:112
+msgid "Cape Verde"
+msgstr "Republika Zielonego Przylądka"
+
+#: includes/adsense.search_options.inc:113
+msgid "Cayman Islands"
+msgstr "Kajmany"
+
+#: includes/adsense.search_options.inc:114
+msgid "Central African Republic"
+msgstr "Republika Środkowoafrykańska"
+
+#: includes/adsense.search_options.inc:115
+msgid "Chad"
+msgstr "Czad"
+
+#: includes/adsense.search_options.inc:116
+msgid "Chile"
+msgstr "Czile"
+
+#: includes/adsense.search_options.inc:117
+msgid "Christmas Island"
+msgstr "Wyspa Wielkanocna"
+
+#: includes/adsense.search_options.inc:118
+msgid "Cocos (Keeling) Islands"
+msgstr "Wyspy Kokosowe (Kelinga)"
+
+#: includes/adsense.search_options.inc:119
+msgid "Colombia"
+msgstr "Kolumbia"
+
+#: includes/adsense.search_options.inc:120
+msgid "Comoros"
+msgstr "Komory"
+
+#: includes/adsense.search_options.inc:121
+msgid "Congo"
+msgstr "Kongo"
+
+#: includes/adsense.search_options.inc:122
+msgid "Congo,Democratic Republic"
+msgstr "Republika Demokratyczna Kongo"
+
+#: includes/adsense.search_options.inc:123
+msgid "Cook Islands"
+msgstr "Wyspy Cooka"
+
+#: includes/adsense.search_options.inc:124
+msgid "Costa Rica"
+msgstr "Kostaryka"
+
+#: includes/adsense.search_options.inc:125
+msgid "Cote d'Ivoire"
+msgstr "Wybrzeże Kości Słoniowej"
+
+#: includes/adsense.search_options.inc:126
+msgid "Croatia"
+msgstr "Chorwacja"
+
+#: includes/adsense.search_options.inc:127
+msgid "Cuba"
+msgstr "Kuba"
+
+#: includes/adsense.search_options.inc:128
+msgid "Cyprus"
+msgstr "Cypr"
+
+#: includes/adsense.search_options.inc:129
+msgid "Czech Republic"
+msgstr "Czechy"
+
+#: includes/adsense.search_options.inc:130
+msgid "Djibouti"
+msgstr "Dżibuti"
+
+#: includes/adsense.search_options.inc:131
+msgid "Dominica"
+msgstr "Dominika"
+
+#: includes/adsense.search_options.inc:132
+msgid "Dominican Republic"
+msgstr "Dominikana"
+
+#: includes/adsense.search_options.inc:133
+msgid "East Timor"
+msgstr "Wschodni Tymor"
+
+#: includes/adsense.search_options.inc:134
+msgid "Ecuador"
+msgstr "Ekwador"
+
+#: includes/adsense.search_options.inc:135
+msgid "Egypt"
+msgstr "Egipt"
+
+#: includes/adsense.search_options.inc:136
+msgid "El Salvador"
+msgstr "Salwador"
+
+#: includes/adsense.search_options.inc:137
+msgid "Equatorial Guinea"
+msgstr "Gwinea Równikowa"
+
+#: includes/adsense.search_options.inc:138
+msgid "Eritrea"
+msgstr "Erytrea"
+
+#: includes/adsense.search_options.inc:139
+msgid "Estonia"
+msgstr "Estonia"
+
+#: includes/adsense.search_options.inc:140
+msgid "Ethiopia"
+msgstr "Etiopia"
+
+#: includes/adsense.search_options.inc:141
+msgid "Falkland Islands (Malvinas)"
+msgstr "Falklandy"
+
+#: includes/adsense.search_options.inc:142
+msgid "Faroe Islands"
+msgstr "Wyspy Owcze"
+
+#: includes/adsense.search_options.inc:143
+msgid "Fiji"
+msgstr "Fidżi"
+
+#: includes/adsense.search_options.inc:144
+msgid "French Guiana"
+msgstr "Gujana francuska"
+
+#: includes/adsense.search_options.inc:145
+msgid "French Polynesia"
+msgstr "Polinezja francuska"
+
+#: includes/adsense.search_options.inc:146
+msgid "French Southern Territories"
+msgstr "Francuskie terytoria południowe"
+
+#: includes/adsense.search_options.inc:147
+msgid "Gabon"
+msgstr "Gabon"
+
+#: includes/adsense.search_options.inc:148
+msgid "Gambia"
+msgstr "Gambia"
+
+#: includes/adsense.search_options.inc:149
+msgid "Georgia"
+msgstr "Gruzja"
+
+#: includes/adsense.search_options.inc:150
+msgid "Ghana"
+msgstr "Ghana"
+
+#: includes/adsense.search_options.inc:151
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+#: includes/adsense.search_options.inc:152
+msgid "Greece"
+msgstr "Grecja"
+
+#: includes/adsense.search_options.inc:153
+msgid "Greenland"
+msgstr "Grenlandia"
+
+#: includes/adsense.search_options.inc:154
+msgid "Grenada"
+msgstr "Grenada"
+
+#: includes/adsense.search_options.inc:155
+msgid "Guadeloupe"
+msgstr "Gwadelupa"
+
+#: includes/adsense.search_options.inc:156
+msgid "Guam"
+msgstr "Guam"
+
+#: includes/adsense.search_options.inc:157
+msgid "Guatemala"
+msgstr "Gwatemala"
+
+#: includes/adsense.search_options.inc:158
+msgid "Guinea"
+msgstr "Gwinea"
+
+#: includes/adsense.search_options.inc:159
+msgid "Guinea-Bissau"
+msgstr "Gwinea Bissau"
+
+#: includes/adsense.search_options.inc:160
+msgid "Guyana"
+msgstr "Gujana"
+
+#: includes/adsense.search_options.inc:161
+msgid "Haiti"
+msgstr "Taiti"
+
+#: includes/adsense.search_options.inc:162
+msgid "Heard and McDonald Islands"
+msgstr "Wyspy Heard i McDonalda"
+
+#: includes/adsense.search_options.inc:163
+msgid "Honduras"
+msgstr "Honduras"
+
+#: includes/adsense.search_options.inc:164
+msgid "Hungary"
+msgstr "Węgry"
+
+#: includes/adsense.search_options.inc:165
+msgid "Iceland"
+msgstr "Islandia"
+
+#: includes/adsense.search_options.inc:166
+msgid "India"
+msgstr "Indie"
+
+#: includes/adsense.search_options.inc:167
+msgid "Indonesia"
+msgstr "Indonezja"
+
+#: includes/adsense.search_options.inc:168
+msgid "Iran"
+msgstr "Iran"
+
+#: includes/adsense.search_options.inc:169
+msgid "Iraq"
+msgstr "Irak"
+
+#: includes/adsense.search_options.inc:170
+msgid "Ireland"
+msgstr "Irlandia"
+
+#: includes/adsense.search_options.inc:171
+msgid "Israel"
+msgstr "Izrael"
+
+#: includes/adsense.search_options.inc:172
+msgid "Jamaica"
+msgstr "Jamajka"
+
+#: includes/adsense.search_options.inc:173
+msgid "Jordan"
+msgstr "Jordan"
+
+#: includes/adsense.search_options.inc:174
+msgid "Kazakhstan"
+msgstr "Kazahstan"
+
+#: includes/adsense.search_options.inc:175
+msgid "Kenya"
+msgstr "Kenia"
+
+#: includes/adsense.search_options.inc:176
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#: includes/adsense.search_options.inc:177
+msgid "Kuwait"
+msgstr "Kuwejt"
+
+#: includes/adsense.search_options.inc:178
+msgid "Kyrgyzstan"
+msgstr "Kirgistan"
+
+#: includes/adsense.search_options.inc:179
+msgid "Lao People's Democratic Republic"
+msgstr "Laos"
+
+#: includes/adsense.search_options.inc:180
+msgid "Latvia"
+msgstr "Łotwa"
+
+#: includes/adsense.search_options.inc:181
+msgid "Lebanon"
+msgstr "Liban"
+
+#: includes/adsense.search_options.inc:182
+msgid "Lesotho"
+msgstr "Lesoto"
+
+#: includes/adsense.search_options.inc:183
+msgid "Liberia"
+msgstr "Liberia"
+
+#: includes/adsense.search_options.inc:184
+msgid "Libya"
+msgstr "Libia"
+
+#: includes/adsense.search_options.inc:185
+msgid "Liechtenstein"
+msgstr "Lichtensztajn"
+
+#: includes/adsense.search_options.inc:186
+msgid "Lithuania"
+msgstr "Litwa"
+
+#: includes/adsense.search_options.inc:187
+msgid "Luxembourg"
+msgstr "Luksemburg"
+
+#: includes/adsense.search_options.inc:188
+msgid "Macau"
+msgstr "Makao"
+
+#: includes/adsense.search_options.inc:189
+msgid "Macedonia"
+msgstr "Macedonia"
+
+#: includes/adsense.search_options.inc:190
+msgid "Madagascar"
+msgstr "Madagaskar"
+
+#: includes/adsense.search_options.inc:191
+msgid "Malawi"
+msgstr "Malawi"
+
+#: includes/adsense.search_options.inc:192
+msgid "Malaysia"
+msgstr "Malezja"
+
+#: includes/adsense.search_options.inc:193
+msgid "Maldives"
+msgstr "Malediwy"
+
+#: includes/adsense.search_options.inc:194
+msgid "Mali"
+msgstr "Mali"
+
+#: includes/adsense.search_options.inc:195
+msgid "Malta"
+msgstr "Mali"
+
+#: includes/adsense.search_options.inc:196
+msgid "Marshall Islands"
+msgstr "Wyspy Marshalla"
+
+#: includes/adsense.search_options.inc:197
+msgid "Martinique"
+msgstr "Martinika"
+
+#: includes/adsense.search_options.inc:198
+msgid "Mauritania"
+msgstr "Mauretania"
+
+#: includes/adsense.search_options.inc:199
+msgid "Mauritius"
+msgstr "Mauritius"
+
+#: includes/adsense.search_options.inc:200
+msgid "Mayotte"
+msgstr "Mayotte"
+
+#: includes/adsense.search_options.inc:201
+msgid "Mexico"
+msgstr "Meksyk"
+
+#: includes/adsense.search_options.inc:202
+msgid "Micronesia"
+msgstr "Mikronezja"
+
+#: includes/adsense.search_options.inc:203
+msgid "Moldova"
+msgstr "Mołdawia"
+
+#: includes/adsense.search_options.inc:204
+msgid "Monaco"
+msgstr "Monako"
+
+#: includes/adsense.search_options.inc:205
+msgid "Mongolia"
+msgstr "Mongolia"
+
+#: includes/adsense.search_options.inc:206
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#: includes/adsense.search_options.inc:207
+msgid "Morocco"
+msgstr "Maroko"
+
+#: includes/adsense.search_options.inc:208
+msgid "Mozambique"
+msgstr "Mozambik"
+
+#: includes/adsense.search_options.inc:209
+msgid "Myanmar"
+msgstr "Myanmar"
+
+#: includes/adsense.search_options.inc:210
+msgid "Namibia"
+msgstr "Namibia"
+
+#: includes/adsense.search_options.inc:211
+msgid "Nauru"
+msgstr "Nauru"
+
+#: includes/adsense.search_options.inc:212
+msgid "Nepal"
+msgstr "Nepal"
+
+#: includes/adsense.search_options.inc:213
+msgid "Netherlands Antilles"
+msgstr "Antyle holenderskie"
+
+#: includes/adsense.search_options.inc:214
+msgid "New Caledonia"
+msgstr "Nowa Kaledonia"
+
+#: includes/adsense.search_options.inc:215
+msgid "New Zealand"
+msgstr "Nowa Zelandia"
+
+#: includes/adsense.search_options.inc:216
+msgid "Nicaragua"
+msgstr "Nikaragua"
+
+#: includes/adsense.search_options.inc:217
+msgid "Niger"
+msgstr "Niger"
+
+#: includes/adsense.search_options.inc:218
+msgid "Nigeria"
+msgstr "Nigeria"
+
+#: includes/adsense.search_options.inc:219
+msgid "Niue"
+msgstr "Niue"
+
+#: includes/adsense.search_options.inc:220
+msgid "Norfolk Island"
+msgstr "Norfolk"
+
+#: includes/adsense.search_options.inc:221
+msgid "Northern Mariana Islands"
+msgstr "Mariany Północne"
+
+#: includes/adsense.search_options.inc:222
+msgid "North Korea"
+msgstr "Korea Północna"
+
+#: includes/adsense.search_options.inc:223
+msgid "Oman"
+msgstr "Oman"
+
+#: includes/adsense.search_options.inc:224
+msgid "Pakistan"
+msgstr "Pakistan"
+
+#: includes/adsense.search_options.inc:225
+msgid "Palau"
+msgstr "Palau"
+
+#: includes/adsense.search_options.inc:226
+msgid "Palestinian Territory"
+msgstr "Terytorium Palestyny"
+
+#: includes/adsense.search_options.inc:227
+msgid "Panama"
+msgstr "Panama"
+
+#: includes/adsense.search_options.inc:228
+msgid "Papua New Guinea"
+msgstr "Papua-Nowa Gwinea"
+
+#: includes/adsense.search_options.inc:229
+msgid "Paraguay"
+msgstr "Paragwaj"
+
+#: includes/adsense.search_options.inc:230
+msgid "Peru"
+msgstr "Peru"
+
+#: includes/adsense.search_options.inc:231
+msgid "Philippines"
+msgstr "Filipiny"
+
+#: includes/adsense.search_options.inc:232
+msgid "Pitcairn"
+msgstr "Pitcairn"
+
+#: includes/adsense.search_options.inc:233
+msgid "Poland"
+msgstr "Polska"
+
+#: includes/adsense.search_options.inc:234
+msgid "Puerto Rico"
+msgstr "Portoryko"
+
+#: includes/adsense.search_options.inc:235
+msgid "Qatar"
+msgstr "Katar"
+
+#: includes/adsense.search_options.inc:236
+msgid "Reunion"
+msgstr "Reunion"
+
+#: includes/adsense.search_options.inc:237
+msgid "Romania"
+msgstr "Rumunia"
+
+#: includes/adsense.search_options.inc:238
+msgid "Russian Federation"
+msgstr "Rosja"
+
+#: includes/adsense.search_options.inc:239
+msgid "Rwanda"
+msgstr "Ruanda"
+
+#: includes/adsense.search_options.inc:240
+msgid "Saint Kitts and Nevis"
+msgstr "Saint Kitts i Nevis"
+
+#: includes/adsense.search_options.inc:241
+msgid "Saint Lucia"
+msgstr "Saint Lucia"
+
+#: includes/adsense.search_options.inc:242
+msgid "Saint Vincent and the Grenadines"
+msgstr "Saint Vincent i Grenadyny"
+
+#: includes/adsense.search_options.inc:243
+msgid "Samoa"
+msgstr "Samoa"
+
+#: includes/adsense.search_options.inc:244
+msgid "San Marino"
+msgstr "San Marino"
+
+#: includes/adsense.search_options.inc:245
+msgid "Sao Tome and Principe"
+msgstr "Sao Tome and Principe"
+
+#: includes/adsense.search_options.inc:246
+msgid "Saudi Arabia"
+msgstr "Arabia Saudyjska"
+
+#: includes/adsense.search_options.inc:247
+msgid "Senegal"
+msgstr "Senegal"
+
+#: includes/adsense.search_options.inc:248
+msgid "Serbia and Montenegro"
+msgstr "Serbia i Czarnogóra"
+
+#: includes/adsense.search_options.inc:249
+msgid "Seychelles"
+msgstr "Seszele"
+
+#: includes/adsense.search_options.inc:250
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
+#: includes/adsense.search_options.inc:251
+msgid "Slovakia"
+msgstr "Słowacja"
+
+#: includes/adsense.search_options.inc:252
+msgid "Slovenia"
+msgstr "Słowenia"
+
+#: includes/adsense.search_options.inc:253
+msgid "Solomon Islands"
+msgstr "Solomon Islands"
+
+#: includes/adsense.search_options.inc:254
+msgid "Somalia"
+msgstr "Somalia"
+
+#: includes/adsense.search_options.inc:255
+msgid "South Africa"
+msgstr "Republika Południowej Afryki"
+
+#: includes/adsense.search_options.inc:256
+msgid "South Georgia and The South Sandwich Islands"
+msgstr "Georgia Południowa i Sandwich Południowy"
+
+#: includes/adsense.search_options.inc:257
+msgid "Sri Lanka"
+msgstr "Sri Lanka"
+
+#: includes/adsense.search_options.inc:258
+msgid "St. Helena"
+msgstr "St. Helena"
+
+#: includes/adsense.search_options.inc:259
+msgid "St. Pierre and Miquelon"
+msgstr "St. Pierre and Miquelon"
+
+#: includes/adsense.search_options.inc:260
+msgid "Sudan"
+msgstr "Sudan"
+
+#: includes/adsense.search_options.inc:261
+msgid "Suriname"
+msgstr "Surinam"
+
+#: includes/adsense.search_options.inc:262
+msgid "Svalbard and Jan Mayen Islands"
+msgstr "Wyspy Svalbarda i Jana Mayena"
+
+#: includes/adsense.search_options.inc:263
+msgid "Swaziland"
+msgstr "Suazi"
+
+#: includes/adsense.search_options.inc:264
+msgid "Syria"
+msgstr "Syria"
+
+#: includes/adsense.search_options.inc:265
+msgid "Tajikistan"
+msgstr "Tadżykistan"
+
+#: includes/adsense.search_options.inc:266
+msgid "Tanzania"
+msgstr "Tanzania"
+
+#: includes/adsense.search_options.inc:267
+msgid "Thailand"
+msgstr "Tajlandia"
+
+#: includes/adsense.search_options.inc:268
+msgid "Togo"
+msgstr "Togo"
+
+#: includes/adsense.search_options.inc:269
+msgid "Tokelau"
+msgstr "Tokelau"
+
+#: includes/adsense.search_options.inc:270
+msgid "Tonga"
+msgstr ""
+
+#: includes/adsense.search_options.inc:271
+msgid "Trinidad and Tobago"
+msgstr "Trynidad i Tobago"
+
+#: includes/adsense.search_options.inc:272
+msgid "Tunisia"
+msgstr "Tunezja"
+
+#: includes/adsense.search_options.inc:273
+msgid "Turkey"
+msgstr "Turcja"
+
+#: includes/adsense.search_options.inc:274
+msgid "Turkmenistan"
+msgstr "Turkmenistan"
+
+#: includes/adsense.search_options.inc:275
+msgid "Turks and Caicos Islands"
+msgstr "Turks i Caicos"
+
+#: includes/adsense.search_options.inc:276
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#: includes/adsense.search_options.inc:277
+msgid "Uganda"
+msgstr "Uganda"
+
+#: includes/adsense.search_options.inc:278
+msgid "Ukraine"
+msgstr "Ukraina"
+
+#: includes/adsense.search_options.inc:279
+msgid "United Arab Emirates"
+msgstr "Zjednoczone Emiraty Arabskie"
+
+#: includes/adsense.search_options.inc:280
+msgid "United States Minor Outlying Islands"
+msgstr "Dalekie Wyspy Mniejsze Stanów Zjednoczonych"
+
+#: includes/adsense.search_options.inc:281
+msgid "Uruguay"
+msgstr "Urugwaj"
+
+#: includes/adsense.search_options.inc:282
+msgid "Uzbekistan"
+msgstr "Uzbekistan"
+
+#: includes/adsense.search_options.inc:283
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#: includes/adsense.search_options.inc:284
+msgid "Vatican"
+msgstr "Watykan"
+
+#: includes/adsense.search_options.inc:285
+msgid "Venezuela"
+msgstr "Wenezuela"
+
+#: includes/adsense.search_options.inc:286
+msgid "Viet Nam"
+msgstr "Wietnam"
+
+#: includes/adsense.search_options.inc:287
+msgid "Virgin Islands (British)"
+msgstr "Wyspy Dziewicze (bryt.)"
+
+#: includes/adsense.search_options.inc:288
+msgid "Virgin Islands (U.S.)"
+msgstr "Wyspy Dziewicze (amer.)"
+
+#: includes/adsense.search_options.inc:289
+msgid "Wallis and Futuna Islands"
+msgstr "Wallis i Futuna"
+
+#: includes/adsense.search_options.inc:290
+msgid "Western Sahara"
+msgstr "Sahara zachodnia"
+
+#: includes/adsense.search_options.inc:291
+msgid "Yemen"
+msgstr "Jemen"
+
+#: includes/adsense.search_options.inc:292
+msgid "Zambia"
+msgstr "Zambia"
+
+#: includes/adsense.search_options.inc:293
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
+
+#: includes/adsense.search_options.inc:294
+msgid "United States"
+msgstr "Stany Zjednoczone"
+
+#: includes/adsense.search_options.inc:306
+msgid "Arabic"
+msgstr "arabski"
+
+#: includes/adsense.search_options.inc:307
+msgid "Bulgarian"
+msgstr "bułgarski"
+
+#: includes/adsense.search_options.inc:308
+msgid "Chinese (simplified)"
+msgstr "chiński uproszczony"
+
+#: includes/adsense.search_options.inc:309
+msgid "Chinese (traditional)"
+msgstr "chiński tradycyjny"
+
+#: includes/adsense.search_options.inc:310
+msgid "Croatian"
+msgstr "chorwacki"
+
+#: includes/adsense.search_options.inc:311
+msgid "Czech"
+msgstr "czeski"
+
+#: includes/adsense.search_options.inc:312
+msgid "Danish"
+msgstr "duński"
+
+#: includes/adsense.search_options.inc:313
+msgid "Dutch"
+msgstr "holenderski"
+
+#: includes/adsense.search_options.inc:314
+msgid "English"
+msgstr "angielski"
+
+#: includes/adsense.search_options.inc:315
+msgid "Finnish"
+msgstr "fiński"
+
+#: includes/adsense.search_options.inc:316
+msgid "French"
+msgstr "francuski"
+
+#: includes/adsense.search_options.inc:317
+msgid "German"
+msgstr "niemiecki"
+
+#: includes/adsense.search_options.inc:318
+msgid "Greek"
+msgstr "grecki"
+
+#: includes/adsense.search_options.inc:319
+msgid "Hebrew"
+msgstr "hebrajski"
+
+#: includes/adsense.search_options.inc:320
+msgid "Hungarian"
+msgstr "węgierski"
+
+#: includes/adsense.search_options.inc:321
+msgid "Indonesian"
+msgstr "indonezyjski"
+
+#: includes/adsense.search_options.inc:322
+msgid "Italian"
+msgstr "włoski"
+
+#: includes/adsense.search_options.inc:323
+msgid "Japanese"
+msgstr "japoński"
+
+#: includes/adsense.search_options.inc:324
+msgid "Korean"
+msgstr "koreański"
+
+#: includes/adsense.search_options.inc:325
+msgid "Norwegian"
+msgstr "norweski"
+
+#: includes/adsense.search_options.inc:326
+msgid "Polish"
+msgstr "polski"
+
+#: includes/adsense.search_options.inc:327
+msgid "Portuguese"
+msgstr "portugalski"
+
+#: includes/adsense.search_options.inc:328
+msgid "Romanian"
+msgstr "rumuśnki"
+
+#: includes/adsense.search_options.inc:329
+msgid "Russian"
+msgstr "rosyjski"
+
+#: includes/adsense.search_options.inc:330
+msgid "Serbian"
+msgstr "serbski"
+
+#: includes/adsense.search_options.inc:331
+msgid "Slovak"
+msgstr "słowacki"
+
+#: includes/adsense.search_options.inc:332
+msgid "Spanish"
+msgstr "hiszpański"
+
+#: includes/adsense.search_options.inc:333
+msgid "Swedish"
+msgstr "szwedzki"
+
+#: includes/adsense.search_options.inc:334
+msgid "Thai"
+msgstr "tajski"
+
+#: includes/adsense.search_options.inc:335
+msgid "Turkish"
+msgstr "turecki"
+
+#: includes/adsense.search_options.inc:336
+msgid "Vietnamese"
+msgstr "wietnamski"
+
+#: managed/adsense_managed.module:46
+msgid "AdSense: unconfigured "
+msgstr "Nieskonfigurowane AdSense"
+
+#: managed/adsense_managed.module:71
+#: old/oldcode/adsense_oldcode.module:92
+msgid "Ad format"
+msgstr "format reklam"
+
+#: managed/adsense_managed.module:74
+#: old/oldcode/adsense_oldcode.module:95
+msgid "Select the ad dimensions you want for this block."
+msgstr "Wybierz szerokość reklamy jaką chcesz dla tego bloku"
+
+#: managed/adsense_managed.module:82
+msgid "This is the Ad Slot ID from your Google Adsense account, such as 0123456789."
+msgstr "To jest miejsce na numer twojego identyfikatora wydawcy"
+
+#: managed/adsense_managed.module:88
+#: old/oldcode/adsense_oldcode.module:114
+msgid "Ad alignment"
+msgstr ""
+
+#: managed/adsense_managed.module:91
+#: old/oldcode/adsense_oldcode.admin.inc:118
+#: old/oldcode/adsense_oldcode.module:75;117
+#: old/search/adsense_search.module:85
+msgid "None"
+msgstr "Żaden"
+
+#: managed/adsense_managed.module:92
+#: old/oldcode/adsense_oldcode.module:118
+msgid "Left"
+msgstr ""
+
+#: managed/adsense_managed.module:93
+#: old/oldcode/adsense_oldcode.module:119
+msgid "Centered"
+msgstr ""
+
+#: managed/adsense_managed.module:96
+#: old/oldcode/adsense_oldcode.module:122
+msgid "Select the horizontal alignment of the ad within the block."
+msgstr ""
+
+#: managed/adsense_managed.module:22
+msgid "Managed Ads"
+msgstr "Zarządzane reklamy"
+
+#: managed/adsense_managed.info:0
+msgid "Managed ads"
+msgstr "Zarządzone reklamy"
+
+#: managed/adsense_managed.info:0
+msgid "Ad unit generator module using the new managed ads feature available in the Google AdSense site."
+msgstr "Moduł generator jednostek reklam używa nowych zarządzania reklamami, które są dostępne na stronie Google AdSense"
+
+#: old/oldcode/adsense_oldcode.admin.inc:37
+msgid "Ad groups"
+msgstr "Grupy reklam"
+
+#: old/oldcode/adsense_oldcode.admin.inc:50
+msgid "Group @group attributes"
+msgstr "Właściwości grupy @group"
+
+#: old/oldcode/adsense_oldcode.admin.inc:55
+#: old/search/adsense_search.admin.inc:168
+msgid "Title"
+msgstr "Tytuł"
+
+#: old/oldcode/adsense_oldcode.admin.inc:59
+msgid "Title of the group."
+msgstr "Tytuł grupy"
+
+#: old/oldcode/adsense_oldcode.admin.inc:64
+msgid "Ad type"
+msgstr "Typ reklamy"
+
+#: old/oldcode/adsense_oldcode.admin.inc:66
+#: old/search/adsense_search.admin.inc:184
+msgid "Text"
+msgstr "Tekst"
+
+#: old/oldcode/adsense_oldcode.admin.inc:66
+msgid "Image"
+msgstr "Obraz"
+
+#: old/oldcode/adsense_oldcode.admin.inc:66
+msgid "Both"
+msgstr "Oba"
+
+#: old/oldcode/adsense_oldcode.admin.inc:76
+#: old/search/adsense_search.admin.inc:89
+msgid "Text color"
+msgstr "Kolor tekstu"
+
+#: old/oldcode/adsense_oldcode.admin.inc:84
+msgid "Border color"
+msgstr "Kolor obramowania"
+
+#: old/oldcode/adsense_oldcode.admin.inc:100
+msgid "Title color"
+msgstr "Kolor tytułu"
+
+#: old/oldcode/adsense_oldcode.admin.inc:108
+msgid "URL color"
+msgstr "Kolor linka"
+
+#: old/oldcode/adsense_oldcode.admin.inc:116
+msgid "Alternate URL color"
+msgstr "Alternatywny kolor linka"
+
+#: old/oldcode/adsense_oldcode.admin.inc:118
+msgid "Alternate URL"
+msgstr "Alternatywny URL"
+
+#: old/oldcode/adsense_oldcode.admin.inc:118
+msgid "Alternate color"
+msgstr "Alternatywny kolor"
+
+#: old/oldcode/adsense_oldcode.admin.inc:123
+msgid "Alternate info"
+msgstr "Alternatywna informacja"
+
+#: old/oldcode/adsense_oldcode.admin.inc:127
+msgid "Enter either 6 letter alternate color code, or alternate URL to use"
+msgstr "Wstaw 6-znakowy kod koloru lub alternatywny URL"
+
+#: old/oldcode/adsense_oldcode.admin.inc:132
+msgid "Rounded corners"
+msgstr "Zaokrąglone narożniki"
+
+#: old/oldcode/adsense_oldcode.admin.inc:135
+msgid "Choose type of round corners"
+msgstr "Wybierz typ zaokrąglonych narożników"
+
+#: old/oldcode/adsense_oldcode.admin.inc:143
+#: old/search/adsense_search.admin.inc:241
+msgid "Custom channels"
+msgstr "Własne kanały"
+
+#: old/oldcode/adsense_oldcode.admin.inc:144
+#: old/search/adsense_search.admin.inc:242
+msgid "Enter up to !channels custom channels that you have configured in Google AdSense. If you are not using custom channels, or you are only using URL channels, then leave this empty."
+msgstr "Wpisz do !channels własnych kanałów, które masz skonfigurowane w Google AdSense. Jeśli nie używasz własnych kanałów lub używasz kanałów URL, wtedy pozostaw to pole puste"
+
+#: old/oldcode/adsense_oldcode.admin.inc:150
+#: old/search/adsense_search.admin.inc:248
+msgid "Custom channel ID"
+msgstr "Własny kanał ID"
+
+#: old/oldcode/adsense_oldcode.admin.inc:184
+#: old/search/adsense_search.admin.inc:291
+msgid "Color must be between #000000 and #FFFFFF"
+msgstr "Kolor musi być pomiędzy #000000 i #FFFFFF"
+
+#: old/oldcode/adsense_oldcode.module:58
+msgid "AdSense old code: unconfigured "
+msgstr "Stary kod AdSense : nieskonfigurowany"
+
+#: old/oldcode/adsense_oldcode.module:100
+msgid "Group"
+msgstr "Grupa"
+
+#: old/oldcode/adsense_oldcode.module:107
+#: old/search/adsense_search.module:102
+msgid "Channel"
+msgstr "Kanał"
+
+#: old/oldcode/adsense_oldcode.module:34
+msgid "Old Code Ads"
+msgstr "Stary kod reklam"
+
+#: old/oldcode/adsense_oldcode.info:0
+msgid "Ads (old)"
+msgstr "Reklamy (stare)"
+
+#: old/oldcode/adsense_oldcode.info:0
+msgid "Ad unit generator module using the old format code in which the colours are specified in the ad's JavaScript."
+msgstr "Generator jednostek relam używa starego formatu kodu, w których kolory są ustawiane przez kod JavaScript w reklamie."
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:37
+msgid "Required parameters"
+msgstr "Wymagane parametry"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:42
+msgid "Google AdSense client ID profile field"
+msgstr "Pole profilu identyfikacyjnego wydawcy AdSense"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:46
+msgid "This is the profile field that holds the AdSense Client ID for the site owner as well as (optionally) for site users who participate in revenue sharing. You must enabled the profile module and create a new field for this."
+msgstr "To jest pole profilu, które przechowuje identyfikator wydawcy AdSense właściciela strony oraz (opcjonalnie) użytkowników, którzy uczestniczą w podziale zysków. Musisz włączyć moduł profile i stworzyć nowe pole ..."
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:53
+msgid "Revenue sharing percentage"
+msgstr ""
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:60
+msgid "Percentage of node views going to author"
+msgstr "Procent wyświetleń zawartości jaki zostanie przetransferowany do autora"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:67
+msgid "Percentage of node views going to author with the following roles"
+msgstr ""
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:68
+msgid "When the author belongs to one or more roles, the percentage of node views using his AdSense Client ID will be the maximum between the author value and the following settings for each role."
+msgstr ""
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:86
+msgid "Percentage of node views going to user who referred the author"
+msgstr "Procent wyświetleń zawartości jaki zostanie przetransferowany do użytkownika, który referred the author"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:96
+msgid "Content types"
+msgstr ""
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:122
+msgid "Role"
+msgstr ""
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.admin.inc:122
+msgid "Percentage"
+msgstr ""
+
+#: (duplicate) old/revenue_sharing_basic/revenue_sharing_basic.module:56
+#: ;22
+msgid "Revenue Sharing"
+msgstr "Dzielenie zyskami"
+
+#: (duplicate) old/revenue_sharing_basic/revenue_sharing_basic.module:57
+msgid "Drupal page cache is enabled."
+msgstr "Cache Drupal dla stron jest włączony."
+
+#: (duplicate) old/revenue_sharing_basic/revenue_sharing_basic.module:58
+msgid "This causes conflicts with revenue sharing, since the pages are stored in the cache and are not dynamically generated. If you experience issues with revenue sharing, then disable the page cache."
+msgstr "To może spowodować konflikt z dzieleniem zysków, ponieważ strony nie są przechowywane w pamięci, ale generowane dynamicznie. Jeśli doświadczysz problemów z dzieleniem zysków, wówczas wyłacz pamięć stron."
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.info:0
+msgid "Revenue sharing basic (old)"
+msgstr "Podstawowe dzielenie zyskami (stare)"
+
+#: old/revenue_sharing_basic/revenue_sharing_basic.info:0
+msgid "Revenue sharing for the Google Adsense module"
+msgstr "Dzielenie zyskami dla modułu Adsense."
+
+#: old/search/adsense_search.admin.inc:26
+msgid "Allows users to search the web or the specific site(s) of your choice. Enter the site's URL without the last '/'"
+msgstr "Pozwól użytkownikom wyszukiwać w sieci albo w wybranych przez ciebie stronach. Wprowadź URL stron bez slasha '/'"
+
+#: old/search/adsense_search.admin.inc:55
+msgid "Use SafeSearch"
+msgstr "Użyj bezpiecznego wyszukiwania"
+
+#: old/search/adsense_search.admin.inc:64
+msgid "Google Logo"
+msgstr "Logo Google"
+
+#: old/search/adsense_search.admin.inc:65
+msgid "Logo above text box"
+msgstr "Logo powyżej pola tekstowego"
+
+#: old/search/adsense_search.admin.inc:66
+msgid "\"Google Search\" on button"
+msgstr "Napis \"Wyszukiwarka Google\" na przycisku"
+
+#: old/search/adsense_search.admin.inc:72
+msgid "Search button below text box"
+msgstr "Przycisk wyszukiwania poniżej pudełka"
+
+#: old/search/adsense_search.admin.inc:99
+msgid "Site Language"
+msgstr "Język stony"
+
+#: old/search/adsense_search.admin.inc:113
+msgid "Length of text box (Max 64)"
+msgstr "Długość tekstu maksymalnie 64"
+
+#: old/search/adsense_search.admin.inc:145
+msgid "Color attributes"
+msgstr "Atrybuty kolorów"
+
+#: old/search/adsense_search.admin.inc:160
+msgid "Border"
+msgstr "Obramowanie"
+
+#: old/search/adsense_search.admin.inc:176
+msgid "Background"
+msgstr "Tło"
+
+#: old/search/adsense_search.admin.inc:192
+msgid "URL"
+msgstr "URL"
+
+#: old/search/adsense_search.admin.inc:200
+msgid "Visited URL"
+msgstr "Odwiedzone URL"
+
+#: old/search/adsense_search.admin.inc:208
+msgid "Light URL"
+msgstr "Lekki URL?"
+
+#: old/search/adsense_search.admin.inc:216
+msgid "Logo Background"
+msgstr "Tło logo"
+
+#: old/search/adsense_search.results.inc:17
+msgid "Search keywords: %keyword"
+msgstr ""
+
+#: old/search/adsense_search.module:76
+msgid "AdSense Search: unconfigured "
+msgstr "Szukaj AdSense : nieskonfigurowane"
+
+#: old/search/adsense_search.module:210
+msgid "Google Search"
+msgstr "Wyszukiwarka Google"
+
+#: old/search/adsense_search.info:0
+msgid "Search (old)"
+msgstr "Wyszukiwanie (stare)"
+
+#: old/search/adsense_search.info:0
+msgid "AdSense for Search generator module. This module uses the 'old' code in which the user can select to search the entire Web or 1 to 3 user-defined domains."
+msgstr "AdSense dla modułu generowania wyszukiwania. Ten moduł używa starego kodu, w który użytkownik może wybrać, czy chce przeszukać całą sieć czy tylko wybrane 1-3 strony."
+
+#~ msgid "adsense"
+#~ msgstr "adsense"
+#~ msgid "AdSense settings are available under !link"
+#~ msgstr "Ustawienia AdSense znajdują się na stronie : !link"
+#~ msgid "Background Color"
+#~ msgstr "Kolor tła"
+#~ msgid "adsense_cse"
+#~ msgstr "adsense_cse"
+#~ msgid "adsense_managed"
+#~ msgstr "adsense_managed"
+#~ msgid "adsense_oldcode"
+#~ msgstr "adsense_oldcode"
+#~ msgid "Enable revenue sharing"
+#~ msgstr "Włącz dzielenie zysków"
+#~ msgid ""
+#~ "Note that enabling this will disable AdSense code caching, which can "
+#~ "cause more resource usage for busy sites. The referral feature requires "
+#~ "the referral module to be installed."
+#~ msgstr ""
+#~ "Wiedz, że włączenie tego wyłączy cachowanie kodów AdSense, co może "
+#~ "spowodować większą zasobożerność w przypadku obleganych stron. Opcja "
+#~ "poleceń (refferal feature) wymaga zainstalowania modułu refferal."
+#~ msgid "This feature requires the referral module to be installed."
+#~ msgstr "To wymaga zainstalowania modułu Refferal"
+#~ msgid "Revenue Sharing (basic)"
+#~ msgstr "Dzielenie zyskami (podstawowe)"
+#~ msgid "revenue_sharing_basic"
+#~ msgstr "revenue_sharing_basic"
+#~ msgid "Text Color"
+#~ msgstr "Kolor tekstu"
+#~ msgid "adsense_search"
+#~ msgstr "adsense_search"
+

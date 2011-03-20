@@ -1,0 +1,64 @@
+<?php
+// $Id: xmlsitemap_engines.install,v 1.3 2008/05/20 17:48:47 darrenoh Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function xmlsitemap_engines_install() {
+  if (db_result(db_query("
+    SELECT 1 FROM {system}
+    WHERE type = 'module' AND name = 'gsitemap' AND (status = 1 OR schema_version >= 0)
+  "))) {
+    $settings = db_query("SELECT * FROM {variable} WHERE name LIKE 'gsitemap\_%\_submit'");
+    while ($variable = db_fetch_object($settings)) {
+      $ts = strlen('gsitemap_');
+      $tl = strpos($variable->name, '_com_submit') === FALSE ? strlen('_submit') : strlen('_com_submit');
+      variable_set('xmlsitemap_engines_'. substr($variable->name, $ts, -$tl) .'_submit', unserialize($variable->value));
+      variable_del($variable->name);
+    }
+    $settings = db_query("SELECT * FROM {variable} WHERE name LIKE 'gsitemap\_%\_url'");
+    while ($variable = db_fetch_object($settings)) {
+      $ts = strlen('gsitemap_');
+      $tl = strpos($variable->name, '_com_url') === FALSE ? strlen('_url') : strlen('_com_url');
+      variable_set('xmlsitemap_engines_'. substr($variable->name, $ts, -$tl) .'_url', unserialize($variable->value));
+      variable_del($variable->name);
+    }
+    $settings = db_query("SELECT * FROM {variable} WHERE name LIKE 'gsitemap\_%verify%'");
+    while ($variable = db_fetch_object($settings)) {
+      $ts = strlen('gsitemap_');
+      $tl = strpos($variable->name, '_verify');
+      $engine = $tl === FALSE ? 'google' : substr($variable->name, $ts, $tl - $ts);
+      variable_set("xmlsitemap_engines_${engine}". strstr($variable->name, '_verify'), unserialize($variable->value));
+      variable_del($variable->name);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function xmlsitemap_engines_uninstall() {
+  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'xmlsitemap\_engines\_'");
+  while ($variable = db_fetch_object($settings)) {
+    variable_del($variable->name);
+  }
+}
+
+/**
+ * Implementation of hook_update_N().
+ * 
+ * Replace Moreover with Windows Live.
+ */
+function xmlsitemap_engines_update_1() {
+  $ret = array();
+  $submit = db_result(db_query("SELECT value FROM {variable} WHERE name = 'xmlsitemap_engines_moreover_submit'"));
+  if ($submit !== FALSE) {
+    variable_set('xmlsitemap_engines_live_submit', $submit);
+  }
+  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'xmlsitemap\_engines\_moreover\_'");
+  while ($variable = db_fetch_object($settings)) {
+    variable_del($variable->name);
+  }
+  return $ret;
+}
+

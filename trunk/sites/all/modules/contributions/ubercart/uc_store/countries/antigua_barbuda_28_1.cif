@@ -1,0 +1,18 @@
+<?php
+// $Id: antigua_barbuda_28_1.cif,v 1.1.2.1 2008/11/07 21:13:24 islandusurper Exp $
+
+function antigua_barbuda_install() {
+  db_query("INSERT INTO {uc_countries} VALUES (28, 'Antigua and Barbuda', 'AG', 'ATG', 1)");
+
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(28, 'GE', 'St. George'),"
+          ."(28, 'JO', 'St. John'),"
+          ."(28, 'MA', 'St. Mary'),"
+          ."(28, 'PA', 'St. Paul'),"
+          ."(28, 'PE', 'St. Peter'),"
+          ."(28, 'BB', 'Barbuda'),"
+          ."(28, 'RD', 'Redonda'),"
+          ."(28, 'PH', 'St. Philip')");
+
+  uc_set_address_format(28, "!company\r\n!first_name !last_name\r\n!street1\r\n!street2\r\n!city, !zone_code !postal_code\r\n!country_name_if");
+}

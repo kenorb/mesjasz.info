@@ -1,0 +1,66 @@
+<?php
+// $Id: venezuela_862_1.cif,v 1.2.2.4 2008/11/03 21:33:50 islandusurper Exp $
+
+/**
+ * First implement hook_install() using the name of the country as the base of
+ * the function name.
+ */
+function venezuela_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (862, 'Venezuela', 'VE', 'VEN', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(862, 'AM', 'Amazonas'),"
+          ."(862, 'AN', 'Anzoátegui'),"
+          ."(862, 'AP', 'Apure'),"
+          ."(862, 'AR', 'Aragua'),"
+          ."(862, 'BA', 'Barinas'),"
+          ."(862, 'BO', 'Bolívar'),"
+          ."(862, 'CA', 'Carabobo'),"
+          ."(862, 'CO', 'Cojedes'),"
+          ."(862, 'DA', 'Delta Amacuro'),"
+          ."(862, 'DF', 'Dependencias Federales'),"
+          ."(862, 'DC', 'Distrito Capital'),"
+          ."(862, 'FA', 'Falcón'),"
+          ."(862, 'GU', 'Guárico'),"
+          ."(862, 'LA', 'Lara'),"
+          ."(862, 'ME', 'Mérida'),"
+          ."(862, 'MI', 'Miranda'),"
+          ."(862, 'MO', 'Monagas'),"
+          ."(862, 'NE', 'Nueva Esparta'),"
+          ."(862, 'PO', 'Portuguesa'),"
+          ."(862, 'SU', 'Sucre'),"
+          ."(862, 'TA', 'Táchira'),"
+          ."(862, 'TR', 'Trujillo'),"
+          ."(862, 'VA', 'Vargas'),"
+          ."(862, 'YA', 'Yaracuy'),"
+          ."(862, 'ZU', 'Zulia')");
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.  Documentation on address formats
+  // is available at:
+  // http://www.ubercart.org/ubercart_users_guide/country_settings#address_format_docs
+  uc_set_address_format(862,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+   ."\r\n!city !zone_code !postal_code\r\n!country_name_if");
+}
+
+/**
+ * If necessary, implement hook_update() with $version being the only argument.
+ * Add a new case for each version update, and be sure to always include the
+ * latest changes in the install function.
+ */
+function venezuela_update($version) {
+}
+
+/**
+ * If necessary, implement hook_uninstall().  This requires no argument.  The
+ * store module automatically removes rows from the country and zones tables
+ * related to the country, and it unsets the address format.  This function is
+ * only necessary for other things you may have included in your country's
+ * installation process.
+ */
+function venezuela_uninstall() {
+}

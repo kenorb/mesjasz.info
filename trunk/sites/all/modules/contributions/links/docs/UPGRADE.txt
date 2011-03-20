@@ -1,0 +1,56 @@
+$Id: UPGRADE.txt,v 1.1.2.1 2009/01/22 03:07:36 syscrusher Exp $
+
+The Links Package contains several scripts that can help you upgrade from
+legacy modules. If your favorite legacy module should be supported and
+isn't, contributed update scripts are welcome. Please create new scripts
+rather than adding additional modules to the existing ones, as the desire
+is to keep these as simple as possible.
+
+
+GENERAL UPGRADE PROCEDURE:
+
+1. Use Drupal's own upgrade process to convert to Drupal 4.7.x. Don't worry
+   that the URLs appear to be missing. They are stored in a table separate
+   from the basic nodes, and will be migrated to the new {links_node} table
+   by this script.
+
+2. Decide which script(s) you need based on the instructions that follow.
+   Copy the script(s) to the top-level directory of your Drupal site.
+
+3. Login to your site as the administrative user.
+
+4. Manually type the URL to the upgrade script you wish to run. These scripts
+   are independent of one another, so if you need to use more than one, you
+   can run them in any order you wish.
+
+5. To prevent the timeout errors that can happen on some servers during
+   database transactions that process thousands of records, the upgrade
+   scripts limit themselves to no more than 1000 nodes per run. You should
+   simply use your browser's reload or refresh function to re-execute each
+   script until it reports that it had zero records to do on its run. The
+   scripts are self-limiting, so you won't hurt anything by accidentally
+   running it too many times.
+
+
+DESCRIPTION OF THE UPGRADE SCRIPTS:
+
+update-weblinks-old.php
+
+	This script is to be used for "weblink" nodes created with the OLD
+	version of weblink.module, for Drupal versions prior to 4.6. Do NOT
+	attempt to use this script with the newer versions of weblink.module
+	created by Ber Kessels.
+
+update-weblinks.php
+
+	This script is for the newer "weblink" nodes created with Ber
+	Kessels' version of weblinks for Drupal 4.6. Do NOT run this
+	script against older versions.
+
+update-webstory.php
+
+	Most people will not need this script; it is provided mainly as an
+	example. The webstory.module was a custom node type used only on a
+	few web sites. But since it needed to be written, there was no reason
+	not to share in hopes that it might be useful as a template for
+	others who have custom links-handling modules.

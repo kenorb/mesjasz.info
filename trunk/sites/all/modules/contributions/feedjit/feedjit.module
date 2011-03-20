@@ -1,0 +1,127 @@
+<?php
+// $Id: feedjit.module,v 1.4 2008/07/23 12:55:34 lyricnz Exp $
+
+/**
+ * @file
+ * A module for integrating with realtime traffic statistics as provided by http://feedjit.com/
+ *
+ * Please review the Feedjit Terms of Service before enabling this on your
+ * site. In particular the non-commercial clause, the right to redistribute
+ * your content, and deliver 3rd-party advertisements using the service.
+ * http://feedjit.com/static/TOS.html
+ */
+
+global $_feedjit_color_names, $_feedjit_schemes;
+$_feedjit_color_names = array('bc', 'tc', 'brd1', 'lnk', 'hc');
+$_feedjit_schemes = array( // in color.module format
+  '#FFFFFF,#494949,#336699,#494949,#336699' => t('Feedjit Neutral'),
+  '#E8F6BE,#666666,#C4C4C4,#666666,#7F7F7F' => t('Feedjit Green'),
+  '#FFFFFF,#008000,#336699,#008000,#336699' => t('Seashore'),
+  '#FFFFFF,#5F5F5F,#0000FF,#5F5F5F,#0000FF' => t('Blues n Greys'),
+  '#CCCCCC,#333333,#666666,#333333,#000000' => t('Graphite'),
+  '#003366,#AECCEB,#6699CC,#AECCEB,#FFFFFF' => t('Blue Crush'),
+  '#028502,#D7D7D7,#00A700,#D7D7D7,#FFFFFF' => t('Arring Town'),
+  '#FFFFFF,#333333,#999999,#346BA4,#C13A10' => t('Rowser'),
+  '#003366,#FFFF00,#6699CC,#FFFF00,#FFFFFF' => t('Blue Angels'),
+  '#FFFFFF,#999999,#CCCCCC,#999999,#666666' => t('Grey Goose'),
+  '#000000,#8A8A8A,#D50000,#7C7C7C,#CC0000' => t('The Darkness'),
+  '#038CB6,#FB91D2,#FFBCBC,#E7E2A0,#C3FCFE' => t('Birthday Cake'),
+  '#000000,#FF0198,#FFACDD,#FF0198,#FF84CD' => t('Pink on Black'),
+);
+
+
+
+/**
+ * Implementation of hook_block().
+ */
+function feedjit_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $blocks[0] = array('info' => t('Feedjit Live Traffic Feed'), 'pages' => "admin\nadmin/*");
+      $blocks[1] = array('info' => t('Feedjit Live Traffic Map'), 'pages' => "admin\nadmin/*");
+      $blocks[2] = array('info' => t('Feedjit Live Recommended Reading'), 'pages' => "admin\nadmin/*");
+      $blocks[3] = array('info' => t('Feedjit Live Page Popularity'), 'pages' => "admin\nadmin/*");
+      return $blocks;
+      break;
+
+    case 'configure':
+      return _feedjit_block_configure($delta);
+      break;
+
+    case 'save':
+      return _feedjit_block_save($delta, $edit);
+      break;
+
+    case 'view':
+      return _feedjit_block_view($delta);
+      break;
+  } // switch
+}
+
+
+/**
+ * Configure the colors for this block. For now all blocks use the same form.
+ */
+function _feedjit_block_configure($delta) {
+  global $_feedjit_schemes;
+  $schemes = array_keys($_feedjit_schemes);
+
+  $_feedjit_info[''] = t('Custom');
+  $form['scheme'] = array(
+    '#type' => 'select',
+    '#title' => t('Color set'),
+    '#options' => $_feedjit_schemes,
+    '#default_value' => variable_get('feedjit_scheme_'. $delta, $schemes[0]),
+  );
+
+  return $form;
+}
+
+function _feedjit_block_save($delta, $edit) {
+  variable_set('feedjit_scheme_'. $delta, $edit['scheme']);  
+}
+
+function _feedjit_block_view($delta) {
+
+  // determine the current colors
+  global $_feedjit_color_names, $_feedjit_schemes;
+  $schemes = array_keys($_feedjit_schemes);
+  $current_scheme = variable_get('feedjit_scheme_'. $delta, $schemes[0]);
+  $args = array_combine($_feedjit_color_names, explode(',#', substr($current_scheme, 1)));
+
+  switch ($delta) {
+    case 0:
+      $block['subject'] = t('Live Traffic Feed');
+      $block['content'] = _feedjit_script_html('http://feedjit.com/serve/', $args, $block['subject']);
+      break;
+
+    case 1:
+      $block['subject'] = t('Live Traffic Map');
+      $block['content'] = _feedjit_script_html('http://feedjit.com/map/', $args, $block['subject']);
+      break;
+
+    case 2:
+      $block['subject'] = t('Live Recommended Reading');
+      $block['content'] = _feedjit_script_html('http://feedjit.com/coFilter/', $args, $block['subject']);
+      break;
+
+    case 3:
+      $block['subject'] = t('Live Page Popularity');
+      $block['content'] = _feedjit_script_html('http://feedjit.com/popPages/', $args, $block['subject']);
+      break;
+  } // switch
+
+  return $block;
+}
+
+function _feedjit_script_html($path, $args, $linktext) {
+  $options = array(
+    'query' => drupal_query_string_encode($args),
+    'external' => TRUE,
+    'absolute' => TRUE,
+  );
+
+  return
+    '<script type="text/javascript" src="'. url($path, $options) .'"></script>'.
+    '<noscript>'. l($linktext, 'http://feedjit.com/') .'</noscript>';
+}

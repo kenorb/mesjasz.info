@@ -1,0 +1,775 @@
+$Id: CHANGELOG.txt,v 1.59.2.8 2009/01/21 04:16:32 syscrusher Exp $
+
+                        LOG OF CHANGES
+
+Most recent changes are at the top of the list.
+
+2009-01-20	Syscrusher
+
+	New feature: Administrative option allows rel="nofollow"
+	attribute on external links, per issue #144620.
+
+	New feature: Administrative option allows direct links
+	(skipping redirect page, at the cost of no click
+	counting). Separately controllable for internal and
+	external links.
+
+	New feature: Optional logging of all external redirects,
+	primarily for diagnostic purposes but also useful if the
+	site owner wants really detailed click tracking.
+
+	Added #maxlength attribute for URL textfields to allow
+	longer values, per issue #232575.
+
+2009-01-15	Syscrusher
+
+	Oops. Should NOT have used db_next_id() in Drupal 6.
+	Corrected this to use drupal_write_record(). I will
+	be looking at a more comprehensive update to the
+	links_put_links() function but for now just wanted
+	to get this critical bug fixed. This fixes issue #359071.
+
+2009-01-12	Syscrusher
+
+	Removed obsolete call to _system_update_utf8() in
+	links.install to fix issue #356994.
+
+	Changed incorrect db_last_insert_id() call to instead
+	use db_next_id().
+
+	Applied patch from issue #357437 to fix failure of
+	outbound link.
+
+	Applied patch to fix filter tips bug reported in #357335.
+
+2009-01-01	Syscrusher
+
+	Omit links to edit node references in cases where there
+	are no such references for a particular node.
+
+	Delete operation for an individual link-node reference
+	was too broad; narrowed scope.
+
+2008-12-31	Syscrusher
+
+	TRANSLATORS: Updated template to unify in po/links.pot.
+
+	Fixed issue #341487 in links_weblink.
+
+	Fixed issue #132209 in links_weblink, although the patch
+	attached to that issue was not actually the fix for the
+	problem in the D6 version of the module.
+
+	Fixed issue #147226 (translation of "Visit") in links.inc.
+
+	Implemented the direct-weblink feature requested in #147893.
+
+	Fixed missing links tab in links_related.
+
+2008-12-30	Syscrusher
+
+	Removed an extraneous diagnostic stub from links_admin.
+
+2008-12-29	Syscrusher
+
+	links_admin.module is now fully functional and ready
+	for a beta release.
+
+	Added feature to allow deleting node references from
+	a given link on the sub-screen.
+
+	Added filter capabilities to the main links management
+	screen.
+
+	Added links_admin.css stylesheet to format the filter
+	criteria form.
+
+	General cleanup of code and moving functions into more
+	appropriate locations within the file.
+
+2008-12-27	Syscrusher
+
+	Fully functional links_admin.module. Some new
+	APIs in links.inc. Removed an extraneous diagnostic
+	message from links_weblink.module.
+
+	This is the initial beta release of links_admin.
+
+2008-12-25	Syscrusher
+
+	Further development work on the links_admin
+	module, with some enhancements to the links API
+	itself. The API changes are backward-compatible,
+	as the newly-added parameters are optional.
+
+2008-12-22	Syscrusher
+
+	Another interim commit. Much of links_admin is
+	now functional. The sub-page to list referring
+	nodes is not done yet.
+
+	Added documentation for the new hooks in API.html.
+	Developers, pay heed!
+
+	Updated links_related and links_weblink to
+	implement the new hooks as appropriate.
+
+2008-12-21	Syscrusher
+
+	Early version of links_admin.module with some
+	functionality. Forms display but do NOT actually
+	update anything yet. PRE-ALPHA code!
+
+2008-12-11	Syscrusher
+
+	Added a new feature whereby the administrator can cause
+	the related links fieldset to always be expanded, even
+	if there are currently no links. The default behavior
+	remains unchanged; this is a new option.
+
+2008-11-12	Syscrusher
+
+	links_weblink is now fully functional and ready for
+	beta testing. Note the addition of a stylesheet to
+	the repository for this release.
+
+2008-10-31	Syscrusher
+
+	Another interim commit. The form is now invoking the
+	various themes, but not everything is working right yet.
+	Still a development release.
+
+2008-10-31	Syscrusher
+
+	Interim commit. links_weblink is now functional, although
+	a long way from cosmetically correct. On the plus side,
+	error handling for missing vocabulary and/or categories
+	for the weblinks is much more graceful than in previous
+	versions.
+
+2008-07-16	Syscrusher
+
+	Fixed bugs in links.inc that were preventing links from
+	saving. There were no API changes in this update, just
+	bug fixes, and these were D6-specific and do not need to
+	be back-ported.
+
+	Minor updates to links_related.module to fix some small
+	bugs with the node edit form.
+
+	Initial commit of links_weblink.module. This is an "alpha"
+	commit, not fully functional yet. At this time, weblink
+	nodes can be created and edited, and the admin page works,
+	but the weblinks directory does not yet display.
+
+2008-07-14	Syscrusher
+
+	Fixed the cosmetic problem in the related links edit form.
+
+2008-07-06	Syscrusher
+
+	Further progress on the Drupal 6 port. Still ALPHA level
+	code, not for production use, but we are a lot closer.
+	links.module and links_related.module are mostly functional
+	except for a cosmetic problem with the related links editing
+	form in nodes.
+
+2007-12-31	Syscrusher
+
+	Initial port of links.inc and links.module to Drupal 6.
+	WARNING: Alpha-level code -- not for production!
+	The links_related and links_weblink modules are not ported yet.
+
+2007-12-11	Syscrusher	Version 5--1-8
+
+	A host of minor bug fixes and small features. Life is finally
+	starting to settle down after an extremely busy few months, and
+	I hope to get more improvements out in the next several weeks.
+
+	Today's patches include:
+
+	Accepted patch from #114151, from jvandervort, to fix the order
+	of categories in links_weblink. Also took his suggestion for a
+	parallel change to fix the order of the child catefories. Thanks.
+
+	Accepted patch from #150970 to fix HTML visible in some of the
+	admin pages, and to update links that have changed in recent
+	Drupal core revisions. Many thanks to lyricnz for this patch.
+	This should also fix #150906.
+
+	Added bracketing of links_lid string in links.inc to fix #188655,
+	where link ID sequence did not respect table prefix. Thanks to
+	jonathan_hunt for finding the bug and suggesting the fix.
+
+	Fixed #147226, lack of t() call for "Visit" in links.inc, as
+	reported by jvlagsma.
+
+	Fixed deprecated PHP syntax in links_related, per #195430. Thanks
+	to vacilando for reporting the problem.
+
+	Made body field optional, per #131637, as suggested by teleted,
+	elondaits, and dman.
+
+2007-05-03	Syscrusher	Version 5--1-7
+
+	Added "edit own weblinks" permission per issue #76527. Thanks to
+	yched for contributing the patch.
+
+2007-04-27	Syscrusher
+
+	Added translation templates ("po" directory) and the Spanish
+	translation contributed by elondaits, per issue #133306.
+
+	API CHANGE: The function links_get_links() will now return NULL if no
+	links are found, rather than returning an array with two elements
+	that are themselves empty. This simplifies testing for values on
+	return, but may cause errors for code that relied upon the function
+	always returning an array before. This change is pursuant to #139067.
+
+	API CHANGE: The function links_get_list() now accepts an additional
+	parameter $statistics, which defaults to FALSE. This parameter
+	determines whether the click count is returned as part of the
+	link title, if other conditions (such as user permissions) would
+	permit it so. Existing code that wants the click count enabled
+	will need to add this parameter as TRUE.
+
+	Fixed incorrect use of #value (should be #default_value) for
+	URL form declaration in links_weblink.module, per issue #128620.
+
+2007-04-26	Syscrusher	Version 5--1-6
+
+	Fixed critical error #139529 in links.inc.
+
+2007-04-25	Syscrusher	Version 5--1-5
+
+	Applied patch to resolve #117108, an empty "target" attribute
+	on links_weblink link tags, if the target is not specified.
+	Thanks to RayZ for the patch.
+
+	Applied patch to resolve #130890, an SQL error with MySQL 5.x
+	at installation time. Thanks to Denny for the patch.
+
+	Added package and dependencies information to .info files.
+
+	Committed partial fix for #132209, based on a patch from
+	douggreen but with some additional bug fixes. This resolves
+	the issue for the Related Links listing, but not yet for
+	the Links from Article Text listing. That fix is on hold
+	until after another patch is applied, because fixing that
+	now would break the next patch.
+
+	Committed large patch for #139130, by dman. This patch
+	fixes many problems with Blocks, improves form handling,
+	adds the 'edit related links' page, and iproves rendering
+	of the related links table.
+
+	The #139130 patch also adds three functions to the 'edit
+	links' page under the 'links' tab of nodes:
+	* Create a links_weblink node page for the related link
+	  (this will make a new node in addition to the one being
+	  edited).
+	* Attach the embedded link to the current node as a related
+	  link.
+	* If links_admin is enabled, go to the editing page for
+	  the embedded link or add it to the links catalog.
+
+	Note that the links_admin module is still not fully implemented;
+	the third feature above detects whether links_admin.module is
+	enabled, and right now it should NOT be because it isn't working
+	yet.
+
+	Committed patch #133247, by elondaits, which makes display of
+	weblinks in the "next category down" optional.
+
+2007-03-17	Syscrusher
+
+	Accepted (with enhancements and some debugging) the code from
+	#119050, to allow more than one blank line in links_related.
+	Also fixed a minor typo per #128286 (partial fix on that issue).
+        This is an interim commit; more to come.
+
+2007-01-28	Syscrusher	Version 5--1-4
+
+	Fixed issue #76803, errors in link display for links_weblink.
+
+2007-01-27	Syscrusher	Version 5--1-3
+
+	Resolved issue #99156 and #109847 (duplicates), for call to
+	deprecated form_render() function in links_weblink.module.
+
+	Resolved issue #110317, faulty SQL query in update-weblinks.php.
+
+	Resolved issue #111251, with embedded link detection failing.
+
+	Rearranged menus to be more compliant with Drupal 5.0 menu
+	organization.
+
+	Put a stub message into the "links admin" page since that
+	module doesn't work yet. Developers will need to comment out
+	the stub return to see the under-development form.
+
+2006-09-14	Syscrusher
+
+	Added .info files for each of the four modules in the package.
+
+2006-09-10	Syscrusher
+
+	Updated links.module to make admin menu entries work. Still
+	some cosmetic issues with the main admin screen, and the
+	link content admin doesn't work at all yet, but it's another
+	step toward Drupal 5 compatibility.
+
+2006-09-10	Syscrusher
+
+	Patch from Eaton, per issue #82088, to update Links core
+	functionality to Drupal 5.0 (prerelease). This represents a
+	significant fork from the 4.7 release. As Eaton points out, this
+	is not finished yet, and needs updates especially to the admin
+	screens, but it is a significant step forward. Thanks, Eaton!
+
+2006-08-01	Syscrusher
+
+	Based on suggestions from others on development list, moved all
+	link administration functions to links_admin.module instead of
+	including them with links.module.
+
+	Fixed a bug with the outbound link from the links_admin module.
+
+	Branching all code *except* links_admin.module for DRUPAL-4-7.
+	We have a release!
+
+2006-07-24	Syscrusher (contributions by RayZ)
+
+	Committed prompt text patch from RayZ per issue #73879.
+
+	Fixed internal links bug with patch from RayZ per issue #72459.
+
+2006-06-21	Syscrusher (contributions by Eaton, moggy, and douggreen)
+
+	Additional bug correction and feature additions per issue #52639.
+	This incorporates all changes contributed by Eaton and posted to
+	that issue as of today.
+
+	Corrected problem with "weblinks" menu item, using patch supplied
+	by moggy pursuant to issue #53942.
+
+	Fixed top level link per patch from douggreen, issue #67796, with
+	modifications of my own added.
+
+2006-04-17	Syscrusher (contributions by Eaton and RayZ)
+
+	Pursuant to issue #52639, initially committed links_views.inc.
+	This code is still experimental; please read the issue for details.
+	Also please note that this is intentionally *NOT* the latest version
+	of links_views.inc. There is some question as to correct handling of
+	link titles, and the "_0" version may not be committed, based on the
+	outcome of that discussion.
+
+2006-04-17	Syscrusher
+
+	The link query functions that accept a URL now also accept the MD5
+	hash of a normalized URL to allow other applications to do a direct
+	query. This feature was requested in issue #55113.
+
+	Added EXPERIMENTAL statistics functions to links.inc, as suggested
+	in feature request issue #54503. This is just a start; more will
+	follow as time permits.
+
+2006-04-08	Syscrusher
+
+	Fixed weblink filtering per issue #54619, to correct bug
+	where weblink filter could only find weblink-created links.
+
+	Minor documentation and code format fixes.
+
+2006-04-07	Syscrusher
+
+	Remove leading slashes from URLs in links_l(), to fix
+	issue #57431.
+
+	Separated 'access links statistics' from 'access statistics'
+	permissions, per issue #57424.
+
+2006-03-23	Syscrusher
+
+	API change: New function links_parse_url() added. This
+	function takes just about anything that works as a URL,
+	parses it out, and returns the parsed components as well
+	as a normalized version. The normalized version is
+	synthesized by concatenating the appropriate components
+	depending on the URL type, rather than just by using
+	regular expressions on the entire URL. This yields a more
+	thorough validation and normalization process.
+
+	API change: The function links_normalize_url() now calls
+	the new links_parse_url() function to do the heavy lifting.
+
+	NOTE: Because of the above, it is necessary to recalc all
+	of the MD5s in the {links} table. This can easily be done
+	by using "update.php" (from core Drupal) to apply UPDATE 2
+	to the Links package. Most of your URLs will not change,
+	but a few may be better normalized. In my testing, a
+	database with 500 real URLs had only two changes, both
+	of which were manually inspected and found to be legitimate
+	normalizations.
+
+	Changed links.install to fix length of {links_node}.module
+	to correct issue #55372. This had already been fixed in
+	links.mysql, but the change didn't propagate into the new
+	install file.
+
+	Removed trailing PHP delimiters from files per coding
+	standards (http://drupal.org/node/545), thereby fixing
+	issues #55577 and #45940.
+
+	Removed icky DOS carriage returns from lines in links.inc,
+	per issue #45940.
+
+2006-03-17	Syscrusher
+
+	Added PREFIXES.txt file to explain module prefixes and to
+	establish an informal prefix registry.
+
+	Removed a lot of dead code from links_related.module that
+	was left over from its ancestor module before the links API.
+
+	Fixed missing ?> at end of links_related.module (the line
+	was mistakenly deleted by a patch).
+
+	Added some explanatory comments to the links.install file.
+
+2006-03-14	Syscrusher
+
+	API change: The function links_goto_bynode now allows a zero
+	node ID, as long as the link ID is nonzero. This will perform
+	a redirect as usual, though it will not be able to tally the
+	click from any specific node.
+
+	Significant improvements to the weblink filter, fixing the
+	bug reported by RayZ in issue #53572 and improving its
+	handling of links.
+
+2006-03-14	Syscrusher
+
+	Added links.install file contributed by drewish, per issue
+	#45940. Test reports welcome.
+
+2006-02-20	Syscrusher
+
+	Committed patch by Webchick to fix issue #49987, SQL error
+	on weblinks directory when no weblinks are defined.
+
+2006-02-02	Syscrusher
+
+	Moved node API calls into separate functions, fixing issue
+	#43177 reported by Steve Dondley.
+
+2006-02-01	Syscrusher
+
+	Added new links directory view in links_weblink.module. Now
+	if you go to q=links/weblink you will see directory of all
+	"weblink" type nodes in the system, organized by taxonomy.
+	Gracefully handles assignment of multiple vocabularies to
+	"weblink" nodes, and gracefully handles taxonomy trees that
+	allow multiple parents. Uses the Drupal breadcrumbs functions
+	to show ancestry, but only one level up due to the multiple-
+	parentage possibility.
+
+	Flexible queries are possible, such as q=links/weblink/15,32
+	which would return all links for TIDs 15 or 32.
+
+	The new code is functional but still cosmetically primitive.
+	Also, the links catalog is controlled by a new security
+	permission, but the rest of the module doesn't respect the
+	new setting yet.
+
+	Added more link management functionality to links.module.
+	This feature is still not complete, however.
+
+	Updated update-weblinks-old.php to work with latest Drupal
+	HEAD version. This has been tested with over 200 nodes.
+
+	Updated update-webstory.php to work with the latest Drupal
+	HEAD version. This has now been tested with over 2600 nodes.
+
+	Initial commit of update-weblinks.php, which is designed to
+	work with Ber Kessels' newer weblinks module (the one written
+	for Drupal 4.6). This particular script is currently UNTESTED
+	because I do not have a site running Ber's version. Test reports
+	welcome, of course.
+
+	Initial commit of UPGRADE.txt, the instructions for using the
+	various update scripts.
+
+2006-01-22	Syscrusher
+
+	DOCUMENTATION: The file API.txt is gone, replaced by API.html
+	which I believe will be easier to read.
+
+	The admin...links page is now display-functional. It still
+	doesn't actually *do* anything if you submit the form, but
+	it does run the query and let you page through the links.
+	This page also checks specifically for "links_monitor"
+	module and adds a link to Drupal path "admin/links/monitor/$lid"
+	if the module is found. This will provide a convenient hook
+	for the future monitoring module to use.
+
+	The form to display and edit all references to a given link
+	is now also created, though like the primary link admin form
+	it doesn't actually do anything yet if it is submitted.
+
+	There is a new administrator setting for links.module that
+	controls how many links appear on a page in admin screens.
+
+	URLs for sub-editing functions have been changed from the
+	form "admin/links/$lid/$op" to "admin/links/$op/$lid". This
+	will make it easier to hook add-in functions into the main
+	links admin screen. The plan is to implement a hook function
+	to allow any module to add link operations to this screen
+	easily.
+
+2006-01-21	Syscrusher
+
+	DOCUMENTATION: I have officially renamed this set of modules
+	from "Links Bundle" to "Links Package". Please refer to the
+	collection as such in documentation files from here onward.
+
+	API CHANGE: The function links_format_goto_url() now returns
+	a raw "Drupal URL" (e.g., "links/goto/275/3") rather than
+	processing it through url() or l() before return. If you call
+	the links_format_goto_url() function, you need to add a local
+	call to the Drupal-corrective functions that manage non-clean-URL
+	(i.e., "index.php?q=drupal/url/path") sites. This fixes issue
+	#42908 reported by webchick and worked on by Ber Kessels and
+	Steve Dondley.
+
+	API CHANGE: The functions links_goto() and links_format_goto_url()
+	now accept an optional $module parameter to establish the module
+	scope of the request. links_goto_link(), which already accepted
+	this parameter, now defaults it to empty instead of 'links',
+	with that implying a generic redirection without tallying the
+	outbound click (see function comments for detailed explanation).
+	Normally, all other modules that call these functions should
+	specify their own names in the $module parameter. This change
+	enables correct tallying of outbound link clicks.
+
+	The link-hunting functionality for node bodies is working. The
+	"links" tab (if enabled) and links endnotes (if enabled) from
+	the links_related module now include a separate listing of all
+	links found in the node body text, whether raw URLs or enclosed
+	in HTML anchor tags. The feature still needs a lot of work --
+	in particular, the editing form displays but doesn't actually
+	do anything yet. This also addresses bug #44647 reported by
+	metapunk and aries. This functionality is part of links_related.
+
+	The display of the embedded links is now a site-configurable
+	option in the admin settings for the links_related module.
+
+	The next TODO is to finish bringing links.module up to the 4.7
+	forms API, per issue #37385. I am also working on other issues;
+	see the project page for details. The links package is still a
+	work in progress, but it is getting closer to completion.
+
+2006-01-20	Syscrusher
+
+	Updated the database creation script for the UTF-8 patch per
+	http://drupal.org/node/22218#utf8_sql, and added links.install
+	for the new update system.
+
+	There was an error with key length being too long in the links_node
+	table, because of the new character set. Shortening the module
+	column to 60 characters fixed it; it's unlikely anyone would ever
+	name a module with a name bigger than that, anyway.
+
+	Corrected URL for setting which node types get related links, in
+	links_related.module, per issue #44643 (thanks metapunk).
+
+	Fixed the cosmetic error where link text was being truncated
+	even in the endnotes version of the display, in links.inc.
+
+	Applied Eaton's patch from issue #44748 to fix the context $module
+	parameter that was incorrect several places in links_related.module.
+
+2005-12-27	Syscrusher
+
+	Fixed SQL query for links_weblink block handler, per issue #42139.
+	Patch by naudefj was correct in spirit but made against earlier
+	version of module, so applied an equivalent change manually.
+
+2005-12-12	Syscrusher
+
+	NOTE: Users of the previous version need to execute a simple SQL
+	command to update the {links_node} table for this version:
+
+	UPDATE links_node SET module='links_related' WHERE module='links';
+
+	(Add the table prefix before links_node if required.)
+
+	Major rewrite of parts of links_weblink. This updated the behavior
+	of the forms API, building on contribs from drewish and Eaton. The
+	most significant change is that links_weblink now exploits the
+	module-context functionality of the links API, to maintain the
+	"primary" link for a weblink-type node as a distinct entity
+	separate from any related links that may or may not be attached
+	to that node (if related links are enabled for "weblink" nodes by
+	the sysadmin). In other words, it is now possible to have a weblink
+	whose semantics are "This weblink points to XYZ web site; here are
+	some related URLs as a 'see also' reference." Sites might use this
+	functionality to have the weblink itself point to a main page but
+	some related links point to especially interesting sub-pages. Since
+	related links are allowed/disallowed by the site admin, anyone who
+	doesn't like that notion can simply not enable them for weblink
+	nodes (that is the default situation).
+
+	In short the default behavior of links_weblink is now rather similar
+	to the behavior of the old weblinks module, but it can be configured
+	to add new flexibility if the webmaster prefers.
+
+	links_weblink now has a settings page to control its behavior.
+	Those who have been working with the previous version may need to
+	flush the cache to make this item visible in the admin menu.
+
+	Other significant changes:
+
+	New API: array links_get_list($module, &$node, $page, $teaser)
+	Builds a simple array containing links for the specified node, in
+	the specified module context. This function is simply a refactoring
+	of links_related_list() to make it available for reuse by other
+	modules (notably links_weblink).
+
+	API change: Re-ordered parameters for links_save_links_for_node()
+	to put $module second rather than last. This was done to make
+	the save and load functions more symmetrical, and because $module
+	was found to be used more often than expected.
+
+	API change: Added a $global flag to links_save_links_for_node().
+	When TRUE, this causes an altered URL for a link to change that
+	link globally in the {links} table. Without $global, a new URL
+	either catalogs the new link, or (if the new URL already exists
+	in the catalog) changes {links_node}.lid to point to the new URL
+	record in {links}. $global requires the 'change url globally'
+	user permission.
+
+	Added the 'change_url_globally' permission in links.module. (See
+	preceding paragraph for description.)
+
+	New API: string links_sort_get_parms($url)
+        Takes all of the GET parameters in the URL string and sorts them
+        alphabetically. This helps make URLs that have the same parms and
+        values, but in different order, normalize the same so they will
+        be merged in the database.
+
+	API change: links_get_links_for_node() renamed to
+        links_load_links_for_node() for consistency with the "load/save"
+	terminology used elsewhere in Drupal.
+
+	API semantics change: The $module parameter for functions
+	links_get_links_for_node() and links_load_links_for_node() has
+	changed to allow *any* module to use it. The string "links_"
+	is no longer automatically prepended. Correct syntax for this
+	parameter is now the full module name (e.g., "links_related"
+	or "links_weblink" or "my_other_module") rather than just the
+	part of the module after "links_". Default for the parameter
+	is now "links", implying a globally-shared link/node mapping.
+	Note that none of the modules in the links package itself
+	rely on that default, and normally external modules won't, either.
+	As before, leaving this parameter blank implies an operation that
+	affects *all* links for a node in *all* module contexts -- this
+	should be used with great caution, and probably only in sysadmin
+	situations rather than applications.
+
+	The database initialization scripts no longer drop tables.
+
+2005-12-10	Syscrusher
+
+	Minor bug fixes in links.inc, related to the $module context
+	parameter on the save and load functions. Additional documentation
+	for developers in API.txt.
+
+2005-12-09	Syscrusher
+
+	Fixed nonfunctional user-specific preference settings.
+
+	Fixed problems with missing explicitly-declared values for
+	settings fields, in option lists.
+
+2005-12-07	Syscrusher
+
+	Committed links_weblink.module patch by drewish, per issue #40077.
+
+	Committed links_related.module patch by drewish (with help from
+	Eaton), per issue #39877.
+
+	Committed links.module patch by drewish, per issue #37385.
+
+2005-12-05	Syscrusher
+
+	Committed changed by Eaton to improve form handling, per issue
+	#39877.
+
+	Committed a small patch by drewish to fix issue #40070.
+
+	There are still known bugs in the node editing form; I'm working
+	on those.
+
+2005-11-19	Syscrusher
+
+	Added hook_node_info() implementation in links_weblink.module.
+	Fixes issue #38176, patch by Eaton.
+
+2005-11-13	Syscrusher
+
+	Committed changes by Eaton, per issue #37385, to begin moving to
+	Drupal 4.7 forms API. A *big* thanks to Eaton for this patch set!
+
+	Corrected error in HTML pointed out by xqus in issue #36853.
+	Good catch, xqus.
+
+	Committed link editing code from xqus, per issue #35675, and then
+	converted this new code to Drupal 4.7 forms API.
+
+	WARNING: This version is NOT FULLY FUNCTIONAL. In particular, there
+	is a known infinite loop on adding content with related links. DO
+	NOT use for production, and the link admin page now does not show
+	any links in its list. This is an interim commit of work in progress.
+
+2005-11-01	Syscrusher
+
+	Added links.pgsql, kindly contributed by "mok000". This addresses
+	issue #35006.
+
+2005-07-13	Syscrusher
+
+	Fixed error with key being too long in the MySQL table creation
+	script. Addresses bug #26414.
+
+2005-06-16	Syscrusher
+
+	Major enhancements to links_related.module, including a feature to
+	locate embedded links and make them available for editing and
+	migration into the catalog. THIS IS NOT YET COMPLETE; the module
+	is currently EXPERIMENTAL status.
+
+2005-06-15	Syscrusher
+
+	Continued progress in the code building. Added new functions to
+	links.inc and links.module for more robust handling of the target
+	selection for links. There is now an option for new window only on
+	external links.
+
+	Fixed some bugs in the database updates, where trivial cases were
+	trying to execute empty queries.
+
+	Added new function links_l() which works like the l() from Drupal
+	core (and, indeed, calls it internally) but which respects the
+	admin and user settings for link targets.
+
+2005-06-10	Syscrusher
+
+	Initial commit of links package code into modules directory of HEAD
+	branch. Package is usable but not yet completed. API is mostly stable,
+	database schema is (at least in theory) stable, in that no further
+	changes are *planned* at this time.
+
+	This is very definitely ALPHA TEST code, however, so use at own
+	risk, and only in a development/preview environment.

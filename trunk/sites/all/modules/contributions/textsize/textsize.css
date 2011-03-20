@@ -1,0 +1,149 @@
+/* $Id: textsize.css,v 1.1.1.2.2.1 2008/03/12 00:12:01 christianzwahlen Exp $ */
+
+.icon,
+a.icon,
+a.icon:visited,
+a.icon:hover,
+a.icon:active {
+  padding: 3px 4px 3px 23px;
+  margin: 0px;
+}
+
+/* list */
+ul.textsize_inline li {
+  display: inline;
+  list-style-type: none;
+  list-style-image: none !important; /* fix for zen theme */
+  background: transparent;
+  margin: 0; 
+  padding: 0; 
+}
+
+ul.textsize li {
+  list-style-type: none;
+  list-style-image: none !important; /* fix for zen theme */
+  background: transparent;
+  margin: 0; 
+  padding: 0; 
+}
+/* p */
+.block-textsize p {
+  margin: 0; 
+  padding: 0; 
+}
+/* images */
+ul.textsize_inline li img {
+  height: 1em; 
+}
+a.textsize_increase,
+a.textsize_increase:visited {
+  background: transparent url("images/increase.gif") no-repeat 0 0 !important;
+}
+a.textsize_decrease,
+a.textsize_decrease:visited {
+  background: transparent url("images/decrease.gif") no-repeat 0 0 !important;
+}
+a.textsize_normal,
+a.textsize_normal:visited {
+  background: transparent url("images/normal.gif") no-repeat 0 0 !important;
+}
+
+a.textsize_increase:hover  {
+  background: transparent url("images/increase.gif") no-repeat 0 -100px !important;
+}
+a.textsize_decrease:hover {
+  background: transparent url("images/decrease.gif") no-repeat 0 -100px !important;
+}
+a.icon.textsize_normal:hover {
+  background: transparent url("images/normal.gif") no-repeat 0 -100px !important;
+}
+
+.display_hidden {
+  position: absolute;
+  left: -1000px;	
+  top: -1000px;
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
+  display: none;
+}
+
+/**
+ * The style for jQuery
+ * Info: This "!important" values are stronger, because the place is after the values in the CSS head."
+ */
+body.textsize-50 {
+  font-size: 50% !important;
+}
+body.textsize-60 {
+  font-size: 60% !important;
+}
+body.textsize-70 {
+  font-size: 70% !important;
+}
+body.textsize-80 {
+  font-size: 80% !important;
+}
+body.textsize-90 {
+  font-size: 90% !important;
+}
+body.textsize-100 {
+  font-size: 100% !important;
+}
+body.textsize-110 {
+  font-size: 110% !important;
+}
+body.textsize-120 {
+  font-size: 120% !important;
+}
+body.textsize-130 {
+  font-size: 130% !important;
+}
+body.textsize-140 {
+  font-size: 140% !important;
+}
+body.textsize-150 {
+  font-size: 150% !important;
+}
+body.textsize-160 {
+  font-size: 160% !important;
+}
+body.textsize-170 {
+  font-size: 170% !important;
+}
+body.textsize-180 {
+  font-size: 180% !important;
+}
+body.textsize-190 {
+  font-size: 190% !important;
+}
+body.textsize-200 {
+  font-size: 200% !important;
+}
+
+/** 
+ * Hacks. 
+ * Images not for IE 5.5 and Opera 6 
+ */
+head:first-child+body a.textsize_increase,
+head:first-child+body a.textsize_increase:visited {
+  background: transparent url("images/increase.png") no-repeat 0 0 !important;
+}
+head:first-child+body a.textsize_decrease,
+head:first-child+body a.textsize_decrease:visited {
+  background: transparent url("images/decrease.png") no-repeat 0 0 !important;
+}
+head:first-child+body a.textsize_normal,
+head:first-child+body a.textsize_normal:visited {
+  background: transparent url("images/normal.png") no-repeat 0 0 !important;
+}
+
+head:first-child+body a.textsize_increase:hover  {
+  background: transparent url("images/increase.png") no-repeat 0 -100px !important;
+}
+head:first-child+body a.textsize_decrease:hover {
+  background: transparent url("images/decrease.png") no-repeat 0 -100px !important;
+}
+head:first-child+body a.icon.textsize_normal:hover {
+  background: transparent url("images/normal.png") no-repeat 0 -100px !important;
+}

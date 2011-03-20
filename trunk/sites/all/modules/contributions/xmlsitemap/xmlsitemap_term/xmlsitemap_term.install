@@ -1,0 +1,154 @@
+<?php
+// $Id: xmlsitemap_term.install,v 1.5 2008/06/09 01:25:19 darrenoh Exp $
+
+/**
+ * Implementation of hook_requirements().
+ */
+function xmlsitemap_term_requirements($phase) {
+  $t = get_t();
+  $requirements = array();
+  if (in_array($GLOBALS['db_type'], array('mysql', 'mysqli')) && version_compare(db_version(), '4.0.14') < 0) {
+    $requirements['xmlsitemap_term_sql'] = array(
+      'title' => $t('XML Sitemap: Term'),
+      'value' => $t('Your MySQL version is too low. &ldquo;XML Sitemap: Term&rdquo; requires MySQL 4.0.14 or higher.'),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function xmlsitemap_term_schema() {
+  $schema['xmlsitemap_term'] = array(
+    'description' => t('The base table for xmlsitemap.'),
+    'fields' => array(
+      'tid' => array(
+        'description' => t('The id of the path.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'pid' => array(
+        'description' => t('The id of the path.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'last_changed' => array(
+        'description' => t('Keeps track of new changes.'),
+        'type' => 'int',
+      ),
+      'previously_changed' => array(
+        'description' => t('Keeps track of old changes.'),
+        'type' => 'int',
+      ),
+      'priority_override' => array(
+        'description' => t('Stores the index value.'),
+        'type' => 'float',
+      ),
+    ),
+    'indexes' => array(
+      'pid' => array('pid'),
+    ),
+    'primary key' => array('tid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function xmlsitemap_term_enable() {
+  $weight = db_result(db_query("SELECT weight FROM {system} WHERE type = 'module' AND name = 'pathauto'"));
+  if ($weight !== FALSE) {
+    db_query("UPDATE {system} SET weight = %d WHERE type = 'module' AND name = 'xmlsitemap_term'", ++$weight);
+  }
+  $query = "
+    INSERT INTO {xmlsitemap_term} (tid, last_changed)
+    SELECT td.tid, %d FROM {term_data} td
+    LEFT JOIN {xmlsitemap_term} xt ON xt.tid = td.tid
+    WHERE xt.tid IS NULL
+  ";
+  db_query($query, time());
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      db_query("
+        UPDATE {xmlsitemap_term} xt INNER JOIN {url_alias} ua
+        ON ua.src = CONCAT('taxonomy/term/', CAST(xt.tid AS CHAR))
+        OR ua.src = CONCAT('forum/', CAST(xt.tid AS CHAR))
+        SET xt.pid = ua.pid
+        WHERE xt.pid IS NULL
+      ");
+      break;
+    case 'pgsql':
+      db_query("
+        UPDATE {xmlsitemap_term}
+        SET pid = {url_alias}.pid
+        FROM {url_alias}
+        WHERE {url_alias}.src = CONCAT('taxonomy/term/', CAST(tid AS VARCHAR))
+        OR {url_alias}.src = CONCAT('forum/', CAST(tid AS VARCHAR))
+        AND {xmlsitemap_term}.pid IS NULL
+      ");
+      break;
+  }
+  xmlsitemap_update_sitemap();
+}
+
+/**
+ * Implementation of hook_disable().
+ */
+function xmlsitemap_term_disable() {
+  xmlsitemap_update_sitemap();
+}
+
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function xmlsitemap_term_install() {
+  drupal_install_schema('xmlsitemap_term');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function xmlsitemap_term_uninstall() {
+  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'xmlsitemap\_term\_%'");
+  while ($variable = db_fetch_object($settings)) {
+    variable_del($variable->name);
+  }
+  drupal_uninstall_schema('xmlsitemap_term');
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Add missing URL aliases.
+ */
+function xmlsitemap_term_update_1() {
+  $ret = array(update_sql("UPDATE {xmlsitemap_term} SET pid = NULL WHERE pid = 0"));
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("
+        UPDATE {xmlsitemap_term} xt, {url_alias} ua SET xt.pid = ua.pid
+        WHERE xt.pid IS NULL AND (
+          ua.src = CONCAT('taxonomy/term/', CAST(xt.tid AS CHAR))
+          OR ua.src = CONCAT('forum/', CAST(xt.tid AS CHAR))
+        )
+      ");
+      break;
+    case 'pgsql':
+      $ret[] = update_sql("
+        UPDATE {xmlsitemap_term} SET pid = {url_alias}.pid FROM {url_alias}
+        WHERE {xmlsitemap_term}.pid IS NULL AND (
+          {url_alias}.src = CONCAT('taxonomy/term/', CAST(tid AS VARCHAR))
+          OR {url_alias}.src = CONCAT('forum/', CAST(tid AS VARCHAR))
+        )
+      ");
+      break;
+  }
+  return $ret;
+}
+

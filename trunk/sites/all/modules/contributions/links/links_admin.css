@@ -1,0 +1,13 @@
+/* $Id */
+
+/*
+ * Stylesheet for links_admin
+ */
+
+#links_admin_filter td {
+  vertical-align: bottom;
+}
+
+#links_admin_filter tr {
+  border-top: 1px dotted black;
+}

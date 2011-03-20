@@ -1,0 +1,193 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/dblog/dblog.admin.inc:18
+msgid "Discard log entries above the following row limit"
+msgstr "Wyrzuć wpisy, jeśli liczba wierszy przekracza limit"
+
+#: modules/dblog/dblog.admin.inc:21
+msgid ""
+"The maximum number of rows to keep in the database log. Older entries will "
+"be automatically discarded. (Requires a correctly configured <a href=\"@cron"
+"\">cron maintenance task</a>.)"
+msgstr ""
+"Maksymalna liczba wierszy, które mogą być przechowywane w bazie danych. "
+"Starsze wpisy będą automatycznie usuwane. Wymagane jest prawidłowe "
+"skonfigurowanie <a href=\"@cron\">zadań cron</a>."
+
+#: modules/dblog/dblog.admin.inc:81;109
+msgid "No log messages available."
+msgstr "Brak wiadomości w dzienniku."
+
+#: modules/dblog/dblog.admin.inc:97
+msgid "Count"
+msgstr "Liczba"
+
+#: modules/dblog/dblog.admin.inc:140
+msgid "Location"
+msgstr "Lokalizacja"
+
+#: modules/dblog/dblog.admin.inc:152;220
+msgid "Severity"
+msgstr "Priorytet"
+
+#: modules/dblog/dblog.admin.inc:260
+msgid "Filter log messages"
+msgstr "Filtr wpisów dziennika"
+
+#: modules/dblog/dblog.admin.inc:297
+msgid "You must select something to filter by."
+msgstr "Należy podać kryterium filtrowania."
+
+#: modules/dblog/dblog.module:21
+msgid ""
+"The dblog module monitors your system, capturing system events in a log to "
+"be reviewed by an authorized individual at a later time. This is useful for "
+"site administrators who want a quick overview of activities on their site. "
+"The logs also record the sequence of events, so it can be useful for "
+"debugging site errors."
+msgstr ""
+"Moduł obsługi dzienników monitoruje działanie systemu, zachowując informacje "
+"o zdarzeniach w dzienniku, który może być później przeglądany przez "
+"użytkownika posiadającego odpowiednie uprawnienia. Dziennik jest przydatny "
+"administratorom, którzy chcą mieć dostęp do zwięzłego przeglądu zdarzeń "
+"występujących w witrynie. Dzienniki zachowują także takie informacje, które "
+"mogą być przydatne do rozwiązywania problemów w funkcjonowaniu witryny."
+
+#: modules/dblog/dblog.module:22
+msgid ""
+"The dblog log is simply a list of recorded events containing usage data, "
+"performance data, errors, warnings and operational information. "
+"Administrators should check the dblog report on a regular basis to ensure "
+"their site is working properly."
+msgstr ""
+"Dziennik jest po prostu listą zapisanych zdarzeń, zawierająca informacje na "
+"temat użytkowników, wydajności, błędów, ostrzeżeń i informacje o działaniu "
+"systemu. Bardzo ważne jest, by regularnie przeglądać dzienniki, które są "
+"często jedynym źródłem informacji na temat tego, co dzieje się w witrynie."
+
+#: modules/dblog/dblog.module:23
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@dblog"
+"\">Dblog module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@dblog\">stronę dotyczącej dzienników "
+"zdarzeń</a> w podręczniku konfiguracji w internecie."
+
+#: modules/dblog/dblog.module:26
+msgid ""
+"The dblog module monitors your website, capturing system events in a log to "
+"be reviewed by an authorized individual at a later time. The dblog log is "
+"simply a list of recorded events containing usage data, performance data, "
+"errors, warnings and operational information. It is vital to check the dblog "
+"report on a regular basis as it is often the only way to tell what is going "
+"on."
+msgstr ""
+"Moduł obsługi dzienników monitoruje działanie witryny, zachowując informacje "
+"o zdarzeniach w dzienniku, który może być później przeglądany przez "
+"użytkownika posiadającego odpowiednie uprawnienia. Dziennik jest po prostu "
+"listą zapisanych zdarzeń, zawierająca informacje na temat użytkowników, "
+"wydajności, błędów, ostrzeżeń i informacje o działaniu systemu. Bardzo ważne "
+"jest, by regularnie przeglądać dzienniki, które są często jedynym źródłem "
+"informacji na temat tego, co dzieje się w witrynie."
+
+#: modules/dblog/dblog.module:47
+msgid ""
+"Settings for logging to the Drupal database logs. This is the most common "
+"method for small to medium sites on shared hosting. The logs are viewable "
+"from the admin pages."
+msgstr ""
+"Ustawienia dotyczące zapisywania zdarzeń w dziennikach przechowywanych w "
+"bazie danych. Metoda ta jest najczęściej wykorzystywana w przypadku małych i "
+"średnich witryn nie posiadających własnego serwera. Dzienniki te można "
+"przeglądać za pomocą stron dostępnych w dziale zarządzania."
+
+#: modules/dblog/dblog.module:55
+msgid "Recent log entries"
+msgstr "Ostatnie wpisy do dziennika"
+
+#: modules/dblog/dblog.module:56
+msgid "View events that have recently been logged."
+msgstr "Wyświetla listę ostatnio zapisanych do dziennika zdarzeń."
+
+#: modules/dblog/dblog.module:63
+msgid "Top 'page not found' errors"
+msgstr "Najczęstsze błędy nieznalezienia strony"
+
+#: modules/dblog/dblog.module:64
+msgid "View 'page not found' errors (404s)."
+msgstr "Wyświetla listę błędów nieznalezienia strony (404)."
+
+#: modules/dblog/dblog.module:71
+msgid "Top 'access denied' errors"
+msgstr "Najczęstsze błędy odmowy dostępu"
+
+#: modules/dblog/dblog.module:72
+msgid "View 'access denied' errors (403s)."
+msgstr "Wyświetla listę błędów odmowy dostępu (403)."
+
+#: modules/dblog/dblog.module:0
+msgid "dblog"
+msgstr "dziennik"
+
+#: modules/dblog/dblog.install:25
+msgid "Table that contains logs of all system events."
+msgstr ""
+
+#: modules/dblog/dblog.install:30
+msgid "Primary Key: Unique watchdog event ID."
+msgstr ""
+
+#: modules/dblog/dblog.install:36
+msgid "The {users}.uid of the user who triggered the event."
+msgstr ""
+
+#: modules/dblog/dblog.install:43
+msgid "Type of log message, for example \"user\" or \"page not found.\""
+msgstr ""
+
+#: modules/dblog/dblog.install:49
+msgid "Text of log message to be passed into the t() function."
+msgstr ""
+
+#: modules/dblog/dblog.install:55
+msgid ""
+"Serialized array of variables that match the message string and that is "
+"passed into the t() function."
+msgstr ""
+
+#: modules/dblog/dblog.install:63
+msgid "The severity level of the event; ranges from 0 (Emergency) to 7 (Debug)"
+msgstr ""
+
+#: modules/dblog/dblog.install:70
+msgid "Link to view the result of the event."
+msgstr ""
+
+#: modules/dblog/dblog.install:75
+msgid "URL of the origin of the event."
+msgstr ""
+
+#: modules/dblog/dblog.install:82
+msgid "URL of referring page."
+msgstr ""
+
+#: modules/dblog/dblog.install:89
+msgid "Hostname of the user who triggered the event."
+msgstr ""
+
+#: modules/dblog/dblog.install:95
+msgid "Unix timestamp of when event occurred."
+msgstr ""

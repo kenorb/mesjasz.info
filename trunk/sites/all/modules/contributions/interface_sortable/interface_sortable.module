@@ -1,0 +1,273 @@
+<?php
+// $Id: interface_sortable.module,v 1.3 2007/05/24 01:08:05 marcp Exp $
+
+/**
+ * Implementation of hook_elements
+ */
+function interface_sortable_elements() {
+  $type['sortable'] = array(
+    '#input' => TRUE,
+    '#process' => array('interface_sortable_process'),
+    '#items' => array(),
+    '#outer_tag' => 'div',
+    '#inner_tag' => 'div',
+    '#options' => array(),
+  );
+  
+  return $type;
+}
+
+/**
+ * Expansion function for 'interface_sortable' type form element
+ * 
+ * extra arguments:
+ * 
+ * #items => array()
+ *   required - Keyed array of items to be sorted.
+ *   Keys will be returned in sorted order.
+ *   Values can be anything.
+ *  
+ *  #inner_tag => 'div'
+ *  #outer_tag => 'div'
+ *    type of tag to use for sortables (could also be 'ul' and 'li'... or anything)
+ *  
+ *  #inner_class => 'sortable-item'
+ *  #outer_class => 'sortable-container'
+ *    class to attach to the sortable items and container.  #inner_class gets
+ *    passed on to the Sortable as 'accept'...
+ * 
+ *  #options => array()
+ *    options to modify the behaviour of the sorting
+ *    see: http://interface.eyecon.ro/docs/sort
+ *
+ * @param array $element
+ *   the array representing the sortable element
+ */
+function interface_sortable_process($element) {
+  if (!is_array($element)) {
+    $element = array();
+  }
+  
+  if (!array_key_exists('#options', $element)) {
+    $element['#options'] = array();  
+  }
+  
+  $innertag = array_key_exists('#inner_tag', $element) ? $element['#inner_tag'] : 'div';
+  $outertag = array_key_exists('#outer_tag', $element) ? $element['#outer_tag'] : 'div';
+  $outer_class = array_key_exists('#outer_class', $element) ? $element['#outer_class'] : 'sortable-container';
+  $inner_class = array_key_exists('#inner_class', $element) ? $element['#inner_class'] : 'sortable-item';
+  
+  // If the user hasn't set the class of items to accept for drag and drop,
+  // set it to the inner class for them...
+  if (!array_key_exists('accept', $element['#options'])) {
+    $element['#options']['accept'] = $inner_class;
+  } 
+  
+  $outerid = $element['#parents'][0];
+  
+  $sortables['#prefix'] = "<$outertag id='$outerid-wrapper' class='$outer_class'>\n";
+  $sortables['#suffix'] = "</$outertag>\n";
+  
+  // if there's a #value, eval it and resort
+  if ($element['#value']) {
+    $keyorder = interface_get_sort($element['#value']);
+    $items = $element['#items'];
+    foreach ($keyorder as $key) {
+      $newitems[$key] = $items[$key];
+    }
+    $element['#items'] = $newitems;
+    unset($element['#value']);
+  }
+  
+  foreach ($element['#items'] as $k => $v) {
+    $sortables[$k] = array(
+      '#type' => 'markup',
+      '#value' => $v,
+      '#prefix' => "<$innertag id='{$outerid}_{$k}' class='$inner_class'>",
+      '#suffix' => "</$innertag>\n"
+    );
+    $order[] = $k;
+  }
+
+  // If the user hasn't sent in an onchange handler, create a default
+  // one that sets the sortable element's value every time the order
+  // changes...
+  if (!array_key_exists('#onchange', $element['#options'])) {
+    $element['#options']['#onchange'] = <<<EOT
+      function (obj) {
+        serial = $.SortSerialize(obj[0].id);
+        document.getElementById('edit-$outerid').value = serial.hash;
+      }
+EOT;
+  }
+  
+  interface_sortable_element($outerid .'-wrapper', $element['#options']);
+  $value = $outerid .'[]='. implode('&'. $outerid .'[]=', $order);
+  
+  $element['#type'] = 'markup';
+  $element[] = $sortables;
+  $element[$outerid] = array(
+    '#type' => 'hidden',
+    '#theme' => 'interface_sortable_hidden',
+    '#value' => $value
+  );
+  
+  return $element;
+}
+
+/**
+ * Format the hidden sortable form field that holds the sort order.
+ * This differs from theme_hidden() only in the fact that we don't
+ * call check_plain($element['#value']) when printing the value out
+ * because it escapes the ampersands...  Not even sure that would be
+ * a problem, so this might not even be necessary...
+ *
+ * @param $element
+ *   An associative array containing the properties of the element.
+ *   Properties used:  value, edit
+ * @return
+ *   A themed HTML string representing the hidden form field.
+ */
+function theme_interface_sortable_hidden($element) {
+  return '<input type="hidden" name="'. $element['#name'] .'" id="'. $element['#id'] .'" value="'. $element['#value'] ."\" ". drupal_attributes($element['#attributes']) ." />\n";
+}
+
+/**
+ * Convert form output from interface_sortable_process into an array
+ * 
+ * Interface's sortable output is designed as a GET argument (e.g. ?sort[]=second&sort[]=third&sort[]=first)
+ * 
+ * This function converts the output of the hidden field into an array
+ *
+ * @param string $sort
+ * @return array
+ */
+function interface_get_sort($sort) {
+  $return = array();
+  parse_str($sort, $result);
+  $elements = array_keys($result);
+  if (!empty($elements)) {
+    $element = $elements[0];
+    $len = strpos($element, '-wrapper');
+    $prefix = substr($element, 0, $len);
+    foreach ($result[$element] as $val) {
+      if (strpos($val, $prefix .'_') === 0) {
+        $val = substr($val, strlen($prefix) + 1);
+      }
+      $return[] = $val;
+    }
+  }
+  return $return;
+}
+
+/**
+ * Makes the element with the DOM ID specified by element_id sortable by
+ * drag-and-drop.
+ * 
+ * This method requires the inclusion of the jQuery Interface JavaScript plug-in.
+ * 
+ * @Example:
+ *   interface_sortable_element("my_list", array('action' => 'order'))
+ * 
+ * In the example, the action gets a "my_list" array parameter containing the values
+ * of the ids of elements the sortable consists of, in the current order.
+ * 
+ * You can change the behaviour with various options, see script.aculo.us for more documentation.
+ * 
+ * @param string $element_id
+ * @param array $options
+ */
+
+function interface_sortable_element($element_id, $options = array()) {
+  jquery_interface_add();
+  $parms = interface_to_js($options);
+  
+  drupal_add_js("$(document).ready( function () { $('#$element_id').Sortable($parms) } );", 'inline');
+}
+
+/******************** Core rewrites *************************/
+
+/**
+ * Modification of drupal_to_js()
+ * adds support for anonymous arrays & function (non-quoted) strings
+ * 
+ * prefix key with # to prevent quoting of value
+ * 
+ * @example
+ * interface_to_js(
+ *   array('containment' => array('element_1', 'element_2'), '#onUpdate' => 'function(){alert("hi");}'));
+ * returns:
+ *   {containment: ['element_1', 'element_2'], onUpdate: function(){alert("hi");}}
+ * 
+ * [[[^^^check that^^^]]]
+ *
+ * @param mixed $var
+ *   any type of variable
+ * 
+ * @param string $key
+ *   used internally
+ * 
+ * @return string
+ *   a javascript representation of the variable
+ */
+function interface_to_js($var, $key = NULL) {
+  switch (gettype($var)) {
+    case 'boolean':
+      return $var ? 'true' : 'false'; // Lowercase necessary!
+    case 'integer':
+    case 'double':
+      return $var;
+    case 'resource':
+    case 'string':
+      // if the key for this variable starts with a #, don't quote it
+      if ($key{0} == '#') {
+        $output = $var;
+      }
+      else {
+        $output = str_replace(array("\r", "\n"), array('\r', '\n'), addslashes($var));
+        $output = '"'. $output .'"';
+      }
+      return $output;
+    case 'array':
+      //check to see if there are non-numeric keys
+      $keys = false;
+      foreach (array_keys($var) as $key) {
+        if (!is_numeric($key)) {
+          $keys = true;
+          break;
+        }
+      }
+      if (!$keys) {
+        foreach ($var as $v) {
+          $output[] = interface_to_js($v);
+        }
+        return '[ '. implode(', ', $output) .' ]';
+      }
+      // if it's an array with keys, continue to object treatment
+    case 'object':
+      $output = array();
+      foreach ($var as $k => $v) {
+        if ($k{0} == '#') {
+          $ok = substr($k, 1);
+        }
+        else {
+          $ok = $k;
+        }
+        $output[] = $ok .': '. interface_to_js($v, $k);
+      }
+      return '{ '. implode(', ', $output) .' }';
+    default:
+      return 'null';
+  }
+}
+
+/**
+ * Implementation of hook_theme()...
+ */
+function interface_sortable_theme() {
+  return array(
+    'interface_sortable_hidden' => array(
+      'arguments' => array('element')
+    )
+  );
+}

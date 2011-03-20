@@ -1,0 +1,100 @@
+<?php
+// $Id: uc_cart.install,v 1.7.2.4 2009/02/24 15:35:49 islandusurper Exp $
+
+/**
+ * @file
+ * Install hooks for uc_cart.module.
+ */
+
+/**
+ * Ubercart uc_cart.module schema
+ */
+function uc_cart_schema() {
+  $schema = array();
+
+  $schema['uc_cart_products'] = array(
+    'fields' => array(
+      'cart_id' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '0',
+      ),
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'qty' => array(
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'changed' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'data' => array(
+        'type' => 'text',
+      ),
+    ),
+    'indexes' => array(
+      'cart_id' => array('cart_id'),
+    ),
+  );
+
+  return $schema;
+}
+
+function uc_cart_install() {
+  drupal_install_schema('uc_cart');
+}
+
+function uc_cart_uninstall() {
+  drupal_uninstall_schema('uc_cart');
+
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_cart_%%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_pane_%%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_cap_%%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_checkout_%%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_msg_%%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'uc_new_customer_%%'");
+
+  variable_del('uc_minimum_subtotal');
+  variable_del('uc_add_item_redirect');
+  variable_del('uc_continue_shopping_url');
+  variable_del('uc_continue_shopping_text');
+  variable_del('uc_continue_shopping_type');
+  variable_del('uc_use_next_buttons');
+  variable_del('uc_collapse_current_pane');
+
+  variable_del('uc_ce_no_cancel');
+  variable_del('uc_ce_submit_disable');
+}
+
+function uc_cart_update_6000() {
+  $ret = array();
+
+  // Standardize database definitions during upgrade to Drupal 6.
+  // ID fields are unsigned, regular-sized ints.
+  // "Boolean" flags are unsigned tiny ints.
+  // Postgres tables will have the necessary default values, and MySQL
+  // doesn't need them, so the schema can just be mismatched for that.
+  db_change_field($ret, 'uc_cart_products', 'nid', 'nid', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0));
+  db_change_field($ret, 'uc_cart_products', 'qty', 'qty', array('type' => 'int', 'unsigned' => TRUE, 'size' => 'small', 'not null' => TRUE, 'default' => 0));
+
+  return $ret;
+}
+
+function uc_cart_update_6001() {
+  // Remove unused variables.
+  variable_del('uc_checkout_review_button');
+  variable_del('uc_checkout_submit_button');
+  variable_del('uc_checkout_next_button');
+
+  return array();
+}

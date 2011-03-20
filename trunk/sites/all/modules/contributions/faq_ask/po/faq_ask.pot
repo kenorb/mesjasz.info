@@ -1,0 +1,370 @@
+# $Id: faq_ask.pot,v 1.7.2.1 2008/01/25 16:40:28 nancyw Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  faq_ask.module,v 1.17 2008/01/10 18:15:38 nancyw
+#  faq_ask.info,v 1.2.2.1 2008/01/25 03:03:36 nancyw
+#  faq_ask.install,v 1.4 2008/01/17 14:36:52 nancyw
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2008-01-25 11:26-0500\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: faq_ask.module:18
+msgid "This module is an add-on to the FAQ module that allows users with the 'ask question' permission to create a question which will be queued for an 'expert' to answer."
+msgstr ""
+
+#: faq_ask.module:19
+msgid "The module shows an abbreviated version of the FAQ form without an answer field. The node is created without the 'published' attribute. There is a block that will show the unanswered questions to the 'expert' (generally, this requires a separate role)."
+msgstr ""
+
+#: faq_ask.module:20
+msgid "Viewing of the completed question and answer pair is done by the FAQ module."
+msgstr ""
+
+#: faq_ask.module:21
+msgid "Simply adding the 'FAQ' content type to a vocabulary will not make it eligible for experts; you must go to the settings page and add it there."
+msgstr ""
+
+#: faq_ask.module:26
+msgid "Add a question for our expert to answer. After being answered, your question and the answer will be displayed in the FAQ pages. If the question will not fit in the box below, please try to rephrase it."
+msgstr ""
+
+#: faq_ask.module:43;35
+msgid "ask question"
+msgstr ""
+
+#: faq_ask.module:55
+msgid "The Faq_Ask module has been enabled."
+msgstr ""
+
+#: faq_ask.module:55;173;383
+msgid "Please go to the <a href=\"!url\">settings page</a> to configure this module."
+msgstr ""
+
+#: faq_ask.module:153
+msgid "<suggest a category>"
+msgstr ""
+
+#: faq_ask.module:171
+msgid "Currently, there are no categories defined. "
+msgstr ""
+
+#: faq_ask.module:176
+msgid "Please <a href=\"!url\">ask your site administrator</a> to set up this feature."
+msgstr ""
+
+#: faq_ask.module:201
+msgid "Category"
+msgstr ""
+
+#: faq_ask.module:207
+msgid "Please select the correct category for your question."
+msgstr ""
+
+#: faq_ask.module:213
+msgid "Suggested Category"
+msgstr ""
+
+#: faq_ask.module:217
+msgid "Please enter your suggested category for the question."
+msgstr ""
+
+#: faq_ask.module:227
+msgid "Question"
+msgstr ""
+
+#: faq_ask.module:234
+msgid "Enter your question here. It will be answered as soon as possible. The maximum length for the question is 255 characters."
+msgstr ""
+
+#: faq_ask.module:239
+msgid "Send my question"
+msgstr ""
+
+#: faq_ask.module:263
+msgid "Suggested by @name (!uid) on @date"
+msgstr ""
+
+#: faq_ask.module:319
+msgid "The following question has been posted in the \"!cat\" category."
+msgstr ""
+
+#: faq_ask.module:322
+msgid "In order to answer it you will first need to <a href=\"!url\">login</a> to the site."
+msgstr ""
+
+#: faq_ask.module:323
+msgid "Once logged in, you may proceed <a href=\"!url\">directly to the question</a> to answer it."
+msgstr ""
+
+#: faq_ask.module:342
+msgid "left side"
+msgstr ""
+
+#: faq_ask.module:345
+msgid "right side"
+msgstr ""
+
+#: faq_ask.module:348
+msgid "top"
+msgstr ""
+
+#: faq_ask.module:351
+msgid "bottom"
+msgstr ""
+
+#: faq_ask.module:358
+msgid "It should appear in the list at the @region of the screen momentarily."
+msgstr ""
+
+#: faq_ask.module:361
+msgid "It should appear in the list momentarily."
+msgstr ""
+
+#: faq_ask.module:367
+msgid "Your question has been submitted."
+msgstr ""
+
+#: faq_ask.module:383
+msgid "The Faq_Ask module requires that FAQ \"Categorize questions.\""
+msgstr ""
+
+#: faq_ask.module:390
+msgid "Notify experts"
+msgstr ""
+
+#: faq_ask.module:391
+msgid "If this box is checked, the expert(s) for the question will be notified via email that a question awaits them. If you do not choose this option, the \"Unanswered Questions\" block will be the only way they will know they have questions to answer."
+msgstr ""
+
+#: faq_ask.module:397
+msgid "Allow \"Suggest a category\""
+msgstr ""
+
+#: faq_ask.module:398
+msgid "If this box is checked, the person asking a question will have an option to enter a new category. It will have the default expert assigned to it until you return here to correct the assignment."
+msgstr ""
+
+#: faq_ask.module:406
+msgid "Question Box Length"
+msgstr ""
+
+#: faq_ask.module:407
+msgid "This sets the length of the question box (not the question itself). This affects only the FAQ_Ask module, not the FAQ display. The recommendation is to set it as wide as your theme will allow it. Note: If resizable textareas are enabled, this setting will have no effect."
+msgstr ""
+
+#: faq_ask.module:434
+msgid "Use these vocabularies"
+msgstr ""
+
+#: faq_ask.module:437
+msgid "Only the terms from the selected vocabularies will be included in the list below."
+msgstr ""
+
+#: faq_ask.module:438
+msgid "Simply adding the 'FAQ' content type to a vocabulary will not make it eligible for experts; you must return to here to add it."
+msgstr ""
+
+#: faq_ask.module:439
+msgid "If you select different vocabularies, you must save the configuration BEFORE selecting users below."
+msgstr ""
+
+#: faq_ask.module:446
+msgid "Free tagging vocabularies are not allowed for Faq_Ask."
+msgstr ""
+
+#: faq_ask.module:459
+msgid "No roles with \"answer question\" permission were found; only !admin is currently eligible to be an expert. You may want to go to the <a href=\"!access\">Access Control page</a> to update your permissions."
+msgstr ""
+
+#: faq_ask.module:478
+msgid "No vocabularies or terms were found for the \"faq\" content type . Please go to the <a href=\"!access\">Categories page</a> to update your vocabulary."
+msgstr ""
+
+#: faq_ask.module:509
+msgid "Expert Roles"
+msgstr ""
+
+#: faq_ask.module:513
+msgid "User 1 (@admin) will always be in the list, regardless of roles."
+msgstr ""
+
+#: faq_ask.module:513
+msgid "If you select different roles, you must save the configuration BEFORE selecting users below."
+msgstr ""
+
+#: faq_ask.module:528;532;557
+msgid "Note: Even though the check boxes below are checked, you must still click the \"Save configuration\" button to save the expert settings."
+msgstr ""
+
+#: faq_ask.module:585
+msgid "!name doesn't exist. If you have just changed your role selections this may be okay."
+msgstr ""
+
+#: faq_ask.module:600
+msgid "Default expert"
+msgstr ""
+
+#: faq_ask.module:601
+msgid "The selected user will be assigned as the expert for all terms that are added to the selected vocabularies until you return to this page and update it."
+msgstr ""
+
+#: faq_ask.module:608
+msgid "Save configuration"
+msgstr ""
+
+#: faq_ask.module:651
+msgid "Configuration has been updated."
+msgstr ""
+
+#: faq_ask.module:689
+msgid "Attempt to assign expert failed."
+msgstr ""
+
+#: faq_ask.module:692
+msgid "Assigned expert @expert to @name (@tid)."
+msgstr ""
+
+#: faq_ask.module:753
+msgid "Faq_ask_taxonomy: Unknown op (@op) encountered"
+msgstr ""
+
+#: faq_ask.module:787
+msgid "Attempt to delete expert failed."
+msgstr ""
+
+#: faq_ask.module:790
+msgid "Deleted experts for '@name'."
+msgstr ""
+
+#: faq_ask.module:810
+msgid "Faq_Ask can't determine the correct vocabulary because no FAQ nodes exist yet."
+msgstr ""
+
+#: faq_ask.module:823
+msgid "Unanswered Questions"
+msgstr ""
+
+#: faq_ask.module:842
+msgid "Number of questions to show"
+msgstr ""
+
+#: faq_ask.module:843
+msgid "This controls the number of questions that appear in the 'Unanswered Questions' block."
+msgstr ""
+
+#: faq_ask.module:884
+msgid "If you select a question, you must answer it."
+msgstr ""
+
+#: faq_ask.module:916
+msgid "more..."
+msgstr ""
+
+#: faq_ask.module:939
+msgid "All Unanswered Questions"
+msgstr ""
+
+#: faq_ask.module:942
+msgid "You may go <a href=\"!setting\">here</a> to change the block limit."
+msgstr ""
+
+#: faq_ask.module:971
+msgid "For some strange reason, I couldn't find any categories for you."
+msgstr ""
+
+#: faq_ask.module:1005
+msgid "Currently there are no unanswered questions for you to view."
+msgstr ""
+
+#: faq_ask.module:327;330
+msgid "FAQ_Ask"
+msgstr ""
+
+#: faq_ask.module:327
+msgid "Expert notification email sent to @to"
+msgstr ""
+
+#: faq_ask.module:330
+msgid "Expert notification email to @to failed for the \"!cat\" category."
+msgstr ""
+
+#: faq_ask.module:772 faq_ask.info:0
+msgid "Faq_Ask"
+msgstr ""
+
+#: faq_ask.module:772
+msgid "Vocabulary @voc was deleted from Faq_Ask by @name."
+msgstr ""
+
+#: faq_ask.module:35
+msgid "answer question"
+msgstr ""
+
+#: faq_ask.module:72
+msgid "Experts"
+msgstr ""
+
+#: faq_ask.module:76
+msgid "Allows the user to configure the Ask_FAQ module."
+msgstr ""
+
+#: faq_ask.module:82
+msgid "Ask a question"
+msgstr ""
+
+#: faq_ask.module:95
+msgid "Answer a question"
+msgstr ""
+
+#: faq_ask.module:103
+msgid "Edit a question"
+msgstr ""
+
+#: faq_ask.module:111
+msgid "List more unanswered questions"
+msgstr ""
+
+#: faq_ask.module:0
+msgid "faq_ask"
+msgstr ""
+
+#: faq_ask.install:9
+msgid "FAQ expert to term mapping."
+msgstr ""
+
+#: faq_ask.install:12
+msgid "User identifier for the expert."
+msgstr ""
+
+#: faq_ask.install:18
+msgid "Taxonomy identifier of the terms for the expert."
+msgstr ""
+
+#: faq_ask.install:39
+msgid "faq_ask module installed."
+msgstr ""
+
+#: faq_ask.install:42
+msgid "faq_ask table creation failed. Please \"uninstall\" the module and retry."
+msgstr ""
+
+#: faq_ask.install:60
+msgid "faq_ask module uninstalled."
+msgstr ""
+
+#: faq_ask.info:0
+msgid "Allows an unanswered question 'queue' for the FAQ module."
+msgstr ""
+

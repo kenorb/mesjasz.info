@@ -1,0 +1,40 @@
+<?php
+// $Id: brazil_76_1.cif,v 1.4.2.1 2008/11/03 21:33:50 islandusurper Exp $
+
+function brazil_install() {
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (076, 'Brazil', 'BR', 'BRA', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+    ."(76, 'AC', 'Acre'),"
+    ."(76, 'AL', 'Alagoas'),"
+    ."(76, 'AP', 'Amapá'),"
+    ."(76, 'AM', 'Amazonas'),"
+    ."(76, 'BA', 'Bahia'),"
+    ."(76, 'CE', 'Ceará'),"
+    ."(76, 'DF', 'Distrito Federal'),"
+    ."(76, 'ES', 'Espírito Santo'),"
+    ."(76, 'GO', 'Goiás'),"
+    ."(76, 'MA', 'Maranhão'),"
+    ."(76, 'MT', 'Mato Grosso'),"
+    ."(76, 'MS', 'Mato Grosso do Sul'),"
+    ."(76, 'MG', 'Minas Gerais'),"
+    ."(76, 'PA', 'Pará'),"
+    ."(76, 'PB', 'Paraíba'),"
+    ."(76, 'PR', 'Paraná'),"
+    ."(76, 'PE', 'Pernambuco'),"
+    ."(76, 'PI', 'Piauí'),"
+    ."(76, 'RJ', 'Rio de Janeiro'),"
+    ."(76, 'RN', 'Rio Grande do Norte'),"
+    ."(76, 'RS', 'Rio Grande do Sul'),"
+    ."(76, 'RO', 'Rondônia'),"
+    ."(76, 'RR', 'Roraima'),"
+    ."(76, 'SC', 'Santa Catarina'),"
+    ."(76, 'SP', 'São Paulo'),"
+    ."(76, 'SE', 'Sergipe'),"
+    ."(76, 'TO', 'Tocantins')");
+
+  uc_set_address_format(76, "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+                           ."\r\n!city, !postal_code\r\n!zone_name, !country_name");
+}

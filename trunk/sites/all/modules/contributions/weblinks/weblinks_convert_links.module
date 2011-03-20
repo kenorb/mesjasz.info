@@ -1,0 +1,127 @@
+<?php
+// $Id: weblinks_convert_links.module,v 1.1.4.2 2008/11/03 06:49:06 nancyw Exp $
+
+/**
+ * @file
+ * Convert Links package to Web Links.
+ * Drupal 5 Version - Links has no 6 version.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function weblinks_convert_links_menu() {
+  $items = array();
+
+  $items['admin/settings/weblinks/convert'] = array(
+    'title' => 'Convert Links package',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('weblinks_convert_form'),
+    'access arguments' => array('administer weblinks'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 10,
+    );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_init().
+ */
+function weblinks_convert_init() {
+  drupal_add_css(drupal_get_path('module', 'weblinks') .'/weblinks.css');
+}
+
+function weblinks_convert_form() {
+  drupal_set_message(t('<strong>Warning</strong>: This is a <strong>DESTRUCTIVE</strong> process. The Links package nodes will be changed to Web Links nodes and any taxonomy vocabularies will be updated to be used on the "weblinks" content type.'), 'warning');
+
+  $form = array();
+
+  $form['backup'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('I have done a back up of my database.'),
+    );
+
+  $form['limit'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Number of Links to convert at a time'),
+    '#size' => 5,
+    '#default_value' => 0,
+    '#description' => t('This minimizes the risk of timing out if you have a lot of links to convert.'),
+    );
+
+  $form['convert'] = array(
+    '#type' => 'submit',
+    '#value' => t('Convert'),
+    );
+
+  $form['#validate'][] = 'weblinks_convert_form_validate';
+  $form['#submit'][] = 'weblinks_convert_form_submit';
+  
+  return $form;
+}
+
+function weblinks_convert_form_validate($form, &$form_state) {
+  if (!$form_state['values']['backup']) {
+    form_set_error('backup', t('You must check the box that says you backed up your database.'));
+  }
+}
+
+function weblinks_convert_form_submit($form, &$form_state) {
+  weblinks_convert_links($form_state['values']['limit']);
+}
+
+function weblinks_convert_links($limit = 10) {
+  $rows = array();
+  $header = array(t('nid'), t('url'), t('weight'), t('tids'), t('last check'));
+  $result = db_query_range("SELECT n.nid, n.vid FROM {node} n WHERE n.type='weblink'", 0, $limit);
+  $vids = array();
+  $how_many = 0;
+  while ($data = db_fetch_array($result)) {
+    $node = node_load($data);
+
+    $node->url = $node->links_weblink_url;
+    if (!$node->url) {
+      drupal_set_message(t('Improper URL set by Links package in node #!nid.', array('!nid' => $node->nid), 'error'));
+      drupal_set_message(print_r($node, TRUE), 'error');
+      continue;  // Skip the conversion.
+    }
+    $tids = array();
+
+    foreach ($node->taxonomy as $tid => $term) {
+      $vids[] = $term->vid;
+      $tids[] = $tid; 
+    }
+
+    $node->last_checked = isset($node->links_weblink[0]['last_check']) ? $node->links_weblink[0]['last_check'] : 0;
+
+    $node->weight = $node->links_weblink[0]['weight'];
+    $node->type = 'weblinks';
+    $node->revision = TRUE; 
+    node_save($node);
+    ++$how_many;
+  }
+  drupal_set_message(t('!count links converted.', array('!count' => ($how_many ? $how_many : t('No')))), 'status');
+
+  $vids = array_unique($vids);
+  drupal_set_message(t('Found !count vocabularies: (!vocs)', array('!count' => count($vids), '!vocs' => implode(', ', $vids))));
+
+  foreach ($vids as $vid) {
+    $vocabulary = (array) taxonomy_vocabulary_load($vid);
+    if (!in_array('weblinks', $vocabulary['nodes'])) {
+      $types = $vocabulary['nodes'];
+      $types[] = 'weblinks';
+      $vocabulary['nodes'] = array();
+      foreach ($types as $type) {
+        $vocabulary['nodes'][$type] = 1;
+      }
+      $status = taxonomy_save_vocabulary($vocabulary);
+      if ($status) {
+        drupal_set_message(t('Added "Web Links" content to the !voc vocabulary.', array('!voc' => $vocabulary['name'])), 'status');
+      }
+      else {
+        drupal_set_message(t('Failed adding "Web Links" content to the !voc vocabulary.', array('!voc' => $vocabulary['name'])), 'error');
+      }
+    }
+  }
+}

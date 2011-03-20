@@ -1,0 +1,465 @@
+<?php
+// $Id: simplefeed.module,v 1.46.2.19 2008/10/15 01:38:00 m3avrck Exp $
+
+/**
+ * @file
+ * Parse feeds into nodes.
+ */
+
+/**
+ * Implementation of hook_init().
+ */
+function simplefeed_init() {
+  // ensure we are not serving a cached page
+  if (function_exists('drupal_set_content')) {
+    if (module_exists('token')) {
+      include_once('./'. drupal_get_path('module', 'simplefeed') .'/simplefeed_token.inc');
+    }
+  }
+}
+
+
+/**
+ * Implementation of hook_menu().
+ */
+function simplefeed_menu() {
+  $items = array();
+
+  $items['admin/settings/simplefeed'] = array(
+    'title' => t('SimpleFeed'),
+    'description' => t('Configure how feeds are parsed.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('simplefeed_admin_settings'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer feeds'),
+    'file' => 'simplefeed.admin.inc',
+  );
+  $items['node/%node/refresh'] = array(
+    'title' => t('Refresh feed'),
+    'page callback' => 'simplefeed_feed_refresh',
+    'page arguments' => array(1),
+    'access callback' => 'simplefeed_feed_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2
+  );
+  $items['node/%node/empty'] = array(
+    'title' => t('Empty feed'),
+    'page callback' => 'simplefeed_feed_empty',
+    'page arguments' => array(1),
+    'access callback' => 'simplefeed_feed_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 3
+  );
+
+  return $items;
+}
+
+/**
+ * Determine access for feed callbacks.
+ */
+function simplefeed_feed_access($node) {
+  if ($node->type == 'feed' && user_access('administer feeds')) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+
+/**
+ * Implementation of hook_perm().
+ */
+function simplefeed_perm() {
+  return array('create feeds', 'edit own feeds', 'edit feeds', 'administer feeds');
+}
+
+
+/**
+ * Implementation of hook_access().
+ */
+function simplefeed_access($op, $node) {
+  global $user;
+
+  switch ($op) {
+    case 'create':
+      return user_access('create feeds');
+      break;
+
+    case 'update':
+    case 'delete':
+      // users who create a feed may edit or delete it later, assuming they have the necessary permissions
+      if ((user_access('edit own feeds') && ($user->uid == $node->uid)) || user_access('edit feeds')) {
+        return TRUE;
+      }
+      break;
+  }
+}
+
+
+/**
+ * Implementation of hook_node_info().
+ */
+function simplefeed_node_info() {
+  return array(
+    'feed' => array(
+      'name' => t('Feed'),
+      'module' => 'simplefeed',
+      'description' => t('Aggregate an RSS or Atom syndication feed.'),
+      'body_label' => t('Description'),
+    ),
+  );
+}
+
+
+/**
+ * Implementation of hook_form().
+ */
+function simplefeed_form(&$node) {
+  $type = node_get_types('type', $node);
+
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => check_plain($type->title_label),
+    '#required' => TRUE,
+    '#default_value' => $node->title,
+    '#weight' => -5,
+  );
+  $form['body_filter']['body'] = array(
+    '#type' => 'textarea',
+    '#title' => check_plain($type->body_label),
+    '#default_value' => $node->body,
+    '#rows' => 3,
+    '#required' => TRUE,
+  );
+  $form['body_filter']['format'] = filter_form($node->format);
+
+  $form['url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('URL'),
+    '#description' => t('The URL for this feed.'),
+    '#default_value' => isset($node->url) ? $node->url : 'http://',
+    '#maxlength' => 1024,
+    '#required' => TRUE,
+  );
+
+  if (user_access('administer feeds')) {
+    $form['feed_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Feed settings'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+
+    $period = array(0 => t('Never')) + drupal_map_assoc(array(3600, 10800, 21600, 32400, 43200, 86400, 172800, 259200, 604800, 1209600, 2419200, 4838400, 9676800), 'format_interval');
+    $form['feed_settings']['expires'] = array(
+      '#type' => 'select',
+      '#title' => t('Discard feed items older than'),
+      '#default_value' => isset($node->expires) ? $node->expires : variable_get('simplefeed_expires', 0),
+      '#options' => $period,
+      '#description' => t('Older feed items will be automatically discarded. Requires !cron to be running.', array('!cron' => l('cron', 'admin/logs/status'))),
+    );
+
+    $period = array(0 => t('Never'), 1 => t('Manual')) + drupal_map_assoc(array(900, 1800, 3600, 7200, 10800, 21600, 32400, 43200, 64800, 86400, 172800, 259200, 604800), 'format_interval');
+    $form['feed_settings']['refresh'] = array(
+      '#type' => 'select',
+      '#title' => t('Check feed every'),
+      '#description' => t('How often should a feed be checked for new content? If you select "manual", you can update a feed by clicking "refresh this feed" below the feed node. If you select a time, !cron must be running.', array('!cron' => l('cron', 'admin/logs/status'))),
+      '#options' => $period,
+      '#default_value' => isset($node->refresh) ? $node->refresh : variable_get('simplefeed_refresh', 3600),
+    );
+  }
+  else {
+    $form['feed_settings']['expires'] = array('#type' => 'value', '#value' => variable_get('simplefeed_expires', 0));
+    $form['feed_settings']['refresh'] = array('#type' => 'value', '#value' => variable_get('simplefeed_refresh', 3600));
+  }
+
+  return $form;
+}
+
+
+/**
+ * Implementation of hook_validate().
+ */
+function simplefeed_validate($node) {
+  $valid_url = "`(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?`";
+  $url = trim($node->url);
+
+  if (preg_match($valid_url, $url)) {
+    $duplicate = db_result(db_query("SELECT nid FROM {simplefeed_feed} WHERE url = '%s'", $node->url));
+
+    // make sure this URL does not exist already
+    // if this node is being updated make sure it doesn't trigger a duplicate warning
+    if ($duplicate != '' && $duplicate != $node->nid) {
+      form_set_error('url', t('The URL entered already exists. Please try a different URL.'));
+    }
+
+   if (variable_get('simplefeed_check_url', 1)) {
+     include_once './'. drupal_get_path('module', 'simplefeed') .'/simplepie.inc';
+
+     // init simplepie and have it see if it can find a feed
+     $feed = new SimplePie();
+     $feed->enable_cache(FALSE);
+     $feed->set_timeout(15);
+
+     // prevent SimplePie from using all of it's data santization since we use Drupal's input formats to handle this
+     $feed->set_stupidly_fast(TRUE);
+     $feed->set_feed_url($node->url);
+
+     // feed hasn't been added yet, so use a very low time setting
+     // FeedBurner requires this
+     header("If-Modified-Since:" . 1);
+     $success = $feed->init();
+
+     if (!$success) {
+       form_set_error('url', t('A feed could not be found at this URL. Please try a different URL.'));
+     }
+   }
+  }
+  else {
+    form_set_error('url', t('The URL entered is not valid. It should be in the format of: %url_format', array('%url_format' => 'http://www.example.com/rss.xml')));
+  }
+}
+
+
+/**
+ * Implementation of hook_load().
+ */
+function simplefeed_load($node) {
+  $additions = db_fetch_object(db_query('SELECT url, expires, refresh, checked, hash FROM {simplefeed_feed} WHERE vid = %d', $node->vid));
+  return $additions;
+}
+
+
+/**
+ * Implementation of hook_insert().
+ */
+function simplefeed_insert($node) {
+  db_query("INSERT INTO {simplefeed_feed} (vid, nid, url, expires, refresh) VALUES (%d, %d, '%s', %d, %d)", $node->vid, $node->nid, $node->url, $node->expires, $node->refresh);
+  
+  // download any feed items if this is enabled
+  if (variable_get('simplefeed_download', 0)) {
+    simplefeed_feed_refresh($node);
+  }  
+}
+
+
+/**
+ * Implementation of hook_update().
+ */
+function simplefeed_update($node) {
+  // if this is a new node or we're adding a new revision
+  if ($node->revision) {
+    simplefeed_insert($node);
+  }
+  else {
+    db_query("UPDATE {simplefeed_feed} SET url = '%s', expires = %d, refresh = %d, error = 0 WHERE vid = %d", $node->url, $node->expires, $node->refresh, $node->vid);
+  }
+}
+
+
+/**
+ * Implementation of hook_delete().
+ */
+function simplefeed_delete($node) {
+  // delete the feed
+  db_query('DELETE FROM {simplefeed_feed} WHERE nid = %d', $node->nid);
+
+  // delete all feed items associated with this feed
+  $feed_items = db_query('SELECT nid FROM {simplefeed_feed_item} WHERE fid = %d', $node->nid);
+
+  while ($feed_item = db_fetch_object($feed_items)) {
+    node_delete($feed_item->nid);
+  }
+
+  // clean out old stats if enabled
+  if (module_exists('simplefeed_stats')) {
+    db_query('DELETE FROM {simplefeed_feed_stats} WHERE fid = %d', $node->nid);
+  }  
+
+  db_query('DELETE FROM {simplefeed_feed_item} WHERE fid = %d', $node->nid);
+}
+
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+
+function simplefeed_nodeapi(&$node, $op, $teaser, $page) {
+  switch ($op) {
+    case 'delete revision':
+      db_query('DELETE FROM {simplefeed_feed} WHERE vid = %d', $node->vid);
+      break;
+  }
+}
+
+
+/**
+ * Implementation of hook_link().
+ */
+function simplefeed_link($type, $node = NULL, $teaser = FALSE) {
+  $links = array();
+
+  if ($type == 'node' && $node->type == 'feed') {
+    if (module_exists('views')) {
+      $links['simplefeed_view_feed_items'] = array(
+        'title' => t('View feed items'),
+        'href' => 'feeds/'. $node->nid,
+        'attributes' => array('title' => t('View feed items')),
+      );
+    }
+  }
+
+  return $links;
+}
+
+
+/**
+ * Implementation of hook_cron().
+ */
+function simplefeed_cron() {
+  simplefeed_feed_refresh();
+  simplefeed_item_feed_expire();
+}
+
+
+/**
+ * Refresh a feed, downloading any new feed items and creating nodes for them.
+ */
+function simplefeed_feed_refresh($node = NULL) {
+  // initialize simplepie
+  // we want to do this only once and not each time per feed, which would be slower
+  include_once './'. drupal_get_path('module', 'simplefeed') .'/simplepie.inc';
+
+  if (!$node) {
+    // refresh all feeds
+    $limit = variable_get('simplefeed_cron_throttle', 50);
+    // limit in ASC order so we grab the top N that haven't been checked recently
+    // we can only update feed nodes that have a valid refresh time set; ignore "never" and "manual" options
+    $query = 'SELECT n.nid FROM {node} n INNER JOIN {simplefeed_feed} s ON n.vid = s.vid WHERE ((%d - s.checked) >= s.refresh) AND n.status = 1 AND s.refresh > 1 AND s.error = 0 ORDER BY s.checked ASC';
+    $process_feeds = db_query_range($query, time(), 0, $limit);
+
+    // process each feed
+    while ($process_feed = db_fetch_object($process_feeds)) {
+      simplefeed_feed_process($process_feed->nid);
+    }
+  }
+  else {
+    simplefeed_feed_process($node->nid);
+
+    // cleanup session messages so you don't see a bazillion Feed Item created messages
+    unset($_SESSION['messages']['status']);
+    drupal_set_message(t('The feed %feed has been updated.', array('%feed' => $node->title)));    
+
+    drupal_goto('node/'. $node->nid);
+  }
+}
+
+
+/**
+ * Process a feed, updating the feed and creating feed items as needed.
+ *
+ * @param $nid
+ *   The node id of the feed to process.
+ */
+function simplefeed_feed_process($nid) {
+  $process_feed = node_load($nid);
+
+  $feed = new SimplePie();
+  $feed->enable_cache(FALSE);
+  $feed->set_timeout(15);
+  // prevent SimplePie from using all of it's data santization since we use Drupal's input formats to handle this
+  $feed->set_stupidly_fast(TRUE);
+  $feed->set_feed_url($process_feed->url);
+  // FeedBurner requires this check otherwise it won't work well with SimplePie
+  // also performance improvement
+  header('If-Modified-Since:'. $process_feed->checked);
+  $success = $feed->init();
+
+  if ($success && $feed->data) {
+    // get a unique hash of the headers in the feed, fast and easy way to compare if this feed is updated or not
+    $hash = md5(serialize($feed->data));
+
+    // hashes don't match so likely the feed is updated
+    if ($process_feed->hash != $hash) {
+      // above we define hook_view() which then performs check_url() on the $url in the feed node
+      // the problem is check_url() calls filter_xss_bad_protocol() which does it thing to prevent XSS
+      // but it returns the string through check_plain() which calls htmlspecialchars()
+      // this converts & in a url to &amp; and then causes SimplePie not to be able to parse it
+      // because of this, we decode this URL since we are passing it directly to SimplePie
+      // it is still encoded everywhere else it is output to prevent XSS
+      $process_feed->url = htmlspecialchars_decode($process_feed->url, ENT_QUOTES);
+
+      // turn each feed item into a node
+      simplefeed_item_feed_parse($process_feed, $feed);
+    }
+
+    // finished processing this feed so we can mark it checked
+    db_query("UPDATE {simplefeed_feed} SET checked = %d, hash = '%s', error = 0 WHERE vid = %d", time(), $hash, $process_feed->vid);
+  }
+  else if (isset($feed->error)) {
+    db_query("UPDATE {simplefeed_feed} SET error = 1 WHERE vid = %d", $process_feed->vid);
+    if (module_exists('simplefeed_stats')) {
+      simplefeed_stats_feed_fail($process_feed, $feed->error);
+    }
+    else {
+      watchdog('simplefeed', 'The feed %feed could not be processed due to the following error: %error', array('%feed' => $process_feed->title, '%error' => $feed->error), WATCHDOG_ERROR, l('view', 'node/'. $process_feed->nid));
+    }
+  }
+  else {
+    watchdog('simplefeed', 'You shouldn\'t be here. Something has gone terribly wrong.');
+  }
+}
+
+
+/**
+ * Delete all feed items associated with a feed.
+ */
+function simplefeed_feed_empty($node) {
+  $feeds = db_query("SELECT nid FROM {simplefeed_feed_item} WHERE fid = %d", $node->nid);
+  while ($feed = db_fetch_object($feeds)) {
+    node_delete($feed->nid);
+  }
+  db_query("UPDATE {simplefeed_feed} SET hash = NULL WHERE nid = %d", $node->nid);
+
+  if (module_exists('simplefeed_stats')) {
+    simplefeed_stats_feed_empty($node->nid);
+  }
+
+  drupal_set_message(t('Feed emptied.'));
+  drupal_goto('node/'. $node->nid);
+}
+
+/**
+ * Implementation of hook_requirements().
+ */
+function simplefeed_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break at install time.
+  $t = get_t();
+
+  if ($phase == 'runtime') {
+    $path = drupal_get_path('module', 'simplefeed');
+
+    if (!file_exists($path .'/simplepie.inc')) {
+      $requirements['simplepie'] = array(
+        'title' => $t('SimpleFeed'),
+        'value' => $t('SimplePie library missing'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t('SimpleFeed requires the <a href="http://simplepie.org/">SimplePie</a> library to properly parse feeds. Please download either the 1.0 or 1.1 development (recommended) version and place simplepie.inc in your SimpleFeed module directory.'),
+      );
+    }
+  }
+  return $requirements;
+}
+
+/**
+ * This is a PHP4 compatibility function -- not needed since this is already in PHP5
+ */
+if (!function_exists("htmlspecialchars_decode")) {
+  function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT) {
+    return strtr($string, array_flip(get_html_translation_table(HTML_SPECIALCHARS, $quote_style)));
+  }
+}

@@ -1,0 +1,587 @@
+<?php
+
+// $Id$
+
+/*
+ * Implementation of hook_help
+ */
+function chatblock_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#chatblock':
+      return t('This allows users to chat to each other via a DHTML chatblock.  Requires Javascript to be enabled in their browser.  Should update on page refreshes.');
+      break;
+    case 'admin/modules#description':
+      return t('Creates a chatblock for users.');
+      break;
+  }
+}
+
+/*
+ * Implementation of hook_perm
+ */
+function chatblock_perm() {
+  return array('join chats', 'view chats', 'view chat logs'); 
+}
+
+/*
+ * Implementation of hook_block
+ */
+function chatblock_block($op = 'list', $delta = 0, $edit = array()) {
+  // The $op parameter determines what piece of information is being requested.
+  switch ($op) {
+    case 'list':
+      $blocks[0]['info'] = t('Allows user to chat via a chatblock.');
+      return $blocks;
+    case 'configure':
+      $form = array();
+      if ($delta == 0) {
+        // All we need to provide is a text field, Drupal will take care of
+        // the other block configuration options and the save button.
+        $form['chatblock_number_messages'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Number of messages'),
+          '#size' => 60,
+          '#description' => t('The number of messages to show in this block.'),
+          '#default_value' => variable_get('chatblock_number_messages',  100),
+        );
+      }
+      return $form;
+    case 'save':
+      if ($delta == 0) {
+        // Have Drupal save the string to the database.
+        variable_set('chatblock_number_messages', $edit['chatblock_number_messages']);
+      }
+      return;
+    case 'view':
+      // If $op is "view", then we need to generate the block for display
+      // purposes. The $delta parameter tells us which block is being requested.
+      $block['subject'] = t('Chat');
+      $block['content'] = chatblock_contents();
+      return $block;
+  } 
+}
+
+/*
+ * Implementation of hook_menu
+ */
+function chatblock_menu() {
+  global $user;
+  $items = array();
+
+  $items['chatblock/view'] = array(
+    'title' => 'chatblock',
+    'page callback' => 'chatblock_chat_callback',
+    'access arguments' => array('view chats'),
+    'type' => MENU_CALLBACK
+  );
+  $items['chatblock/update'] = array(
+    'title' => 'chatblock update',
+    'page callback' => 'chatblock_chat_update_callback',
+    'access arguments' => array('view chats'),
+    'type' => MENU_CALLBACK
+  );
+  $items['chatblock/logs'] = array(
+    'title' => 'Chatblock logs',
+    'description' => 'View the logs of the chats on the site.',
+    'access arguments' => array('view chat logs'),
+    'page callback' => 'chatblock_logs_page_view',
+    'type' => MENU_NORMAL_ITEM
+  );
+
+  $items['admin/settings/chatblock'] = array(
+    'title' => 'ChatBlock',
+    'description' => 'Set the settings for the site-wide chat block.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('chatblock_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['chatblock/help'] = array(
+    'title' => 'Chatblock help',
+    'description' => 'View some useful information about using the chatblock.',
+    'access arguments' => array('join chats'),
+    'page callback' => 'chatblock_help_page',
+    'type' => MENU_NORMAL_ITEM
+  );
+
+  return $items;
+}
+
+function chatblock_settings_form() {
+  $form = array();
+
+  $form['chatblock_settings']['chatblock_number_messages'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Number of messages'),
+    '#description' => t('Enter the maximum number of messages to display in the chatblock.'),
+    '#default_value' => variable_get('chatblock_number_messages', 100),
+    '#size' => 60,
+    '#required' => FALSE
+  );
+
+  $form['chatblock_settings']['chatblock_ignore_user_1'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Ignore Admin'),
+    '#description' => t('Ignore user 1 for the chat module so that the admin can work in peace.'),
+    '#default_value' => variable_get('chatblock_ignore_user_1', 0)
+  );
+  
+  $form['chatblock_settings']['chatblock_show_logouts'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Ignore logouts'),
+    '#description' => t('Do not show the has just logged out messages in the chatblock.'),
+    '#default_value' => variable_get('chatblock_show_logouts', 0)
+  );
+
+  $form['chatblock_settings']['chatblock_show_logins'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Ignore logins'),
+    '#description' => t('Do not show the has just logged in messages in the chatblock.'),
+    '#default_value' => variable_get('chatblock_show_logins', 0)
+  );
+
+  $form['chatblock_settings']['chatblock_show_empty'] = array(
+    '#type' => 'checkbox',
+	'#title' => t('Show empty messages'),
+	'#description' => t('Unchecking this box allows you to completely ignore (including the saving into the database) of empty messages.'),
+	'#default_value' => variable_get('chatblock_show_empty', 1),
+  );
+
+  $form['chatblock_settings']['chatblock_refresh_rate'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Refresh rate'),
+    '#description' => t('The number of seconds between refreshes of the chatblock text. Defaults to 5 seconds.'),
+    '#default_value' => variable_get('chatblock_refresh_rate', 5)
+  );
+
+  $options = array('Never', '1 day', '1 week', '2 weeks', '1 month');
+  $form['chatblock_autodelete'] = array(
+    '#type' => 'select',
+    '#title' => t('Autodelete'),
+    '#description' => t('Automatically delete messages older than this number of days'),
+    '#options' => $options,
+    '#default_value' => array(variable_get('chatblock_autodelete', 0))
+  );
+  
+  return system_settings_form($form);
+}
+
+/*
+ * Updating the database
+ */
+function chatblock_database($op, $message = "", $name = "", $timestamp = NULL, $limit = 100) {
+  // get the user information
+  global $user;
+  $username = $user->name;
+
+  // which database operation are we doing?
+  switch ($op) {
+    case 'view':
+  
+      // get the maximum messageid
+      $max = db_result(db_query("SELECT MAX(messageid) FROM {chatblock}"));
+    
+      if ($limit) {
+        // find the place to start our limit
+        $start = $max - $limit;
+    
+        // no negative starting values in db queries
+        if ($start < 0) {
+          $start = 0;
+        }
+    
+        // need to do slightly different queries for different db types
+        switch($GLOBALS['db_type']) {
+          case 'mysql':
+          case 'mysqli':
+            // do the query
+            $query = "SELECT message, username, messageid, timestamp FROM {chatblock} WHERE timestamp > %d ORDER BY timestamp LIMIT %d, %d";
+            break;
+          case 'pgsql':
+            $query = "SELECT message, username, messageid, timestamp FROM {chatblock} WHERE timestamp > %d ORDER BY timestamp OFFSET %d LIMIT %d"; 
+            break;
+        }
+    
+        $result = db_query($query, $timestamp, $start, $max);
+      }
+      else {
+        $query = "SELECT message, username, messageid, timestamp FROM {chatblock} WHERE timestamp > %f ORDER BY timestamp";
+        $result = db_query($query, $timestamp);
+      }
+
+      // send back the messages as an associative array
+      $messages = array();
+      while ($row = db_fetch_array($result)) {
+        // m prepended to timestamp to provide support for Opera which has a bug in its implementation of json
+        $messages['m'. $row['timestamp']] = array('username' => $row['username'], 'message' => chatblock_filter_message($row['message']));
+      }
+   
+      return $messages;
+
+    case 'update':
+      $timestamp = chatblock_microtime_float()*100;
+      $query = "INSERT INTO {chatblock} (message, username, timestamp) VALUES ('%s','%s',%s)";
+      $result = db_query($query, $message, $username, $timestamp);
+      return;
+
+    case 'user':
+      $timestamp = chatblock_microtime_float()*100;
+      $query = "INSERT INTO {chatblock} (message, username, timestamp) VALUES ('%s','%s',%s)";
+      $result = db_query($query, $message, $username, $timestamp);
+      return;
+
+    case 'logs':
+      $query = "SELECT message, username, messageid, timestamp FROM {chatblock} ORDER BY timestamp";
+      $result = pager_query($query, 20, 0);
+      $messages = array();
+      while ($row = db_fetch_array($result)) {
+        $messages[$row['timestamp']] = array('username' => $row['username'], 'message' => $row['message']);
+      }
+      return $messages;
+
+  }
+}
+
+/*
+ * Default chat block to be opened on page refreshes
+ */
+function chatblock_contents() {
+  global $user;
+  // hide the block if the admin user decides to ignore it
+  if ((variable_get('chatblock_ignore_user_1', 0) == 1) && ($user->uid == 1)) {
+    return '';
+  }
+
+  // start outputing the block
+  $output = '';
+  
+  // make sure the current user is allowed to see chats
+  if (user_access('view chats')) {
+
+    // add the css and the js if the user can view the chatblock
+    $path = drupal_get_path('module', 'chatblock');
+    drupal_add_css($path .'/css/chatblock.css');
+    drupal_add_js($path .'/chatblock.js');
+    drupal_add_js(chatblock_js(), 'inline');
+  
+    // add the messages
+    $output .= chatblock_messages();
+  
+    // if the user can also chat, show the form below the messages
+    if (user_access('join chats')) {
+    
+    // add the actual chatblock form
+      $output .= drupal_get_form('chatblockchatform');
+    } 
+
+  }
+  return $output;
+}
+
+/*
+ * Get the current messages and display them.
+ */
+function chatblock_messages() {
+  
+  // start the output
+  $output = '';
+
+  if (!isset($_POST['chatboxtoken'])) {
+  
+    // get the current messages from the database
+    // how many messages are we supposed to show?
+    $limit = intval(variable_get('chatblock_number_messages', 100));
+    $messages = chatblock_database('view', "", "", 0, $limit);
+  
+    // keep track of the message ids
+    $nums = array_keys($messages);
+  
+    // add the container
+    $output .= '<div class="chatblockwrapper"><div id="chatblock_block">';
+  
+    // if we have messages, show them
+    if (count($messages) > 0) {
+      foreach ($messages as $timestamp => $row) {
+
+        // filter the message
+        $message = chatblock_filter_message($row['message']);
+    
+         // add the current message to the output
+        $output .= '<div class="chatblock-message"><span class="chatblock-username">'. $row['username'] .': </span> '. $message .'</div>';
+      }
+    }
+  
+    // end of the container
+    $output .= '<br class="endchatblock" /></div></div>';
+  
+    // add the container for the timestamp
+    $output .= '<div id="chatblocklastmessage" style="display: none;">'. chatblock_microtime_float()*100 .'</div>';
+  
+    // send back the output
+    return $output;
+  }
+  else {
+  
+    // get the timestamp of the last message
+    $lasttime = (float) $_POST['timestamp'];
+  
+    $messages = chatblock_database('view', "", "", $lasttime, FALSE);
+  
+    // and the current time
+    $thistime = chatblock_microtime_float()*100;
+
+    // loop through the messages
+    if (count($messages) > 0) {
+      // add the current timestamp
+      $messages[0] = 'm'. $thistime;
+      
+      // set the header for Opera
+      header("Content-type: application/x-javascript");
+      
+      // send the data
+      print drupal_to_js($messages);
+    }
+    exit();
+  }
+}
+
+/*
+ *  This function filters the messages and adds the smileys and extra if any.
+ */
+function chatblock_filter_message($message) {
+  $url = drupal_get_path('module', 'chatblock');
+  $message = strip_tags($message);
+  $message = preg_replace("/>\:>/" , theme_image($url .'/images/twisted.gif', ':twisted:'), $message);
+  $message = preg_replace("/\?\:\)/" , theme_image($url .'/images/think.gif', ':think:'), $message);
+  $message = preg_replace("/N\:\)/" , theme_image($url .'/images/naughty.gif', ':naughty:'), $message);
+  $message = preg_replace("/O\:\)/" , theme_image( $url . '/images/angel.gif', ':angel:'), $message);
+  $message = preg_replace("/\:D/" , theme_image( $url . '/images/biggrin.gif', ':biggrin:'), $message);
+  $message = preg_replace("/\:P/" , theme_image( $url . '/images/tongue.gif', ':tongue:'), $message);
+  $message = preg_replace("/\:o/" , theme_image( $url . '/images/impressed.gif', ':impressed:'), $message);
+  $message = preg_replace("/\:\|/" , theme_image( $url . '/images/neutral.gif', ':neutral:'), $message);
+  $message = preg_replace("/8-\)/" , theme_image( $url . '/images/cool.gif', ':cool:'), $message);
+  $message = preg_replace("/\%\)/" , theme_image( $url . '/images/confused.gif', ':confused:'), $message);
+  $message = preg_replace("/\:\[/" , theme_image( $url . '/images/ashamed.gif', ':ashamed:'), $message);
+  $message = preg_replace("/oO/" , theme_image( $url . '/images/eh.gif', ':eh:'), $message);
+  $message = preg_replace("/\^\^/" , theme_image( $url . '/images/kidding.gif', ':kidding:'), $message);
+  $message = preg_replace("/>\:\{/" , theme_image( $url . '/images/mad.gif', ':mad:'), $message);
+  $message = preg_replace("/\:applause\:/" , theme_image( $url . '/images/applause.gif', 'applause'), $message);
+  $message = preg_replace("/\!\:{/" , theme_image( $url . '/images/silenced.gif', ':silenced:'), $message);
+  $message = preg_replace("/8\)/" , theme_image( $url . '/images/rolleyes.gif', ':rolleyes:'), $message);
+  $message = preg_replace("/\:S/" , theme_image( $url . '/images/sick.gif', ':sick:'), $message);
+  $message = preg_replace("/\:IW\:/" , theme_image( $url . '/images/whistle.gif', ':whistle:'), $message);
+  $message = preg_replace("/\:\)/" , theme_image( $url . '/images/smile.gif', ':smile:'), $message);
+  $message = preg_replace("/\:\(/" , theme_image( $url . '/images/sad.gif', ':sad:'), $message);
+  $message = chatblock_find_url($message);
+  return $message;
+}
+
+/*
+ * Parse the message and convert the URLs
+ */
+function chatblock_find_url($string){
+  //"www."
+  $pattern_preg1 = '#(^|\s)(www|WWW)\.([^\s<>\.]+)\.([^\s\n<>]+)#sm';
+  $replace_preg1 = '\\1<a href="http://\\2.\\3.\\4" target="_blank" class="link">\\2.\\3.\\4</a>';
+
+  //"http://"
+  $pattern_preg2 = '#(^|[^\"=\]]{1})(http|HTTP)(s|S)?://([^\s<>\.]+)\.([^\s<>]+)#sm';
+  $replace_preg2 = '\\1<a href="\\2\\3://\\4.\\5" target="_blank" class="link">\\2\\3://\\4.\\5</a>';
+  
+  $string = preg_replace($pattern_preg1, $replace_preg1, $string);
+  $string = preg_replace($pattern_preg2, $replace_preg2, $string);
+
+  return $string;
+}
+
+/**
+ *  This is the basic chatblock form to display.
+ */
+function chatblockchatform(){
+  $form = array();
+
+  $form['chatblocktext'] = array(
+    '#type' => 'textfield',
+    '#size' => 20
+  );
+
+  $form['chatblocksubmit'] = array(
+    '#type' => 'submit',
+    '#attributes' => array('onclick' => 'return chatblockSend(this);'),
+    '#value' => t('send'),
+  ); 
+
+  return $form;
+}
+
+
+
+/**
+ * This callback inserts the current message into the database
+ * path: chatblock/update
+ */
+function chatblock_chat_update_callback() {
+  if (isset($_POST['message'])) {
+    $message = filter_xss($_POST['message'], array());
+  }
+
+  $show = TRUE;
+  if (strlen($message) == 0) {
+    $show = variable_get('chatblock_show_empty', 1) ? TRUE : FALSE;
+  }
+ 
+  if ($show) {
+    chatblock_database('update', $message);
+    chatblock_messages();
+  }
+}
+
+/**
+ * This callback just sends back any new messages
+ * path: chatblock/view
+ */
+function chatblock_chat_callback() {
+  $output = chatblock_messages();
+  echo $output;
+  exit();
+}
+
+/*
+ * Implementation of hook_user
+ */
+function chatblock_user($op, &$edit, &$account, $category = NULL){
+  $username = $account->name;
+  switch($op) {
+    case 'login':
+      if (variable_get('chatblock_show_logins', 0) == 0) {
+        chatblock_database('user',' has just logged in.', $username);
+      }
+      break;
+    case 'logout':
+      if (variable_get('chatblock_show_logouts', 0) == 0) {
+        chatblock_database('user',' has just logged out.', $username);
+      }
+      break;
+  }
+}
+
+/*
+ * Our custom submission stuff so that the messages are sent to the correct location
+ */
+function chatblockchatform_submit($form, &$form_state) {
+  if (isset($form_state['values']['chatblocktext'])) {
+    $message = filter_xss($form_state['values']['chatblocktext'], array());
+    chatblock_database('update', $message);
+  }
+  return;
+}
+
+/*
+ * View the chat logs, as a menu Callback
+ */
+function chatblock_logs_page_view() {
+  $messages = chatblock_database('logs');
+  $output = '';
+  if (!is_array($messages)) {
+    $messages = array();
+  }
+  foreach ($messages as $timestamp => $row) {
+    $message = chatblock_filter_message($row['message']);
+    $output .= '<div style="width: 160px"><span style="color: red">'.$row['username'].': </span> '. $message .'</div>';
+  }
+  $output .= theme_pager(array(), 20, 0);
+  return $output;
+}
+
+function chatblock_help_page() {
+  $output = '';
+  $url = drupal_get_path('module', 'chatblock');
+
+  $header = array(t('Text'), t('Replacement image  ext'));
+  $rows = array(
+    array(":D" , chatblock_filter_message(":D")),
+    array(":)" , chatblock_filter_message(":)")),
+    array(":P" , chatblock_filter_message(":P")),
+    array(":(" , chatblock_filter_message(":(")),
+    array(":o" , chatblock_filter_message(":o")),
+    array(":|" , chatblock_filter_message(":|")),
+    array("8-)" , chatblock_filter_message("8-)")),
+    array("%)" , chatblock_filter_message("%)")),
+    array(":[" , chatblock_filter_message(":[")),
+    array("O:)" , chatblock_filter_message("O:)")),
+    array("oO" , chatblock_filter_message("oO")),
+    array("^^" , chatblock_filter_message("^^")),
+    array(">:{" , chatblock_filter_message(">:{")),
+    array(">:>" , chatblock_filter_message(">:>")),
+    array(":applause:" , chatblock_filter_message(":applause:")),
+    array("!:{" , chatblock_filter_message("!:{")),
+    array("N:)" , chatblock_filter_message("N:)")),
+    array("8)" , chatblock_filter_message("8)")),
+    array(":S" , chatblock_filter_message(":S")),
+    array("?:)" , chatblock_filter_message("?:)")),
+    array(":IW:" , chatblock_filter_message(":IW:")),
+    array("http://www.somedomain.com" , '<a href="http://www.somedomain.com" onclick="return false">http:www.somedomain.com</a>'),
+    array("www.somedomain.com", '<a href="http://www.somedomain.com" onclick="return false">http:www.somedomain.com</a>')
+  );
+  $output .= '<p>'.t('This shows some shortcuts for some smileys and replacement text.').'</p>';
+  $output .= theme('table', $header, $rows);
+  return $output;
+}
+
+/**
+ * Implementation of hook_cron()
+ */
+function chatblock_cron() {
+  $amount = variable_get('chatblock_autodelete', 0);
+  $timestamp = chatblock_microtime_float()*100;
+  switch($amount) {
+    case 0:
+      return;
+      break;
+    case 1:
+      $time = 100*60*60*24; 
+      break;
+    case 2;
+      $time = 100*60*60*24*7;
+      break;
+    case 3;
+      $time = 100*60*60*24*14;
+      break;
+    case 4:
+      $time = 100*60*60*24*31;
+      break;
+  }
+  watchdog("chatblock", "Time is: " . $time . " and timestamp is: " . $timestamp, WATCHDOG_NOTICE);
+  db_query("DELETE FROM {chatblock} WHERE timestamp < %d", $timestamp - $time);
+}
+
+/**
+ * Create the script tag to include the page
+ */
+function chatblock_js() {
+
+  // how often are we supposed to update the page?
+  $rate = variable_get('chatblock_refresh_rate', 5)*1000;
+
+  $script = '
+var chatBlockInterval;
+var chatBlockUpdateURL = "'. url('chatblock/update', array('absolute' => TRUE)) .'";
+var chatBlockViewURL = "'. url('chatblock/view', array('absolute' => TRUE)) .'";
+
+$(document).ready(function () {
+  chatBlockInterval = setInterval("chatboxGetMessage()", '. $rate .');
+  chatboxInitScroll();
+});';
+  return $script;
+}
+
+
+/**
+ * Simple function to replicate PHP 5 behaviour
+ */
+function chatblock_microtime_float() {
+  list($usec, $sec) = explode(" ", microtime());
+  return ((float)$usec + (float)$sec);
+}
+

@@ -1,0 +1,66 @@
+<?php
+// $Id: switzerland_756_1.cif,v 1.4.4.1 2008/11/03 21:33:50 islandusurper Exp $
+
+/**
+ * First implement hook_install() using the name of the country as the base of
+ * the function name.
+ */
+function switzerland_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES ('756', 'Switzerland', 'CH', 'CHE', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(756, 'AG', 'Aargau'),"
+          ."(756, 'AI', 'Appenzell Innerrhoden'),"
+          ."(756, 'AR', 'Appenzell Ausserrhoden'),"
+          ."(756, 'BS', 'Basel-Stadt'),"
+          ."(756, 'BL', 'Basel-Landschaft'),"
+          ."(756, 'BE', 'Bern'),"
+          ."(756, 'FR', 'Fribourg'),"
+          ."(756, 'GE', 'Geneva'),"
+          ."(756, 'GL', 'Glarus'),"
+          ."(756, 'GR', 'Graubünden'),"
+          ."(756, 'JU', 'Jura'),"
+          ."(756, 'LU', 'Luzern'),"
+          ."(756, 'NE', 'Neuchâtel'),"
+          ."(756, 'NW', 'Nidwalden'),"
+          ."(756, 'OW', 'Obwalden'),"
+          ."(756, 'SH', 'Schaffhausen'),"
+          ."(756, 'SZ', 'Schwyz'),"
+          ."(756, 'SO', 'Solothurn'),"
+          ."(756, 'SG', 'St. Gallen'),"
+          ."(756, 'TG', 'Thurgau'),"
+          ."(756, 'TI', 'Ticino'),"
+          ."(756, 'UR', 'Uri'),"
+          ."(756, 'VS', 'Valais'),"
+          ."(756, 'VD', 'Vaud'),"
+          ."(756, 'ZG', 'Zug'),"
+          ."(756, 'ZH', 'Zürich')");
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.  Documentation on address formats
+  // is available at:
+  // http://www.ubercart.org/ubercart_users_guide/country_settings#address_format_docs
+  uc_set_address_format(756,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2\r\n!postal_code !city\r\n!country_name_if");
+}
+
+/**
+ * If necessary, implement hook_update() with $version being the only argument.
+ * Add a new case for each version update, and be sure to always include the
+ * latest changes in the install function.
+ */
+function switzerland_update($version) {
+}
+
+/**
+ * If necessary, implement hook_uninstall().  This requires no argument.  The
+ * store module automatically removes rows from the country and zones tables
+ * related to the country, and it unsets the address format.  This function is
+ * only necessary for other things you may have included in your country's
+ * installation process.
+ */
+function switzerland_uninstall() {
+}

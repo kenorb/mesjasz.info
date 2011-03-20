@@ -1,0 +1,13 @@
+; $Id: links_related.info,v 1.3 2008/07/07 02:28:55 syscrusher Exp $
+name = Links Related
+description = Adds an extra URL field to nodes of admin-specified types.
+dependencies[] = links
+package = Links
+core = 6.x
+
+; Information added by drupal.org packaging script on 2009-01-22
+version = "6.x-1.0-beta15"
+core = "6.x"
+project = "links"
+datestamp = "1232594723"
+

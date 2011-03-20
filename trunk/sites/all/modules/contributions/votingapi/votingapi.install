@@ -1,0 +1,293 @@
+<?php
+
+// $Id: votingapi.install,v 1.21.4.4 2008/04/09 00:54:19 eaton Exp $
+
+function votingapi_schema() {
+  $schema['votingapi_vote'] = array(
+    'fields' => array(
+      'vote_id' => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'content_type' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => 'node'),
+      'content_id' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'value' => array('type' => 'float', 'not null' => TRUE, 'default' => 0),
+      'value_type' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => 'percent'),
+      'tag' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => 'vote'),
+      'uid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'timestamp' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'vote_source' => array('type' => 'varchar', 'length' => 255),
+    ),
+    'primary key' => array('vote_id'),
+    'indexes' => array(
+      'content' => array('content_type', 'content_id'),
+      'content_uid' => array('content_type', 'content_id', 'uid'),
+      'content_source' => array('content_type', 'content_id', 'vote_source'),
+      'content_vtype' => array('content_type', 'content_id', 'value_type'),
+      'content_value_tag' => array('content_type', 'content_id', 'value_type', 'tag'),
+    ),
+  );
+  $schema['votingapi_cache'] = array(
+    'fields' => array(
+      'vote_cache_id' => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'content_type' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => 'node'),
+      'content_id' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'value' => array('type' => 'float', 'not null' => TRUE, 'default' => 0),
+      'value_type' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => 'percent'),
+      'tag' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => 'vote'),
+      'function' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => ''),
+      'timestamp' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('vote_cache_id'),
+    'indexes' => array(
+      'content' => array('content_type', 'content_id'),
+      'content_function' => array('content_type', 'content_id', 'function'),
+      'content_tag_func' => array('content_type', 'content_id', 'tag', 'function'),
+      'content_vtype_tag' => array('content_type', 'content_id', 'value_type', 'tag'),
+      'content_vtype_tag_func' => array('content_type', 'content_id', 'value_type', 'tag', 'function'),
+    ),
+  );
+  return $schema;
+}
+
+function votingapi_install() {
+  drupal_install_schema('votingapi');
+}
+
+function votingapi_uninstall() {
+  drupal_uninstall_schema('votingapi');
+}
+
+/**
+ * UTF8 update
+ */
+function votingapi_update_1() {
+  return _system_update_utf8(array('votingapi_vote', 'votingapi_cache'));
+}
+
+/**
+ * Value fields changed to signed floats.
+ */
+function votingapi_update_2() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("ALTER TABLE {votingapi_cache} CHANGE value value float(10) default NULL");
+      $ret[] = update_sql("ALTER TABLE {votingapi_vote} CHANGE value value float(10) default NULL");
+      break;
+  }
+
+  return $ret;
+}
+
+/**
+ * Value fields changed to signed floats.
+ */
+function votingapi_update_3() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("ALTER TABLE {votingapi_cache} CHANGE value_type value_type varchar(20) NOT NULL");
+      $ret[] = update_sql("ALTER TABLE {votingapi_vote} CHANGE value_type value_type varchar(20) NOT NULL");
+
+      $ret[] = update_sql("ALTER TABLE {votingapi_cache} ADD INDEX (content_type)");
+      $ret[] = update_sql("ALTER TABLE {votingapi_cache} ADD INDEX (content_id)");
+      $ret[] = update_sql("ALTER TABLE {votingapi_vote} ADD INDEX (content_type)");
+      $ret[] = update_sql("ALTER TABLE {votingapi_vote} ADD INDEX (content_id)");
+
+      $ret[] = db_query("UPDATE {votingapi_cache} SET value_type = 'percent' WHERE value_type = '1'");
+      $ret[] = db_query("UPDATE {votingapi_cache} SET value_type = 'points' WHERE value_type = '2'");
+      $ret[] = db_query("UPDATE {votingapi_cache} SET value_type = 'option' WHERE value_type = '3'");
+
+      $ret[] = db_query("UPDATE {votingapi_vote} SET value_type = 'percent' WHERE value_type = '1'");
+      $ret[] = db_query("UPDATE {votingapi_vote} SET value_type = 'points' WHERE value_type = '2'");
+      $ret[] = db_query("UPDATE {votingapi_vote} SET value_type = 'option' WHERE value_type = '3'");
+
+      break;
+  }
+
+  return $ret;
+}
+
+/**
+ * Initial work to roll Voting Actions functionality into Voting API.
+ */
+
+function votingapi_update_4() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("CREATE TABLE {votingapi_action_set} (
+           vasid int(10) unsigned NOT NULL,
+           parent int(10) unsigned NOT NULL,
+           required int(8) NOT NULL default '0',
+           mask varchar(8) default 'AND',
+           content_type varchar(20) default NULL,
+           name varchar(128) default NULL,
+           enabled int default 1,
+           source varchar(65) default NULL,
+           weight int(10) NOT NULL default 0,
+           PRIMARY KEY  (vasid)
+         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
+
+      $ret[] = update_sql("CREATE TABLE {votingapi_action_condition} (
+          vacid int(10) unsigned NOT NULL,
+          vasid int(10) unsigned NOT NULL,
+          weight int(10) NOT NULL default 0,
+          value varchar(255),
+          handler varchar(255) NOT NULL,
+          PRIMARY KEY  (vacid)
+        ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
+
+      $ret[] = update_sql("CREATE TABLE {votingapi_action} (
+          vasid int(10) unsigned NOT NULL,
+          aid varchar(255) NOT NULL default '0'
+        ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
+
+      break;
+  }
+
+  return $ret;
+}
+
+/**
+ * Fixed index definition, corrected table prefixes.
+ */
+
+function votingapi_update_5() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("ALTER TABLE {votingapi_vote} ADD INDEX content (content_type, content_id);");
+      $ret[] = update_sql("ALTER TABLE {votingapi_cache} ADD INDEX content (content_type, content_id);");
+
+      $ret[] = update_sql("ALTER TABLE {votingapi_vote} DROP INDEX content_type;");
+      $ret[] = update_sql("ALTER TABLE {votingapi_vote} DROP INDEX content_id;");
+      $ret[] = update_sql("ALTER TABLE {votingapi_cache} DROP INDEX content_type;");
+      $ret[] = update_sql("ALTER TABLE {votingapi_cache} DROP INDEX content_id;");
+
+      $ret[] = update_sql("RENAME TABLE votingapi_action_condition TO {votingapi_action_condition};");
+      $ret[] = update_sql("RENAME TABLE votingapi_action TO {votingapi_action};");
+
+      $ret[] = update_sql("UPDATE {sequences} SET name = '{votingapi_cache}' WHERE name = 'votingapi_cache';");
+      $ret[] = update_sql("UPDATE {sequences} SET name = '{votingapi_vote}' WHERE name = 'votingapi_vote';");
+
+      break;
+  }
+
+  return $ret;
+}
+
+function votingapi_update_6() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("ALTER TABLE {votingapi_action_condition} ADD COLUMN name varchar(128) NOT NULL;");
+      $ret[] = update_sql("ALTER TABLE {votingapi_action_condition} CHANGE value data varchar(255)");
+      $ret[] = update_sql("ALTER TABLE {votingapi_action_set} ADD COLUMN description varchar(255) NOT NULL;");
+      break;
+  }
+
+  return $ret;
+
+}
+
+
+function votingapi_update_7() {
+  // There are quite a few changes. Let's just take the easy way and nuke this puppy.
+  // Nothing has been using the tables up to this point, anyhow.
+  
+  $ret[] = update_sql("DROP TABLE {votingapi_action_set}");
+  $ret[] = update_sql("DROP TABLE {votingapi_action_condition}");
+  $ret[] = update_sql("DROP TABLE {votingapi_action}");
+  
+  $ret[] = update_sql("CREATE TABLE {votingapi_action_set} (
+      name varchar(64) NOT NULL,
+      parent_name varchar(64) default NULL,
+      content_type varchar(20) default NULL,
+      source varchar(64) default NULL,
+      description varchar(255) default NULL,
+      required int(8) NOT NULL default '0',
+      criteria_mask varchar(8) default 'AND',
+      weight int(10) NOT NULL default 0,
+      PRIMARY KEY  (name)
+    ) /*!40100 DEFAULT CHARACTER SET utf8 */;");
+
+  $ret[] = update_sql("CREATE TABLE {votingapi_action_condition} (
+      name varchar(64) NOT NULL,
+      parent_name varchar(64) default NULL,
+      description varchar(255) default NULL,
+      weight int(10) NOT NULL default 0,
+      data varchar(255),
+      handler varchar(255) NOT NULL,
+      PRIMARY KEY  (name)
+    ) /*!40100 DEFAULT CHARACTER SET utf8 */;");
+
+  $ret[] = update_sql("CREATE TABLE {votingapi_action} (
+      parent_name varchar(64) NOT NULL,
+      aid varchar(255) NOT NULL
+    ) /*!40100 DEFAULT CHARACTER SET utf8 */;");
+    
+  return $ret;
+}
+
+function votingapi_update_8() {
+  // whoops. mis-named column.
+  $ret = array();
+  $ret[] = update_sql("ALTER TABLE {votingapi_action_set} CHANGE criteria_mask condition_mask varchar(8) DEFAULT 'AND';");
+  return $ret;
+}
+
+function votingapi_update_9() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+        $ret[] = update_sql("ALTER TABLE {votingapi_cache} ADD COLUMN timestamp int(11) default NULL;");
+      break;
+    case 'pgsql':
+        $ret[] = update_sql("ALTER TABLE {votingapi_cache} ADD COLUMN timestamp int4 default NULL;");
+      break;
+  }
+  $ret[] = update_sql("UPDATE {votingapi_cache} SET timestamp = " . time() . " WHERE timestamp IS NULL;");
+  return $ret;
+}
+
+function votingapi_update_6100() {
+  $ret = array();
+
+  // Convert vote_id and vote_cache_id columns to auto increment.
+  db_drop_primary_key($ret, 'votingapi_cache');
+  db_change_field($ret, 'votingapi_cache', 'vote_cache_id', 'vote_cache_id', array('type' => 'serial', 'not null' => TRUE), array('primary key' => array('vote_cache_id')));
+
+  db_drop_primary_key($ret, 'votingapi_vote');
+  db_change_field($ret, 'votingapi_vote', 'vote_id', 'vote_id', array('type' => 'serial', 'not null' => TRUE), array('primary key' => array('vote_id')));
+
+  // Rename the 'hostname' field to 'vote_source' for more flexibility.
+  db_change_field($ret, 'votingapi_vote', 'hostname', 'vote_source', array('type' => 'varchar', 'length' => 255));
+
+  $indexes = array(
+    'content_uid' => array('content_type', 'content_id', 'uid'),
+    'content_source' => array('content_type', 'content_id', 'vote_source'),
+    'content_vtype' => array('content_type', 'content_id', 'value_type'),
+    'content_value_tag' => array('content_type', 'content_id', 'value_type', 'tag'),
+  );
+  foreach ($indexes as $name => $fields) {
+    db_add_index($ret, 'votingapi_vote', $name, $fields);
+  }
+
+  $indexes = array(
+    'content_function' => array('content_type', 'content_id', 'function'),
+    'content_tag_func' => array('content_type', 'content_id', 'tag', 'function'),
+    'content_vtype_tag' => array('content_type', 'content_id', 'value_type', 'tag'),
+    'content_vtype_tag_func' => array('content_type', 'content_id', 'value_type', 'tag', 'function'),
+  );
+  foreach ($indexes as $name => $fields) {
+    db_add_index($ret, 'votingapi_cache', $name, $fields);
+  }
+
+  // Yes, we loves us the SchemaAPI.
+  return $ret;
+}

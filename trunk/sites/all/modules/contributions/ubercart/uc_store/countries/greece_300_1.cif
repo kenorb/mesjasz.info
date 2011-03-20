@@ -1,0 +1,90 @@
+<?php
+// $Id: greece_300_1.cif,v 1.2.2.4 2008/11/03 21:33:50 islandusurper Exp $
+
+/**
+* First implement hook_install() using the name of the country as the base of
+* the function name.
+*/
+function greece_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (300, 'Ελλάδα', 'GR', 'GRC', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+      ."(300, 'ATT', 'Αττική'),"
+      ."(300, 'AIT', 'Αιτωλοακαρνανία'),"
+      ."(300, 'ARG', 'Αργολίδα'),"
+      ."(300, 'ARK', 'Αρκαδία'),"
+      ."(300, 'ART', 'Άρτα'),"
+      ."(300, 'AHA', 'Αχαϊα'),"
+      ."(300, 'BOI', 'Βοιωτία'),"
+      ."(300, 'GRE', 'Γρεβενά'),"
+      ."(300, 'DRA', 'Δράμα'),"
+      ."(300, 'DOD', 'Δωδεκάνησα'),"
+      ."(300, 'EVR', 'Έβρος'),"
+      ."(300, 'EVI', 'Εύβοια'),"
+      ."(300, 'EVT', 'Ευρυτανία'),"
+      ."(300, 'ZAK', 'Ζάκυνθος'),"
+      ."(300, 'ILI', 'Ηλεία'),"
+      ."(300, 'HMA', 'Ημαθία'),"
+      ."(300, 'HRA', 'Ηράκλειο'),"
+      ."(300, 'THP', 'Θεσπρωτία'),"
+      ."(300, 'THE', 'Θεσσαλονίκη'),"
+      ."(300, 'IOA', 'Ιωάννινα'),"
+      ."(300, 'KAV', 'Καβάλα'),"
+      ."(300, 'KAR', 'Καρδίτσα'),"
+      ."(300, 'KAS', 'Καστοριά'),"
+      ."(300, 'KER', 'Κέρκυρα'),"
+      ."(300, 'KEF', 'Κεφαλληνία'),"
+      ."(300, 'KIL', 'Κιλκίς'),"
+      ."(300, 'KOZ', 'Κοζάνη'),"
+      ."(300, 'KOR', 'Κορινθία'),"
+      ."(300, 'KYK', 'Κυκλάδες'),"
+      ."(300, 'LAK', 'Λακωνία'),"
+      ."(300, 'LAR', 'Λάρισα'),"
+      ."(300, 'LAS', 'Λασίθι'),"
+      ."(300, 'LES', 'Λέσβος'),"
+      ."(300, 'LEF', 'Λευκάδα'),"
+      ."(300, 'MAG', 'Μαγνησία'),"
+      ."(300, 'ΜES', 'Μεσσηνία'),"
+      ."(300, 'XAN', 'Ξάνθη'),"
+      ."(300, 'PEL', 'Πέλλα'),"
+      ."(300, 'PIE', 'Πιερία'),"
+      ."(300, 'PRE', 'Πρέβεζα'),"
+      ."(300, 'RET', 'Ρέθυμνο'),"
+      ."(300, 'ROD', 'Ροδόπη'),"
+      ."(300, 'SAM', 'Σάμος'),"
+      ."(300, 'SER', 'Σέρρες'),"
+      ."(300, 'TRI', 'Τρίκαλα'),"
+      ."(300, 'FTH', 'Φθιώτιδα'),"
+      ."(300, 'FLO', 'Φλώρινα'),"
+      ."(300, 'FOK', 'Φωκίδα'),"
+      ."(300, 'HAL', 'Χαλκιδική'),"
+      ."(300, 'HAN', 'Χανιά'),"
+      ."(300, 'HIO', 'Χίος')");
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.
+  uc_set_address_format(300,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+   ."\r\n!postal_code, !city\r\n!country_name_if");
+}
+
+/**
+* If necessary, implement hook_update() with $version being the only argument.
+* Add a new case for each version update, and be sure to always include the
+* latest changes in the install function.
+*/
+function greece_update($version) {
+}
+
+/**
+* If necessary, implement hook_uninstall().  This requires no argument.  The
+* store module automatically removes rows from the country and zones tables
+* related to the country, and it unsets the address format.  This function is
+* only necessary for other things you may have included in your country's
+* installation process.
+*/
+function greece_uninstall() {
+}

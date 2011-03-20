@@ -1,0 +1,13 @@
+; $Id: views_ui.info,v 1.10 2008/01/09 00:05:08 merlinofchaos Exp $
+name = Views UI
+description = Administrative interface to views. Without this module, you cannot create or edit your views.
+package = Views
+core = 6.x
+dependencies[] = views
+
+; Information added by drupal.org packaging script on 2008-10-08
+version = "6.x-2.0-rc5"
+core = "6.x"
+project = "views"
+datestamp = "1223507723"
+

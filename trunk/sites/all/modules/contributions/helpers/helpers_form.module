@@ -1,0 +1,492 @@
+<?php
+// $Id: helpers_form.module,v 1.1.4.3.2.1 2008/02/14 17:43:30 nancyw Exp $
+
+/**
+ * @file
+ * This is a library of useful form functions and methods.
+ * Please insert the link if you have a patch for core to introduce a function from this lib to core.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function helpers_form_help($path, $args) {
+  switch ($path) {
+    case 'admin/modules#description':
+      return t('A development library for forms. Contains useful functions and methods for form building.');
+  }
+}
+
+/**
+ * Form functions
+ */
+/**
+ * returns a form-structure filled with countries. useful in a select.
+ * @param $title, the title of the form. Defaults to "Countries" (translated). If provided, it will not be translated
+ * @param $default_value, the selected country.
+ * @param $required, whether or not a "none" string should be included in the options.
+ * @param $description, optionally provide a description. Is not translated.
+ * @param $multiple, whether or not to allow multiple choices.
+ * @return form element ready to add to form.
+ */
+function countries_select_for_form($title = '', $default_value = NULL, $required = FALSE, $description = '', $multiple = false) {
+  if ($required) {
+    $options = _helpers_data_countries_array();
+  }
+  else {
+    $options = add_none_to_options(_helpers_data_countries_array());
+  }
+
+  return array(
+    '#type' => 'select',
+    '#title' => $title ? $title : t('Countries'),
+    '#default_value' => $default_value,
+    '#options' => $options,
+    '#multiple' => $multiple,
+    '#size' => $multiple ? min(5, count($options)) : 1,
+    '#description' => $description,
+  );
+}
+
+/**
+ * returns a form-structure filled with US states, useful in a select.
+ * @param $title, the title of the form. Defaults to "States" (translated). If provided, it will not be translated
+ * @param $default_value, the selected state.
+ * @param $required, whether or not a "none" string should be included in the options.
+ * @param $description, optionally provide a description. Is not translated.
+ * @param $multiple, whether or not to allow multiple choices.
+ * @return form element ready to add to form.
+ */
+function states_select_for_form($title = '', $default_value = NULL, $required = FALSE, $description = '', $multiple = false) {
+  if ($required) {
+    $options = _helpers_data_us_states_array();
+  }
+  else {
+    $options = add_none_to_options(_helpers_data_us_states_array());
+  }
+
+  return array(
+    '#type' => 'select',
+    '#title' => $title ? $title : t('States'),
+    '#default_value' => $default_value,
+    '#options' => $options,
+    '#multiple' => $multiple,
+    '#size' => $multiple ? min(5, count($options)) : 1,
+    '#description' => $description,
+  );
+}
+
+/**
+ * Create a form-structure filled with month names, useful in a select.
+ * @param $title, the title of the form. Defaults to "Month" (translated). If provided, it will not be translated.
+ * @param $default_value, the selected month. Must be the number of the month.
+ * @param $required, whether or not a "none" string should be included in the options.
+ * @param $description, optionally provide a description. Is not translated.
+ * @param $multiple, whether or not to allow multiple choices.
+ * @return form element ready to add to form.
+ */
+function month_select_for_form($title = '', $default_value = NULL, $required = FALSE, $description = '', $multiple = false) {
+  if ($required) {
+    $options = _helpers_data_month_names_array();
+  }
+  else {
+    $options = add_none_to_options(_helpers_data_month_names_array());
+  }
+
+  return array(
+    '#type' => 'select',
+    '#title' => $title ? $title : t('Month'),
+    '#default_value' => $default_value,
+    '#options' => $options,
+    '#multiple' => $multiple,
+    '#size' => min(5, count($options)),
+    '#description' => $description,
+  );
+}
+
+/**
+ * Create a form-structure filled with year numbers, useful in a select.
+ * @param $range, The number of years to show from the specified starting year.
+ *   If this value is negative, then only use the number of years before.
+ *   If it is positive, then show the number of years before and after.
+ * @param $start, The year to start the list with.
+ *   If specified (or defaulted) as "current" then, use the current year.
+ * @param $title, the title of the form. Defaults to "Year" (translated). If provided, it will not be translated.
+ * @param $default_value, the selected year.
+ * @param $required, whether or not a "none" string should be included in the options.
+ * @param $description, optionally provide a description. Is not translated.
+ * @param $multiple, whether or not to allow multiple choices.
+ * @return form element ready to add to form.
+ */
+function year_select_for_form($range = 10, $start = 'current', $title = '', $default_value = null, $required = false, $description = '', $multiple = false) {
+  if (is_null($start) || $start == 'current') {
+    $start = date('Y');
+  }
+  if ($range < 0) {
+    $begin_yr = $start + $range;
+    $end_yr = $start;
+  }
+  else {
+    $begin_yr = $start - $range;
+    $end_yr = $start + $range;
+  }
+  $options = array();
+  for ($yr = $begin_yr; $yr <= $end_yr; ++$yr) {
+    $options[$yr] = $yr;
+  }
+
+  if (!$required) {
+    $options = add_none_to_options($options);
+  }
+
+  return array(
+    '#type' => 'select',
+    '#title' => $title ? $title : t('Year'),
+    '#default_value' => $default_value,
+    '#options' => $options,
+    '#multiple' => $multiple,
+    '#size' => min(5, count($options)),
+    '#description' => $description,
+  );
+}
+
+/**
+ * Global and general functions
+ * @param $options the options that you want to append "None" to.
+ * @param $none_string optionally provide a string that will be the "none". If you provide this, it will not be translated and not passed trough the theme layer.
+ */
+function add_none_to_options($options, $none_string = NULL) {
+  if ($none_string) {
+    return array('' => $none_string) + $options;
+  }
+  else {
+    return array('' => theme('none_option')) + $options;
+  }
+}
+
+/**
+ * Helper helpers. Private functions that are used internally
+ */
+/**
+ * Returns a list of countries.
+ * TODO make this a proper associative array with the official country code as key.
+ */
+function _helpers_data_countries_array() {
+  $countries = array(
+    'Afghanistan' => t('Afghanistan'),
+    'Albania' => t('Albania'),
+    'Algeria' => t('Algeria'),
+    'American Samoa' => t('American Samoa'),
+    'Andorra' => t('Andorra'),
+    'Angola' => t('Angola'),
+    'Anguilla' => t('Anguilla'),
+    'Antarctica' => t('Antarctica'),
+    'Antigua And Barbuda' => t('Antigua And Barbuda'),
+    'Argentina' => t('Argentina'),
+    'Armenia' => t('Armenia'),
+    'Aruba' => t('Aruba'),
+    'Australia' => t('Australia'),
+    'Austria' => t('Austria'),
+    'Azerbaijan' => t('Azerbaijan'),
+    'Bahamas' => t('Bahamas'),
+    'Bahrain' => t('Bahrain'),
+    'Bangladesh' => t('Bangladesh'),
+    'Barbados' => t('Barbados'),
+    'Belarus' => t('Belarus'),
+    'Belgium' => t('Belgium'),
+    'Belize' => t('Belize'),
+    'Benin' => t('Benin'),
+    'Bermuda' => t('Bermuda'),
+    'Bhutan' => t('Bhutan'),
+    'Bolivia' => t('Bolivia'),
+    'Bosnia and Herzegowina' => t('Bosnia and Herzegowina'),
+    'Botswana' => t('Botswana'),
+    'Bouvet Island' => t('Bouvet Island'),
+    'Brazil' => t('Brazil'),
+    'British Indian Ocean Territory' => t('British Indian Ocean Territory'),
+    'Brunei Darussalam' => t('Brunei Darussalam'),
+    'Bulgaria' => t('Bulgaria'),
+    'Burkina Faso' => t('Burkina Faso'),
+    'Burma' => t('Burma'),
+    'Burundi' => t('Burundi'),
+    'Cambodia' => t('Cambodia'),
+    'Cameroon' => t('Cameroon'),
+    'Canada' => t('Canada'),
+    'Cape Verde' => t('Cape Verde'),
+    'Cayman Islands' => t('Cayman Islands'),
+    'Central African Republic' => t('Central African Republic'),
+    'Chad' => t('Chad'),
+    'Chile' => t('Chile'),
+    'China' => t('China'),
+    'Christmas Island' => t('Christmas Island'),
+    'Cocos (Keeling) Islands' => t('Cocos (Keeling) Islands'),
+    'Colombia' => t('Colombia'),
+    'Comoros' => t('Comoros'),
+    'Congo' => t('Congo'),
+    'Congo, the Democratic Republic of the' => t('Congo, the Democratic Republic of the'),
+    'Cook Islands' => t('Cook Islands'),
+    'Costa Rica' => t('Costa Rica'),
+    'Cote d\'Ivoire' => t('Cote d\'Ivoire'),
+    'Croatia' => t('Croatia'),
+    'Cuba' => t('Cuba'),
+    'Cyprus' => t('Cyprus'),
+    'Czech Republic' => t('Czech Republic'),
+    'Denmark' => t('Denmark'),
+    'Djibouti' => t('Djibouti'),
+    'Dominica' => t('Dominica'),
+    'Dominican Republic' => t('Dominican Republic'),
+    'East Timor' => t('East Timor'),
+    'Ecuador' => t('Ecuador'),
+    'Egypt' => t('Egypt'),
+    'El Salvador' => t('El Salvador'),
+    'England' => t('England'),
+    'Equatorial Guinea' => t('Equatorial Guinea'),
+    'Eritrea' => t('Eritrea'),
+    'Espana' => t('Espana'),
+    'Estonia' => t('Estonia'),
+    'Ethiopia' => t('Ethiopia'),
+    'Falkland Islands' => t('Falkland Islands'),
+    'Faroe Islands' => t('Faroe Islands'),
+    'Fiji' => t('Fiji'),
+    'Finland' => t('Finland'),
+    'France' => t('France'),
+    'French Guiana' => t('French Guiana'),
+    'French Polynesia' => t('French Polynesia'),
+    'French Southern Territories' => t('French Southern Territories'),
+    'Gabon' => t('Gabon'),
+    'Gambia' => t('Gambia'),
+    'Georgia' => t('Georgia'),
+    'Germany' => t('Germany'),
+    'Ghana' => t('Ghana'),
+    'Gibraltar' => t('Gibraltar'),
+    'Great Britain' => t('Great Britain'),
+    'Greece' => t('Greece'),
+    'Greenland' => t('Greenland'),
+    'Grenada' => t('Grenada'),
+    'Guadeloupe' => t('Guadeloupe'),
+    'Guam' => t('Guam'),
+    'Guatemala' => t('Guatemala'),
+    'Guinea' => t('Guinea'),
+    'Guinea-Bissau' => t('Guinea-Bissau'),
+    'Guyana' => t('Guyana'),
+    'Haiti' => t('Haiti'),
+    'Heard and Mc Donald Islands' => t('Heard and Mc Donald Islands'),
+    'Honduras' => t('Honduras'),
+    'Hong Kong' => t('Hong Kong'),
+    'Hungary' => t('Hungary'),
+    'Iceland' => t('Iceland'),
+    'India' => t('India'),
+    'Indonesia' => t('Indonesia'),
+    'Ireland' => t('Ireland'),
+    'Israel' => t('Israel'),
+    'Italy' => t('Italy'),
+    'Iran' => t('Iran'),
+    'Iraq' => t('Iraq'),
+    'Jamaica' => t('Jamaica'),
+    'Japan' => t('Japan'),
+    'Jordan' => t('Jordan'),
+    'Kazakhstan' => t('Kazakhstan'),
+    'Kenya' => t('Kenya'),
+    'Kiribati' => t('Kiribati'),
+    'Korea, Republic of' => t('Korea, Republic of'),
+    'Korea (South)' => t('Korea (South)'),
+    'Kuwait' => t('Kuwait'),
+    'Kyrgyzstan' => t('Kyrgyzstan'),
+    'Lao People\'s Democratic Republic' => t('Lao People\'s Democratic Republic'),
+    'Latvia' => t('Latvia'),
+    'Lebanon' => t('Lebanon'),
+    'Lesotho' => t('Lesotho'),
+    'Liberia' => t('Liberia'),
+    'Liechtenstein' => t('Liechtenstein'),
+    'Lithuania' => t('Lithuania'),
+    'Luxembourg' => t('Luxembourg'),
+    'Macau' => t('Macau'),
+    'Macedonia' => t('Macedonia'),
+    'Madagascar' => t('Madagascar'),
+    'Malawi' => t('Malawi'),
+    'Malaysia' => t('Malaysia'),
+    'Maldives' => t('Maldives'),
+    'Mali' => t('Mali'),
+    'Malta' => t('Malta'),
+    'Marshall Islands' => t('Marshall Islands'),
+    'Martinique' => t('Martinique'),
+    'Mauritania' => t('Mauritania'),
+    'Mauritius' => t('Mauritius'),
+    'Mayotte' => t('Mayotte'),
+    'Mexico' => t('Mexico'),
+    'Micronesia, Federated States of' => t('Micronesia, Federated States of'),
+    'Moldova, Republic of' => t('Moldova, Republic of'),
+    'Monaco' => t('Monaco'),
+    'Mongolia' => t('Mongolia'),
+    'Montserrat' => t('Montserrat'),
+    'Morocco' => t('Morocco'),
+    'Mozambique' => t('Mozambique'),
+    'Myanmar' => t('Myanmar'),
+    'Namibia' => t('Namibia'),
+    'Nauru' => t('Nauru'),
+    'Nepal' => t('Nepal'),
+    'Netherlands' => t('Netherlands'),
+    'Netherlands Antilles' => t('Netherlands Antilles'),
+    'New Caledonia' => t('New Caledonia'),
+    'New Zealand' => t('New Zealand'),
+    'Nicaragua' => t('Nicaragua'),
+    'Niger' => t('Niger'),
+    'Nigeria' => t('Nigeria'),
+    'Niue' => t('Niue'),
+    'Norfolk Island' => t('Norfolk Island'),
+    'Northern Ireland' => t('Northern Ireland'),
+    'Northern Mariana Islands' => t('Northern Mariana Islands'),
+    'Norway' => t('Norway'),
+    'Oman' => t('Oman'),
+    'Pakistan' => t('Pakistan'),
+    'Palau' => t('Palau'),
+    'Panama' => t('Panama'),
+    'Papua New Guinea' => t('Papua New Guinea'),
+    'Paraguay' => t('Paraguay'),
+    'Peru' => t('Peru'),
+    'Philippines' => t('Philippines'),
+    'Pitcairn' => t('Pitcairn'),
+    'Poland' => t('Poland'),
+    'Portugal' => t('Portugal'),
+    'Puerto Rico' => t('Puerto Rico'),
+    'Qatar' => t('Qatar'),
+    'Reunion' => t('Reunion'),
+    'Romania' => t('Romania'),
+    'Russia' => t('Russia'),
+    'Rwanda' => t('Rwanda'),
+    'Saint Kitts and Nevis' => t('Saint Kitts and Nevis'),
+    'Saint Lucia' => t('Saint Lucia'),
+    'Saint Vincent and the Grenadines' => t('Saint Vincent and the Grenadines'),
+    'Samoa (Independent)' => t('Samoa (Independent)'),
+    'San Marino' => t('San Marino'),
+    'Sao Tome and Principe' => t('Sao Tome and Principe'),
+    'Saudi Arabia' => t('Saudi Arabia'),
+    'Scotland' => t('Scotland'),
+    'Senegal' => t('Senegal'),
+    'Serbia and Montenegro' => t('Serbia and Montenegro'),
+    'Seychelles' => t('Seychelles'),
+    'Sierra Leone' => t('Sierra Leone'),
+    'Singapore' => t('Singapore'),
+    'Slovakia' => t('Slovakia'),
+    'Slovenia' => t('Slovenia'),
+    'Solomon Islands' => t('Solomon Islands'),
+    'Somalia' => t('Somalia'),
+    'South Africa' => t('South Africa'),
+    'South Georgia and the South Sandwich Islands' => t('South Georgia and the South Sandwich Islands'),
+    'South Korea' => t('South Korea'),
+    'Spain' => t('Spain'),
+    'Sri Lanka' => t('Sri Lanka'),
+    'St. Helena' => t('St. Helena'),
+    'St. Pierre and Miquelon' => t('St. Pierre and Miquelon'),
+    'Suriname' => t('Suriname'),
+    'Svalbard and Jan Mayen Islands' => t('Svalbard and Jan Mayen Islands'),
+    'Swaziland' => t('Swaziland'),
+    'Sweden' => t('Sweden'),
+    'Switzerland' => t('Switzerland'),
+    'Taiwan' => t('Taiwan'),
+    'Tajikistan' => t('Tajikistan'),
+    'Tanzania' => t('Tanzania'),
+    'Thailand' => t('Thailand'),
+    'Togo' => t('Togo'),
+    'Tokelau' => t('Tokelau'),
+    'Tonga' => t('Tonga'),
+    'Trinidad' => t('Trinidad'),
+    'Trinidad and Tobago' => t('Trinidad and Tobago'),
+    'Tunisia' => t('Tunisia'),
+    'Turkey' => t('Turkey'),
+    'Turkmenistan' => t('Turkmenistan'),
+    'Turks and Caicos Islands' => t('Turks and Caicos Islands'),
+    'Tuvalu' => t('Tuvalu'),
+    'Uganda' => t('Uganda'),
+    'Ukraine' => t('Ukraine'),
+    'United Arab Emirates' => t('United Arab Emirates'),
+    'United Kingdom' => t('United Kingdom'),
+    'United States' => t('United States'),
+    'United States Minor Outlying Islands' => t('United States Minor Outlying Islands'),
+    'Uruguay' => t('Uruguay'),
+    'Uzbekistan' => t('Uzbekistan'),
+    'Vanuatu' => t('Vanuatu'),
+    'Vatican City State (Holy See)' => t('Vatican City State (Holy See)'),
+    'Venezuela' => t('Venezuela'),
+    'Viet Nam' => t('Viet Nam'),
+    'Virgin Islands (British)' => t('Virgin Islands (British)'),
+    'Virgin Islands (U.S.)' => t('Virgin Islands (U.S.)'),
+    'Wales' => t('Wales'),
+    'Wallis and Futuna Islands' => t('Wallis and Futuna Islands'),
+    'Western Sahara' => t('Western Sahara'),
+    'Yemen' => t('Yemen'),
+    'Zambia' => t('Zambia'),
+    'Zimbabwe' => t('Zimbabwe'),
+    );
+
+  natsort($countries);
+  return $countries;
+}
+
+function _helpers_data_us_states_array() {
+  $states = array(
+    'AL' => t('Alabama'),
+    'AK' => t('Alaska'),
+    'AZ' => t('Arizona'),
+    'AR' => t('Arkansas'),
+    'CA' => t('California'),
+    'CO' => t('Colorado'),
+    'CT' => t('Connecticut'),
+    'DC' => t('D.C.'),
+    'DE' => t('Delaware'),
+    'FL' => t('Florida'),
+    'GA' => t('Georgia'),
+    'HI' => t('Hawaii'),
+    'ID' => t('Idaho'),
+    'IL' => t('Illinois'),
+    'IN' => t('Indiana'),
+    'IA' => t('Iowa'),
+    'KS' => t('Kansas'),
+    'KY' => t('Kentucky'),
+    'LA' => t('Louisiana'),
+    'ME' => t('Maine'),
+    'MD' => t('Maryland'),
+    'MA' => t('Massachusetts'),
+    'MI' => t('Michigan'),
+    'MN' => t('Minnesota'),
+    'MS' => t('Mississippi'),
+    'MO' => t('Missouri'),
+    'MT' => t('Montana'),
+    'NE' => t('Nebraska'),
+    'NV' => t('Nevada'),
+    'NH' => t('New Hampshire'),
+    'NJ' => t('New Jersey'),
+    'NM' => t('New Mexico'),
+    'NY' => t('New York'),
+    'NC' => t('North Carolina'),
+    'ND' => t('North Dakota'),
+    'OH' => t('Ohio'),
+    'OK' => t('Oklahoma'),
+    'OR' => t('Oregon'),
+    'PA' => t('Pennsylvania'), 
+    'RI' => t('Rhode Island'),
+    'SC' => t('South Carolina'),
+    'SD' => t('South Dakota'),
+    'TN' => t('Tennessee'),
+    'TX' => t('Texas'),
+    'UT' => t('Utah'),
+    'VT' => t('Vermont'),
+    'VA' => t('Virginia'),
+    'WA' => t('Washington'),
+    'WV' => t('West Virginia'),
+    'WI' => t('Wisconsin'),
+    'WY' => t('Wyoming'),
+    );
+  natsort($states);
+  return $states;
+}
+
+function _helpers_data_month_names_array() {
+  $names = array(
+    1 => t('January'), 2 => t('February'), 3 => t('March'),
+    4 => t('April'), 5 => t('May'), 6 => t('June'),
+    7 => t('July'), 8 => t('August'), 9 => t('September'),
+    10 => t('October'), 11 => t('November'), 12 => t('December'),
+    );
+  return $names;
+}

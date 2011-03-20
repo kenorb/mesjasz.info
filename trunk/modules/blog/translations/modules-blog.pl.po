@@ -1,0 +1,184 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/blog/blog.pages.inc:15 modules/blog/blog.module:108
+msgid "@name's blog"
+msgstr "@name - blog"
+
+#: modules/blog/blog.pages.inc:20
+msgid "Post new blog entry."
+msgstr "Dodaj nowy wpis w blogu."
+
+#: modules/blog/blog.pages.inc:23
+msgid "You are not allowed to post a new blog entry."
+msgstr "Brak uprawnień do dodawania nowych wpisów."
+
+#: modules/blog/blog.pages.inc:41
+msgid "You have not created any blog entries."
+msgstr "Nie dodano jeszcze do bloga żadnych wpisów."
+
+#: modules/blog/blog.pages.inc:44
+msgid "!author has not created any blog entries."
+msgstr "Użytkownik !author nie dodał jeszcze do swojego bloga żadnych wpisów."
+
+#: modules/blog/blog.pages.inc:47
+msgid "RSS - !title"
+msgstr "RSS - !title"
+
+#: modules/blog/blog.pages.inc:62
+msgid "Create new blog entry."
+msgstr "Dodano nowy wpis do bloga."
+
+#: modules/blog/blog.pages.inc:79
+msgid "No blog entries have been created."
+msgstr "Nie dodano do bloga żadnych wpisów."
+
+#: modules/blog/blog.pages.inc:81
+msgid "RSS - blogs"
+msgstr "RSS - blogi"
+
+#: modules/blog/blog.module:15
+msgid "Blog entry"
+msgstr "Wpis w blogu"
+
+#: modules/blog/blog.module:17
+msgid ""
+"A <em>blog entry</em> is a single post to an online journal, or <em>blog</"
+"em>."
+msgstr "Blog jest rodzajem internetowego dziennika lub pamiętnika."
+
+#: modules/blog/blog.module:52
+msgid "View recent blog entries"
+msgstr "Ostatnie wpisy w blogu"
+
+#: modules/blog/blog.module:52;124
+msgid "Read @username's latest blog entries."
+msgstr "Wyświetla ostatnie wpisy w blogu użytkownika @username."
+
+#: modules/blog/blog.module:64
+msgid ""
+"The blog module allows registered users to maintain an online journal, or "
+"<em>blog</em>. Blogs are made up of individual <em>blog entries</em>, and "
+"the blog entries are most often displayed in descending order by creation "
+"time."
+msgstr ""
+"Moduł obsługi blogów daje użytkownikom możliwość prowadzenia ich "
+"internetowych dzienników, czyli <em>blogów</em>. Można w nich umieszczać "
+"wpisy, które wyświetlane są zazwyczaj według daty powstania (najnowsze na "
+"początku)."
+
+#: modules/blog/blog.module:65
+msgid ""
+"There is an (optional) <em>Blogs</em> menu item added to the Navigation "
+"menu, which displays all blogs available on your site, and a <em>My blog</"
+"em> item displaying the current user's blog entries. The <em>Blog entry</em> "
+"menu item under <em>Create content</em> allows new blog entries to be "
+"created."
+msgstr ""
+"Opcjonalny element menu nawigacyjnego, <em>Blogi</em>, służy do wyświetlania "
+"wszystkich blogów dostępnych w witrynie, a element <em>Mój blog</em> "
+"przenosi użytkownika na stronę wyświetlającą jego ostatnie wpisy. <em>Wpis w "
+"blogu</em> z menu <em>Dodaj zawartość</em> umożliwia tworzenie nowych wpisów."
+
+#: modules/blog/blog.module:66
+msgid ""
+"Each blog entry is displayed with an automatic link to other blogs created "
+"by the same user. By default, blog entries have comments enabled and are "
+"automatically promoted to the site front page. The blog module also creates "
+"a <em>Recent blog posts</em> block that may be enabled at the <a href="
+"\"@blocks\">blocks administration page</a>."
+msgstr ""
+"Każdemu wpisowi w blogu towarzyszy odnośnik prowadzący na stronę "
+"wyświetlającą cały blog autora wpisu. Domyślne ustawienia wpisów w blogu "
+"pozwalają dodawać do nich odpowiedzi, a także sprawiają, że wpisy "
+"publikowane są na stronie głównej. Moduł obsługi blogów oferuje blok "
+"<em>Ostatnie wpisy w blogach</em>, który może być włączony na <a href="
+"\"@blocks\">stronie zarządzania blokami</a>."
+
+#: modules/blog/blog.module:67
+msgid ""
+"When using the aggregator module an automatic <em>blog it</em> icon is "
+"displayed next to the items in a feed's <em>latest items</em> block. "
+"Clicking this icon populates a <em>blog entry</em> with a title (the title "
+"of the feed item) and body (a link to the source item on its original site "
+"and illustrative content suitable for use in a block quote). Blog authors "
+"can use this feature to easily comment on items of interest that appear in "
+"aggregator feeds from other sites. To use this feature, be sure to <a href="
+"\"@modules\">enable</a> the aggregator module, <a href=\"@feeds\">add and "
+"configure</a> a feed from another site, and <a href=\"@blocks\">position</a> "
+"the feed's <em>latest items</em> block."
+msgstr ""
+"Jeśli włączony jest moduł subskrybenta, obok pozycji z bloku <em>Ostatnie "
+"wiadomości</em> wyświetlane są ikony <em>umieść w blogu</em>. Ikona taka "
+"prowadzi do formularza dodawania wpisu w blogu, w którym do pola tytułu "
+"automatycznie wprowadzono tytuł wiadomości, a do pola treści - odnośnik do "
+"źródła wiadomości, a także tekst, który można zacytować. Autorzy blogów mogą "
+"korzystać z tej funkcji, by w prosty sposób komentować wiadomości "
+"pojawiające się w subskrybowanych kanałach informacyjnych. Funkcja wymaga <a "
+"href=\"@modules\">włączenia modułu subskrybenta</a>, <a href=\"@feeds"
+"\">dodania i skonfigurowania kanału</a> z innej witryny, a także <a href="
+"\"@blocks\">włączenia bloku z ostatnimi wiadomościami z tego kanału</a>."
+
+#: modules/blog/blog.module:68
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@blog"
+"\">Blog module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@blog\">stronie dotyczącej blogów</a> w "
+"podręczniku konfiguracji w internecie."
+
+#: modules/blog/blog.module:108;137;152;161
+msgid "Blogs"
+msgstr "Blogi"
+
+#: modules/blog/blog.module:122
+msgid "@username's blog"
+msgstr "@username - blog"
+
+#: modules/blog/blog.module:196;205
+msgid "Recent blog posts"
+msgstr "Ostatnio w blogach"
+
+#: modules/blog/blog.module:204
+msgid "Read the latest blog entries."
+msgstr "Ostatnie wpisy w blogach."
+
+#: modules/blog/blog.module:26
+msgid "create blog entries"
+msgstr "tworzenie wpisów w blogu"
+
+#: modules/blog/blog.module:26
+msgid "delete own blog entries"
+msgstr "usuwanie wpisów z własnego blogu"
+
+#: modules/blog/blog.module:26
+msgid "delete any blog entry"
+msgstr "usuwanie wszystkich wpisów w blogach"
+
+#: modules/blog/blog.module:26
+msgid "edit own blog entries"
+msgstr "edycja własnych wpisów w blogu"
+
+#: modules/blog/blog.module:26
+msgid "edit any blog entry"
+msgstr "edycja wszystkich wpisów w blogach"
+
+#: modules/blog/blog.module:144
+msgid "My blog"
+msgstr "Mój blog"
+
+#: modules/blog/blog.module:0
+msgid "blog"
+msgstr "blog"

@@ -1,0 +1,201 @@
+<?php
+/** @file
+ * $Id: links.module,v 1.21.2.1 2009/01/21 04:16:33 syscrusher Exp $
+ *
+ * links.module provides an application program interface (API) for managing
+ * internal and external links as part of a Drupal node. The module by itself
+ * does very little; mainly, it provides a user interface for controlling the
+ * way in which links are handled and how they behave within all nodes -- in
+ * other words, the global settings for the API library.
+ *
+ * Author:  Scott Courtney (drupal.org user "syscrusher")
+ */
+
+module_load_include('inc','links','links');
+if (module_exists('views')) {
+  module_load_include('inc','links','links_views');
+}
+
+/**
+ * Returns an array of the permission names that apply to this module
+ */
+function links_perm() {
+  return array('access links statistics');
+}
+
+/**
+ * Manages the global settings for the module
+ */
+function links_settings_form() {
+  $form = array();
+  
+  $form['description'] = array(
+    '#type' => 'markup',
+    '#value' => '<p>' . t('These settings control the behavior of the link-management services and provide defaults for modules which use those services. Some modules may offer module-specific settings that override these for that module only.'),
+  );
+  
+  $form['display_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Display settings'),
+  );
+  
+  $form['display_settings']['links_link_display'] = array(
+    '#type' => 'radios',
+    '#title' => t("Visit link display mode"),
+    // CAUTION: The specific value constants (the integers) are significant here.
+    '#options' => array(0=>t("display as title"), 1=>t("display as url"), 2=>t("only display the 'visit linked page' text")),
+    '#default_value' => variable_get("links_link_display", 0),
+    '#description' => t("Users are able to visit links via the node links list. This setting toggles how the visit link is displayed, either containing the node title or the node target URL or just the words 'visit linked page'"),
+  );
+
+  $form['link_targets'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('Link targets'),
+    '#tree'  => 0,
+    '#description' => t('These settings allow you to apply the attribute <code>target="_blank"</code> to cause links to open in a new browser window or tab. Using this setting will cause your pages not to validate under the XHTML standard, but will work with most browsers. There is some debate over whether using the <code>target</code> attribute is good design practice; Links leaves this choice up to the system administrator.'),
+  );
+
+  $form['link_targets']['links_target'] = array(
+    '#type'    => 'radios',
+    '#title'   => t("Open links in new window"),
+    // CAUTION: The specific value constants (the integers) are significant here.
+    '#options' => array(0=>t("Never"), 1=>t("All links"), 2=>t("External links only")),
+    '#default_value' => variable_get("links_target", 0),
+    '#description'   => t("Controls opening of new browser windows for links."),
+  );
+
+  $form['link_targets']['links_target_is_user_specific'] = array(
+    '#type'    => 'radios',
+    '#title'   => t("User setting for target"),
+    // CAUTION: The specific value constants (the integers) are significant here.
+    '#options' => array(0=>t("deny"), 1=>t("allow")),
+    '#default_value' => variable_get("links_target_is_user_specific", 0),
+    '#description'   => t("Allow users to specify their own preference via the user settings page."),
+  );
+
+  $form['link_behavior'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('Link targets'),
+    '#description' => t('The settings in this section control the attributes (other than target; see above) and behavior of links managed by the Links Package and modules that use the Links Package database.'),
+  );
+
+  $form['link_behavior']['links_direct_internal'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Link directly to local pages"),
+    '#default_value' => variable_get("links_direct_internal", 0),
+    '#description' => t("For links whose destination is a local path, skip the click-counting redirection and send the user directly to the destination page. <strong>Selecting this option prevents click-through counting on internal (local) links.</strong>"),
+  );
+
+  $form['link_behavior']['links_direct_external'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Link directly to external pages"),
+    '#default_value' => variable_get("links_direct_external", 0),
+    '#description' => t("For links to other web sites, skip the click-counting redirection and send the user directly to the destination page. <strong>Selecting this option prevents click-through counting on external links.</strong>"),
+  );
+
+  $form['link_behavior']['links_rel_nofollow'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Mark external links as &quot;rel=nofollow&quot;"),
+    '#default_value' => variable_get("links_rel_nofollow", 0),
+    '#description' => t("If enabled, this option causes all external links from the Links Package to be marked as !nofollow. This is a measure to prevent spammers from using links from your site to boost their search engine placement.", array('!nofollow'=>l('rel="nofollow"', 'http://en.wikipedia.org/wiki/Nofollow', array('target'=>'_blank', 'rel'=>'nofollow')))),
+  );
+
+  $form['link_behavior']['links_log_redirect'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Log user redirection to external links"),
+    '#default_value' => variable_get("links_log_redirect", 0),
+    '#description' => t("If enabled, this option creates a !log_entry every time a user is redirected through the Links Package to an external link. Usually this is turned off, but you can turn it on for diagnostic purposes if needed. This option is ignored if &quot;link directly to external pages&quot; (above) is enabled.", array('!log_entry'=>l(t('log entry'), 'admin/reports/dblog'))),
+  );
+  
+  $form['security_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Security settings'),
+  );
+  
+  $form['security_settings']['security_link'] = array(
+    '#type' => 'markup',
+    '#value' => t("You can set the permissions of who is allowed to view the count of how many people have followed each link in the !link.", array('!link'=>l(t('access control page'),'admin/user/access'))),
+  );
+
+  return system_settings_form($form);
+}
+
+function links_user($op, &$edit, &$user, $category='') {
+  $user_setting_allowed = links_prefs_is_user_specific('links_target');
+  if ($user_setting_allowed && $op == 'form' && $category == 'account') {
+    $form = array();
+    $form['links_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Links behavior'),
+      '#collapsible' => true,
+      '#tree' => false,
+    );
+    $form['links_settings']['links_target'] = array(
+      '#type' => 'radios',
+      '#title' => t("Open links in new browser window"),
+      // CAUTION: The specific value constants (the integers) are significant here.
+      '#options' => array(0=>t("Never"), 1=>t("All links"), 2=>t("External links only")),
+      '#default_value' => links_prefs_get('links_target'),
+      '#description' => t("Create a new window (or tab, depending on your browser's settings) when you click on a link? This affects all URLs managed by the Links package."),
+    );
+    return $form;
+  }
+  return;
+}
+
+/**
+ * Implements hook_menu
+ */
+function links_menu() {
+  $items = array();
+  $items['links/goto/%'] = array(
+    'title'=>'Outlink Redirection',
+    'page callback'=>'links_menu_goto',
+    'access callback'=>'user_access',
+    'access arguments'=>array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  $items['admin/content/links'] = array(
+    'title' => 'link management',
+    'description' => 'Manage links for your site.',
+    'page callback' => 'system_admin_menu_block_page',
+    'access callback'=>'user_access',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/settings/links'] = array(
+    'title' => 'Links package',
+    'description' => 'Configure the global display settings and default targets for links managed by the Links package.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('links_settings_form'),
+    'access callback'=>'user_access',
+    'access arguments' => array('administer site configuration'),
+//    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/settings/links/package'] = array(
+    'title' => t('package settings'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('links_settings_form'),
+    'access callback'=>'user_access',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  return $items;
+}
+
+// Menu callback functions
+
+function links_menu_goto() {
+  $nid = arg(2);
+  $lid = arg(3);
+  $module = arg(4);
+  if (! links_goto_bynode($nid, $lid, $module)) {
+    drupal_set_message(t('Link data not found'),'error');
+    if ($nid) {
+      $output = l(t('Return'),'node/'.$nid);
+    } else {
+      $output = '';
+    }
+    print theme('page',$output);
+  }
+}

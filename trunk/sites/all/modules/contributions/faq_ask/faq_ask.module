@@ -1,0 +1,1195 @@
+<?php
+// $Id: faq_ask.module,v 1.17.2.14 2008/11/24 21:28:50 nancyw Exp $
+
+/**
+ * @file
+ * This module is an add-on to the FAQ module that allows users with the 'ask question'
+ * permission to create a question which will be queued for an 'expert' to answer.
+ */
+
+/**
+ * Display help and module information
+ * @param section which section of the site we're displaying help
+ * @return help text for section
+ */
+function faq_ask_help($path, $arg) {
+  $output = '';
+
+  switch ($path) {
+    case 'admin/help#faq_ask':
+      $output .= '<p>'. t("This module is an add-on to the FAQ module that allows users with the 'ask question' permission to create a question which will be queued for an 'expert' to answer.") .'</p>'.
+        '<p>'. t("The module shows an abbreviated version of the FAQ form without an answer field. The node is created without the 'published' attribute. There is a block that will show the unanswered questions to the 'expert' (generally, this requires a separate role).") .'</p>'.
+        '<p>'. t("Viewing of the completed question and answer pair is done by the FAQ module.") .'</p>'.
+        '<p>'. t("Simply adding the 'FAQ' content type to a vocabulary will not make it eligible for experts; you must go to the settings page and add it there.") .'</p>';
+      return $output;
+
+    case 'admin/settings/faq/ask':
+      return theme('box', null, '<big>'. t('In order for the Faq_Ask module to operate, you must, at the least,: 1) Define at least one vocabulary for use with the "faq" content type; 2) select one or more roles as experts (and you may have to "Save configuration"); 3) select at least one category and expert combination; 4) click the "Save configuration" button.') .'</big>');
+
+    case 'faq_ask/more':
+      $output = '<p>'. variable_get('faq_ask_expert_advice', _faq_ask_advice_default('expert')) .'</p>';
+      if (user_access('administer blocks')) {
+        $output .= '<p><em>'. t('You may go <a href="!setting">here</a> to change the block limit.', array('!setting' => url('admin/build/block/configure/faq_ask/0'))) .'</em></p>';
+      }
+      return $output;
+
+    case 'faq_ask/%':
+    case 'faq_ask':
+      return variable_get('faq_ask_help_text', _faq_ask_help_default());
+  }
+}
+
+/**
+ * Implementation of hook_perm().
+ * Define the permissions this module uses
+ */
+function faq_ask_perm() {
+  return array('ask question', 'answer question');
+}
+
+/**
+ * Implementation of hook_access().
+ */
+function faq_ask_access($op, $node, $account) {
+  // If node is already published, it's not ours any more.
+  if ($node->status == 1) {
+    return null;
+  }
+  if ($op == 'create') {
+    return user_access(t('ask question')) || user_access('answer question');
+  }
+  else {
+//    return user_access('answer question') || user_access('edit_own_faq');
+    // We don't include "edit own" because the intent is they can edit their own until it's published.
+    return user_access('answer question') || $account->uid == $node->uid; 
+  }
+}
+
+/**
+ * Implementation of hook_enable().
+ *  This function reminds the user to configure the module.
+ */
+function faq_ask_enable() {
+  if (_faq_ask_check_dependencies()) {
+    drupal_set_message(t('The Faq_Ask module has been enabled.') .' '. t('Please go to the <a href="!url">settings page</a> to configure this module.', array('!url' => url('admin/settings/faq/ask'))), 'notice');
+  }
+}
+
+/**
+ * Determines whether the current user has one of the given permissions.
+ */
+function faq_ask_user_access_or($string1, $string2) {
+  return user_access($string1) || user_access($string2);
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function faq_ask_menu() {
+  if (!_faq_ask_check_dependencies()) {
+    return array();
+  }
+
+  $items = array();
+
+  $items['admin/settings/faq/ask'] = array(
+    'title' => 'Experts',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('faq_ask_settings_form'),
+    'access arguments' => array('administer faq'),
+    'description' => 'Allows the user to configure the Ask_FAQ module.',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -2,
+  );
+
+  $items['faq_ask'] = array(
+    'title' => 'Ask a question',
+    'page callback' => 'faq_ask_page',
+    'access callback' => 'user_access',
+    'access arguments' => array('ask question'),
+    'weight' => 1,
+  );
+
+  $items['faq_ask/%'] = array(
+    'page arguments' => array(1),
+    'access arguments' => array('ask question'),
+  );
+
+  $items['faq_ask/answer/%node'] = array(
+    'title' => 'Answer a question',
+    'page callback' => 'faq_ask_answer',
+    'page arguments' => array(2),
+    'access arguments' => array('answer question'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['faq_ask/edit/%node'] = array(
+    'title' => 'Edit a question',
+    'page callback' => 'faq_ask_edit',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['faq_ask/more'] = array(
+    'title' => 'List more unanswered questions',
+    'page callback' => 'faq_ask_list_more',
+    'access callback' => 'faq_ask_user_access_or',
+    'access arguments' => array('answer question', 'ask question'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Get the ask question form.
+ */
+function faq_ask_page($tid = null) {
+  $output = null;
+  if ($tid) {
+    $term = taxonomy_get_term($tid);
+    $taxo_image = null;
+    if (module_exists('taxonomy_image')) {
+      $taxo_image = taxonomy_image_display($tid, 'align="left"');
+    }
+    $output .= '<table id="faq_ask_description"><tr><td>'. $taxo_image . filter_xss($term->description) .'</td></tr></table>';
+    $output .= '<div class="clear-block"></div>';
+  }
+  $output .= drupal_get_form('faq_ask_form', $tid, null);
+  return $output;
+}
+
+/**
+ * Get the edit question form.
+ */
+function faq_ask_edit($node) {
+  global $user;
+  if ($node->status == 1) {
+    drupal_set_message(t('That question has already been answered.'), 'status');
+  }
+  else {
+    if ($user->uid == $node->uid) {
+      $form = drupal_get_form('faq_ask_form', null, $node);
+      return $form;
+    }
+    else {
+      drupal_set_message(t('You are not allowed to edit that question.'), 'error');
+    }
+  }
+  drupal_goto('node');
+}
+
+/**
+ * Implementation of hook_form().
+ *  This is the "ask question" form.
+ */
+function faq_ask_form($form_state, $tid, $node) {
+  $form = array();
+
+  // We will allow term suggestions only if the setting is chosen
+  //  AND there is a vocabulary named "FAQ."
+  $vid = db_result(db_query_range("SELECT vid FROM {vocabulary} WHERE name='FAQ'", 0, 1));
+  $suggest = variable_get('faq_ask_suggest', false) && $vid;
+
+  // Find all the categories for which we have experts.
+  $cat_sql = db_rewrite_sql('SELECT DISTINCT(t.name), e.tid FROM {term_data} t JOIN {faq_expert} e USING (tid)', 't', 'tid');
+//  drupal_set_message($cat_sql);
+  $cat_list = array_flip(db_result_array(db_query($cat_sql)));
+//  drupal_set_message(show_array($cat_list));
+  if (count($cat_list) == 0) {
+    $msg = t('Currently, there are no categories defined. ') .' ';
+    if (user_access('administer faq')) {
+      $msg .= t('Please go to the <a href="!url">settings page</a> to configure this module.', array('!url' => url('admin/settings/faq/ask')));
+    }
+    else {
+      $msg .= t('Please <a href="!url">ask your site administrator</a> to set up this feature.', array('!url' => url('user/1/contact')));
+    }
+    drupal_set_message($msg, 'error');
+    return;
+  }
+
+  if ($suggest) {
+    $cat_list[0] = t('<suggest a category>');
+    $form['#redirect'] = false;
+    $form['faq_vid'] = array(
+      '#type' => 'value',
+      '#value' => $vid,
+      );
+    if (!$tid) {
+      $default_tid = 0;
+    }
+  }
+
+  // If a nid exists, then get the existing values.
+  if ($node) {
+    $nid = $node->nid;
+    $title = $node->title;
+    $taxo = array_keys($node->taxonomy);
+    $default_tid = $taxo[0];
+  }
+  else {
+    $nid = null;
+    $default_tid = $tid;
+    $title = null;
+  }
+
+  $form['nid'] = array(
+    '#type' => 'value',
+    '#value' => $nid,
+  );
+
+  // Category.
+  $expert_categorize = variable_get('faq_ask_categorize', FALSE);
+  // Check if only experts can categorize the question.
+  if (!$expert_categorize && user_access('answer question')) {
+    $form['category'] = array(
+      '#title' => t('Category'),
+      '#type' => 'select',
+      '#options' => $cat_list,
+      '#default_value' => $default_tid,
+      '#required' => TRUE,
+      '#weight' => -3,
+      '#description' => t('Please select the correct category for your question.'),
+      );
+  }
+  else {
+    $form['category'] = array(
+      '#type' => 'value',
+      '#value' => -1,
+      );
+  }
+
+  if (count($form_state['post']) > 0) {
+    if ($form_state['post']['category'] == 0) {
+      $form['new_cat'] = array(
+        '#title' => t('Suggested Category'),
+        '#type' => 'textfield',
+        '#weight' => -1,
+        '#default_value' => null,
+        '#description' => t('Please enter your suggested category for the question.'),
+        );
+    }
+  }
+
+  // Question.
+  $cols = variable_get('faq_ask_title_len', 60);
+  $form['title'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Question'),
+    '#required' => true,
+    '#default_value' => $title,
+    '#weight' => 0,
+    '#cols' => $cols,
+    '#rows' => 5,
+    '#description' => t('Enter your question here. It will be answered as soon as possible.'),
+  );
+
+  $form['send'] = array(
+    '#type' => 'submit',
+    '#value' => t('Send my question'),
+    '#weight' => 3,
+  );
+
+  return $form;
+}
+
+/**
+ * Implementation of hook_form_submit().
+ * This function gets the entered question and category and creates an unpublished FAQ node.
+ */
+function faq_ask_form_submit($form, &$form_state) {
+  global $user;
+  $form_values = $form_state['values'];
+
+  $category = $form_state['values']['category'];
+  if ($category == 0 && empty($form_state['values']['new_cat'])) {
+    // Can only be 0 if allowing category suggestion.
+  }
+  else {
+    if ($category == 0) {
+      // We have a new category to process.
+      $new_cat = $form_state['values']['new_cat'];
+      $term = array('name' => $new_cat,
+        'description' => t('Suggested by @name (!uid) on @date', array('@name' => $user->name, '!uid' => $user->uid,  '@date' => date('F j, Y'))),
+        'vid' => $form_state['values']['faq_vid'],
+        'weight' => 0,
+        'parent' => 0,
+        'tid' => NULL,
+        );
+      taxonomy_save_term($term);
+      $term = (object)$term;
+      // Setting up the expert will be done in hook_taxonomy.
+    }
+    else {
+      $term = taxonomy_get_term($category);
+    }
+
+    $node = array(
+      'type' => 'faq',
+      'body' => '',    /* Empty string rather than null. */
+      'title' => $form_state['values']['title'],
+      'taxonomy' => $category >= 0 ? array($category => $term) : NULL,
+      'created' => time(),
+      'uid' => $user->uid,
+      'name' => $user->uid ? $user->name : variable_get('anonymous', t('Anonymous')),
+      'status' => 0,   /* Unpublished. */
+      'format' => 1,   /* Default filter (filtered HTML) */
+      'comment' => variable_get('comment_faq', 0),
+      );
+    $node_options = variable_get('node_options_'. $node['type'], array('status', 'promote'));
+    foreach (array('promote', 'sticky', 'revision') as $key) {
+      $node[$key] = in_array($key, $node_options) ? 1 : 0;
+    }
+
+    if ($form_state['values']['nid']) {
+      $node['nid'] = $form_state['values']['nid'];
+    }
+
+    // Okay, let's get it done. Node_submit will prepare it and make it an object.
+    $node = node_submit($node);
+    node_save($node);
+
+    // Are we notifying the expert(s)?
+    if (variable_get('faq_ask_notify', false)) {
+      // $from = variable_get('site_name', 'Drupal') .'<'. variable_get('site_mail', ini_get('sendmail_from')) .'>';
+      $params = array(
+        'category' => $category >= 0 ? filter_xss($term->name) : -1,
+        'question' => $node->title,
+        'nid' => $node->nid,
+        );
+      // Find out who the experts are.
+      $result = db_query('SELECT uid FROM {faq_expert} WHERE tid=%d', $category);
+      while ($expert = db_fetch_array($result)) {
+        $account = user_load(array('uid' => $expert['uid']));
+        $params['account'] = $account;
+        $mail_sent = drupal_mail('faq_ask', 'notify_expert', $account->mail, user_preferred_language($account), $params/*, $from*/);
+        if ($mail_sent) {
+          watchdog('FAQ_Ask', 'Expert notification email sent to @to',
+            array('@to' => $account->mail), WATCHDOG_NOTICE);
+        }
+        else {
+          watchdog('FAQ_Ask', 'Expert notification email to @to failed for the "@cat" category.',
+            array('@to' => $account->mail, '@cat' => filter_xss($term->name)), WATCHDOG_ERROR);
+          drupal_set_message($msg, 'status');
+        }
+      }
+    }
+
+    // Quick detour to see if the block is enabled.
+    if (user_access('answer question')) {
+      $theme = variable_get('theme_default', 'bluemarine');
+      $region = db_result(db_query_range("SELECT region FROM {blocks} WHERE theme='%s' AND module='faq_ask' AND delta=0 AND status=1", $theme, 0, 1));
+    }
+    else {
+      $region = NULL;
+    }
+    if ($region) {
+        switch ($region) {
+          case 'left':
+            $region_name = t('left side');
+            break;
+          case 'right':
+            $region_name = t('right side');
+            break;
+          case 'header':
+            $region_name = t('top');
+            break;
+          case 'footer':
+            $region_name = t('bottom');
+            break;
+          default:
+            $region_name = '';
+            break;
+        }
+        if ($region_name) {
+          $msg = t('It should appear in the list at the @region of the screen momentarily.', array('@region' => $region_name));
+        }
+        else {
+          $msg = t('It should appear in the list momentarily.');
+        }
+    }
+    else {
+      $msg = null;
+    }
+    drupal_set_message(t('Your question has been submitted.') .' '. $msg, 'status');
+
+    drupal_goto('faq'. ($category > 0 ? '/'. $category : NULL));
+  }
+}
+
+/**
+ * Implementation of hook_mail().
+ * This function completes the email, allowing for placeholder substitution.
+ * @TODO: notify_asker.
+ * @TODO: define messages & subjects on settings page, with list of tokens. how to handle newlines?
+ */
+function faq_ask_mail($key, &$message, $params) {
+  $newline = "\n<br/><br/>";
+  $body = array();
+  $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+  $language = $message['language'];
+  $variables = user_mail_tokens($params['account'], $language);
+  switch ($key) {
+    case 'notify_expert':
+      $variables += array(
+        '@cat' => $params['category'],
+        '@question' => $params['question'],
+        '!answer_uri' => url('faq_ask/answer/'. $params['nid'], array('absolute' => true)),
+        );
+
+      $subject = t('You have a question waiting on !site', $variables, $language->language);
+      $body[]= t('Dear !username,', $variables, $language->language);
+  // should %newline really be in translatable text? replace "\n" with %newline?
+      if ($params['category'] == -1) {
+        $body = t('The following question has been posted.', NULL, $language->language);
+      }
+      else {
+        $body = t('The following question has been posted in the "!cat" category.', array('!cat' => filter_xss($term->name)));
+      }
+//      $body[] = t('The following question has been posted in the "@cat" category.', $variables, $language->language);
+      $body[] = $params['question'];
+      $body[] = t('In order to answer it you will first need to <a href="!login_uri">login</a> to the site.', $variables, $language->language);
+      $body[] = t('Once logged in, you may proceed <a href="!answer_uri">directly to the question</a> to answer it.', $variables, $language->language);
+      break;
+  }
+  $message['body'] = drupal_wrap_mail(implode($newline, $body));
+  $message['subject'] = $subject;
+}
+
+/**
+ * Implementation of hook_form().
+ * This form allows the users to select the expert roles and to which categories the users in those roles are assigned.
+ * Note, the expert/category table attempts to use the least horizontal space,
+ * so it can "flip" based on whether there are more categories or experts.
+ */
+function faq_ask_settings_form(&$form_state, $op = null, $aid = null) {
+  $form = array();
+  // Set a basic message that will be unset once we pass the error checking.
+  $form['error'] = array('#value' => t('Errors were found, please correct them before proceeding.'), '#weight' => -10);
+
+  $faq_use_categories = variable_get('faq_use_categories', false);
+  if (!$faq_use_categories) {
+    drupal_set_message(t('The Faq_Ask module requires that FAQ "Categorize questions."') .' '. t('Please go to the <a href="!url">settings page</a> to configure this module.', array('!url' => url('admin/settings/faq/categories'))), 'error');
+    return $form;
+    }
+
+  // Get the list of vocabularies that apply to FAQ s.
+  $vocabs = taxonomy_get_vocabularies('faq');
+  if (count($vocabs) == 0) {
+    drupal_set_message(t('The Faq_Ask module requires that at least one vocabulary apply to the "faq" content type. Please go to the Taxonomy <a href="!taxo_uri">configuration page</a> to do this.', array('!taxo_uri' => url('admin/content/taxonomy'))), 'error');
+    return $form;
+  }
+
+  // Get the admin's name.
+  $admin = ucwords(db_result(db_query('SELECT name FROM {users} WHERE uid=1')));
+
+  $form['notification'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Notifications'),
+    '#collapsible' => true,
+    '#collapsed' => false,
+    );
+
+  $form['notification']['faq_ask_notify'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Notify experts'),
+    '#description' => t('If this box is checked, the expert(s) for the question will be notified via email that a question awaits them. If you do not choose this option, the "Unanswered Questions" block will be the only way they will know they have questions to answer.'),
+    '#default_value' => variable_get('faq_ask_notify', 0),
+    );
+
+  $form['options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Options'),
+    '#collapsible' => true,
+    '#collapsed' => false,
+    );
+
+  $form['options']['faq_ask_categorize'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Only expert can categorize'),
+    '#description' => t('If this box is checked, only an expert answering a question can add a category.'),
+    '#default_value' => variable_get('faq_ask_categorize', FALSE),
+    );
+
+  $form['options']['faq_ask_expert_own'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Give ownership to the expert'),
+    '#description' => t('If this box is checked, unanswered questions from anonymous users will be assigned to the expert.'),
+    '#default_value' => variable_get('faq_ask_expert_own', FALSE),
+    );
+
+  $form['options']['faq_ask_suggest'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow "Suggest a category"'),
+    '#description' => t('If this box is checked, the person asking a question will have an option to enter a new category. It will have the default expert assigned to it until you return here to correct the assignment.'),
+    '#default_value' => variable_get('faq_ask_suggest', FALSE),
+    );
+ 
+  $form['options']['faq_ask_expert_advice'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Answer advice for the expert'),
+    '#cols' => 60,
+    '#rows' => 1,
+    '#description' => t('This text will be shown at the bottom of the "Unanswered questions" block.'),
+    '#default_value' => variable_get('faq_ask_expert_advice', _faq_ask_advice_default()),
+    );
+
+    $form['options']['advice']['faq_ask_admin_advice'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Advice for an administrator/editor'),
+    '#cols' => 60,
+    '#rows' => 1,
+    '#default_value' => variable_get('faq_ask_admin_advice', _faq_ask_advice_default('admin')),
+    );
+
+    $form['options']['advice']['faq_ask_asker_advice'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Advice for an administrator/editor'),
+    '#cols' => 60,
+    '#rows' => 1,
+    '#default_value' => variable_get('faq_ask_asker_advice', _faq_ask_advice_default('asker')),
+    );
+
+  $help_default = variable_get('faq_ask_help_text', _faq_ask_help_default());
+  $form['options']['faq_ask_help_text'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Help text for the asker'),
+    '#cols' => 60,
+    '#rows' => drupal_strlen($help_default) / 60,
+    '#description' => t('This text will be shown at the top of the "Ask a Question" page.'),
+    '#default_value' => $help_default,
+    );
+
+    $title_opts = drupal_map_assoc(array(20, 30, 40, 50, 60, 70, 80, 90, 100, 128));
+  $form['options']['faq_ask_title_len'] = array(
+    '#type' => 'select',
+    '#options' => $title_opts,
+    '#title' => t('Question Box Length'),
+    '#description' => t('This sets the length of the question box (not the question itself). This affects only the FAQ_Ask module, not the FAQ display. The recommendation is to set it as wide as your theme will allow it. Note: If resizable textareas are enabled, this setting will have no effect.'),
+    '#default_value' => variable_get('faq_ask_title_len', 60),
+    );
+
+  $form['experts'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Experts'),
+    '#collapsible' => true,
+    '#collapsed' => false,
+    );
+
+  // Use the list of vocabularies from above.
+  if (count($vocabs) == 1) {
+    // Single vocabulary, don't bother with a selection box, just set it.
+    $vid = key($vocabs);
+    $def_vid = $vid;
+    variable_set('faq_ask_vocabularies', array($vid => $vid));
+    $vobj = $vocabs[$vid];
+    $free = $vobj->tags;
+  }
+  else {
+    // Multiple vocabs available.
+    $voc_list = array();
+    $def_vid = 0;  // variable_get('faq_ask_vocabularies', 0)?
+    $free = false;
+    foreach ($vocabs as $vid => $vobj) {
+      $voc_list[$vid] = $vobj->name;
+      if ($vobj->name == 'FAQ') {
+        $def_vid = $vid;
+      }
+      $free = $free || ($vobj->tags);
+    }
+    $form['experts']['faq_ask_vocabularies'] = array(
+      '#type' => 'select',
+      '#options' => $voc_list,
+      '#title' => t('Use these vocabularies'),
+      '#multiple' => true,
+      '#default_value' => variable_get('faq_ask_vocabularies', $def_vid),
+      '#description' => t('Only the terms from the selected vocabularies will be included in the list below.')
+        .' '. t("Simply adding the 'FAQ' content type to a vocabulary will not make it eligible for experts; you must return to here to add it.")
+        .'<br/><big>'. t('If you select different vocabularies, you must save the configuration BEFORE selecting users below.') .'</big>',
+      );
+  } // End multiple vocabs.
+
+  if ($free) {
+    $msg = t('Free tagging vocabularies are not allowed for Faq_Ask.');
+    drupal_set_message($msg, 'error');
+    $form['experts']['error'] = array(
+      '#type' => 'item',
+      '#value' => '<big><big>'. $msg .'</big></big>'
+      );
+    return $form;
+  }
+
+  // Changed query and loop because it failed if 'answer' was the first perm in list.
+  // This should be faster any way.
+  $role_list = db_result_array(db_query("SELECT r.rid, r.name FROM {role} r JOIN {permission} p USING (rid) WHERE p.perm LIKE '%%answer question%%'"));
+  if (empty($role_list)) {
+    drupal_set_message(t('No roles with "answer question" permission were found; only !admin is currently eligible to be an expert. You may want to go to the <a href="!access">Permissions page</a> to update your permissions.', array('!access' => url('admin/user/permissions'), '!admin' => $admin)), 'error');
+  }
+
+  // Get all terms associated with FAQ.
+  //$vocabs = variable_get('faq_ask_vocabularies', $def_vid);
+  $vocabs_array = array();
+  foreach ($vocabs as $vocab) {
+    $vocabs_array[$vocab->vid] = $vocab->vid;  
+  }
+  
+  $result = db_query('SELECT td.tid, td.name, td.description FROM {term_data} td WHERE td.vid IN ('. db_placeholders($vocabs_array) .') ORDER BY td.weight ASC, td.name ASC', $vocabs_array);
+//  $result = db_query("SELECT td.tid, td.name, td.description FROM {term_data} td WHERE td.vid IN (". db_placeholders($vocabs) .") ORDER BY td.weight ASC, td.name ASC", $vocabs);
+
+  $faq_terms = array();
+  while ($term = db_fetch_array($result)) {
+    // Show term hierarchy?
+    $term_name = /* str_repeat('--', $term['depth']) . */ $term['name'];
+    if (substr($term['description'], 0, 9) == 'suggested') {
+      $faq_terms[$term['tid']] = $term_name .'<br/>--<small>'. strip_tags($term['description']) .'</small>';
+    }
+    else {
+      $faq_terms[$term['tid']] = $term_name;
+    }
+  }
+  if (count($faq_terms) == 0) {
+    drupal_set_message(t('No vocabularies or terms were found for the "faq" content type . Please go to the <a href="!access">Categories page</a> to update your vocabulary.', array('!access' => url('admin/content/taxonomy'))), 'error');
+    return $form;
+  }
+
+  // Get all users associated with the roles.
+  $faq_expert_names = array();
+  // User/1 typically is not assigned roles, but should be in the list.
+  $faq_expert_names[1] = $admin;
+
+  $rids = variable_get('faq_expert_role', array());
+  if (!empty($rids)) {
+    if (in_array(DRUPAL_AUTHENTICATED_RID, $rids)) {
+      // Authenticated users may be experts, so get all active users.
+      // No other roles matter.
+      $result = db_query("SELECT u.uid, u.name FROM {users} u WHERE status=1");
+    }
+    else {
+      // Only specific roles may be experts.
+      $result = db_query('SELECT DISTINCT(u.uid), u.name FROM {users_roles} ur JOIN {users} u USING (uid) WHERE ur.rid IN ('. db_placeholders($rids) .')', $rids);
+    }
+    while ($user = db_fetch_array($result)) {
+      if ($user['uid'] != 1) {
+        $faq_expert_names[$user['uid']] = ucwords($user['name']);
+      }
+    }
+    // Put them in alphabetical order.
+    asort($faq_expert_names);
+  }
+
+  if (!empty($role_list)) {
+    $form['experts']['faq_expert_role'] = array(
+      '#type' => 'select',
+      '#title' => t('Expert Roles'),
+      '#options' => $role_list,
+      '#multiple' => true,
+      '#default_value' => variable_get('faq_expert_role', '2'),
+      '#description' => t('User 1 (@admin) will always be in the list, regardless of roles.', array('@admin' => $admin)) .'<br/><big>'. t('If you select different roles, you must save the configuration BEFORE selecting users below.') .'</big>',
+      );
+  }
+
+  $more_experts_than_terms = count($faq_expert_names) > count($faq_terms);
+
+  // If there is only one eligible expert, we might as well preset all categories.
+  $expert_msg = null;
+  $only_one_expert = (count($faq_expert_names) == 1);
+
+  $count = 0;
+  if ($more_experts_than_terms) {
+    // Experts go down the left; terms go across the top.
+    $top = null;
+    if ($only_one_expert) {
+      $top .= '<p>'. t('Note: Even though the check boxes below are checked, you must still click the "Save configuration" button to save the expert settings.') .'</p>';
+    }
+    $top .= '<table id="faq_experts"><tr><th> </th><th>'. implode('</th><th>', $faq_terms) .'</th></tr>';
+    if ($only_one_expert) {
+      $top .= '<tr><td colspan="100">'. t('Note: Even though the check boxes below are checked, you must still click the "Save configuration" button to save the expert settings.') .'</td></tr>';
+    }
+    foreach ($faq_expert_names as $uid => $name) {
+      ++$count;
+      $class = $count & 1 ? 'odd' : 'even';
+      $left = '<tr class="'. $class .'"><td><strong>'. $name .'</strong></td>';
+      foreach ($faq_terms as $tid => $term_name) {
+        $box_name = 'expert_'. $uid .'_'. $tid;
+        $form['experts'][$box_name] = array(
+          '#type' => 'checkbox',
+          '#default_value' => $only_one_expert,
+          '#prefix' => $top . $left .'<td align="center">',
+          '#suffix' => '</td>',
+          );
+        $top = null;
+        $left = null;
+      }
+    $form['experts'][$box_name]['#suffix'] .= '</tr>';
+    }
+    $form['experts'][$box_name]['#suffix'] .= '</table>';
+  }
+  else {
+    // Experts go across the top; terms go down the left.
+    $top = null;
+    if ($only_one_expert) {
+      $top .= '<p>'. t('Note: Even though the check boxes below are checked, you must still click the "Save configuration" button to save the expert settings.') .'</p>';
+    }
+    $top .= '<table id="faq_experts"><tr><th> </th><th>'. implode('</th><th>', $faq_expert_names) .'</th></tr>';
+    foreach ($faq_terms as $tid => $term_name) {
+      ++$count;
+      $class = $count & 1 ? 'odd' : 'even';
+      $left = '<tr class="'. $class .'"><td><strong>'. $term_name .'</strong></td>';
+      foreach ($faq_expert_names as $uid => $name) {
+        $box_name = 'expert_'. $uid .'_'. $tid;
+        $form['experts'][$box_name] = array(
+          '#type' => 'checkbox',
+          '#default_value' => $only_one_expert,
+          '#prefix' => $top . $left .'<td align="center">',
+          '#suffix' => '</td>',
+          );
+        $top = null;
+        $left = null;
+      }
+    $form['experts'][$box_name]['#suffix'] .= '</tr>';
+    }
+    $form['experts'][$box_name]['#suffix'] .= '</table>';
+  }
+
+  $form['experts'][$box_name]['#suffix'] .= t('Those who will be answering questions will need both "answer question" and "edit faq" permissions.');
+
+  $result = db_query("SELECT * FROM {faq_expert}");
+  while ($expert = db_fetch_array($result)) {
+    $box_name = 'expert_'. $expert['uid'] .'_'. $expert['tid'];
+    if (isset($form['experts'][$box_name])) { // Might not be present any more.
+      $form['experts'][$box_name]['#default_value'] = true;
+    }
+    else {
+      // Expert 0 means default expert; overlook it.
+      if ($expert['tid'] != 0) {
+        drupal_set_message(t("!name doesn't exist. If you have just changed your role selections this may be okay.", array('!name' => $box_name)), 'warning'); 
+      }
+    }
+  }
+
+  if ($only_one_expert) {
+    // Create a form value to set default expert to admin.
+    $form['experts']['faq_ask_default_expert'] = array(
+      '#type' => 'value',
+      '#value' => 1,
+      );
+  }
+  else {
+    $form['experts']['faq_ask_default_expert'] = array(
+      '#type' => 'select',
+      '#options' => $faq_expert_names,
+      '#multiple' => false,
+      '#title' => t('Default expert'),
+      '#description' => t('The selected user will be assigned as the expert for all terms that are added to the selected vocabularies until you return to this page and update it.'),
+      '#default_value' => variable_get('faq_ask_default_expert', 1),
+      );
+  }
+
+  // Get rid of error element.
+  unset($form['error']);  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save configuration'),
+    '#weight' => 5,
+  );
+
+  return $form;
+}
+
+/**
+ * Implementation of hook_form_submit().
+ * It saves the expert roles that were selected, then rebuilds the expert/category table.
+ */
+function faq_ask_settings_form_submit($form, &$form_state) {
+  $form_values = $form_state['values'];
+  // Save the simple stuff.
+  if (isset($form_state['values']['faq_expert_role'])) {
+    variable_set('faq_expert_role', $form_state['values']['faq_expert_role']);
+  }
+  if (isset($form_state['values']['faq_ask_vocabularies'])) {
+    variable_set('faq_ask_vocabularies', $form_state['values']['faq_ask_vocabularies']);
+  }
+  variable_set('faq_ask_title_len', $form_state['values']['faq_ask_title_len']);
+  variable_set('faq_ask_categorize', $form_state['values']['faq_ask_categorize']);
+  variable_set('faq_ask_expert_own', $form_state['values']['faq_ask_expert_own']);
+  variable_set('faq_ask_suggest', $form_state['values']['faq_ask_suggest']);
+  variable_set('faq_ask_notify', $form_state['values']['faq_ask_notify']);
+  variable_set('faq_ask_default_expert', $form_state['values']['faq_ask_default_expert']);
+  variable_set('faq_ask_expert_advice', $form_state['values']['faq_ask_expert_advice']);
+  variable_set('faq_ask_help_text', $form_state['values']['faq_ask_help_text']);
+  variable_set('faq_ask_admin_advice', $form_state['values']['faq_ask_admin_advice']);
+  variable_set('faq_ask_asker_advice', $form_state['values']['faq_ask_asker_advice']);
+
+  // Get all the selected expert/category options.
+  // First, we'll include the default expert for tid=0.
+  $values = array('('. $form_state['values']['faq_ask_default_expert'] .', 0)');
+  foreach ($form_values as $name => $value) {
+    if (substr($name, 0, 7) == 'expert_') {
+      list($junk, $uid, $tid) = explode('_', $name);
+      if ($value) {
+        $values[] = '('. $uid .', '. $tid .')';
+      }
+    }
+  }
+  $vals = implode(', ', $values);
+
+  // Delete the current values and save the new ones.
+  if (!empty($values)) {
+    db_query('TRUNCATE {faq_expert}');
+    db_query("INSERT INTO {faq_expert} (uid, tid) VALUES %s", $vals);
+  }
+
+  drupal_set_message(t('Configuration has been updated.'), 'status');
+}
+
+/**
+ * This function is called when an expert selects a question to answer.
+ * It changes the status option to "published" then goes to the regular FAQ edit function.
+ */
+function faq_ask_answer($node) {
+  global $user;
+  $owner = $node->uid;
+  if (variable_get('faq_ask_expert_own', FALSE) && $node->uid == 0) {
+    $owner = $user->uid;
+    drupal_set_message(t('This question is being assigned to @user.', array('@user' => $user->name)));
+  }
+  // Change the status to published.
+  db_query("UPDATE {node} SET status=1, uid=%d WHERE nid=%d", $owner, $node->nid);
+
+  // Need to invoke node/##/edit.
+  drupal_goto('node/'. $node->nid .'/edit');
+}
+
+/**
+ * Implementation of hook_taxonomy().
+ *  @param:
+ *    op:  'insert', 'update, 'delete'
+ *    type: 'term', 'vocabulary'
+ *    array: depends on other two.
+ */
+function faq_ask_taxonomy($op, $type, $array = NULL) {
+  global $user;
+  $default_expert = variable_get('faq_ask_default_expert', 1);
+  $my_vocs = variable_get('faq_ask_vocabularies', array());
+  $vid = $array['vid'];
+  // See if it's one of our vocabularies.
+  $our_vocab = in_array($vid, $my_vocs);
+
+  switch ($op) {
+    case 'insert':
+      switch ($type) {
+        case 'term':
+          // term: set default expert.
+          if ($our_vocab) {
+            $insert = db_query("INSERT INTO {faq_expert} (uid, tid) VALUES (%d, %d)", $default_expert, $array['tid']);
+            if ($insert === false) {
+              drupal_set_message(t('Attempt to assign expert failed.'), 'error');
+            }
+            else {
+              drupal_set_message(t('Assigned expert @expert to @name (@tid).', array('@expert' => $default_expert, '@name' => $array['name'], '@tid' => $array['tid'])), 'status');
+            }
+          }
+          break;
+
+        case 'vocabulary':
+          // New vocabulary created. It will not show on the ask page until the user
+          // goes to the settings page, so we don't need to do anything.
+          break;
+      } // End insert switch type.
+      break;
+
+    case 'delete':
+      switch ($type) {
+        case 'term':
+          // Delete term: remove experts.
+          if ($our_vocab) {
+            _faq_ask_delete_expert($array['tid'], $array['name']);
+          }
+          break;
+
+        case 'vocabulary':
+          // Each term gets deleted first, so all we have to do is remove it from our vocab list.
+          if ($our_vocab) {
+            _faq_ask_delete_vocabulary($vid, $array, $my_vocs);
+          }
+          break;
+      } // End delete switch type.
+      break;
+
+    case 'update':
+      //  Two cases for vocabulary:
+      //    1) FAQ is added to the vocab. -- see insert comment.
+      //    2) FAQ is removed from the vocab. -- need to delete all experts for all terms and remove from voc list?
+      //  $array['nodes'] contains an array of content types for the vocab.
+      switch ($type) {
+        case 'term':
+          // Term update: nothing to do.
+          break;
+
+        case 'vocabulary':
+          if (in_array('faq', $array['nodes'])) {
+            // If it's there now, we're done.
+            break;
+          }
+          // Not there now, so we need to see if it was.
+          if ($our_vocab) {
+            $tree = taxonomy_get_tree($vid);
+            foreach ($tree as $term) {
+              $my_tid = $term->tid;
+              $my_tname = $term->name;
+              _faq_ask_delete_expert($my_tid, $my_tname);
+            } // End foreach tree.
+            _faq_ask_delete_vocabulary($vid, $array, $my_vocs);
+          }
+
+          break;
+      } // End update switch type.
+      break;
+
+    default:
+      drupal_set_message(t('Faq_ask_taxonomy: Unknown op (@op) encountered', array('@op' => $op)), 'status');
+
+  } // End switch $op
+}
+
+/**
+ * Helper function to delete a vocabulary.
+ *  @param.
+ *    $vid - the taxonomy vocabulary id.
+ *    $array - the array provided in hook_taxonomy.
+ *    $my_vocs - the array of faq_ask vocabularies.
+ *
+ *  @return: none.
+ */
+function _faq_ask_delete_vocabulary($vid, $array, $my_vocs) {
+  global $user;
+  $name = $array['name'];
+  $uname = $user->name;
+  drupal_set_message("Vocabulary '$name' is being removed from the Faq_Ask list.", 'status');
+  watchdog('Faq_Ask', 'Vocabulary @voc was deleted from Faq_Ask by @name.', array('@voc' => $name, '@name' => $uname), WATCHDOG-NOTICE);
+  unset($my_vocs[$vid]);
+  variable_set('faq_ask_vocabularies', $my_vocs);
+}
+
+/**
+ * Helper function to delete experts.
+ *  @param.
+ *    $tid - the taxonomy term id for the experts.
+ *
+ *  @return: none.
+ */
+function _faq_ask_delete_expert($tid, $name=null) {
+  $delete = db_query("DELETE FROM {faq_expert} WHERE tid=%d", $tid);
+  if ($delete === false) {
+    drupal_set_message(t('Attempt to delete expert failed.'), 'error');
+  }
+  else {
+    drupal_set_message(t("Deleted experts for '@name'.", array('@name' => $name)), 'status');
+  }
+}
+ 
+ /**
+ *  Special function to verify new module dependencies.
+ */
+function _faq_ask_check_dependencies() {
+// TODO: Rip this code out after a few months.
+  $is_it_here = module_exists('helpers_database');
+  if (!$is_it_here) {
+    drupal_set_message(t('The Helpers_database module is not present or not enabled. It is required for Faq_Ask. Faq_Ask has been disabled to prevent a site outage.'), 'error');
+    module_disable(array('faq_ask'));
+  }
+  return $is_it_here;
+}
+
+/**
+ *  Special function to get the advice text default.
+ */
+function _faq_ask_advice_default($type = 'expert') {
+  switch ($type) {
+    case 'expert':
+      return t('If you select a question, you must answer it.');
+
+    case 'admin':
+      return t('You are allowed to edit unanswered questions.');
+
+    case 'asker':
+      return t('You may edit your own questions until they are answered.');
+  }
+}
+
+/**
+ *  Special function to get the help text default.
+ */
+function _faq_ask_help_default() {
+  return t("Add a question for our expert to answer. After being answered, your question and the answer will be displayed in the FAQ pages. If the question will not fit in the box below, please try to rephrase it.");
+}
+
+/**
+ *  Implementation of hook_block().
+ *  This creates and populates the "unanswered questions" block.
+ */
+function faq_ask_block($op = 'list', $delta = 0, $edit = array()) {
+  global $user;
+  switch ($op) {
+    case 'list':
+      $blocks[0]['info'] = t('Unanswered Questions');
+      $blocks[1]['info'] = t('Ask a Question');
+      return $blocks;
+
+    case 'view':
+      switch ($delta) {
+        case 0:
+          // Unanswered Questions.
+          // First, let's deal with a change in module dependencies.
+          if (_faq_ask_check_dependencies()) {
+            $block['content'] = _faq_ask_list_unanswered(variable_get('faq_unanswered_count', 3));
+          }
+          break;
+
+        case 1:
+          // Ask a question block.
+          $block['content'] = faq_ask_page(null);
+          break;
+
+      } // end switch($delta).
+      return $block;
+
+    case 'configure':
+      switch ($delta) {
+        case 0:
+          // Unanswered Questions.
+          $form['faq_unanswered_count'] = array(
+            '#type' => 'select',
+            '#title' => t('Number of questions to show'),
+            '#description' => t("This controls the number of questions that appear in the 'Unanswered Questions' block."),
+            '#options' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 15 => 15, 20 => 20, 25 => 25, 50 => 50, 100 => 100),
+            '#default_value' => variable_get('faq_unanswered_count', 3),
+            );
+          break;
+      } // end switch($delta)
+
+      return $form;
+
+    case 'save':
+      switch ($delta) {
+        case 0:
+          variable_set('faq_unanswered_count', $edit['faq_unanswered_count']);
+          break;
+
+      } // end switch($delta)
+      return;
+  } // end switch($op)
+}
+
+/**
+ * This is the code to select the Unanswered Questions for the block.
+ * It is also used by the "more" page by setting a very high limit.
+ */
+function _faq_ask_list_unanswered($limit) {
+  global $user;
+  // Bounce anonymous users.
+  if ($user->uid == 0) {
+    return null;
+  }
+
+  // What permissions does this user have?
+  $can_edit = user_access('administer faq') || user_access('administer nodes');
+  $is_expert = user_access('answer question');
+  
+  $mode = 'edit';
+  $output = $extra_msg = null;
+  // A high limit means we are doing the "more" page.
+  if ($limit > 1000) {
+    $order = 'tn.tid ASC, n.created ASC';
+  }
+  else {
+    $order = 'n.created ASC';
+  }
+
+  // Note: If the admin is also an expert, the expert-ness prevails.
+  if ($is_expert) {
+    $mode = 'answer';
+    if ($limit < 1000) {
+      $extra_msg = '<p class="faq_ask_expert_advice">'. variable_get('faq_ask_expert_advice', _faq_ask_advice_default('expert')) .'</p>';
+    }
+    // Get the expert's terms.
+    $terms = db_result_array(db_query('SELECT tid FROM {faq_expert} WHERE uid=%d', $user->uid));
+
+    // Check if this expert has any categories.
+    if (count($terms) == 0) {
+      if ($limit > 1000) {
+        return '<p>'. t("For some strange reason, I couldn't find any categories for you.") .'</p>';
+      }
+      else {
+        return null;
+      }
+    }
+    // Join the term_data table to select based on tid.
+    $result = db_query("SELECT n.title, n.nid, tn.tid FROM {node} n LEFT JOIN {term_node} tn USING (nid) WHERE n.type='faq' AND n.status=0 AND (tn.tid IN (". db_placeholders($terms) .") OR tn.tid IS NULL) ORDER BY ". $order, $terms);
+  }
+  elseif ($can_edit) {
+    $result = db_query("SELECT n.title, n.nid, tn.tid FROM {node} n JOIN {term_node} tn USING (nid) WHERE n.type='faq' AND n.status=0 ORDER BY ". $order, $terms);
+    if ($limit < 1000) {
+      $extra_msg = '<p class="faq_ask_expert_advice">'. variable_get('faq_ask_admin_advice', _faq_ask_advice_default('admin')) .'</p>';
+    }
+  }
+  else { // Edit own.
+    $result = db_query("SELECT n.title, n.nid, tn.tid FROM {node} n JOIN {term_node} tn USING (nid) WHERE n.type='faq' AND n.status=0 AND n.uid=%d ORDER BY ". $order, $user->uid);
+    if ($limit < 1000) {
+      $extra_msg = '<p class="faq_ask_expert_advice">'. variable_get('faq_ask_asker_advice', _faq_ask_advice_default('asker')) .'</p>';
+    }
+  }
+
+  // Get unpublished nodes that are type='faq'.
+  $items = array();
+  $i = 0;
+  $prev_cat = -1;
+  
+  while ($node = db_fetch_array($result)) {
+    ++$i;
+    // If we've reached the limit, then quit.
+    if ($i > $limit) {
+      break;
+    }
+    $tid = $node['tid'];
+    if ($prev_cat == $tid || $limit < 1000) {
+      $items[] = l($node['title'], 'faq_ask/'. $mode .'/'. $node['nid']);
+    }
+    else {
+      if (count($items) > 0) {
+        $output .= theme('item_list', $items);
+        $items = array();
+      }
+      if ($tid) {
+        $term = taxonomy_get_term($tid);
+        $output .= '<br/><h3>'. filter_xss($term->name) .'</h3>';
+      }
+      else {
+        $output .= '<br/><h3>'. t('Uncategorized') .'</h3>';
+      }
+      $prev_cat = $tid;
+      $items[] = l($node['title'], 'faq_ask/'. $mode .'/'. $node['nid']);
+    }
+  }
+  if ($i) {
+    $output .= theme('item_list', $items)
+      . ($i > $limit ? l(t('more...'), 'faq_ask/more', array('class' => 'faq_ask_more_link')) : null)
+      . ($limit < 1000 ? $extra_msg : null);
+  }
+  elseif ($limit > 1000) {
+    $output .= '<p>'. t('Currently there are no unanswered questions for you to view.') .'</p>';
+  }
+
+  return $output;
+}
+
+/**
+ *  This function lists all the unanswered questions the user is allowed to see.
+ *  It is used by the "more..." link from the block, but can also be called independently.
+ */
+function faq_ask_list_more() {
+  drupal_set_title(t('All Unanswered Questions'));
+  $output = '<br/>';
+  return _faq_ask_list_unanswered(9999999);
+}

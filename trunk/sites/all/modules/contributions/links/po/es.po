@@ -1,0 +1,675 @@
+# $Id: es.po,v 1.2 2007/12/14 18:52:15 syscrusher Exp $
+#
+# Spanish translation of Drupal (links\links.module)
+# Copyright 2007 <eric.londaits@gmail.com>
+# Generated from file: links.module,v 1.17.2.1 2007/01/28 03:39:24 syscrusher
+# Generated from file: links_weblink.module,v 1.15.2.3 2007/01/28 17:04:51 syscrusher
+# Generated from file: links_related.module,v 1.15.2.1 2007/01/28 03:39:24 syscrusher
+# Generated from file: links_admin.module,v 1.2.2.1 2007/01/28 03:39:24 syscrusher
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: es\n"
+"POT-Creation-Date: 2007-04-02 21:09-0300\n"
+"PO-Revision-Date: 2007-04-02 22:24-0300\n"
+"Last-Translator: Eric Londaits <eric.londaits@gmail.com>\n"
+"Language-Team: Spanish <eric.londaits@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+#: links\links.module:34
+msgid "These settings control the behavior of the link-management services and provide defaults for modules which use those services. Some modules may offer module-specific settings that override these for that module only."
+msgstr "Estas opciones controlan el comportamiento de los servicios de gestión de enlaces y proveen valores por defectos para los módulos que usan esos servicios. Algunos módulos pueden ofrecer opciones específicas que suplantan a estas sólo para ese módulo."
+
+#: links\links.module:44
+msgid "Visit link display mode"
+msgstr "Modo de visualización de enlaces"
+
+#: links\links.module:46
+msgid "display as title"
+msgstr "mostrar como título"
+
+#: links\links.module:46
+msgid "display as url"
+msgstr "mostrar como url"
+
+#: links\links.module:46
+msgid "only display the 'visit linked page' text"
+msgstr "sólo mostrar el texto 'visitar página enlazada'"
+
+#: links\links.module:48
+msgid "Users are able to visit links via the node links list. This setting toggles how the visit link is displayed, either containing the node title or the node target URL or just the words 'visit linked page'"
+msgstr "Los usuarios pueden visitar enlaces a través de la lista de enlaces a nodos. Esta opción modifica cómo se muestra el enlace, ya sea conteniendo el título del nodo o el URL del nodo o sólo las palabras 'visitar página enlazada'."
+
+#: links\links.module:53
+msgid "Link targets"
+msgstr "Destino de enlaces"
+
+#: links\links.module:55
+msgid "These settings allow you to apply the attribute <code>target=\"_blank\"</code> to cause links to open in a new browser window or tab. Using this setting will cause your pages not to validate under the XHTML standard, but will work with most browsers. There is some debate over whether using the <code>target</code> attribute is good design practice; Links leaves this choice up to the system administrator."
+msgstr "Estas opciones le permiten aplicar el atributo <code>target=\"_blank\"</code> para provocar que los enlaces se abran en una nueva ventana o solapa del navegador. Usar esta opción va a causar que sus páginas no se validen bajo el estandar XHTML, pero funcionarán en la mayoría de los navegadores. Se debate si usar el atributo <code>target</code> es una buena o mala práctica de diseño; Links le deja esta decisión al administrador del sistema."
+
+#: links\links.module:60
+msgid "Open links in new window"
+msgstr "Abrir los enlaces en una ventana nueva"
+
+#: links\links.module:62;103
+msgid "Never"
+msgstr "Nunca"
+
+#: links\links.module:62;103
+msgid "All links"
+msgstr "Todos los enlaces"
+
+#: links\links.module:62;103
+msgid "External links only"
+msgstr "Sólo enlaces externos"
+
+#: links\links.module:64
+msgid "Controls opening of new browser windows for links."
+msgstr "Controla la apertura de nuevas ventanas de navegador para los enlaces."
+
+#: links\links.module:69
+msgid "User setting for target"
+msgstr "Destino seleccionado por el usuario"
+
+#: links\links.module:71
+msgid "deny"
+msgstr "negar"
+
+#: links\links.module:71
+msgid "allow"
+msgstr "permitir"
+
+#: links\links.module:73
+msgid "Allow users to specify their own preference via the user settings page."
+msgstr "Permitir a los usuarios especificar sus propias preferencias a través de la página de opciones del usuario."
+
+#: links\links.module:78
+msgid "Security settings"
+msgstr "Opciones de seguridad"
+
+#: links\links.module:83
+msgid "You can set the permissions of who is allowed to view the count of how many people have followed each link in the %link."
+msgstr "Puede configurar el permiso de quién puede ver la cantidad de gente que ha seguido cada enlace en la %link"
+
+#: links\links.module:83
+msgid "access control page"
+msgstr "página de control de acceso"
+
+#: links\links.module:95
+msgid "Links behavior"
+msgstr "Comportamiento de los enlaces"
+
+#: links\links.module:101
+msgid "Open links in new browser window"
+msgstr "Abrir enlaces en una nueva ventana del navegador"
+
+#: links\links.module:105
+msgid "Create a new window (or tab, depending on your browser's settings) when you click on a link? This affects all URLs managed by the Links package."
+msgstr "Crear una nueva ventana (o solapa, dependiendo de la configuración del navegador) cuando haga clic en un link? Esto afecta a todos los URLs manejados por el paquete Links."
+
+#: links\links.module:120
+msgid "Outlink Redirection"
+msgstr ""
+
+#: links\links.module:129
+msgid "link management"
+msgstr "gestión de enlaces"
+
+#: links\links.module:130
+msgid "Manage links for your site."
+msgstr "Gestionar los enlaces de su sitio."
+
+#: links\links.module:137
+msgid "Links package"
+msgstr "Paquete Links"
+
+#: links\links.module:138
+msgid "Configure the global display settings and default targets for links managed by the Links package."
+msgstr "Configurar las opciones globales de visualización y destinos por defecto de los enlaces gestionados por el paquete Links."
+
+#: links\links.module:146
+msgid "package settings"
+msgstr "opciones del paquete"
+
+#: links\links.module:163
+msgid "Link data not found"
+msgstr ""
+
+#: links\links.module:165
+msgid "Return"
+msgstr ""
+
+#: links\links_related.module:12
+msgid "links"
+msgstr "enlaces"
+
+#: links\links_related.module:17
+msgid "list links"
+msgstr "listar enlaces"
+
+#: links\links_related.module:20
+msgid "edit links"
+msgstr "editar enlaces"
+
+#: links\links_related.module:31
+msgid "related links"
+msgstr "enlaces relacionados"
+
+#: links\links_related.module:32
+msgid "Configure settings for related links attached to other content."
+msgstr "Configurar opciones para los enlaces relacionados adjuntos a otro contenido."
+
+#: links\links_related.module:46
+msgid "Adds an extra URL field to nodes of admin-specified types."
+msgstr "Agrega un URL extra a los nodos de tipos especificados por el administrador."
+
+#: links\links_related.module:78
+msgid "The &quot;links&quot; module is disabled or not installed. Node links will not function until this is corrected. Check the availability of that module, and enable if needed, in the %modules."
+msgstr "El módulo &quot;links&quot; está desactivado o no está instalado. Los nodos de enlace no funcionarán hasta que esto sea corregido. Revise la disponiblidad de ese módulo, y de ser necesario habilítelo en la %modules."
+
+#: links\links_related.module:83
+msgid "Link display settings"
+msgstr "Opciones de visualización de enlaces"
+
+#: links\links_related.module:84
+msgid "Other settings for how the links behave and how they are displayed are available in the %linksettingspage."
+msgstr "Otras opciones sobre el funcionamiento de los enlaces y su visualización se encuentran en la %linksettingspage."
+
+#: links\links_related.module:84
+msgid "links module settings page"
+msgstr "página de opciones del módulo links"
+
+#: links\links_related.module:89
+msgid "Displayed links (teaser mode)"
+msgstr "Enlaces visualizados (modo avance)"
+
+#: links\links_related.module:91;99
+msgid "None"
+msgstr "Ninguno"
+
+#: links\links_related.module:91;99
+msgid "All"
+msgstr "Todos"
+
+#: links\links_related.module:92
+msgid "This setting controls how many links are displayed near the node title (in most themes) for the teaser or listing format."
+msgstr "Esta opción controla cuántos enlaces se muestran cerca del título del nodo (en la mayoría de los temas) para el formato de avance o de listado."
+
+#: links\links_related.module:97
+msgid "Displayed links (full-page mode)"
+msgstr "Enlaces mostrados (modo página completa)"
+
+#: links\links_related.module:100
+msgid "This setting controls how many links are displayed near the node title (in most themes) in full-page displays."
+msgstr "Esta opción controla cuántos enlaces se muestran cerca del título del nodo (en la mayoría de los temas) para la visualización de página completa."
+
+#: links\links_related.module:105
+msgid "Display trim length"
+msgstr "Largo para acortar visualización"
+
+#: links\links_related.module:108
+msgid "Trims the displayed text (but not the actual URL) for links displayed near the article title. Does not affect display of links as end-notes within the article body."
+msgstr "Acorta el texto mostrado (pero no el URL) para enlaces visualizados cerca del título del artículo. No afecta la visualización de enlaces al final del cuerpo del artículo."
+
+#: links\links_related.module:113
+msgid "Show end-notes list"
+msgstr "Mostrar la lista de notas finales"
+
+#: links\links_related.module:116
+msgid "If enabled, list of the article's related links will be appended to the end of the content, when in full-page display mode. This listing will also appear as part of the separate links tab (if that feature is enabled)."
+msgstr "De estar habilitado, la lista de enlaces relacionados del artículo será adosada al final del contenido, cuando se esté en modo de página completa. Este listado también aprecerá como parte de la solapa de enlaces separada (si esa función está habilitada)."
+
+#: links\links_related.module:121
+msgid "List embedded links"
+msgstr "Listar enlaces embebidos"
+
+#: links\links_related.module:124
+msgid "If enabled, a list of links contained within the article text will be appended to the end of the content, when in full-page display mode. This listing will also appear as part of the separate links tab (if that feature is enabled)."
+msgstr "De estar habilitado, la lista de enlaces contenidos en el texto del artículo será adosada al final del contenido, cuando se esté en modo de página completa. Este listado también aprecerá como parte de la solapa de enlaces separada (si esa función está habilitada)."
+
+#: links\links_related.module:129
+msgid "Show links tab"
+msgstr "Mostrar solapa de enlaces"
+
+#: links\links_related.module:132
+msgid "If enabled, a tab will be added to node displays to display the list of related and embedded links on their own separate page."
+msgstr "De estar habilitado, una solapa será agregada a las visualizaciones de nodos para mostrar la lista de enlaces relacionados y embebidos en una página propia separada."
+
+#: links\links_related.module:137
+msgid "To choose what content types have link URLs available, use the %workflowpage to set the 'has related links url' attribute for the desired node types. Note that you may need to revisit this setting if you add modules that define new node types, because the default is OFF for each content type."
+msgstr "Para elegir qué tipos de contenido podrán tener enlaces a URLs utilice la %workflowpage para seleccionar el atributo 'tiene url de enlaces relacionados' para los tipos de nodo deseados. Note que puede que tenga que revisar la opción si agrega módulos que definen nuevos tipos de nodo, por el valor por defecto es APAGADO para cada tipo de contendio."
+
+#: links\links_related.module:137
+msgid "default content workflow page"
+msgstr "página por defecto de flujo de trabajo de contenido"
+
+#: links\links_related.module:210;307
+msgid "Related links"
+msgstr "Enlaces relacionados"
+
+#: links\links_related.module:216
+msgid "Allow related links"
+msgstr "Permitir enlaces relacionados"
+
+#: links\links_related.module:217
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: links\links_related.module:217
+msgid "Optional"
+msgstr "Opcional"
+
+#: links\links_related.module:217
+msgid "Required"
+msgstr "Requerido"
+
+#: links\links_related.module:219
+msgid "This setting enables or disables related links for this content type."
+msgstr "Esta opción activa o desactiva los enlaces relacionados para el tipo de contenido."
+
+#: links\links_related.module:237;313;435
+msgid "Related Links"
+msgstr "Enlaces relacionados"
+
+#: links\links_related.module:238
+msgid "Links are stored as part of the !page. Monitoring and dead link detection are centrally managed from there. <strong>To add more links, just click &quot;Preview&quot; to add another blank row. To remove a link from this article, just blank out its URL field or check the Delete box.</strong> If you blank out the title but leave the URL, then the system will suggest a title for you. The Weight allows you to determine the order in which links are displayed; lower numbers float to the top."
+msgstr "Los enlaces se almacenan como parte de la página. La detección y monitoreo de enlaces rotos se controla en forma centralizada desde aquí. <strong>Para agregar más enlaces sólo haga click en &quot;Vista previa&quot; para agregar otra fila en blanco. Para quitar un enlace de este artículo, sólo vacíe su campo de URL o marque la caja de Eliminar.</strong>"
+
+#: links\links_related.module:238
+msgid "links management feature"
+msgstr "función de gestión de enlaces"
+
+#: links\links_related.module:256
+msgid "(at least one link required for this content type)"
+msgstr "(al menos se requiere un enlace para este tipo de contenido)"
+
+#: links\links_related.module:267
+msgid "URL"
+msgstr "URL"
+
+#: links\links_related.module:267
+msgid "Weight"
+msgstr "Peso"
+
+#: links\links_related.module:267
+msgid "Delete"
+msgstr "Eliminar"
+
+#: links\links_related.module:287
+msgid "Link Title"
+msgstr "Título del enlace"
+
+#: links\links_related.module:287
+msgid "and URL"
+msgstr "y URL"
+
+#: links\links_related.module:542;573
+msgid "Matched text: %match"
+msgstr "Texto correspondiente: %match"
+
+#: links\links_related.module:545
+msgid "Links from Article Text"
+msgstr "Enlaces del Texto del Artículo"
+
+#: links\links_related.module:557
+msgid "Embedded Links"
+msgstr "Enlace embebidos"
+
+#: links\links_related.module:560
+msgid "These are the links found inside the page content. You can choose to replace the direct URLs with managed links from the site's links catalog (adding new links if necessary), or to replace existing catalog links with the actual direct URLs. Titles added or changed here do not override titles for the same link if it appears on other pages."
+msgstr "Estos enlaces se encontraron dentro del contenido de la página. Puede elegir remplazar los URLs directos con enlaces gestionados del catálogo de enlaces del sitio (agregando nuevos enlaces si es necesario), o remplazar los enlaces existentes en el catálogo con los URLs directos. Los títulos agregados o modificados aquí no suplantan a los títulos para el mismo enlace si este aparece en otras páginas."
+
+#: links\links_related.module:577
+msgid "Cataloged title"
+msgstr "Título catalogado"
+
+#: links\links_related.module:581
+msgid "URL: "
+msgstr "URL:"
+
+#: links\links_related.module:585
+msgid "Make non-catalog link"
+msgstr "Hacer un enlace no catalogado"
+
+#: links\links_related.module:585
+msgid "Make catalog link"
+msgstr "Hacer enlace catalogado"
+
+#: links\links_related.module:593
+msgid "Save changes -- NOT YET FUNCTIONAL"
+msgstr "Grabar cambios -- AÚN NO FUNCIONAL"
+
+#: links\links_related.module:0
+msgid "links_related"
+msgstr ""
+
+#: links\links_admin.module:21
+msgid "Manages entries in the Links database."
+msgstr "Gestionar entradas en la base de datos de enlaces."
+
+#: links\links_admin.module:41
+msgid "These settings control the behavior of the link-management services."
+msgstr "Estas opciones controlan el comportamiento de los servicios de gestión de enlaces."
+
+#: links\links_admin.module:51
+msgid "Links per page in administrative screens"
+msgstr "Enlaces por página en pantallas administrativas"
+
+#: links\links_admin.module:54
+msgid "This setting controls how many links will be displayed per page in link administration pages."
+msgstr "Esta opción controla cuantos enlaces se mostrarán por página en las páginas de gestión de enlaces."
+
+#: links\links_admin.module:68;76
+msgid "administer links database"
+msgstr "administrar base de datos de enlaces"
+
+#: links\links_admin.module:69
+msgid "Update individual links, and mark links for scheduled validation."
+msgstr "Actualizar enlaces individuales, y marcar enlaces para validación programada."
+
+#: links\links_admin.module:91
+msgid "<p>This feature is still under development.</p>"
+msgstr "<p>Esta función aún se encuentra en desarrollo.</p>"
+
+#: links\links_admin.module:101
+msgid "Edit Link References"
+msgstr "Editar Referencias a Enlace"
+
+#: links\links_admin.module:148
+msgid "Clicked %clicks times"
+msgstr "Cliqueado %clicks veces"
+
+#: links\links_admin.module:162
+msgid "Remove"
+msgstr "Quitar"
+
+#: links\links_admin.module:162
+msgid "Owning module"
+msgstr "Módulo dueño"
+
+#: links\links_admin.module:162
+msgid "Local Link Title (optional)"
+msgstr "Título local del enlace (opcional)"
+
+#: links\links_admin.module:162;361
+msgid "Statistics"
+msgstr "Estadísticas"
+
+#: links\links_admin.module:169
+msgid "Article: "
+msgstr "Artículo:"
+
+#: links\links_admin.module:174
+msgid "Default title for this link: %title"
+msgstr "Título por defecto para el enlace: %title"
+
+#: links\links_admin.module:177
+msgid "The link title field in this form controls the displayed title for each reference to the link, not the link's main title in the catalog. Where the title is empty, the link's default title will automatically be used."
+msgstr "El campo título del enlace de este formulario controla el título que se muestra en cada referencia al enlace, no el título principal del enlace en el catálogo. Cuando el título esté vacío, se utilizará automáticamente el título por defecto del enlace."
+
+#: links\links_admin.module:197
+msgid "(Select operation)"
+msgstr "(Seleccione operación)"
+
+#: links\links_admin.module:198
+msgid "Update titles and/or URLs"
+msgstr "Actualizar títulos y/o URLs"
+
+#: links\links_admin.module:199
+msgid "Delete the selected links"
+msgstr "Eliminar los enlaces seleccionados"
+
+#: links\links_admin.module:200
+msgid "Mark for validity check"
+msgstr "Marcar para validación"
+
+#: links\links_admin.module:209
+msgid "Update options"
+msgstr "Opciones de actualización"
+
+#: links\links_admin.module:218;286
+msgid "Update"
+msgstr "Actualizar"
+
+#: links\links_admin.module:244
+msgid "used %n places<br />last clicked %d<br />%c total clicks"
+msgstr "usado en %n lugares<br />cliqueado por última vez %d<br />%c clics totales"
+
+#: links\links_admin.module:252
+msgid "delete"
+msgstr "eliminar"
+
+#: links\links_admin.module:256
+msgid "references"
+msgstr "referencias"
+
+#: links\links_admin.module:260
+msgid "goto link"
+msgstr "visitar enlace"
+
+#: links\links_admin.module:265
+msgid "monitor"
+msgstr "monitorear"
+
+#: links\links_admin.module:275;371
+msgid "No links available."
+msgstr "No hay enlaces disponibles."
+
+#: links\links_admin.module:286
+msgid "Delete all"
+msgstr "Eliminar todos"
+
+#: links\links_admin.module:361
+msgid "Select"
+msgstr "Seleccionar"
+
+#: links\links_admin.module:361
+msgid "Link Title and URL"
+msgstr "Título del enlace y URL"
+
+#: links\links_admin.module:378
+msgid "<strong>Warning:</strong> Changing a URL here changes it for <em>all content pages</em> that refer to that link. Changing the title here changes it for all content pages that do not provide their own title for the link. It may be advisable to click on the <b>references</b> link and review where a link is used before changing its title."
+msgstr "<strong>Advertencia:</strong> Cambiar un URL aquí lo cambia para <em>todas las páginas de contenido</em> que hacen referencia a ese enlace. Cambiar el título aquí lo cambia para todas las páginas de contenido que no proveen su propio título para el enlace. Puede ser recomendable hacer clic en el enlace <b>referencias</b> y revisar dónde se utiliza el enlace antes de cambiar su título."
+
+#: links\links_admin.module:30
+msgid "administer links"
+msgstr "administrar enlaces"
+
+#: links\links_admin.module:30
+msgid "change url globally"
+msgstr "cambiar url globalmente"
+
+#: links\links_admin.module:0
+msgid "links_admin"
+msgstr ""
+
+#: links\links_weblink.module:16
+msgid "<p>This module is used to create links to other resources -- websites, pages, documents, etc. Each click on an outgoing link is logged and counted.</p>"
+msgstr "<p>Este módulo se utiliza para crear enlaces a otro recursos -- sitios web, páginas, documentos, etc. Cada clic en un enlace saliente es registrado y contabilizado.</p>"
+
+#: links\links_weblink.module:26
+msgid "weblink"
+msgstr ""
+
+#: links\links_weblink.module:30
+msgid "A weblink is an article whose main purpose is to catalog a link into a directory, as distinguished from an article of some other type that may or may not have related links. It is possible that a weblink article may <i>also</i> have related links (depending on administrative settings for this site), but the weblink's primary link is a required field that is separate from the optional related links (if any)."
+msgstr "Un weblink es un artículo cuyo propósito principal es catalogar un enlace a un directorio, a diferencia de un artículo de otro tipo que puede o no tener enlaces relacionados. Es posible que un artículo weblink pueda <i>también</i> tener enlaces relacionados (dependiendo en las opciones administrativas de este sitio), pero el enlace primaro de un weblink es un campo requerido que se encuentra separado de los enlaces relacionados opcionales (si hubiere)."
+
+#: links\links_weblink.module:43
+msgid "weblinks"
+msgstr ""
+
+#: links\links_weblink.module:49
+msgid "weblinks module"
+msgstr "módulo weblinks"
+
+#: links\links_weblink.module:50
+msgid "Configure settings for the weblink content type."
+msgstr "Configure opciones para el tipo de contenido weblink"
+
+#: links\links_weblink.module:125
+msgid "Weblinks Top Level"
+msgstr "Weblinks de nivel superior"
+
+#: links\links_weblink.module:127
+msgid "Weblinks: %topics"
+msgstr ""
+
+#: links\links_weblink.module:129
+msgid "Weblinks top level"
+msgstr "Weblinks de nivel superior"
+
+#: links\links_weblink.module:264
+msgid "Categories"
+msgstr "Categorías"
+
+#: links\links_weblink.module:268
+msgid "Links in this category"
+msgstr "Enlaces en esta categoría"
+
+#: links\links_weblink.module:277
+msgid "No links found in this category"
+msgstr "No se encontraron enlaces en esta categoría"
+
+#: links\links_weblink.module:295
+msgid ""
+"The &quot;links&quot; module is disabled or not installed. Weblinks will not function until this is corrected. Check the availability of\n"
+"that module, and enable if needed, in the %modules."
+msgstr "El módulo &quot;links&quot; está desactivado o no está instalado. Weblinks no funcionará hasta que esto sea corregido. Revise la disponiblidad de este módulo, y habilítelo de ser necesario en la %modules."
+
+#: links\links_weblink.module:302
+msgid "Other settings for how weblinks behave and how they are displayed are available in the %linksettingspage."
+msgstr "Otras opciones del comportamiento de los weblinks y cómo se visualizan están disponibles en la %linksettingspage."
+
+#: links\links_weblink.module:307
+msgid "Link display for teaser view"
+msgstr "Visualización de enlaces para avances"
+
+#: links\links_weblink.module:309;317
+msgid "Do not display link"
+msgstr "No mostrar enlace"
+
+#: links\links_weblink.module:309;317
+msgid "Display link"
+msgstr "Mostrar enlace"
+
+#: links\links_weblink.module:310
+msgid "This setting controls whether the clickable link is displayed near the node title (in most themes) for the teaser or listing format."
+msgstr "Esta opción controla si el enlace cliqueable se muestra cerca del título del nodo (en la mayoría de los temas) en el formato de avance o listado."
+
+#: links\links_weblink.module:315
+msgid "Link display for full-page view"
+msgstr "Visualización de enlace en vista de página completa"
+
+#: links\links_weblink.module:326
+msgid "Trims the displayed text (but not the actual URL) when the clickable link is displayed near the article title. Does not affect display of the link at the end of the article body."
+msgstr "Recorta el texto mostrado (pero no el URL) cuando el enlace se muestra cerca del título del artículo. No afecta la visualizción del enlace al final del cuerpo del artículo."
+
+#: links\links_weblink.module:331
+msgid "Show link at end of body text"
+msgstr "Mostrar enlace al final del texto del cuerpo"
+
+#: links\links_weblink.module:334
+msgid "If enabled, the clickable link will be appended to the end of the content, when in full-page display mode."
+msgstr "Si está activo, el enlace se adosará al final del contenido al estar en modo de visualización de página completa."
+
+#: links\links_weblink.module:339
+msgid "Weblink catalog settings"
+msgstr "Opciones de catálogo de weblinks"
+
+#: links\links_weblink.module:344
+msgid "Enable weblinks directory"
+msgstr "Habilitar directorio de weblinks"
+
+#: links\links_weblink.module:347
+msgid "If enabled, this module will produce a directory of all weblink nodes, organized by category."
+msgstr "Si se habilita, este módulo producirá un directorio de todos los nodos weblink, organizado por categoría."
+
+#: links\links_weblink.module:352
+msgid "Category display columns"
+msgstr "Columnas de visualización de categorías"
+
+#: links\links_weblink.module:355
+msgid "If the weblink catalog is enabled, this setting controls the number of columns in the table of catagories that appears at the top of link catalog pages."
+msgstr "Si el catálogo de weblinks se encuentra habilitado, esta opción controla la cantidad de columnas en la tabla de categorías que aparece en la parte superior de las páginas de catálogo de enlaces."
+
+#: links\links_weblink.module:360
+msgid "Show links in child categories"
+msgstr "Mostrar enlaces en categorías hijo"
+
+#: links\links_weblink.module:363
+msgid "If enabled, the weblink catalog will list weblinks in both the selected category and its children (if the vocabulary in use is hierarchical)."
+msgstr "Si se habilita, el catálogo de weblinks listará weblinks tanto en la categoría seleccionada como en sus hijos (si el vocabulario en uso es jerárquico)."
+
+#: links\links_weblink.module:380
+msgid "Textual description of the weblink"
+msgstr "Descripción textual del weblink."
+
+#: links\links_weblink.module:386
+msgid "Link URL"
+msgstr "URL del enlace."
+
+#: links\links_weblink.module:389
+msgid "Link URL, either local or remote. The URL will be normalized to remove things like session identifiers, which are not a permanent part of the link address."
+msgstr "URL del enlace, ya sea local o remoto. El URL será normalizado para quitar cosas como identificadores de sesión, que no son parte permanente de la dirección del enlace."
+
+#: links\links_weblink.module:395
+msgid "Body"
+msgstr "Cuerpo"
+
+#: links\links_weblink.module:555;564
+msgid "Top weblinks"
+msgstr "Weblinks principales"
+
+#: links\links_weblink.module:556;569
+msgid "Latest weblinks"
+msgstr "Últimos weblinks"
+
+#: links\links_weblink.module:557
+msgid "Weblinks blogroll"
+msgstr ""
+
+#: links\links_weblink.module:574
+msgid "Weblinks"
+msgstr ""
+
+#: links\links_weblink.module:575
+msgid "Not yet implemented."
+msgstr "Aún no implementado."
+
+#: links\links_weblink.module:592
+msgid "Weblink filter"
+msgstr "Filtro de weblinks"
+
+#: links\links_weblink.module:594
+msgid "Filter for weblink tokens,  [weblink:node_id|text] or [weblink:node_id/link_id] or [weblink:http://weblink.example.com/]. If there is more than one link for the specified node_id, the first one will be used unless link_id is specified."
+msgstr "Filtro para secuencias weblink,  [weblink:node_id|text] o [weblink:node_id/link_id] o [weblink:http://weblink.example.com/]. Si hay más de un enlace para el node_id especificado, el primero será usado a menos que se especifique un link_id."
+
+#: links\links_weblink.module:618
+msgid "(Link not found)"
+msgstr "(Enlace no encontrado)"
+
+#: links\links_weblink.module:653
+msgid "You may create links to items stored in our weblink registry using a special syntax. The weblink codes will be replaced by a links to visit the real websites. Syntax: <code>[weblink:node_id]</code> (to use the first link for that node), <code>[weblink:node_id/link_id]</code> (to use a specific link for that node) or <code>[weblink:http://a.weblink.example.com/]</code> (to specify a raw URL)."
+msgstr "Puede crear enlaces a elementos almacenados en su registro de weblinks usando una sintaxis especial. Los códigos weblink serán remplazados por enlaces para visitar a los sitios web reales. Syntaxis: <code>[weblink:node_id]</code> (para utilizar el primer enlace al nodo), <code>[weblink:node_id/link_id]</code> (para usar un enlace específico para ese nodo) o <code>[weblink:http://a.weblink.example.com/]</code> (para especificar un URL en forma directa)."
+
+#: links\links_weblink.module:656
+msgid "You may link to webpages <a href=\"%long-tip\">through the weblinks registry</a>"
+msgstr "Puede enlazar a páginas web <a href=\"%long-tip\">a través del registro weblinks</a>"
+
+#: links\links_weblink.module:286
+msgid "create weblinks"
+msgstr "crear weblinks"
+
+#: links\links_weblink.module:286
+msgid "view weblinks"
+msgstr "visualizar weblinks"
+
+#: links\links_weblink.module:0
+msgid "links_weblink"
+msgstr ""
+

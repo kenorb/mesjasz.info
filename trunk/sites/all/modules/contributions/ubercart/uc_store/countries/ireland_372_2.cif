@@ -1,0 +1,58 @@
+<?php
+// $Id: ireland_372_2.cif,v 1.1.2.1 2009/02/10 21:58:15 islandusurper Exp $
+
+// Note: Ireland does not currently have postal codes but it has been announced
+// that they will be implemented - so I left the postal code in the address definition.
+// http://www.dcmnr.gov.ie/Press+Releases/Dempsey+announces+programme+to+introduce+postcodes+in+Ireland+by+1st+January+2008.htm
+//
+
+function ireland_install() {
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES ('372', 'Ireland', 'IE', 'IRL', 2)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(372, 'CARLOW', 'Co. Carlow'),"
+          ."(372, 'CAVAN', 'Co. Cavan'),"
+          ."(372, 'CLARE', 'Co. Clare'),"
+          ."(372, 'CORK', 'Co. Cork'),"
+          ."(372, 'DONEGAL', 'Co. Donegal'),"
+          ."(372, 'DUBLIN', 'Co. Dublin'),"
+          ."(372, 'GALWAY', 'Co. Galway'),"
+          ."(372, 'KERRY', 'Co. Kerry'),"
+          ."(372, 'KILDARE', 'Co. Kildare'),"
+          ."(372, 'KILKENNY', 'Co. Kilkenny'),"
+          ."(372, 'LAOIS', 'Co. Laois'),"
+          ."(372, 'LEITRIM', 'Co. Leitrim'),"
+          ."(372, 'LIMERICK', 'Co. Limerick'),"
+          ."(372, 'LONGFORD', 'Co. Longford'),"
+          ."(372, 'LOUTH', 'Co. Louth'),"
+          ."(372, 'MAYO', 'Co. Mayo'),"
+          ."(372, 'MEATH', 'Co. Meath'),"
+          ."(372, 'MONAGHAN', 'Co. Monaghan'),"
+          ."(372, 'OFFALY', 'Co. Offaly'),"
+          ."(372, 'ROSCOMMON', 'Co. Roscommon'),"
+          ."(372, 'SLIGO', 'Co. Sligo'),"
+          ."(372, 'TIPPERARY', 'Co. Tipperary'),"
+          ."(372, 'WATERFORD', 'Co. Waterford'),"
+          ."(372, 'WESTMEATH', 'Co. Westmeath'),"
+          ."(372, 'WEXFORD', 'Co. Wexford'),"
+          ."(372, 'WICKLOW', 'Co. Wicklow')");
+
+  uc_set_address_format(372,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+   ."\r\n!city, !zone_name !postal_code\r\n!country_name_if");
+}
+
+function ireland_update($version) {
+  switch ($version) {
+    case 2:
+      uc_set_address_format(372,
+        "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+       ."\r\n!city, !zone_name !postal_code\r\n!country_name_if");
+      break;
+  }
+}
+
+function ireland_uninstall() {
+}

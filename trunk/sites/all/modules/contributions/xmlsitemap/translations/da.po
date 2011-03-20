@@ -1,0 +1,144 @@
+# Danish translation of Drupal (gsitemap.module)
+# Copyright 2006 Morten Wulff <wulff@tem.dtu.dk>
+msgid ""
+msgstr ""
+"Project-Id-Version: Danish translation of Drupal (gsitemap.module) $Id: da.po,v 1.2 2008/05/20 17:48:46 darrenoh Exp $\n"
+"POT-Creation-Date: 2006-04-07 15:29+0200\n"
+"PO-Revision-Date: 2006-04-07 15:58+0100\n"
+"Last-Translator: Morten Wulff <wulff@psyke.org>\n"
+"Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: Danish\n"
+"X-Poedit-Country: DENMARK\n"
+
+#: gsitemap.module:15
+msgid "Creates a Google Sitemap at q=gsitemap"
+msgstr "Opretter et Google Sitemap på q=gsitemap"
+
+#: gsitemap.module:17
+msgid "The following options allow you to alter the behavior of the Google Sitemap module."
+msgstr "De følgende indstillinger lader dig ændre hvordan Google Sitemap-modulet opfører sig."
+
+#: gsitemap.module:37;402;405;443;446;0
+msgid "gsitemap"
+msgstr "gsitemap"
+
+#: gsitemap.module:43
+msgid "gsitemap verification page"
+msgstr "Efterprøv gsitemap"
+
+#: gsitemap.module:59
+msgid "gsitemap Settings"
+msgstr "Indstillinger for gsitemap"
+
+#: gsitemap.module:65
+msgid "Priority override"
+msgstr "Tilsidesæt prioritet"
+
+#: gsitemap.module:69
+msgid "Optionally specify a value for the priority in the Google Sitemap, or -1 to prevent it from appearing in the sitemap."
+msgstr "Angiv en værdi for prioriteten i Google Sitemap (valgfrit) eller -1 for at forhindre at indholdet optræder på sidekortet."
+
+#: gsitemap.module:132
+msgid "Priority must be a number between 0.0 and 1.0, inclusive, or -1 to prevent this node from appearing in the sitemap."
+msgstr "Prioriteten skal være et tal mellem 0.0 og 1.0, inklusive, eller -1 for at forhindre at dette indhold optræder på sidekortet."
+
+#: gsitemap.module:187
+msgid "Priority Settings"
+msgstr "Prioritetsindstillinger"
+
+#: gsitemap.module:192
+msgid "Front page priority"
+msgstr "Forsideprioritet"
+
+#: gsitemap.module:196
+msgid "This is the absolute priority for the front page.  Values can range between 0.0 and 1.0."
+msgstr "Forsidens absolutte prioritet. Værdier kan være mellem 0.0 og 1.0."
+
+#: gsitemap.module:200
+msgid "Promotion adjustment"
+msgstr "Juster forfremmelse"
+
+#: gsitemap.module:204
+msgid "This number will be added to the priority of each node that is promoted to the front page."
+msgstr "Tallet lægges til prioriteten for hvert indholdselement, der forfremmes til forsiden."
+
+#: gsitemap.module:208
+msgid "Comment ratio weight"
+msgstr "Vægt af kommentarforhold"
+
+#: gsitemap.module:212
+msgid "This number will be multiplied with the ratio of the number of comments on the node over the number of comments on the node with the most comments, i.e., this number will be added to the priority of the node with the most comments."
+msgstr "Dette tal ganges med forholdet mellem antallet af kommentarer til det aktuelle indholdselement og antallet af kommentarer til indholdselementet med flest kommentarer, dvs. dette tal lægges til prioriteten af indholdselementet med flest kommentarer."
+
+#: gsitemap.module:218
+msgid "You can enter -1 in any of the following fields to prevent nodes of that type from appearing in the sitemap."
+msgstr "Du kan indtaste -1 i hvert af de følgende felter for at forhindre at indhold af den angivne type optræder i sidekortet."
+
+#: gsitemap.module:224
+msgid "%name adjustment"
+msgstr "%name justering"
+
+#: gsitemap.module:228
+msgid "This number will be added to the priority of nodes of type %name."
+msgstr "Dette tal lægges til prioriteten af alle indholdselementer af typen %name."
+
+#: gsitemap.module:234
+msgid "Other Settings"
+msgstr "Andre indstillinger"
+
+#: gsitemap.module:240
+msgid "Verification link"
+msgstr "Henvisning til efterprøvning"
+
+#: gsitemap.module:243
+msgid "In order to view stats, Google will ask you to verify that you control this site by creating a page with a certain name.  Enter that name here and the gsitemap module will hook that filename.  Note that this will only work if you have clean URLs enabled."
+msgstr "For at kunne vise statisikker vil Google bede dig om at bevise, at du kontrollerer dette netsted ved at oprette en side med et særligt navn. Indtast navnet her og gsitemap-modulet vil håndtere det. Bemærk at dette kun virker hvis du har aktiveret rene URLer."
+
+#: gsitemap.module:247
+msgid "Count comments in change date and frequency"
+msgstr "Medtag kommentarer i opdateringsdato og frekvens"
+
+#: gsitemap.module:250
+msgid "If enabled, the frequency of comments on a node will affect its change frequency and last modification date."
+msgstr "Frekvensen af kommentarer til et indholdslement vil påvirke dets opdateringsfrekvens og ændringsdato."
+
+#: gsitemap.module:254
+msgid "Include links to taxonomy term pages"
+msgstr "Medtag henvisninger til taksonomiord"
+
+#: gsitemap.module:257
+msgid "If enabled, links to taxonomy term pages will be included in the sitemap."
+msgstr "Henvisninger til taksonomiord medtages i sidekortet."
+
+#: gsitemap.module:261
+msgid "Submit sitemap to Google when updated"
+msgstr "Indsend sidekort til Google ved opdatering"
+
+#: gsitemap.module:264
+msgid "If enabled, the sitemap will be submitted to Google via HTTP request each time it is updated.  If you have submitted your sitemap using a Google Account, this is probably unnecessary."
+msgstr "Sidekortet indsendes til Google via en HTTP-forespørgsel hver gang det opdateres. Hvis du har indsendt sidekortet vha. en Google-konto er dette sikkert unødvendigt."
+
+#: gsitemap.module:268
+msgid "Submit sitemap to Google on cron run"
+msgstr "Indsend sidekort til Google når cron køres."
+
+#: gsitemap.module:271
+msgid "If enabled, the sitemap will be submitted to Google via HTTP request each time the cron job is run.  If you have submitted your sitemap using a Google Account, this is probably unnecessary."
+msgstr "Sidekortet indsendes til Google via en HTTP-forespørgsel næste gang der køres en cron-opgave. Hvis du har indsendt sidekortet vha. en Google-konto er dette sikkert unødvendigt."
+
+#: gsitemap.module:275
+msgid "Log accesses"
+msgstr "Registrer tilgang"
+
+#: gsitemap.module:278
+msgid "If enabled, an watchdog entry will be made each time the sitemap is accessed, containing information about the requestor."
+msgstr "Aktiver dette for at oprette en linje i hændelsesloggen med information om spørgeren hver gang sidekortet tilgås."
+
+#: gsitemap.module:25
+msgid "override node priority"
+msgstr "tilsidesæt indholdsprioritet"
+

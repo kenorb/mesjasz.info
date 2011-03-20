@@ -1,0 +1,301 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/poll/poll-bar.tpl.php:25 modules/poll/poll.pages.inc:20
+msgid "1 vote"
+msgid_plural "@count votes"
+msgstr[0] "1 głos"
+msgstr[1] "@count głosy"
+msgstr[2] "@count głosów"
+
+#: modules/poll/poll-results-block.tpl.php:26
+#: modules/poll/poll-results.tpl.php:24
+msgid "Total votes: @votes"
+msgstr "Razem głosów: @votes"
+
+#: modules/poll/poll.pages.inc:20
+msgid "open"
+msgstr "trwa"
+
+#: modules/poll/poll.pages.inc:20
+msgid "closed"
+msgstr "zamknięta"
+
+#: modules/poll/poll.pages.inc:32
+msgid ""
+"This table lists all the recorded votes for this poll. If anonymous users "
+"are allowed to vote, they will be identified by the IP address of the "
+"computer they used when they voted."
+msgstr ""
+"Tabela przedstawia wszystkie zapisane głosy oddane w tej ankiecie. Jeśli "
+"użytkownicy anonimowi są uprawnieni do głosowania, ich identyfikację "
+"umożliwia adres IP komputera, z którego wysłali głos."
+
+#: modules/poll/poll.pages.inc:35 modules/poll/poll.module:573
+msgid "Vote"
+msgstr "Głosuj"
+
+#: modules/poll/poll.module:16
+msgid ""
+"The poll module can be used to create simple polls for site users. A poll is "
+"a simple, multiple choice questionnaire which displays the cumulative "
+"results of the answers to the poll. Having polls on the site is a good way "
+"to receive feedback from community members."
+msgstr ""
+"Moduł obsługi ankiet służy do tworzenia prostych ankiet dla użytkowników "
+"witryny. Ankieta to kwestionariusz wielokrotnego wyboru, którego wyniki są, "
+"po zsumowaniu, wyświetlane na stronie. Ankiety są dobrym sposobem na szybkie "
+"poznanie opinii członków społeczności skupionej wokół witryny."
+
+#: modules/poll/poll.module:17
+msgid ""
+"When creating a poll, enter the question being posed, as well as the "
+"potential choices (and beginning vote counts for each choice). The status "
+"and duration (length of time the poll remains active for new votes) can also "
+"be specified. Use the <a href=\"@poll\">poll</a> menu item to view all "
+"current polls. To vote in or view the results of a specific poll, click on "
+"the poll itself."
+msgstr ""
+"Podczas tworzenia ankiety należy podać pytanie oraz możliwe odpowiedzi (a "
+"także początkową liczbę głosów dla każdej z nich). Można także określić "
+"status i czas trwania ankiety (czyli czas, przez który zbierane są głosy). "
+"Odpowiedni odnośnik w menu umożliwia <a href=\"@poll\">wyświetlenie listy "
+"wszystkich aktywnych ankiet</a>. By w jednej z nich zagłosować lub obejrzeć "
+"rezultaty głosowania, należy wybrać ją ze wspomnianej listy."
+
+#: modules/poll/poll.module:18
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@poll"
+"\">Poll module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@poll\">stronie dotyczącej ankiet</a> w "
+"podręczniku konfiguracji w internecie."
+
+#: modules/poll/poll.module:133
+msgid "Most recent poll"
+msgstr "Najświeższa ankieta"
+
+#: modules/poll/poll.module:174
+msgid ""
+"A <em>poll</em> is a question with a set of possible responses. A <em>poll</"
+"em>, once created, automatically provides a simple running count of the "
+"number of votes received for each response."
+msgstr ""
+"<em>Ankieta</em> to pytanie wraz ze zbiorem możliwych odpowiedzi. Głosy na "
+"każdą z nich są podliczane na bieżąco."
+
+#: modules/poll/poll.module:175
+msgid "Question"
+msgstr "Pytanie"
+
+#: modules/poll/poll.module:237
+msgid "More choices"
+msgstr "Więcej opcji"
+
+#: modules/poll/poll.module:238
+msgid ""
+"If the amount of boxes above isn't enough, click here to add more choices."
+msgstr "Jeśli potrzebnych jest więcej opcji, należy skorzystać z przycisku."
+
+#: modules/poll/poll.module:251
+msgid "Closed"
+msgstr "Zamknięta"
+
+#: modules/poll/poll.module:257
+msgid "Poll settings"
+msgstr "Ustawienia ankiety"
+
+#: modules/poll/poll.module:263
+msgid "Poll status"
+msgstr "Status ankiety"
+
+#: modules/poll/poll.module:266
+msgid "When a poll is closed, visitors can no longer vote for it."
+msgstr "Gdy ankieta jest zamknięta, odwiedzający nie mogą już w niej głosować."
+
+#: modules/poll/poll.module:271
+msgid "Poll duration"
+msgstr "Czas trwania ankiety"
+
+#: modules/poll/poll.module:274
+msgid "After this period, the poll will be closed automatically."
+msgstr "Czas, po jakim ankieta zostanie automatycznie zamknięta."
+
+#: modules/poll/poll.module:306
+msgid "Choice @n"
+msgstr "Odpowiedź @n"
+
+#: modules/poll/poll.module:314
+msgid "Votes for choice @n"
+msgstr "Głosów za odpowiedzią @n"
+
+#: modules/poll/poll.module:387
+msgid "Negative values are not allowed."
+msgstr "Nie można wprowadzać ujemnych wartości."
+
+#: modules/poll/poll.module:392
+msgid "You must fill in at least two choices."
+msgstr "Wymagane jest zaznaczenie przynajmniej dwóch odpowiedzi."
+
+#: modules/poll/poll.module:513
+msgid "Older polls"
+msgstr "Starsze ankiety"
+
+#: modules/poll/poll.module:513
+msgid "View the list of polls on this site."
+msgstr "Lista wszystkich ankiet."
+
+#: modules/poll/poll.module:515;98
+msgid "Results"
+msgstr "Wyniki"
+
+#: modules/poll/poll.module:515
+msgid "View the current poll results."
+msgstr "Wyniki aktualnej ankiety."
+
+#: modules/poll/poll.module:595
+msgid ""
+"Your vote could not be recorded because you did not select any of the "
+"choices."
+msgstr "Nie wybrano żadnej z dostępnych odpowiedzi."
+
+#: modules/poll/poll.module:618
+msgid "Your vote was recorded."
+msgstr "Głos został zapisany."
+
+#: modules/poll/poll.module:674
+msgid "Add another choice"
+msgstr "Dodaj kolejną opcję"
+
+#: modules/poll/poll.module:678
+msgid "Choice"
+msgstr "Opcje"
+
+#: modules/poll/poll.module:679
+msgid "Vote count"
+msgstr "Liczba głosów"
+
+#: modules/poll/poll.module:761
+msgid "Cancel your vote"
+msgstr "Anuluj swój głos"
+
+#: modules/poll/poll.module:57
+msgid "create poll content"
+msgstr "tworzenie ankiet"
+
+#: modules/poll/poll.module:57
+msgid "delete own poll content"
+msgstr "usunięcie własnej ankiety"
+
+#: modules/poll/poll.module:57
+msgid "delete any poll content"
+msgstr "usuwanie ankiet"
+
+#: modules/poll/poll.module:57
+msgid "edit any poll content"
+msgstr "edycja wszystkich ankiet"
+
+#: modules/poll/poll.module:57
+msgid "edit own poll content"
+msgstr "edycja własnej ankiety"
+
+#: modules/poll/poll.module:57
+msgid "vote on polls"
+msgstr "branie udziału w ankietach"
+
+#: modules/poll/poll.module:57
+msgid "cancel own vote"
+msgstr "anulowanie własnego głosu"
+
+#: modules/poll/poll.module:57
+msgid "inspect all votes"
+msgstr "sprawdzanie głosów"
+
+#: modules/poll/poll.module:79
+msgid "Polls"
+msgstr "Ankiety"
+
+#: modules/poll/poll.module:87
+msgid "Votes"
+msgstr "Głosy"
+
+#: modules/poll/poll.module:109
+msgid "Javascript Choice Form"
+msgstr "Formularz wyboru wzbogacony JavaScript"
+
+#: modules/poll/poll.module:0
+msgid "poll"
+msgstr "ankieta"
+
+#: modules/poll/poll.install:25
+msgid "Stores poll-specific information for poll nodes."
+msgstr ""
+
+#: modules/poll/poll.install:32
+msgid "The poll's {node}.nid."
+msgstr ""
+
+#: modules/poll/poll.install:38
+msgid ""
+"The number of seconds past {node}.created during which the poll is open."
+msgstr ""
+
+#: modules/poll/poll.install:45
+msgid "Boolean indicating whether or not the poll is open."
+msgstr ""
+
+#: modules/poll/poll.install:52
+msgid "Stores information about all choices for all {poll}s."
+msgstr ""
+
+#: modules/poll/poll.install:58
+msgid "Unique identifier for a poll choice."
+msgstr ""
+
+#: modules/poll/poll.install:65
+msgid "The {node}.nid this choice belongs to."
+msgstr ""
+
+#: modules/poll/poll.install:72
+msgid "The text for this choice."
+msgstr ""
+
+#: modules/poll/poll.install:78
+msgid "The total number of votes this choice has received by all users."
+msgstr ""
+
+#: modules/poll/poll.install:84
+msgid "The sort order of this choice among all choices for the same node."
+msgstr ""
+
+#: modules/poll/poll.install:94
+msgid "Stores per-{users} votes for each {poll}."
+msgstr ""
+
+#: modules/poll/poll.install:100
+msgid "The {poll} node this vote is for."
+msgstr ""
+
+#: modules/poll/poll.install:107
+msgid "The {users}.uid this vote is from unless the voter was anonymous."
+msgstr ""
+
+#: modules/poll/poll.install:113
+msgid "The {users}'s vote for this poll."
+msgstr ""
+
+#: modules/poll/poll.install:120
+msgid "The IP address this vote is from unless the voter was logged in."
+msgstr ""

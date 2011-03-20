@@ -1,0 +1,28 @@
+<?php
+// $Id: jquerymenu.install,v 1.2 2008/12/28 19:26:22 aaronhawkins Exp $
+function jquerymenu_install(){
+ drupal_install_schema('jquerymenu');
+}
+function jquerymenu_uninstall(){
+  drupal_uninstall_schema('jquerymenu');  
+}
+
+function jquerymenu_schema() {
+  $schema['jquerymenus'] = array(
+      'description' => t('Stores information about which menus are activated'),
+      'fields' => array(
+        'mid' => array(
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+        'menu_name' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ),
+      ),
+      'primary key' => array('mid'),  
+  );
+  return $schema;
+}

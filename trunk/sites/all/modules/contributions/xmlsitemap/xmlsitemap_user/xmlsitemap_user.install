@@ -1,0 +1,165 @@
+<?php
+// $Id: xmlsitemap_user.install,v 1.6 2008/06/09 01:25:20 darrenoh Exp $
+
+/**
+ * Implementation of hook_requirements().
+ */
+function xmlsitemap_user_requirements($phase) {
+  $t = get_t();
+  $requirements = array();
+  if (in_array($GLOBALS['db_type'], array('mysql', 'mysqli')) && version_compare(db_version(), '4.0.14') < 0) {
+    $requirements['xmlsitemap_user_sql'] = array(
+      'title' => $t('XML Sitemap: User'),
+      'value' => $t('Your MySQL version is too low. &ldquo;XML Sitemap: User&rdquo; requires MySQL 4.0.14 or higher.'),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function xmlsitemap_user_schema() {
+  $schema['xmlsitemap_user'] = array(
+    'description' => t('The base table for xmlsitemap.'),
+    'fields' => array(
+      'uid' => array(
+        'description' => t('The id of the path.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'pid' => array(
+        'description' => t('The id of the path.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'last_changed' => array(
+        'description' => t('Keeps track of new changes.'),
+        'type' => 'int',
+      ),
+      'previously_changed' => array(
+        'description' => t('Keeps track of old changes.'),
+        'type' => 'int',
+      ),
+      'priority_override' => array(
+        'description' => t('Stores the index value.'),
+        'type' => 'float',
+      ),
+    ),
+    'indexes' => array(
+      'pid' => array('pid'),
+    ),
+    'primary key' => array('uid'),
+  );
+
+  $schema['xmlsitemap_user_role'] = array(
+    'description' => t('The base table for xmlsitemap.'),
+    'fields' => array(
+      'rid' => array(
+        'description' => t('The id of the path.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'priority' => array(
+        'description' => t('Stores the index value.'),
+        'type' => 'float',
+      ),
+    ),
+    'indexes' => array(
+      'pid' => array('rid'),
+    ),
+    'primary key' => array('rid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function xmlsitemap_user_enable() {
+  $weight = db_result(db_query("SELECT weight FROM {system} WHERE type = 'module' AND name = 'pathauto'"));
+  if ($weight !== FALSE) {
+    db_query("UPDATE {system} SET weight = %d WHERE type = 'module' AND name = 'xmlsitemap_user'", ++$weight);
+  }
+  db_query("
+    INSERT INTO {xmlsitemap_user} (uid, last_changed)
+    SELECT u.uid, u.created FROM {users} u
+    LEFT JOIN {xmlsitemap_user} xu ON xu.uid = u.uid
+    WHERE u.uid <> 0 AND xu.uid IS NULL
+  ");
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      db_query("
+        UPDATE {xmlsitemap_user} xu INNER JOIN {url_alias} ua
+        ON ua.src = CONCAT('user/', CAST(xu.uid AS CHAR))
+        SET xu.pid = ua.pid
+        WHERE xu.pid IS NULL
+      ");
+      break;
+    case 'pgsql':
+      db_query("
+        UPDATE {xmlsitemap_user}
+        SET pid = {url_alias}.pid
+        FROM {url_alias}
+        WHERE {url_alias}.src = CONCAT('user/', CAST(uid AS VARCHAR)) AND {xmlsitemap_user}.pid IS NULL
+      ");
+      break;
+  }
+  db_query("
+    INSERT INTO {xmlsitemap_user_role} (rid)
+    SELECT r.rid FROM {role} r
+    LEFT JOIN {xmlsitemap_user_role} xur ON xur.rid = r.rid
+    WHERE r.rid > 2 AND xur.rid IS NULL
+  ");
+  xmlsitemap_update_sitemap();
+}
+
+/**
+ * Implementation of hook_disable().
+ */
+function xmlsitemap_user_disable() {
+  xmlsitemap_update_sitemap();
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function xmlsitemap_user_install() {
+  drupal_install_schema('xmlsitemap_user');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function xmlsitemap_user_uninstall() {
+  drupal_uninstall_schema('xmlsitemap_user');
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Add missing URL aliases.
+ */
+function xmlsitemap_user_update_1() {
+  $ret = array(update_sql("UPDATE {xmlsitemap_user} SET pid = NULL WHERE pid = 0"));
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("
+        UPDATE {xmlsitemap_user} xu, {url_alias} ua SET xu.pid = ua.pid
+        WHERE xu.pid IS NULL AND ua.src = CONCAT('user/', CAST(xu.uid AS CHAR))
+      ");
+      break;
+    case 'pgsql':
+      $ret[] = update_sql("
+        UPDATE {xmlsitemap_user} SET pid = {url_alias}.pid FROM {url_alias}
+        WHERE {xmlsitemap_user}.pid IS NULL AND {url_alias}.src = CONCAT('user/', CAST(uid AS VARCHAR))
+      ");
+      break;
+  }
+  return $ret;
+}
+

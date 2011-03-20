@@ -1,0 +1,452 @@
+<?php
+// $Id: simplefeed_item.module,v 1.52.2.17 2008/10/07 07:50:19 m3avrck Exp $
+
+/**
+ * @file
+ * A node feed item.
+ */
+
+
+/**
+ * Implementation of hook_perm().
+ */
+function simplefeed_item_perm() {
+  return array('create feed items', 'edit own feed items', 'edit feed items');
+}
+
+
+/**
+ * Implementation of hook_access().
+ */
+function simplefeed_item_access($op, $node) {
+  global $user;
+
+  switch ($op) {
+    case 'create':
+      return user_access('create feed items');
+      break;
+
+    case 'update':
+    case 'delete':
+      // users who create a feed may edit or delete it later, assuming they have the necessary permissions
+      if ((user_access('edit own feed items') && ($user->uid == $node->uid)) || user_access('edit feed items')) {
+        return TRUE;
+      }
+      break;
+  }
+}
+
+
+/**
+ * Implementation of hook_node_info().
+ */
+function simplefeed_item_node_info() {
+  return array(
+    'feed_item' => array(
+      'name' => t('Feed Item'),
+      'module' => 'simplefeed_item',
+      'description' => t('An item that is part of a parent feed.')
+    )
+  );
+}
+
+
+/**
+ * Implementation of hook_form().
+ */
+function simplefeed_item_form(&$node) {
+  $type = node_get_types('type', $node);
+
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => check_plain($type->title_label),
+    '#required' => TRUE,
+    '#default_value' => $node->title,
+    '#weight' => -5,
+  );
+  $form['body_filter']['body'] = array(
+    '#type' => 'textarea',
+    '#title' => check_plain($type->body_label),
+    '#default_value' => $node->body,
+    '#rows' => 3,
+  );
+  $form['body_filter']['format'] = filter_form($node->format);
+
+  $form['url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('URL'),
+    '#description' => t('The URL for this feed item.'),
+    '#maxlength' => 1024,
+    '#default_value' => isset($node->url) ? $node->url : 'http://www.',
+    '#required' => TRUE
+  );
+
+  $form['feed_item_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Feed item settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  // note all feed items are linked to their parent feed through the feed's nid
+  // this allows the main feed to be revisioned (e.g., change title, description, etc.)
+  // but still keep the same list of feed items
+  // we select from the node table to get the latest revision's data
+  $feeds = array();
+  $result = db_query("SELECT title, nid FROM {node} WHERE type = 'feed'");
+  while ($feed = db_fetch_object($result)) {
+    $feeds[$feed->nid] = $feed->title;
+  }
+
+  // can't add a feed item if no feeds exist
+  if (count($feeds) < 1) {
+    drupal_set_message(t('No feeds found. You must first <a href="!create_feed">create a feed</a> before adding feed items.', array('!create_feed' => url('node/add/feed'))), 'error');
+  }
+
+  $form['feed_item_settings']['iid'] = array('#type' => 'value', '#value' => (isset($node->iid)?$node->iid:NULL));
+
+  $form['feed_item_settings']['fid'] = array(
+    '#type' => 'select',
+    '#title' => t('Select parent feed'),
+    '#description' => t('Select the parent feed for this feed item.'),
+    '#options' => $feeds,
+    '#default_value' => (isset($node->fid)?$node->fid:NULL),
+  );
+
+  if (user_access('administer feeds')) {
+    $period = array(0 => t('Never')) + drupal_map_assoc(array(3600, 10800, 21600, 32400, 43200, 86400, 172800, 259200, 604800, 1209600, 2419200, 4838400, 9676800), 'format_interval');
+    $form['feed_item_settings']['expires'] = array(
+      '#type' => 'select',
+      '#title' => t('Discard item older than'),
+      '#default_value' => isset($node->expires) ? $node->expires : variable_get('simplefeed_expires', 0),
+      '#options' => $period,
+      '#description' => t('This feed item will be automatically discarded. Requires !cron to be running.', array('!cron' => l('cron', 'admin/logs/status')))
+    );
+  }
+  else {
+    $form['feed_item_settings']['expires'] = array('#type' => 'value', '#value' => variable_get('simplefeed_expires', 0));
+  }
+
+  return $form;
+}
+
+
+/**
+ * Implementation of hook_validate().
+ *
+ * @todo - currently there is no check for duplicate feed items if entered manually
+ *         we would need to have SimplePie library generate a hash for this feed item
+ */
+function simplefeed_item_validate($node) {
+  $valid_url = "`(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?`";
+  $url = trim($node->url);
+
+  if (!preg_match($valid_url, $url)) {
+    form_set_error('url', t('The URL entered is not valid. It should be in the format of: <em>http://www.example.com/link/to/feed/item.html</em>'));
+  }
+
+  if (!$node->fid) {
+    form_set_error('fid', t('You must select a valid parent feed.'));
+  }
+}
+
+
+/**
+ * Implementation of hook_load().
+ */
+function simplefeed_item_load($node) {
+  $additions = db_fetch_object(db_query('SELECT iid, fid, expires, url FROM {simplefeed_feed_item} WHERE vid = %d', $node->vid));
+  return $additions;
+}
+
+
+/**
+ * Implementation of hook_insert().
+ *
+ * @todo - currently feed items that are manually created have blank iid -- need a way to invoke SimplePie to generate an iid for duplicate checking
+ */
+function simplefeed_item_insert($node) {
+  $iid = md5($node->title . $node->url);
+  db_query("INSERT INTO {simplefeed_feed_item} (vid, nid, iid, fid, expires, url) VALUES (%d, %d, '%s', %d, %d, '%s')", $node->vid, $node->nid, $iid, $node->fid, $node->expires, $node->url);
+}
+
+
+/**
+ * Implementation of hook_update().
+ */
+function simplefeed_item_update($node) {
+  // if this is a new node or we're adding a new revision
+  if ($node->revision) {
+    simplefeed_item_insert($node);
+  }
+  else {
+    db_query("UPDATE {simplefeed_feed_item} SET fid = %d, expires = %d, url = '%s' WHERE vid = %d", $node->fid, $node->expires, $node->url, $node->vid);
+  }
+}
+
+
+/**
+ * Implementation of hook_delete().
+ */
+function simplefeed_item_delete($node) {
+  db_query('DELETE FROM {simplefeed_feed_item} WHERE nid = %d', $node->nid);
+}
+
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function simplefeed_item_nodeapi(&$node, $op, $teaser, $page) {
+  if ($node->type == 'feed_item') {
+    switch ($op) {
+      case 'delete revision':
+        db_query('DELETE FROM {simplefeed_feed_item} WHERE vid = %d', $node->vid);
+        break;
+      case 'submit':
+        // Have to set the date and author here, because non-node administrators aren't able to
+        // change it in node_submit() so feeds added in anon cron jobs will show up as now.
+        $node->created = $node->date ? strtotime($node->date) : NULL;
+        $account = user_load(array('name' => $node->name));
+        $node->uid = $account->uid;
+        break;
+    }
+  }
+}
+
+
+/**
+ * Implementation of hook_link().
+ */
+function simplefeed_item_link($type, $node = NULL, $teaser = FALSE) {
+  $links = array();
+  static $feeds = array();
+
+  if ($type == 'node' && $node->type == 'feed_item' && isset($node->fid)) {
+    // since generally you'll see the same feed items in a row for the same feed
+    // we static cache this query so it doesn't repeat 10x or more per page
+    if (!isset($feeds[$node->fid])) {
+      $feed = db_result(db_query('SELECT title FROM {node} WHERE nid = %d', $node->fid));
+      $feeds[$node->fid] = $feed;
+    }
+    else {
+      $feed = $feeds[$node->fid];
+    }
+    $links['simplefeed_item_parent'] = array(
+      'title' => $feed,
+      'href' => 'node/'. $node->fid,
+      'attributes' => array('title' => t('Goto the feed source for this content'))
+    );
+    $links['simplefeed_item_url'] = array(
+      'title' => t('Source'),
+      // note we don't need to check_url() since we do this in hook_view() on line 244
+      // we decode_entities() to prevent double encoding since this url was already checked above
+      // that way if a user outputs this at the theme layer the url is still safe
+      'href' => decode_entities($node->url),
+      'absolute' => TRUE,
+      'attributes' => array('title' => t('Goto the source of this post'))
+    );
+    
+    if (variable_get('simplefeed_nofollow', 1)) {
+      $links['simplefeed_item_url']['attributes']['rel'] = 'nofollow';
+    }       
+  }
+
+  return $links;
+}
+
+
+/**
+ * Delete any feed items that have expired.
+ */
+function simplefeed_item_feed_expire() {
+  global $user;
+  // because cron runs as anonymouse user, this expire function will never work
+  // we change the current user to be uid=1 so that it can removed expired items
+  // and switch back to current user at the end
+  $current_user = $user;
+  $user = user_load(array('uid' => 1));
+
+  // delete all expired feed items, ignore $vid since we expire *every* feed item in one call, not specific ones
+  // note if a feed item has multiple revisions, any revision's expiration can trigger deletion of the entire node
+  // order by FID so we can keep track of stats per feed
+  $items = db_query('SELECT n.nid, s.fid FROM {node} n JOIN {simplefeed_feed_item} s ON n.vid = s.vid WHERE s.expires <> 0 AND s.expires <= (%d - n.created) ORDER BY s.fid', time());
+
+  while ($item = db_fetch_object($items)) {
+    if (!isset($fid)) {
+      $fid = $item->fid;
+      $count = 0;
+    }
+    node_delete($item->nid);
+        
+    if (module_exists('simplefeed_stats')) {
+      $count++;
+      // if the feed changed
+      if ($fid != $item->fid) {
+        simplefeed_stats_updated_feed($count, $item->fid, 'expire');
+        $fid = $item->fid;
+        $count = 0;
+      }
+    }    
+  }
+  
+  if (isset($fid) && module_exists('simplefeed_stats')) {  
+    // record stats for last feed that expired
+    simplefeed_stats_updated_feed($count, $fid, 'expire');
+  }
+
+  // if we actually deleted something
+  if ($items != '') {
+    // since we can end up deleting a lot of feed items quite often, we optimize this table to save space
+    global $db_type;
+    if ($db_type == 'mysql' || $db_type == 'mysqli') {
+      db_query('OPTIMIZE TABLE {simplefeed_feed_item}');
+    }
+  }
+
+  $user = $current_user;
+}
+
+
+/**
+ * Turn each feed item into a node.
+ *
+ * @param $process_feed
+ *   Feed node object
+ * @param $feed
+ *   SimplePie feed object instaniated.
+ */
+function simplefeed_item_feed_parse($process_feed, $feed) {
+  // loop through all of the items in the feed, faster than foreach
+  $max = $feed->get_item_quantity();
+  $count = 0;
+  module_load_include('inc', 'node', 'node.pages');
+  module_load_include('inc', 'node', 'content_types');
+  $node = node_get_types('type', 'feed_item');
+
+  for ($i = 0; $i < $max; $i++) {
+    $item = $feed->get_item($i);
+    // don't import any items that are going to be expired right away
+    // never is 0 so can throw off this check so make sure it is higher
+    if (($item->get_date('U') < (time() - $process_feed->expires) && $process_feed->expires > 0) || $item->get_date('U') < $process_feed->checked) {
+      // ok we are done checking this feed
+      // any other items past this point are too old
+      // SimplePie default sorts by date
+      break;
+    }    
+
+    // we don't use $item->get_id(true) from SimplePie because it is slightly buggy
+    // and requires a lot of overhead to compute each time (since it uses a gigantic array structure)
+    // instead we opt for a much lighter weight comparison of just the title and body, eliminating the
+    // possibility of any date changes or other tiny changes causing duplicate nodes that otherwise
+    // appear to be the same
+    // that is why the body and title processing appears out here, so we can check for duplicates
+    // it is fast enough to not make much of a difference otherwise
+    $body = $item->get_content();
+    // this strips out any tags that may appear as <b> in the title, and makes sure &quot; -> " for display
+    $title = strip_tags(decode_entities($item->get_title()));
+
+    // some feeds don't provide titles so we construct one with the first 72 characters of the body
+    if (!$title) {
+      // remove any HTML or line breaks so these don't appear in the title
+      $title = trim(str_replace(array("\n", "\r"), ' ', strip_tags($body)));
+      $title = trim(substr($title, 0, 72));
+      $lastchar = substr($title, -1, 1);
+      // check to see if the last character in the title is a non-alphanumeric character, except for ? or !
+      // if it is strip it off so you don't get strange looking titles
+      if (preg_match('/[^0-9A-Za-z\!\?]/', $lastchar)) {
+        $title = substr($title, 0, -1);
+      }
+      // ? and ! are ok to end a title with since they make sense
+      if ($lastchar != '!' and $lastchar != '?') {
+        $title .= '...';
+      }
+    }
+
+    // unique id for each feed item, try and use item permalink, otherwise use feed permalink
+    if (!$link = $item->get_permalink()) {
+      $link = $feed->get_permalink();
+    }
+    // we don't need serialize() since we already have strings
+    $iid = md5($title . $link);
+    // make sure we don't already have this feed item
+    $duplicate = db_result(db_query("SELECT COUNT(iid) FROM {simplefeed_feed_item} WHERE iid = '%s'", $iid));
+
+    if (!$duplicate) {
+      static $type, $vid, $categories;
+      if (!isset($type)) {
+        $categories = variable_get('simplefeed_categories', 0);
+        $vid = variable_get('simplefeed_vocab', 0);
+        // before we add terms we have to make sure this is a freetagging vocabulary
+        // this is because Drupal doesn't tell us on node_load, just gives us terms
+        $type = db_fetch_object(db_query('SELECT multiple, tags FROM {vocabulary} WHERE vid = %d', $vid));
+      }
+
+
+      if ($vid) {
+        // free tagging case
+        if ($type->tags == 1) {
+          $tags = array();
+          // take feed item categories and add to Drupal's taxonomy, only works with free tagging taxonomies
+          if ($categories && count($item->get_categories()) > 0) {
+            // add in any tags that are found in the feed item itself from the originating site
+            foreach ($item->get_categories() as $category) {
+              $tags[] = $category->get_label();
+            }
+          }
+          // inherit terms from parent feed to feed item if there are terms to inherit
+          if ($process_feed->taxonomy) {
+            foreach ($process_feed->taxonomy as $tid => $term) {
+              $tags[] = $term->name;
+            }
+          }
+          if (!empty($tags)) {
+            $item->taxonomy['tags'][$vid] = decode_entities(implode(', ', $tags));
+          }
+        }
+        else if ($process_feed->taxonomy) {
+          foreach ($process_feed->taxonomy as $tid => $term) {
+            // only inherit terms if the right vocab is selected
+            if ($term->vid == $vid) {
+              $item->taxonomy[$vid][$term->tid] = $tid;
+            }
+          }
+        }
+      }
+
+      $link = $item->get_permalink();
+      // this is node created date format for Drupal
+      $date = $item->get_date('Y-m-d H:i:s O');
+
+      $form_state = array();
+      // create a feed item node
+      $form_state['values']['type'] = 'feed_item';
+      $form_state['values']['title'] = $title;
+      if ($date) {
+        // "created" is a node property, however we have to use "date" to set this with drupal_execute since it is the form element name
+        $form_state['values']['date'] = $date;
+      }
+      $form_state['values']['name'] = db_result(db_query('SELECT u.name FROM {node} n INNER JOIN {users} u ON n.uid = u.uid WHERE nid = %d', $process_feed->nid));
+      $form_state['values']['format'] = variable_get('simplefeed_format', 1);
+      // $item->get_description()  for teaser?
+      $form_state['values']['body'] = $body;
+      $form_state['values']['expires'] = $process_feed->expires;
+      $form_state['values']['url'] = $link != '' ? $link : $feed->get_permalink();
+      $form_state['values']['fid'] = $process_feed->nid;
+      $form_state['values']['taxonomy'] = isset($item->taxonomy)?$item->taxonomy:NULL;
+
+      // this is required to get node form submits to work correctly
+      $form_state['submit_handlers'] = array('node_form_submit');
+
+      $count++;
+      // create a new feed-item node, adding in all of the other node defaults
+      drupal_execute('feed_item_node_form', $form_state, $node);
+    }
+
+    // we unset $item each time to prevent any pass by reference memory leaks that PHP encounters with objects in foreach loops
+    unset($item);
+  }
+
+  if (module_exists('simplefeed_stats')) {
+    simplefeed_stats_updated_feed($count, $process_feed->nid);
+  }
+}

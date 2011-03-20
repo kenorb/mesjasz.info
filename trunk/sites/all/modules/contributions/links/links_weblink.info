@@ -1,0 +1,13 @@
+; $Id: links_weblink.info,v 1.3 2008/07/17 02:50:26 syscrusher Exp $
+name = Links Weblink
+description = Creates articles whose main purpose is to catalog a web link.
+dependencies[] = links
+package = Links
+core = 6.x
+
+; Information added by drupal.org packaging script on 2009-01-22
+version = "6.x-1.0-beta15"
+core = "6.x"
+project = "links"
+datestamp = "1232594723"
+

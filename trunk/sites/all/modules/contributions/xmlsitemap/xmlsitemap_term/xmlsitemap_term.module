@@ -1,0 +1,267 @@
+<?php
+// $Id: xmlsitemap_term.module,v 1.11 2008/05/20 17:48:47 darrenoh Exp $
+
+/**
+ * @file Adds terms to the site map.
+ */
+
+/**
+ * Implementation of hook_xmlsitemap_links().
+ */
+function xmlsitemap_term_xmlsitemap_links($type = NULL, $excludes = array()) {
+  $links = array();
+  if (!isset($type)) {
+    $links = _xmlsitemap_term_links(_xmlsitemap_term_excludes());
+    $links = array_merge($links, module_invoke_all('xmlsitemap_links', 'term', _xmlsitemap_term_excludes()));
+    $links = array_merge($links, module_invoke_all('gsitemap', 'term', _xmlsitemap_term_excludes()));
+    if (!empty($links)) {
+      foreach ($links as $key => $link) {
+        $tid[$key] = $link['tid'];
+        $loc[$key] = $link['#loc'];
+      }
+      array_multisort($tid, $loc, $links);
+    }
+  }
+  return $links;
+}
+
+/**
+ * Get array of excluded vocabularies.
+ * @return An array of vocabulary IDs to exclude.
+ */
+function _xmlsitemap_term_excludes() {
+  static $excludes;
+  if (!isset($excludes)) {
+    $excludes = array();
+    $result = db_query("SELECT vid FROM {vocabulary}");
+    while ($vocabulary = db_fetch_object($result)) {
+      if (variable_get("xmlsitemap_term_vocabulary_priority_$vocabulary->vid", 0.5) < 0) {
+        $excludes[] = $vocabulary->vid;
+      }
+    }
+  }
+  return $excludes;
+}
+
+/**
+ * Get term links.
+ * @param $excludes: An array of node types to exclude.
+ * @return An array of links. Each link is an array containing the XML
+ * values for a site map URL.
+ */
+function _xmlsitemap_term_links($excludes = array()) {
+  $links = array();
+  $result = db_query(db_rewrite_sql("
+    SELECT t.*, v.module, xt.last_changed, xt.previously_changed, xt.priority_override, ua.dst AS alias
+    FROM {term_data} t
+    LEFT JOIN {vocabulary} v ON v.vid = t.vid
+    LEFT JOIN {xmlsitemap_term} xt ON xt.tid = t.tid
+    LEFT JOIN {url_alias} ua ON ua.pid = xt.pid
+    WHERE (t.vid NOT IN (". (empty($excludes) ? 0 : implode(', ', $excludes)) .") AND xt.priority_override IS NULL OR xt.priority_override >= 0)
+    AND t.tid <> %d
+  ", 't', 'tid'), _xmlsitemap_term_frontpage());
+  while ($term = db_fetch_object($result)) {
+    if ($term->module == 'forum') {
+      $url = xmlsitemap_url("forum/$term->tid", $term->alias, NULL, NULL, TRUE);
+    }
+    elseif ($term->module != 'taxonomy' && $path = module_invoke($term->module, 'term_path', $term)) {
+      $alias = drupal_lookup_path('alias', $path);
+      if ($alias !== FALSE) {
+        $term->alias = $alias;
+      }
+      $url = xmlsitemap_url($path, $term->alias, NULL, NULL, TRUE);
+    }
+    else {
+      $url = xmlsitemap_url("taxonomy/term/$term->tid", $term->alias, NULL, NULL, TRUE);
+    }
+    $age = time() - $term->last_changed;
+    $interval = empty($term->previously_changed) ? 0 : $term->last_changed - $term->previously_changed;
+    $links[] = array(
+      'tid' => $term->tid,
+      '#loc' => $url,
+      '#lastmod' => $term->last_changed,
+      '#changefreq' => max($age, $interval),
+      '#priority' => _xmlsitemap_term_priority($term),
+    );
+  }
+  return $links;
+}
+
+/**
+ * Get the tid of the front page term.
+ * @return Integer of front page term ID, or 0 if front page is not a term.
+ */
+function _xmlsitemap_term_frontpage() {
+  static $tid;
+  if (!isset($tid)) {
+    $tid = 0;
+    $frontpage = explode('/', drupal_get_normal_path(variable_get('site_frontpage', 'node')));
+    if (count($frontpage) == 3 && $frontpage[0] == 'taxonomy' && $frontpage[1] == 'term' && is_numeric($frontpage[2])) {
+      $tid = $frontpage[2];
+    }
+    elseif (count($frontpage == 2) && $frontpage[0] == 'forum' && is_numeric($frontpage[1])) {
+      $tid = $frontpage[1];
+    }
+  }
+  return $tid;
+}
+
+/**
+ * Calculate the priority of a term.
+ * @param $term: A term object
+ * @return A number between 0 and 1, or -1
+ */
+function _xmlsitemap_term_priority($term) {
+  $priority = $term->priority_override;
+  if (!isset($term->priority_override)) {
+    $priority = variable_get("xmlsitemap_term_vocabulary_priority_$vocabulary->vid", 0.5);
+    $priority = min($priority, 0.9);
+  }
+  return $priority;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function xmlsitemap_term_perm() {
+  return array('override term priority');
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function xmlsitemap_term_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+    case 'taxonomy_form_term':
+      $priority = db_result(db_query("SELECT priority_override FROM {xmlsitemap_term} WHERE tid = %d", $form['tid']['#value']));
+      $priority = isset($priority) ? $priority : 'NULL';
+      if (user_access('override term priority')) {
+        $options = xmlsitemap_priority_options('both');
+        $default = variable_get('xmlsitemap_term_vocabulary_priority_'. $form['vid']['#value'], '0.5');
+        $form['xmlsitemap_term_priority'] = array(
+          '#type' => 'select',
+          '#title' => t('Site map priority'),
+          '#default_value' => $priority,
+          '#options' => $options,
+          '#description' => t('The default priority is %priority.', array('%priority' => $options[$default])),
+        );
+        $form['submit']['#weight'] = 1;
+        $form['delete']['#weight'] = 1;
+      }
+      else {
+        $form['xmlsitemap_term_priority'] = array('#type' => 'value', '#value' => $priority);
+      }
+      break;
+    case 'taxonomy_form_vocabulary':
+      $form['xmlsitemap_term_vocabulary_priority'] = array(
+        '#type' => 'select',
+        '#title' => t('Site map priority'),
+        '#default_value' => variable_get('xmlsitemap_term_vocabulary_priority_'. $form['vid']['#value'], 0.5),
+        '#options' => xmlsitemap_priority_options('exclude'),
+        '#description' => t('This will be the default priority of terms in this vocabulary.'),
+      );
+      $form['submit']['#weight'] = 1;
+      $form['delete']['#weight'] = 1;
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_taxonomy().
+ */
+function xmlsitemap_term_taxonomy($op, $type, $array = NULL) {
+  if ($type == 'vocabulary') {
+    switch ($op) {
+      case 'delete':
+        variable_del("xmlsitemap_term_vocabulary_priority_$array[vid]");
+        xmlsitemap_update_sitemap();
+        break;
+      case 'insert':
+      case 'update':
+        if (variable_get("xmlsitemap_term_vocabulary_priority_$array[vid]", 0.5) != $array['xmlsitemap_term_vocabulary_priority']) {
+          variable_set("xmlsitemap_term_vocabulary_priority_$array[vid]", $array['xmlsitemap_term_vocabulary_priority']);
+          xmlsitemap_update_sitemap();
+        }
+        break;
+    }
+  }
+  else {
+    if ($op != 'delete') {
+      $module = db_result(db_query("SELECT module FROM {vocabulary} WHERE vid = %d", $array['vid']));
+      if ($module == 'forum') {
+        $pid = db_result(db_query("SELECT pid FROM {url_alias} WHERE src = '%s'", "forum/$array[tid]"));
+      }
+      elseif ($module != 'taxonomy' && $path = module_invoke($module, 'term_path', (object) $array)) {
+        $pid = db_result(db_query("SELECT pid FROM {url_alias} WHERE src = '%s'", $path));
+      }
+      else {
+        $pid = db_result(db_query("SELECT pid FROM {url_alias} WHERE src = '%s'", "taxonomy/term/$array[tid]"));
+      }
+      $pid = empty($pid) ? 'NULL' : $pid;
+    }
+    switch ($op) {
+      case 'insert':
+        $priority = isset($array['xmlsitemap_term_priority']) ? $array['xmlsitemap_term_priority'] : 'NULL';
+        db_query("
+          INSERT INTO {xmlsitemap_term} (tid, pid, last_changed, priority_override) VALUES (%d, %s, %d, %s)
+        ", $array['tid'], $pid, time(), $priority);
+        break;
+      case 'update':
+        if (!isset($array['xmlsitemap_term_priority'])) {
+          $priority = db_result(db_query("SELECT priority_override FROM {xmlsitemap_term} WHERE tid = %d", $array['tid']));
+          $array['xmlsitemap_term_priority'] = isset($priority) && $priority !== FALSE ? $priority : 'NULL';
+        }
+        db_query("
+          UPDATE {xmlsitemap_term}
+          SET pid = %s, last_changed = %d, previously_changed = last_changed, priority_override = %s
+          WHERE tid = %d
+        ", $pid, time(), $array['xmlsitemap_term_priority'], $array['tid']);
+        break;
+      case 'delete':
+        db_query("DELETE FROM {xmlsitemap_term} WHERE tid = %d", $array['tid']);
+        break;
+    }
+    xmlsitemap_update_sitemap();
+  }
+}
+
+/**
+ * Implementation of hook_cron().
+ */
+function xmlsitemap_term_cron() {
+  if (db_result(db_query_range("SELECT COUNT(*) FROM {term_data} td LEFT JOIN {xmlsitemap_term} xt ON xt.tid = td.tid WHERE xt.tid IS NULL", 0, 1))) {
+    $query = "
+      INSERT INTO {xmlsitemap_term} (tid, last_changed)
+      SELECT td.tid, %d FROM {term_data} td
+      LEFT JOIN {xmlsitemap_term} xt ON xt.tid = td.tid
+      WHERE xt.tid IS NULL
+    ";
+    db_query($query, time());
+    switch ($GLOBALS['db_type']) {
+      case 'mysql':
+      case 'mysqli':
+        $query = "
+          UPDATE {xmlsitemap_term} xt INNER JOIN {url_alias} ua
+          ON ua.src = CONCAT('taxonomy/term/', CAST(xt.tid AS CHAR))
+          OR ua.src = CONCAT('forum/', CAST(xt.tid AS CHAR))
+          SET xt.pid = ua.pid
+          WHERE xt.pid IS NULL
+        ";
+        break;
+      case 'pgsql':
+        $query = "
+          UPDATE {xmlsitemap_term}
+          SET pid = {url_alias}.pid
+          FROM {url_alias}
+          WHERE {xmlsitemap_term}.pid IS NULL AND (
+            {url_alias}.src = CONCAT('taxonomy/term/', CAST(tid AS VARCHAR))
+            OR {url_alias}.src = CONCAT('forum/', CAST(tid AS VARCHAR))
+          )
+        ";
+        break;
+    }
+    db_query($query);
+    xmlsitemap_update_sitemap();
+  }
+}
+

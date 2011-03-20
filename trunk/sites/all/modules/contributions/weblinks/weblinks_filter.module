@@ -1,0 +1,192 @@
+<?php
+// $Id: weblinks_filter.module,v 1.2.2.4 2008/10/22 18:05:56 nancyw Exp $
+
+/**
+ * @file
+ * Allows users to include links with [link: title].
+ */
+
+/**
+ * Implementation of hook_filter().
+ */
+function weblinks_filter_filter($op, $delta = 0, $format = -1, $text = '') {
+  switch ($op) {
+    case 'list':
+      return weblinks_filter_list();
+
+    case 'description':
+      return weblinks_filter_description($delta);
+
+    case 'prepare':
+      return $text;
+
+    case 'process':
+      return weblinks_filter_process($delta, $format, $text);
+
+    case 'no cache':
+      return FALSE;
+
+    case 'settings':
+      return weblinks_filter_settings($delta, $format);
+
+    default:
+      return $text;
+  }
+}
+
+/**
+ *  Provide a list of filters we provide.
+ */
+function weblinks_filter_list() {
+  return array(0 => t('Weblinks filter'));
+}
+
+/**
+ *  Provide a description of filters we provide.
+ */
+function weblinks_filter_description($delta) {
+  switch ($delta) {
+    case 0:
+      return t('Allows users to include links with [link: <em>title</em>].');
+
+    default:
+      return t('Unknown filter description requested from Weblinks.');
+  }
+}
+
+/**
+ *  Process the content for filters we provide.
+ */
+function weblinks_filter_process($delta, $format, $text) {
+  if (preg_match_all("/\[link?:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $text, $match)) {
+    $urlnode = variable_get('weblinks_filter_urlnode_'. $format, variable_get('weblinks_urlnode', 'url'));
+    $external = variable_get('weblinks_filter_external_'. $format, variable_get('weblinks_external', TRUE));
+    $desc = variable_get('weblinks_filter_linkdesc_'. $format, TRUE);
+    $nofollow = variable_get('weblinks_filter_nofollow_'. $format, variable_get('weblinks_nofollow', FALSE));
+    $img_place = variable_get('weblinks_filter_image_'. $format, 0);
+    $image = $img_place && module_exists('image_attach');
+    $img_size = variable_get('weblinks_filter_image_size_'. $format, 'thumbnail');
+
+    $options = array('attributes' => array('class' => 'weblinks-filter-link'));
+    if ($nofollow) {
+      $options['attributes']['rel'] = 'nofollow';
+    }
+    if ($external && $urlnode == 'url') {
+      $options['attributes']['target'] = '_blank';
+    }
+
+    $search = $match[0];
+    $replace = array();
+    
+    foreach ($match[1] as $key => $value) {
+      $node = node_load(array('title' => trim($value), 'type' => 'weblinks'));
+      if (isset($node->nid)) {
+        if ($desc) {
+          $options['attributes']['title'] = check_plain($node->body);
+        }
+        $title = $node->title;
+        if ($image) {
+          $options['html'] = TRUE;
+          if ($img_place == 1) {
+            $title = image_display(node_load($node->iid), $img_size) .' '. $title;
+          }
+          else {
+            $title .= ' '. image_display(node_load($node->iid), $img_size);
+          }
+        }
+        $replace[] = l($title, ($urlnode == 'url' ? $node->url : 'node/'. $node->nid), $options);
+      }
+      else {
+        $replace[] = '<strong>'. t('No link found for @title.', array('@title' => $value)) .'</strong>';
+      }
+    }
+  }
+  return str_replace($search, $replace, $text);
+}
+
+/**
+ *  Provide settings for filters we provide.
+ */
+function weblinks_filter_settings($delta, $format) {
+  drupal_add_js(drupal_get_path('module', 'weblinks') .'/weblinks.admin.js');
+  $form = array();
+
+  $form['link'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Weblinks settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    );
+
+  $form['link']['weblinks_filter_urlnode_'. $format] = array(
+    '#type' => 'radios',
+    '#title' => t('Links lead to URL or Web Link node'),
+    '#default_value' => variable_get('weblinks_filter_urlnode_'. $format, variable_get('weblinks_urlnode', 'url')),
+    '#description' => t('Most people will want to leave this as URL. Specifying "node" makes it easier to edit the links, but requires an additional click to follow the link.'),
+    '#options' => array('url' => t('URL'), 'node' => t('node')),
+    '#prefix' => '<div class="weblinks-radios">',
+    '#suffix' => '</div>',
+    );
+
+  $form['link']['weblinks_filter_external_'. $format] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Open links in a new window'),
+    '#default_value' => variable_get('weblinks_filter_external_'. $format, variable_get('weblinks_external', TRUE)),
+    '#description' => t('Recommended to keep your vistors on your site. Should not be used when the "Links lead..." option is "node."'),
+    );
+
+  $form['link']['weblinks_filter_linkdesc_'. $format] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use link descriptions as title attribute'),
+    '#default_value' => variable_get('weblinks_filter_linkdesc_'. $format, TRUE),
+    '#description' => t('If checked the link description will be added as a "title" attribute for a hover tip.'),
+    );
+
+  $form['link']['weblinks_filter_nofollow_'. $format] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Spam link deterrent'),
+    '#default_value' => variable_get('weblinks_filter_nofollow_'. $format, variable_get('weblinks_nofollow', FALSE)),
+    '#description' => t('If enabled, Drupal will add rel="nofollow" to all links, as a measure to reduce the effectiveness of spam links. Note: this will also prevent valid links from being followed by search engines, therefore it is likely most effective when enabled for anonymous users.'),
+    );
+
+  if (variable_get('image_attach_weblinks', FALSE)) {
+    $img_link_opts = array(
+      0 => t('No image'),
+      1 => t('Before the title'),
+      2 => t('After the title'),
+      );
+    $form['link']['weblinks_filter_image_'. $format] = array(
+      '#type' => 'select',
+      '#options' => $img_link_opts,
+      '#title' => t('Use image in the link'),
+      '#default_value' => variable_get('weblinks_filter_image_'. $format, 0),
+      '#description' => t('If checked the link will include an image attached to the link, if there is one.'),
+      );
+
+    $image_sizes = array();
+    foreach (image_get_sizes() as $key => $size) {
+      $image_sizes[$key] = $size['label'];
+    }  
+    $form['link']['weblinks_filter_image_size_'. $format] = array(
+      '#type' => 'select',
+      '#options' => $image_sizes,
+      '#title' => t('Image size'),
+      '#default_value' => variable_get('weblinks_filter_image_size_'. $format, 'thumbnail'),
+      '#description' => t('Which size image to use in the link. Requires "Use image..." above to be checked.'),
+      );
+  }
+
+  return $form;
+}
+
+/**
+ * Implementation of hook_filter_tips().
+ */
+function weblinks_filter_filter_tips($delta, $format, $long = FALSE) {
+  if ($long) {
+    return t('To insert a link to a site known to the Weblinks module, you may insert in your content the pseudo-tag: [link: <em>title</em>]. The Weblinks module will insert the appropriate link at that spot in the content.');
+  }
+  else {
+    return t('You may insert a link to a defined site with [link: <em>title</em>].');
+  }
+}

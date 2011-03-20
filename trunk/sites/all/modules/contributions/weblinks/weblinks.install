@@ -1,0 +1,282 @@
+<?php
+// $Id: weblinks.install,v 1.15.2.14 2008/12/29 00:15:04 nancyw Exp $
+
+/**
+ * @file
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function weblinks_install() {
+  $result = drupal_install_schema('weblinks');
+
+  if (count($result) > 0) {
+    drupal_set_message(t('weblinks module installed.'));
+  }
+  else {
+    drupal_set_message(t('weblinks table creation failed. Please "uninstall" the module and retry.'));
+  }
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function weblinks_schema() {
+  $schema['weblinks'] = array(
+    'module' => 'Web Links',
+    'description' => 'Extra node information for the weblinks content type.',
+    'fields' => array(
+    'nid' => array(
+      'description' => 'Node identifier',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      ),
+    'vid' => array(
+      'description' => 'Version identifier',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      ),
+    'click_count' => array(
+      'description' => 'Click counter',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      ),
+    'last_click' => array(
+      'description' => 'Date/time of the last click',
+      'type' => 'int', 
+      'unsigned' => TRUE, 
+      'not null' => FALSE, 
+      'default' => 0,
+      ),
+    'weight' => array(
+      'description' => 'Node weight',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+      'size' => 'tiny',
+      ),
+    'last_status' => array(
+      'description' => 'Status from the last validity check',
+      'type' => 'char',
+      'length' => 4,
+      'not null' => FALSE,
+      'default' => '200',
+      ),
+    'last_checked' => array(
+      'description' => 'Date/time of the last validity check',
+      'type' => 'int', 
+      'unsigned' => TRUE, 
+      'not null' => FALSE, 
+      'default' => 0,
+      ),
+    'url' => array(
+      'description' => 'The actual URL',
+      'type' => 'text',
+      'not null' => TRUE,
+      ),
+    ),
+    'indexes' => array(
+      'url' => array('url (2048)'),
+      ),
+    'primary key' => array('nid', 'vid'),
+  );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Change url to text; add an index on it.
+ */
+function weblinks_update_6100() {
+  $ret = array();
+  db_change_field($ret, 'weblinks', 'url', 'url', array('type' => 'text', 'not null' => TRUE, 'default' => ''));
+  db_add_index($ret, 'weblinks', 'url', array('url (2048)'));
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Delete variables that are no longer used.
+ */
+function weblinks_update_6101() {
+  $ret = array();
+
+  variable_del('weblinks_maxdisp_block_recent');
+  variable_del('weblinks_containers');
+  variable_del('weblinks_block_sort');
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Adding fields for link validity checking.
+ */
+function weblinks_update_6102() {
+  $ret = array();
+
+  db_add_field($ret, 'weblinks', 'last_status', array('type' => 'char', 'length' => 4, 'not null' => FALSE, 'default' => '200'));
+  db_add_field($ret, 'weblinks', 'last_checked', array('type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE, 'default' => 0));
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Change link description variable.
+ */
+function weblinks_update_6103() {
+  $ret = array();
+
+  $current = variable_get('weblinks_linkdesc', TRUE);
+  if ($current) {
+    variable_set('weblinks_linkdesc', 'teaser');
+  }
+  else {
+    variable_set('weblinks_linkdesc', 'none');
+  }
+  
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Clear the caches because of menu/theme changes..
+ */
+function weblinks_update_6104() {
+  $ret = array();
+  drupal_flush_all_caches();  
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Fix the index structure (http://drupal.org/node/293925).
+ */
+function weblinks_update_6105() {
+  $ret = array();
+  $table = 'weblinks';
+  
+  db_drop_index($ret, $table, 'nid');
+  db_drop_primary_key($ret, $table);
+  db_add_primary_key($ret, $table, array('nid', 'vid'));
+  db_drop_index($ret, $table, 'tid');
+  db_add_index($ret, $table, $name, array('tid'));
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Remove tid, add click_count, last_click.
+ */
+function weblinks_update_6106() {
+  $ret = array();
+  $table = 'weblinks';
+
+  db_drop_field($ret, $table, 'tid');
+  db_add_field($ret, $table, 'click_count', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0));
+  db_add_field($ret, $table, 'last_click', array('type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE, 'default' => 0));
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Update "Visit" variable.
+ */
+function weblinks_update_6107() {
+  $ret = array();
+
+  if (!$visit_text = variable_get('weblinks_visit_text', NULL)) {
+    return $ret;
+  }
+  
+  $where = strpos($visit_text, '%title');
+  if ($where === FALSE) {
+    $visit_text .= ' [title]';
+  }
+  else {
+    $visit_text = str_replace('%title', '[title]', $visit_text);
+  }
+  variable_set('weblinks_visit_text', $visit_text);
+  $ret[] = array('success' => TRUE, 'query' => "variable_set('weblinks_visit_text', $visit_text)");
+  
+  return $ret;
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function weblinks_uninstall() {
+  if (variable_get('weblinks_nav_vocabulary', '')!='') {
+    taxonomy_del_vocabulary(variable_get('weblinks_nav_vocabulary', ''));
+  }
+
+  // Remove all weblinks nodes.
+  $result = db_query("SELECT nid FROM {node} WHERE type='weblinks'");
+  while ($obj = db_fetch_object($result)) {
+    node_delete($obj->nid);
+  }
+
+  // Remove the node type.
+  node_type_delete('weblinks');
+
+  // Get the variables that have a tid at the end.
+  // @@@ I'm not crazy about this, but it works.
+  $result = db_query("SELECT v.name FROM {variable} v WHERE v.name LIKE ('weblinks_maxdisp_%') OR v.name LIKE (' weblinks_block_%') OR v.name LIKE (' weblinks_create_block_%') OR v.name LIKE (' weblinks_page_%') OR v.name LIKE (' weblinks_collapse_%') OR v.name LIKE (' weblinks_filter_%')");
+  while ($name = db_result($result)) {
+    variable_del($name);
+  }
+  variable_del('weblinks_allow_dupes');
+  variable_del('weblinks_body_stub');
+  variable_del('weblinks_block_urlnode');
+  variable_del('weblinks_catdesc');
+  variable_del('weblinks_checker_interval');
+  variable_del('weblinks_checker_last');
+  variable_del('weblinks_checker_limit');
+  variable_del('weblinks_checker_redirect');
+  variable_del('weblinks_checker_unpublish');
+  variable_del('weblinks_clickthru');
+  variable_del('weblinks_collapsed');
+  variable_del('weblinks_collapsible');
+  variable_del('weblinks_comment_links');
+  variable_del('weblinks_empty_text');
+  variable_del('weblinks_external');
+  variable_del('weblinks_format');
+  variable_del('weblinks_linkdesc');
+  variable_del('weblinks_linkinfo');
+  variable_del('weblinks_maxdepth');
+  variable_del('weblinks_maxfrontdepth');
+  variable_del('weblinks_nav_vocabulary');
+  variable_del('weblinks_nofollow');
+  variable_del('weblinks_pagedesc');
+  variable_del('weblinks_page_sort');
+  variable_del('weblinks_popular_list_type');
+  variable_del('weblinks_show_url');
+  variable_del('weblinks_simplelinks');
+  variable_del('weblinks_sort');
+  variable_del('weblinks_subcatdesc');
+  variable_del('weblinks_trim');
+  variable_del('weblinks_trim_block');
+  variable_del('weblinks_unclassified_desc');
+  variable_del('weblinks_unclassified_title');
+  variable_del('weblinks_url_stub');
+  variable_del('weblinks_urlnode');
+  variable_del('weblinks_user_links');
+  variable_del('weblinks_validate_check');
+  variable_del('weblinks_view_as');
+  variable_del('weblinks_view_position');
+  variable_del('weblinks_visit_text');
+  // Remove our tables.
+  drupal_uninstall_schema('weblinks');
+
+  drupal_set_message(t('weblinks module uninstalled.'));
+}

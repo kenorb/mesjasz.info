@@ -1,0 +1,16 @@
+; $Id: statistics_filter.info,v 1.2.2.1 2008/09/16 07:03:08 frankralf Exp $
+name = "Statistics filter"
+description = "Filters unwanted entries out of statistics modules' stats."
+package = "Statistics"
+version = "6.x-1.x-dev"
+
+;  changes according to http://drupal.org/node/212702.
+core = 6.x
+dependencies[] = statistics
+
+; Information added by drupal.org packaging script on 2008-09-17
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "statistics_filter"
+datestamp = "1221610307"
+

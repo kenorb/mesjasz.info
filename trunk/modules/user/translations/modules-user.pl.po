@@ -1,0 +1,1726 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/user/user.admin.inc:13 modules/user/user.module:667;2436;911
+msgid "Create new account"
+msgstr "Utwórz nowe konto"
+
+#: modules/user/user.admin.inc:43
+msgid "Show only users where"
+msgstr "Pokaż tylko tych użytkowników, których"
+
+#: modules/user/user.admin.inc:52
+msgid ""
+"<em>and</em> where <strong>%property</strong> is <strong>%value</strong>"
+msgstr ""
+"<em>i</em> których <strong>%property</strong> to <strong>%value</strong>"
+
+#: modules/user/user.admin.inc:55
+msgid "<strong>%property</strong> is <strong>%value</strong>"
+msgstr "<strong>%property</strong> to <strong>%value</strong>"
+
+#: modules/user/user.admin.inc:137;910 modules/user/user.module:621
+msgid "Member for"
+msgstr "Posiada konto przez"
+
+#: modules/user/user.admin.inc:138;911
+msgid "Last access"
+msgstr "Ostatnio"
+
+#: modules/user/user.admin.inc:169 modules/user/user.module:1968
+msgid "blocked"
+msgstr "zablokowany"
+
+#: modules/user/user.admin.inc:169 modules/user/user.module:1968
+msgid "active"
+msgstr "aktywny"
+
+#: modules/user/user.admin.inc:221
+msgid "No users selected."
+msgstr "Nie wybrano użytkowników."
+
+#: modules/user/user.admin.inc:233
+msgid "User registration settings"
+msgstr "Ustawienia tworzenia kont użytkowników"
+
+#: modules/user/user.admin.inc:234
+msgid "Public registrations"
+msgstr "Sposób tworzenia konta"
+
+#: modules/user/user.admin.inc:234
+msgid "Visitors can create accounts and no administrator approval is required."
+msgstr ""
+"Odwiedzający mogą tworzyć konta użytkowników bez konieczności czekania na "
+"zatwierdzenie."
+
+#: modules/user/user.admin.inc:234
+msgid "Visitors can create accounts but administrator approval is required."
+msgstr ""
+"Odwiedzający mogą tworzyć konta użytkowników, które następnie muszą zostać "
+"zatwierdzone."
+
+#: modules/user/user.admin.inc:235
+msgid "Require e-mail verification when a visitor creates an account"
+msgstr ""
+"Wymagaj weryfikacji adresów e-mail podawanych przez użytkowników tworzących "
+"nowe konta"
+
+#: modules/user/user.admin.inc:235
+msgid ""
+"If this box is checked, new users will be required to validate their e-mail "
+"address prior to logging into the site, and will be assigned a system-"
+"generated password. With it unchecked, users will be logged in immediately "
+"upon registering, and may select their own passwords during registration."
+msgstr ""
+"Powoduje, że nowi użytkownicy będą musieli potwierdzić prawdziwość podanego "
+"adresu e-mail, zanim będą się mogli zalogować, a także ich kontu będzie "
+"nadawane generowane automatycznie hasło. Jeżeli opcja jest wyłączona, "
+"użytkownicy będą logowani natychmiast po utworzeniu konta i będą mogli sami "
+"wprowadzić hasło."
+
+#: modules/user/user.admin.inc:236
+msgid "User registration guidelines"
+msgstr "Wskazówki dotyczące tworzenia konta użytkownika"
+
+#: modules/user/user.admin.inc:236
+msgid ""
+"This text is displayed at the top of the user registration form and is "
+"useful for helping or instructing your users."
+msgstr ""
+"Tekst wyświetlany na początku formularza tworzenia konta. Można w nim "
+"zawrzeć objaśnienia lub instrukcje."
+
+#: modules/user/user.admin.inc:241
+msgid "User e-mail settings"
+msgstr "Ustawienia wiadomości e-mail"
+
+#: modules/user/user.admin.inc:242
+msgid ""
+"Drupal sends emails whenever new users register on your site, and "
+"optionally, may also notify users after other account actions. Using a "
+"simple set of content templates, notification e-mails can be customized to "
+"fit the specific needs of your site."
+msgstr ""
+"Drupal wysyła wiadomości e-mail za każdym razem, gdy tworzone są nowe konta "
+"użytkowników. Może także informować użytkowników o innych zdarzeniach "
+"związanych z ich kontami. Treść wiadomości można zmienić za pomocą prostych "
+"szablonów."
+
+#: modules/user/user.admin.inc:246
+msgid "Available variables are:"
+msgstr "Dostępne zmienne to:"
+
+#: modules/user/user.admin.inc:250
+msgid "Welcome, new user created by administrator"
+msgstr "Wiadomość powitalna - konto utworzone przez administratora"
+
+#: modules/user/user.admin.inc:253
+msgid ""
+"Customize welcome e-mail messages sent to new member accounts created by an "
+"administrator."
+msgstr ""
+"Można zmienić treść wiadomości e-mail wysyłanej do użytkowników, którym "
+"konta utworzył administrator."
+
+#: modules/user/user.admin.inc:270
+msgid "Welcome, no approval required"
+msgstr "Wiadomość powitalna - konto nie musi czekać na zatwierdzenie"
+
+#: modules/user/user.admin.inc:273
+msgid ""
+"Customize welcome e-mail messages sent to new members upon registering, when "
+"no administrator approval is required."
+msgstr ""
+"Można zmienić treść wiadomości e-mail wysyłanej do użytkowników tworzących "
+"nowe konta, jeśli nie muszą oni czekać na ich zatwierdzenie."
+
+#: modules/user/user.admin.inc:290
+msgid "Welcome, awaiting administrator approval"
+msgstr "Wiadomość powitalna - konto oczekujące na zatwierdzenie"
+
+#: modules/user/user.admin.inc:293
+msgid ""
+"Customize welcome e-mail messages sent to new members upon registering, when "
+"administrative approval is required."
+msgstr ""
+"Można zmienić treść wiadomości e-mail wysyłanej do użytkowników tworzących "
+"nowe konta, jeśli muszą oni czekać na ich zatwierdzenie."
+
+#: modules/user/user.admin.inc:310
+msgid "Password recovery email"
+msgstr "Wiadomość dla użytkownika, który zapomniał hasła"
+
+#: modules/user/user.admin.inc:313
+msgid "Customize e-mail messages sent to users who request a new password."
+msgstr ""
+"Można zmienić treść wiadomości e-mail wysyłanej do użytkownika, który "
+"zapomniał hasła."
+
+#: modules/user/user.admin.inc:330
+msgid "Account activation email"
+msgstr "Wiadomość o aktywacji konta"
+
+#: modules/user/user.admin.inc:333
+msgid ""
+"Enable and customize e-mail messages sent to users upon account activation "
+"(when an administrator activates an account of a user who has already "
+"registered, on a site where administrative approval is required)."
+msgstr ""
+"Można włączyć wysyłanie wiadomości e-mail do użytkownika, którego konto "
+"zostało zatwierdzone przez administratora, a także zmienić treść tej "
+"wiadomości."
+
+#: modules/user/user.admin.inc:337
+msgid "Notify user when account is activated."
+msgstr "Powiadom użytkownika o aktywacji konta."
+
+#: modules/user/user.admin.inc:355
+msgid "Account blocked email"
+msgstr "Wiadomość o zablokowaniu konta"
+
+#: modules/user/user.admin.inc:358
+msgid ""
+"Enable and customize e-mail messages sent to users when their accounts are "
+"blocked."
+msgstr ""
+"Można włączyć wysyłanie wiadomości e-mail do użytkownika, którego konto "
+"zostało zablokowane, a także zmienić treść tej wiadomości."
+
+#: modules/user/user.admin.inc:362
+msgid "Notify user when account is blocked."
+msgstr "Powiadom użytkownika o zablokowaniu konta."
+
+#: modules/user/user.admin.inc:380
+msgid "Account deleted email"
+msgstr "Wiadomość o usunięciu konta"
+
+#: modules/user/user.admin.inc:383
+msgid ""
+"Enable and customize e-mail messages sent to users when their accounts are "
+"deleted."
+msgstr ""
+"Można włączyć wysyłanie wiadomości e-mail do użytkownika, którego konto "
+"zostało usunięte, a także zmienić treść tej wiadomości."
+
+#: modules/user/user.admin.inc:387
+msgid "Notify user when account is deleted."
+msgstr "Powiadom użytkownika o usunięciu konta."
+
+#: modules/user/user.admin.inc:406
+msgid "Signatures"
+msgstr "Podpisy"
+
+#: modules/user/user.admin.inc:410
+msgid "Signature support"
+msgstr "Obsługa podpisów"
+
+#: modules/user/user.admin.inc:423
+msgid "Pictures"
+msgstr "Portrety"
+
+#: modules/user/user.admin.inc:428
+msgid "Picture support"
+msgstr "Obsługa portetów"
+
+#: modules/user/user.admin.inc:448
+msgid "Picture image path"
+msgstr "Ścieżka do pliku graficznego"
+
+#: modules/user/user.admin.inc:452
+msgid "Subdirectory in the directory %dir where pictures will be stored."
+msgstr "Podkatalog katalogu %dir, w którym przechowywane będą portety."
+
+#: modules/user/user.admin.inc:456
+msgid "Default picture"
+msgstr "Domyślny portret"
+
+#: modules/user/user.admin.inc:460
+msgid ""
+"URL of picture to display for users with no custom picture selected. Leave "
+"blank for none."
+msgstr ""
+"Adres URL pliku graficznego, który wyświetlany będzie, jeśli użytkownik nie "
+"wybierze własnego portretu. Nie wypełniaj pola, jeśli nie chcesz, by "
+"wyświetlany był taki obrazek."
+
+#: modules/user/user.admin.inc:464
+msgid "Picture maximum dimensions"
+msgstr "Maksymalne wymiary portretu"
+
+#: modules/user/user.admin.inc:468
+msgid "Maximum dimensions for pictures, in pixels."
+msgstr "Maksymalne wymiary pliku graficznego, w pikselach."
+
+#: modules/user/user.admin.inc:472
+msgid "Picture maximum file size"
+msgstr "Maksymalna wielkość portretu"
+
+#: modules/user/user.admin.inc:476
+msgid "Maximum file size for pictures, in kB."
+msgstr "Maksymalna wielkość pliku graficznego, w kB."
+
+#: modules/user/user.admin.inc:480
+msgid "Picture guidelines"
+msgstr "Wskazówki dotyczące portretów"
+
+#: modules/user/user.admin.inc:482
+msgid ""
+"This text is displayed at the picture upload form in addition to the default "
+"guidelines. It's useful for helping or instructing your users."
+msgstr ""
+"Tekst wyświetlany jest w formularzu wysyłania portretu, wraz ze "
+"standardowymi wskazówkami. Może zawierać objaśnienia lub instrukcje dla "
+"użytkowników."
+
+#: modules/user/user.admin.inc:543
+msgid "Save permissions"
+msgstr "Zachowaj ustawienia uprawnień"
+
+#: modules/user/user.admin.inc:563 modules/user/user.pages.inc:280;346
+msgid "The changes have been saved."
+msgstr "Zmiany zostały zapisane."
+
+#: modules/user/user.admin.inc:582 modules/user/user.module:1952
+msgid "@module module"
+msgstr "moduł @module"
+
+#: modules/user/user.admin.inc:595
+msgid "Permission"
+msgstr "Uprawnienie"
+
+#: modules/user/user.admin.inc:624
+msgid "Role name"
+msgstr "Nazwa rangi"
+
+#: modules/user/user.admin.inc:629
+msgid ""
+"The name for this role. Example: \"moderator\", \"editorial board\", \"site "
+"architect\"."
+msgstr ""
+"Nazwa tej rangi. Na przykład: \"moderator\", \"redaktor\", \"projektant\"."
+
+#: modules/user/user.admin.inc:637;662;679
+msgid "Save role"
+msgstr "Zachowaj rangę"
+
+#: modules/user/user.admin.inc:641;683
+msgid "Delete role"
+msgstr "Usuń rangę"
+
+#: modules/user/user.admin.inc:652;667;691
+msgid "Add role"
+msgstr "Dodaj rangę"
+
+#: modules/user/user.admin.inc:664;669
+msgid "The role name %name already exists. Please choose another role name."
+msgstr "Istnieje już ranga o nazwie %name. Należy podać inną."
+
+#: modules/user/user.admin.inc:674
+msgid "You must specify a valid role name."
+msgstr "Nazwa rangi musi być prawidłowa."
+
+#: modules/user/user.admin.inc:681
+msgid "The role has been renamed."
+msgstr "Zmieniono nazwę rangi."
+
+#: modules/user/user.admin.inc:689
+msgid "The role has been deleted."
+msgstr "Ranga została usunięta."
+
+#: modules/user/user.admin.inc:693
+msgid "The role has been added."
+msgstr "Ranga została dodana."
+
+#: modules/user/user.admin.inc:717 modules/user/user.module:1012
+msgid "Add rule"
+msgstr "Dodaj regułę"
+
+#: modules/user/user.admin.inc:725
+msgid "Save rule"
+msgstr "Zachowaj regułę"
+
+#: modules/user/user.admin.inc:741;885
+msgid "Access type"
+msgstr "Dostęp"
+
+#: modules/user/user.admin.inc:743
+msgid "Allow"
+msgstr "Zezwól"
+
+#: modules/user/user.admin.inc:743
+msgid "Deny"
+msgstr "Odrzuć"
+
+#: modules/user/user.admin.inc:745
+msgid "Host"
+msgstr "Host"
+
+#: modules/user/user.admin.inc:748;885
+msgid "Rule type"
+msgstr "Typ reguły"
+
+# maska? jakie inne słowo?
+#: modules/user/user.admin.inc:754;885
+msgid "Mask"
+msgstr "Maska"
+
+#: modules/user/user.admin.inc:758
+msgid "Matches any number of characters, even zero characters"
+msgstr "Zastępuje dowolną ilość znaków, nawet 0 znaków"
+
+#: modules/user/user.admin.inc:758
+msgid "Matches exactly one character."
+msgstr "Zastępuje dokładnie jeden znak."
+
+#: modules/user/user.admin.inc:774
+msgid "The access rule has been saved."
+msgstr "Reguła przyznawania dostępu została zapisana."
+
+#: modules/user/user.admin.inc:778
+msgid "The access rule has been added."
+msgstr "Reguła przyznawania dostępu została dodana."
+
+#: modules/user/user.admin.inc:785
+msgid "No value entered. Please enter a test string and try again."
+msgstr ""
+"Nie wprowadzono żadnej wartości. Po jej wprowadzeniu można spróbować "
+"ponownie."
+
+#: modules/user/user.admin.inc:791
+msgid "Enter a username to check if it will be denied or allowed."
+msgstr ""
+"Wprowadzenie nazwy użytkownika umożliwia sprawdzenie, czy zostanie ona "
+"dopuszczona czy odrzucona."
+
+#: modules/user/user.admin.inc:793
+msgid "Check username"
+msgstr "Sprawdź nazwę użytkownika"
+
+#: modules/user/user.admin.inc:802
+msgid "Enter an e-mail address to check if it will be denied or allowed."
+msgstr ""
+"Wprowadzenie adresu e-mail umożliwia sprawdzenie, czy zostanie on "
+"dopuszczony czy odrzucony."
+
+#: modules/user/user.admin.inc:804
+msgid "Check e-mail"
+msgstr "Sprawdź adres e-mail"
+
+#: modules/user/user.admin.inc:813
+msgid ""
+"Enter a hostname or IP address to check if it will be denied or allowed."
+msgstr ""
+"Wprowadzenie nazwy hosta lub adresu IP umożliwia sprawdzenie, czy zostanie "
+"on dopuszczony czy odrzucony."
+
+#: modules/user/user.admin.inc:815
+msgid "Check hostname"
+msgstr "Sprawdź nazwę hosta"
+
+#: modules/user/user.admin.inc:826
+msgid "The username %name is not allowed."
+msgstr "Nazwa użytkownika %name jest niedozwolona."
+
+#: modules/user/user.admin.inc:829
+msgid "The username %name is allowed."
+msgstr "Nazwa użytkownika %name jest dozwolona."
+
+#: modules/user/user.admin.inc:834
+msgid "The e-mail address %mail is not allowed."
+msgstr "Podany adres e-mail %mail jest niedozwolony."
+
+#: modules/user/user.admin.inc:837
+msgid "The e-mail address %mail is allowed."
+msgstr "Podany adres e-mail %mail jest dozwolony."
+
+#: modules/user/user.admin.inc:842
+msgid "The hostname %host is not allowed."
+msgstr "Nazwa hosta %host jest niedozwolona."
+
+#: modules/user/user.admin.inc:845
+msgid "The hostname %host is allowed."
+msgstr "Nazwa hosta %host jest dozwolona."
+
+#: modules/user/user.admin.inc:860;887
+msgid "username"
+msgstr "nazwa użytkownika"
+
+#: modules/user/user.admin.inc:860;887
+msgid "e-mail"
+msgstr "e-mail"
+
+#: modules/user/user.admin.inc:860;887
+msgid "host"
+msgstr "host"
+
+#: modules/user/user.admin.inc:866
+msgid "Are you sure you want to delete the @type rule for %rule?"
+msgstr "Czy na pewno usunąć regułę typu @type dla %rule?"
+
+#: modules/user/user.admin.inc:876
+msgid "The access rule has been deleted."
+msgstr "Reguła przyznawania dostępu została usunięta."
+
+#: modules/user/user.admin.inc:890
+msgid "allow"
+msgstr "zezwól"
+
+#: modules/user/user.admin.inc:890
+msgid "deny"
+msgstr "odrzuć"
+
+#: modules/user/user.admin.inc:893
+msgid "There are currently no access rules."
+msgstr "W tej chiwli nie ma żadnych reguł przyznawania dostępu."
+
+#: modules/user/user.admin.inc:930
+msgid "No users available."
+msgstr "Brak dostępnych kont użytkowników."
+
+#: modules/user/user.admin.inc:951
+msgid "edit permissions"
+msgstr "edytuj uprawnienia"
+
+#: modules/user/user.admin.inc:953
+msgid "edit role"
+msgstr "edytuj rangę"
+
+#: modules/user/user.admin.inc:956
+msgid "locked"
+msgstr "zablokowany"
+
+#: modules/user/user.pages.inc:34
+msgid "Username or e-mail address"
+msgstr "Nazwa użytkownika lub adres e-mail"
+
+#: modules/user/user.pages.inc:39
+msgid "E-mail new password"
+msgstr "Prześlij nowe hasło e-mailem"
+
+#: modules/user/user.pages.inc:56
+msgid "Sorry, %name is not recognized as a user name or an e-mail address."
+msgstr ""
+"Przepraszamy, ale %name nie jest prawidłową nazwą użytkownika lub adresem e-"
+"mail."
+
+#: modules/user/user.pages.inc:67
+msgid "Further instructions have been sent to your e-mail address."
+msgstr "Dalsze instrukcje zostały wysłane na podany adres e-mail."
+
+#: modules/user/user.pages.inc:81
+msgid ""
+"You have already used this one-time login link. It is not necessary to use "
+"this link to login anymore. You are already logged in."
+msgstr ""
+"Jednorazowy odnośnik logowania został już wykorzystany. Nie ma potrzeby "
+"nadal z niego korzystać, ponieważ logowanie przebiegło pomyślnie."
+
+#: modules/user/user.pages.inc:92
+msgid ""
+"You have tried to use a one-time login link that has expired. Please request "
+"a new one using the form below."
+msgstr ""
+"Podjęto próbę wykorzystania jednorazowego odnośnika logowania, którego "
+"ważność wygasła. Za pomocą poniższego formularza można uzyskać nowy."
+
+#: modules/user/user.pages.inc:104
+msgid ""
+"You have just used your one-time login link. It is no longer necessary to "
+"use this link to login. Please change your password."
+msgstr ""
+"Jednorazowy odnośnik logowania został wykorzystany. Korzystanie z niego w "
+"przyszłości nie będzie już konieczne. Należy zmienić swoje hasło."
+
+#: modules/user/user.pages.inc:108
+msgid ""
+"<p>This is a one-time login for %user_name and will expire on %"
+"expiration_date.</p><p>Click on this button to login to the site and change "
+"your password.</p>"
+msgstr ""
+"<p>Strona ta pozwala jednorazowo zalogować się do konta %user_name. "
+"Możliwość ta przestanie być dostępna z dniem %expiration_date</p><p>Poniższy "
+"przycisk umożliwia zalogowanie się i zmianę hasła.</p>"
+
+#: modules/user/user.pages.inc:109
+msgid "This login can be used only once."
+msgstr "Te dane logowania mogą być wykorzystane tylko jednokrotnie."
+
+#: modules/user/user.pages.inc:110 modules/user/user.module:663;1261;905
+msgid "Log in"
+msgstr "Zaloguj"
+
+#: modules/user/user.pages.inc:116
+msgid ""
+"You have tried to use a one-time login link which has either been used or is "
+"no longer valid. Please request a new one using the form below."
+msgstr ""
+"Podjęto próbę wykorzystania z jednorazowego odnośnika logowania, który "
+"został już wcześniej wykorzystany, lub którego ważność wygasła. Za pomocą "
+"poniższego formularza można uzyskać nowy."
+
+#: modules/user/user.pages.inc:263;332;261;330
+#: modules/user/user.module:1779;2288
+msgid "Detected malicious attempt to alter protected user fields."
+msgstr "Wykryto próbę nieuprawnionej modyfikacji chronionych pól użytkownika."
+
+#: modules/user/user.pages.inc:308
+msgid "Are you sure you want to delete the account %name?"
+msgstr "Czy na pewno usunąć konto %name?"
+
+#: modules/user/user.pages.inc:310
+msgid ""
+"All submissions made by this user will be attributed to the anonymous "
+"account. This action cannot be undone."
+msgstr ""
+"Usunięcie konta użytkownika spowoduje także nieodwracalne przypisanie "
+"wszystkich treści, które dodał do systemu, do konta użytkownika anonimowego."
+
+#: modules/user/user.pages.inc:319
+msgid "%name has been deleted."
+msgstr "Konto %name zostało usunięte."
+
+#: modules/user/user.pages.inc:66
+msgid "Password reset instructions mailed to %name at %email."
+msgstr ""
+"Instrukcje dotyczące uzyskania nowego hasła użytkownika %name wysłano na "
+"adres %email."
+
+#: modules/user/user.pages.inc:98
+msgid "User %name used one-time login link at time %timestamp."
+msgstr ""
+"Użytkownik %name wykorzystał jednorazowy odnośnik logowania (%timestamp)."
+
+#: modules/user/user.pages.inc:134
+msgid "Session closed for %name."
+msgstr "Zamknięto sesję z użytkownikiem %name."
+
+#: modules/user/user.module:379
+msgid "You must enter a username."
+msgstr "Nazwa użytkownika jest wymagana."
+
+#: modules/user/user.module:380
+msgid "The username cannot begin with a space."
+msgstr "Nazwa użytkownika nie może rozpoczynać się od spacji."
+
+#: modules/user/user.module:381
+msgid "The username cannot end with a space."
+msgstr "Nazwa użytkownika nie może kończyć się spacją."
+
+#: modules/user/user.module:382
+msgid "The username cannot contain multiple spaces in a row."
+msgstr "Nazwa użytkownika nie może zawierać więcej niż jedną spację."
+
+#: modules/user/user.module:383;394
+msgid "The username contains an illegal character."
+msgstr "Podana nazwa użytkownika zawiera niedozwolony znak."
+
+#: modules/user/user.module:396
+msgid "The username is not a valid authentication ID."
+msgstr "Podana nazwa użytkownika nie jest prawidłowym identyfikatorem."
+
+#: modules/user/user.module:397
+msgid "The username %name is too long: it must be %max characters or less."
+msgstr ""
+"Podana nazwa użytkownika %name jest za długa. Musi zawierać nie więcej niż %"
+"max znaków."
+
+#: modules/user/user.module:401
+msgid "You must enter an e-mail address."
+msgstr "Adres e-mail jest wymagany."
+
+#: modules/user/user.module:403
+msgid "The e-mail address %mail is not valid."
+msgstr "Podany adres e-mail %mail jest nieprawidłowy."
+
+#: modules/user/user.module:429
+msgid ""
+"Failed to upload the picture image; the %directory directory doesn't exist "
+"or is not writable."
+msgstr ""
+"Nie udało się przesłać pliku graficznego. Katalog %directory nie istnieje "
+"lub nie umożliwia zapisu."
+
+#: modules/user/user.module:617
+msgid "History"
+msgstr "Historia"
+
+#: modules/user/user.module:639
+msgid "Account settings"
+msgstr "Ustawienia konta"
+
+#: modules/user/user.module:667
+msgid "Create a new user account."
+msgstr "Tworzy nowe konto użytkownika."
+
+#: modules/user/user.module:669;920
+msgid "Request new password"
+msgstr "Prześlij nowe hasło"
+
+#: modules/user/user.module:669
+msgid "Request new password via e-mail."
+msgstr "Umożliwia uzyskanie nowego hasła."
+
+#: modules/user/user.module:681;728
+msgid "User login"
+msgstr "Logowanie"
+
+#: modules/user/user.module:690;749
+msgid "Who's new"
+msgstr "Nowi użytkownicy"
+
+#: modules/user/user.module:693;788
+msgid "Who's online"
+msgstr "Kto przegląda"
+
+#: modules/user/user.module:700
+msgid "Number of users to display"
+msgstr "Liczba wyświetlanych użytkowników"
+
+#: modules/user/user.module:708
+msgid "User activity"
+msgstr "Aktywność użytkownika"
+
+#: modules/user/user.module:708
+msgid ""
+"A user is considered online for this long after they have last viewed a page."
+msgstr ""
+"Tak długo od ostatniego odświeżenia strony użytkownik jest uważany za "
+"będącego online."
+
+#: modules/user/user.module:709
+msgid "User list length"
+msgstr "Długość listy użytkowników"
+
+#: modules/user/user.module:709
+msgid "Maximum number of currently online users to display."
+msgstr "Maksymalna liczba wyświetlanych użytkowników online."
+
+#: modules/user/user.module:776
+msgid "There is currently %members and %visitors online."
+msgstr "W tej chwili stronę przegląda %members i %visitors."
+
+#: modules/user/user.module:779
+msgid "There are currently %members and %visitors online."
+msgstr "W tej chwili stronę przegląda %members i %visitors."
+
+#: modules/user/user.module:785
+msgid "Online users"
+msgstr "Użytkownicy online"
+
+#: modules/user/user.module:816
+msgid "@user's picture"
+msgstr "Portret użytkownika @user"
+
+#: modules/user/user.module:1180;1050
+msgid "My account"
+msgstr "Moje konto"
+
+#: modules/user/user.module:1253
+msgid "Enter your @s username."
+msgstr "Nazwa użytkownika witryny @s."
+
+#: modules/user/user.module:1256
+msgid "Enter the password that accompanies your username."
+msgstr "Hasło powiązane z nazwą użytkownika."
+
+#: modules/user/user.module:1295
+msgid "The username %name has not been activated or is blocked."
+msgstr "Nazwa użytkownika %name jest nieaktywna lub niedozwolona."
+
+#: modules/user/user.module:1299
+msgid "The name %name is a reserved username."
+msgstr "Nazwa użytkownika %name jest już zajęta."
+
+#: modules/user/user.module:1319
+msgid ""
+"Sorry, unrecognized username or password. <a href=\"@password\">Have you "
+"forgotten your password?</a>"
+msgstr ""
+"Niepoprawna nazwa użytkownika lub hasło. W przypadku zapomnienia hasła <a "
+"href=\"@password\">należy poprosić o nowe</a>."
+
+#: modules/user/user.module:1430
+msgid "Account information"
+msgstr "Dane konta"
+
+#: modules/user/user.module:1438
+msgid ""
+"Spaces are allowed; punctuation is not allowed except for periods, hyphens, "
+"and underscores."
+msgstr ""
+"Wszystkie znaki interpunkcyjne za wyjątkiem kropek, łączników, znaków "
+"podkreśleń i spacji są niedozwolone."
+
+#: modules/user/user.module:1446
+msgid ""
+"A valid e-mail address. All e-mails from the system will be sent to this "
+"address. The e-mail address is not made public and will only be used if you "
+"wish to receive a new password or wish to receive certain news or "
+"notifications by e-mail."
+msgstr ""
+"Adres e-mail, koniecznie prawidłowy. Będą nań przesyłane wszystkie "
+"wiadomości e-mail od systemu. Adres nie jest udostępniany publicznie i "
+"będzie wykorzystywany jedynie w wypadku prośby o przesłanie nowego hasła lub "
+"do przesyłania informacji o nowościach czy innych komunikatów."
+
+#: modules/user/user.module:1451
+msgid ""
+"To change the current user password, enter the new password in both fields."
+msgstr ""
+"By zmienić obecne hasło użytkownika, nowe hasło należy wprowadzić do obydwu "
+"pól."
+
+#: modules/user/user.module:1458
+msgid "Provide a password for the new account in both fields."
+msgstr "Hasło dla nowego konta użytkownika należy wprowadzić do obydwu pól."
+
+#: modules/user/user.module:1468
+msgid "Blocked"
+msgstr "Zablokowany"
+
+#: modules/user/user.module:1503
+msgid "Signature settings"
+msgstr "Ustawienia podpisu"
+
+#: modules/user/user.module:1508
+msgid "Signature"
+msgstr "Podpis"
+
+#: modules/user/user.module:1510
+msgid "Your signature will be publicly displayed at the end of your comments."
+msgstr "Podpis będzie wyświetlany u dołu każdej z odpowiedzi użytkownika."
+
+#: modules/user/user.module:1516
+msgid "Picture"
+msgstr "Portret"
+
+#: modules/user/user.module:1520
+msgid "Delete picture"
+msgstr "Usuń portret"
+
+#: modules/user/user.module:1520
+msgid "Check this box to delete your current picture."
+msgstr "Usuwa obecny portret."
+
+#: modules/user/user.module:1525
+msgid "Upload picture"
+msgstr "Wyślij portret"
+
+#: modules/user/user.module:1525
+msgid ""
+"Your virtual face or picture. Maximum dimensions are %dimensions and the "
+"maximum size is %size kB."
+msgstr ""
+"Twój portret lub też inny obrazek. Maksymalne wymiary to %dimensions, a "
+"maksymalna wielkość wynosi %size kB."
+
+#: modules/user/user.module:1541
+msgid "The name %name is already taken."
+msgstr "Nazwa użytkownika %name jest już zajęta."
+
+#: modules/user/user.module:1544
+msgid "The name %name has been denied access."
+msgstr "Nazwa użytkownika %name jest niedozwolona i została odrzucona."
+
+#: modules/user/user.module:1553
+msgid ""
+"The e-mail address %email is already registered. <a href=\"@password\">Have "
+"you forgotten your password?</a>"
+msgstr ""
+"Istnieje już konto użytkownika wykorzystujące adres e-mail %email. W "
+"przypadku zapomnienia hasła <a href=\"@password\">należy poprosić o nowe</a>."
+
+#: modules/user/user.module:1556
+msgid "The e-mail address %email has been denied access."
+msgstr "Adres e-mail %email jest niedozwolony i został odrzucony."
+
+#: modules/user/user.module:1636
+msgid "Account details for !username at !site"
+msgstr "Informacje dotyczące konta !username w witrynie !site"
+
+#: modules/user/user.module:1638
+msgid ""
+"!username,\n"
+"\n"
+"Thank you for registering at !site. You may now log in to !login_uri using "
+"the following username and password:\n"
+"\n"
+"username: !username\n"
+"password: !password\n"
+"\n"
+"You may also log in by clicking on this link or copying and pasting it in "
+"your browser:\n"
+"\n"
+"!login_url\n"
+"\n"
+"This is a one-time login, so it can be used only once.\n"
+"\n"
+"After logging in, you will be redirected to !edit_uri so you can change your "
+"password.\n"
+"\n"
+"\n"
+"--  !site team"
+msgstr ""
+"Dziękujemy za utworzenie konta !username w witrynie !site. Można się teraz "
+"do niego zalogować, wprowadzając na stronie !login_uri poniższe dane.\n"
+"\n"
+"Nazwa użytkownika: !username\n"
+"Hasło: !password\n"
+"\n"
+"Logowanie może także zostać przeprowadzone poprzez odwiedzenie poniższej "
+"strony.\n"
+"\n"
+"!login_url\n"
+"\n"
+"Logowanie z użyciem powyższych danych można przeprowadzić tylko raz.\n"
+"\n"
+"Strona !edit_uri która ukaże się po zalogowaniu, umożliwia zmianę hasła.\n"
+"\n"
+"\n"
+"--  !site"
+
+#: modules/user/user.module:1640
+msgid "An administrator created an account for you at !site"
+msgstr "Administrator witryny !site stworzył konto użytkownika"
+
+#: modules/user/user.module:1642
+msgid ""
+"!username,\n"
+"\n"
+"A site administrator at !site has created an account for you. You may now "
+"log in to !login_uri using the following username and password:\n"
+"\n"
+"username: !username\n"
+"password: !password\n"
+"\n"
+"You may also log in by clicking on this link or copying and pasting it in "
+"your browser:\n"
+"\n"
+"!login_url\n"
+"\n"
+"This is a one-time login, so it can be used only once.\n"
+"\n"
+"After logging in, you will be redirected to !edit_uri so you can change your "
+"password.\n"
+"\n"
+"\n"
+"--  !site team"
+msgstr ""
+"Administrator witryny zaprasza do skorzystania z konta !username. Można się "
+"teraz do niego zalogować, wprowadzając na stronie !login_uri poniższe dane.\n"
+"\n"
+"Nazwa użytkownika: !username\n"
+"Hasło: !password\n"
+"\n"
+"Logowanie może także zostać przeprowadzone poprzez odwiedzenie poniższej "
+"strony.\n"
+"\n"
+"!login_url\n"
+"\n"
+"Logowanie z użyciem powyższych danych można przeprowadzić tylko raz.\n"
+"\n"
+"Strona !edit_uri która ukaże się po zalogowaniu, umożliwia zmianę hasła.\n"
+"\n"
+"\n"
+"--  !site"
+
+#: modules/user/user.module:1645
+msgid "Account details for !username at !site (pending admin approval)"
+msgstr ""
+"Informacje dotyczące konta !username, oczekującego na zatwierdzenie przez "
+"administratora !site"
+
+#: modules/user/user.module:1647
+msgid ""
+"!username,\n"
+"\n"
+"Thank you for registering at !site. Your application for an account is "
+"currently pending approval. Once it has been approved, you will receive "
+"another e-mail containing information about how to log in, set your "
+"password, and other details.\n"
+"\n"
+"\n"
+"--  !site team"
+msgstr ""
+"Dziękujemy za utworzenie konta !username w witrynie !site. Oczekuje ono w "
+"tej chwili na zatwierdzenie. Kiedy zostanie ono wydane, wyślemy kolejną "
+"wiadomość e-mail, która będzie zawierać informacje potrzebne do zalogowania "
+"i zmiany hasła.\n"
+"\n"
+"\n"
+"-- !site"
+
+#: modules/user/user.module:1649
+msgid ""
+"!username has applied for an account.\n"
+"\n"
+"!edit_uri"
+msgstr ""
+"!username wypełnił formularz założenia konta.\n"
+"\n"
+"!edit_uri"
+
+#: modules/user/user.module:1651
+msgid "Replacement login information for !username at !site"
+msgstr "Informacje dotyczące hasła dla konta !username w witrynie !site"
+
+#: modules/user/user.module:1653
+msgid ""
+"!username,\n"
+"\n"
+"A request to reset the password for your account has been made at !site.\n"
+"\n"
+"You may now log in to !uri_brief by clicking on this link or copying and "
+"pasting it in your browser:\n"
+"\n"
+"!login_url\n"
+"\n"
+"This is a one-time login, so it can be used only once. It expires after one "
+"day and nothing will happen if it's not used.\n"
+"\n"
+"After logging in, you will be redirected to !edit_uri so you can change your "
+"password."
+msgstr ""
+"Otrzymaliśmy prośbę o wyczyszczenie hasła do konta !username w witrynie !"
+"site.\n"
+"\n"
+"By zalogować się do !uri_brief należy odwiedzić poniższą stronę.\n"
+"\n"
+"!login_url\n"
+"\n"
+"Logowanie z użyciem powyższych danych można przeprowadzić tylko raz, a ich "
+"ważność upłynie po jednym dniu. Jeśli nie zostaną wykorzystane, nic się nie "
+"wydarzy.\n"
+"\n"
+"Strona !edit_uri która ukaże się po zalogowaniu, umożliwia zmianę hasła."
+
+#: modules/user/user.module:1655
+msgid "Account details for !username at !site (approved)"
+msgstr ""
+"Informacje dotyczące konta !username w witrynie !site (konto zatwierdzone)"
+
+#: modules/user/user.module:1657
+msgid ""
+"!username,\n"
+"\n"
+"Your account at !site has been activated.\n"
+"\n"
+"You may now log in by clicking on this link or copying and pasting it in "
+"your browser:\n"
+"\n"
+"!login_url\n"
+"\n"
+"This is a one-time login, so it can be used only once.\n"
+"\n"
+"After logging in, you will be redirected to !edit_uri so you can change your "
+"password.\n"
+"\n"
+"Once you have set your own password, you will be able to log in to !"
+"login_uri in the future using:\n"
+"\n"
+"username: !username\n"
+msgstr ""
+"Dziękujemy za utworzenie konta !username w witrynie !site. Można się teraz "
+"do niego zalogować, wprowadzając na stronie !login_uri poniższe dane.\n"
+"\n"
+"Nazwa użytkownika: !username\n"
+"Hasło: !password\n"
+"\n"
+"Logowanie może także zostać przeprowadzone poprzez odwiedzenie poniższej "
+"strony.\n"
+"\n"
+"!login_url\n"
+"\n"
+"Logowanie z użyciem powyższych danych można przeprowadzić tylko raz.\n"
+"\n"
+"Strona !edit_uri która ukaże się po zalogowaniu, umożliwia zmianę hasła. Po "
+"jej dokonaniu przyszłe logowania będą się odbywać poprzez stronę !login_uri "
+"i za pomocą poniższych danych.\n"
+"\n"
+"Nazwa użytkownika: !username\n"
+
+#: modules/user/user.module:1659
+msgid "Account details for !username at !site (blocked)"
+msgstr ""
+"Informacje dotyczące konta !username w witrynie !site (konto zablokowane)"
+
+#: modules/user/user.module:1661
+msgid ""
+"!username,\n"
+"\n"
+"Your account on !site has been blocked."
+msgstr "Konto użytkownika !username w witrynie !site zostało zablokowane."
+
+#: modules/user/user.module:1663
+msgid "Account details for !username at !site (deleted)"
+msgstr "Informacje dotyczące konta !username w witrynie !site (konto usunięte)"
+
+#: modules/user/user.module:1665
+msgid ""
+"!username,\n"
+"\n"
+"Your account on !site has been deleted."
+msgstr "Konto użytkownika !username w witrynie !site zostało usunięte."
+
+#: modules/user/user.module:1725
+msgid "Unblock the selected users"
+msgstr "Zezwól wybranym użytkownikom na dostęp"
+
+#: modules/user/user.module:1729
+msgid "Block the selected users"
+msgstr "Zabroń wybranym użytkownikom dostępu"
+
+#: modules/user/user.module:1733
+msgid "Delete the selected users"
+msgstr "Usuń wybranych użytkowników"
+
+#: modules/user/user.module:1753
+msgid "Add a role to the selected users"
+msgstr "Nadaj rangę wybranym użytkownikom"
+
+#: modules/user/user.module:1756
+msgid "Remove a role from the selected users"
+msgstr "Odbierz rangę wybranym użytkownikom"
+
+#: modules/user/user.module:1858
+msgid "Are you sure you want to delete these users?"
+msgstr "Czy na pewno usunąć wybrane konta użytkowników?"
+
+#: modules/user/user.module:1868
+msgid "The users have been deleted."
+msgstr "Konta użytkowników zostały usunięte."
+
+#: modules/user/user.module:1882
+msgid ""
+"The user module allows users to register, login, and log out. Users benefit "
+"from being able to sign on because it associates content they create with "
+"their account and allows various permissions to be set for their roles. The "
+"user module supports user roles which establish fine grained permissions "
+"allowing each role to do only what the administrator wants them to. Each "
+"user is assigned to one or more roles. By default there are two roles "
+"<em>anonymous</em> - a user who has not logged in, and <em>authenticated</"
+"em> a user who has signed up and who has been authorized."
+msgstr ""
+"Moduł obsługi kont użytkowników pozwala użytkownikom tworzyć własne konta w "
+"witrynie. Użytkownicy zyskują w ten sposób możliwość powiązania dodawanej "
+"przez nich zawartości z ich kontami, a także uzyskania od administratorów "
+"dodatkowych przywilejów. Moduł obsługuje system rang użytkowników, którym "
+"przypisane być mogą odrębne uprawnienia do wykonywania określonych "
+"czynności. Każdy użytkownik posiada jedną lub więcej rang. Domyślnie w "
+"systemie znajdują się dwie rangi: użytkownik anonimowy - określenie "
+"użytkownika, który nie jest zalogowany, oraz użytkownik uwierzytelniony - "
+"użytkownik, który się zalogował."
+
+#: modules/user/user.module:1883
+msgid ""
+"Users can use their own name or handle and can specify personal "
+"configuration settings through their individual <em>My account</em> page. "
+"Users must authenticate by supplying a local username and password or "
+"through their OpenID, an optional and secure method for logging into many "
+"websites with a single username and password. In some configurations, users "
+"may authenticate using a username and password from another Drupal site, or "
+"through some other site-specific mechanism."
+msgstr ""
+"Użytkownicy mogą się podpisywać swoim nazwiskiem bądź identyfikatorem, a "
+"dzięki stronie <em>Moje konto</em> mogą również dostosowywać do swoich "
+"upodobań niektóre elementy konfiguracji witryny. Użytkownicy muszą przejść "
+"proces uwierzytelnienia polegający na podaniu nazwy użytkownika i hasła lub "
+"podaniu identyfikatora OpenID (OpenID to bezpieczna metoda logowania się do "
+"wielu witryn za pomocą tej samej nazwy użytkownika i hasła). W niektórych "
+"wypadkach użytkownicy mogą zalogować się za pomocą nazwy użytkownika i hasła "
+"do konta, które zostało stworzone w innej witrynie opartej o system Drupal, "
+"lub w jeszcze inny, charakterystyczny dla danej witryny, sposób."
+
+#: modules/user/user.module:1884
+msgid ""
+"A visitor accessing your website is assigned a unique ID, or session ID, "
+"which is stored in a cookie. The cookie does not contain personal "
+"information, but acts as a key to retrieve information from your site. Users "
+"should have cookies enabled in their web browser when using your site."
+msgstr ""
+"Użytkownikowi odwiedzającemy witrynę nadawany jest unikatowy indetyfikator "
+"lub identyfikator sesji, zapisywany w pliku cookie. Plik ten nie zawiera "
+"informacji osobistych, a jedynie pełni rolę klucza, za pomocą którego "
+"uzyskiwany jest dostęp do informacji znajdujących się w witrynie. By "
+"mechanizm ten mógł działać, przeglądarki użytkowników muszą akceptować pliki "
+"cookie."
+
+#: modules/user/user.module:1885
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@user"
+"\">User module</a>."
+msgstr ""
+"Więcej informacji <a href=\"@user\">na stronie dotyczącej obsługi "
+"użytkowników</a> w podręczniku konfiguracji w internecie."
+
+#: modules/user/user.module:1888
+msgid ""
+"Drupal allows users to register, login, log out, maintain user profiles, "
+"etc. Users of the site may not use their own names to post content until "
+"they have signed up for a user account."
+msgstr ""
+"Drupal pozwala użytkownikom tworzyć konta, logować się, wylogowywać, "
+"zarządzać swoim <q>profilem</q>, itd. Żaden odwiedzający stronę nie może "
+"podpisywać się swoim imieniem, póki nie założy konta."
+
+#: modules/user/user.module:1891
+msgid ""
+"This web page allows administrators to register new users. Users' e-mail "
+"addresses and usernames must be unique."
+msgstr ""
+"Strona pozwala administratorom tworzyć nowe konta użytkowników. W systemie "
+"nie mogą istnieć dwa konta o takiej samej nazwie lub z takim samym adresem e-"
+"mail."
+
+#: modules/user/user.module:1893
+msgid ""
+"Set up username and e-mail address access rules for new <em>and</em> "
+"existing accounts (currently logged in accounts will not be logged out). If "
+"a username or e-mail address for an account matches any deny rule, but not "
+"an allow rule, then the account will not be allowed to be created or to log "
+"in. A host rule is effective for every page view, not just registrations."
+msgstr ""
+"Strona służy do ustalania reguł przyznawania dostępu wedle nazwy użytkownika "
+"i adresu e-mail. Jeśli nazwa użytkownika bądź adres e-mail spełniają jedną z "
+"reguł odrzucających dostęp, a przy tym nie spełniają żadnej reguły "
+"zezwalającej na dostęp, wtedy konto użytkownika nie będzie mogło zostać "
+"utworzone lub użytkownik nie będzie mógł się zalogować do już istniejącego "
+"konta. Zablokowanie hosta całkowicie uniemożliwia dostęp, niezależnie od "
+"tego, czy użytkownik jest zalogowany, czy nie."
+
+#: modules/user/user.module:1895
+msgid ""
+"Permissions let you control what users can do on your site. Each user role "
+"(defined on the <a href=\"@role\">user roles page</a>) has its own set of "
+"permissions. For example, you could give users classified as \"Administrators"
+"\" permission to \"administer nodes\" but deny this power to ordinary, "
+"\"authenticated\" users. You can use permissions to reveal new features to "
+"privileged users (those with subscriptions, for example). Permissions also "
+"allow trusted users to share the administrative burden of running a busy "
+"site."
+msgstr ""
+"Uprawnienia pozwalają kontrolować działania użytkowników witryny. Każda "
+"ranga użytkownika (ustanowiona na <a href=\"@role\">stronie rang</a>) "
+"posiada własny zestaw uprawnień. Dla przykładu, użytkownicy w randze "
+"administratora mogą posiadać uprawnienia do zarządzania segmentami, a inne "
+"rangi użytkowników mogą być tego uprawnienia pozbawione. System uprawnień "
+"można wykorzystywać do udostępniania wybranym użytkownikom określonych "
+"przywilejów. Pozwala on także zaufanym użytkownikom na dzielenie pomiędzy "
+"siebie obowiązków związanych z zarządzaniem dużą witryną."
+
+#: modules/user/user.module:1897
+msgid ""
+"<p>Roles allow you to fine tune the security and administration of Drupal. A "
+"role defines a group of users that have certain privileges as defined in <a "
+"href=\"@permissions\">user permissions</a>. Examples of roles include: "
+"anonymous user, authenticated user, moderator, administrator and so on. In "
+"this area you will define the <em>role names</em> of the various roles. To "
+"delete a role choose \"edit\".</p><p>By default, Drupal comes with two user "
+"roles:</p>\n"
+"      <ul>\n"
+"      <li>Anonymous user: this role is used for users that don't have a user "
+"account or that are not authenticated.</li>\n"
+"      <li>Authenticated user: this role is automatically granted to all "
+"logged in users.</li>\n"
+"      </ul>"
+msgstr ""
+"<p>Rangi pozwalają wpływać na bezpieczeństwo i sposób zarządzania Drupalem. "
+"Ranga definiuje grupę użytkowników, którzy posiadają określone przywileje, "
+"zgodne z ustawieniami na <a href=\"@permissions\">stronie zarządzania "
+"uprawnieniami</a>. Przykładowe rangi: użytkownik anonimowy, użytkownik "
+"uwierzytelniony, moderator, administrator itd. W tym miejscu ustalić można "
+"<em>nazwy rang</em>. By usunąć rangę, należy skorzystać z odnośnika \"edytuj"
+"\".</p><p>Domyślnie w Drupalu zdefiniowane są dwie rangi użytkowników:</p>\n"
+"      <ul>\n"
+"      <li>użytkownik anonimowy - ranga dla użytkowników, którzy nie mają "
+"jeszcze konta lub nie zostali uwierzytelnieni</li>\n"
+"      <li>użytkownik uwierzytelniony - ranga automatycznie nadawana "
+"wszystkim zalogowanym użytkownikom</li>\n"
+"      </ul>"
+
+#: modules/user/user.module:1903
+msgid ""
+"Enter a simple pattern (\"*\" may be used as a wildcard match) to search for "
+"a username or e-mail address. For example, one may search for \"br\" and "
+"Drupal might return \"brian\", \"brad\", and \"brenda@example.com\"."
+msgstr ""
+"By wyszukać użytkowników strony, należy wprowadzić proste wyrażenie. Może "
+"ono zawierać znak \"*\", zastępujący dowolną ilość innych znaków. Dla "
+"przykładu, po wpisaniu \"kr*\" Drupal mógłby zwrócić użytkowników, których "
+"konta noszą nazwy \"krystian\", \"krzysztof\" i \"krystyna\"."
+
+#: modules/user/user.module:1940
+msgid "role"
+msgstr "ranga"
+
+#: modules/user/user.module:1958
+msgid "permission"
+msgstr "uprawnienie"
+
+#: modules/user/user.module:2160
+msgid "Password strength:"
+msgstr "Siła hasła:"
+
+#: modules/user/user.module:2161
+msgid "Low"
+msgstr "Niska"
+
+#: modules/user/user.module:2163
+msgid "High"
+msgstr "Wysoka"
+
+#: modules/user/user.module:2164
+msgid ""
+"It is recommended to choose a password that contains at least six "
+"characters. It should include numbers, punctuation, and both upper and "
+"lowercase letters."
+msgstr ""
+"Zaleca się wybór hasła składającego się z co najmniej sześciu znaków, a "
+"także zarówno wielkich, jak i małych liter. Powinno ono także zawierać "
+"liczby i znaki przestankowe."
+
+#: modules/user/user.module:2165
+msgid "The password does not include enough variation to be secure. Try:"
+msgstr ""
+"Hasło jest zbyt proste, by mogło zapewnić bezpieczeństwo. Warto rozważyć:"
+
+#: modules/user/user.module:2166
+msgid "Adding both upper and lowercase letters."
+msgstr "zastosowanie zarówno wielkich, jak i małych liter"
+
+#: modules/user/user.module:2167
+msgid "Adding numbers."
+msgstr "dodanie cyfr"
+
+#: modules/user/user.module:2168
+msgid "Adding punctuation."
+msgstr "dodanie znaków przestankowych"
+
+#: modules/user/user.module:2169
+msgid "It is recommended to choose a password different from the username."
+msgstr "zaleca się wybór hasła innego niż nazwa użytkownika"
+
+#: modules/user/user.module:2172
+msgid "Passwords match:"
+msgstr "Hasła się pokrywają:"
+
+#: modules/user/user.module:2187
+msgid "After a user account has been created"
+msgstr "Utworzenie konta użytkownika"
+
+#: modules/user/user.module:2190
+msgid "After a user's profile has been updated"
+msgstr "Zaktualizowanie profilu użytkownika"
+
+#: modules/user/user.module:2193
+msgid "After a user has been deleted"
+msgstr "Usunięcie konta użytkownika"
+
+#: modules/user/user.module:2196
+msgid "After a user has logged in"
+msgstr "Zalogowanie się użytkownika"
+
+#: modules/user/user.module:2199
+msgid "After a user has logged out"
+msgstr "Wylogowanie się użytkownika"
+
+#: modules/user/user.module:2202
+msgid "When a user's profile is being viewed"
+msgstr "Przeglądanie profilu użytkownika"
+
+#: modules/user/user.module:2215
+msgid "Block current user"
+msgstr "Zabroń dostępu użytkownikowi"
+
+#: modules/user/user.module:2221
+msgid "Ban IP address of current user"
+msgstr "Uniemożliwia dostęp użytkownikowi o danym adresie IP"
+
+#: modules/user/user.module:2314
+msgid ""
+"Welcome to Drupal. You are now logged in as user #1, which gives you full "
+"control over your website."
+msgstr ""
+"Witamy w Drupalu! Konto użytkownika z numerem 1 daje pełną kontrolę nad "
+"witryną."
+
+#: modules/user/user.module:2316
+msgid ""
+"</p><p> Your password is <strong>%pass</strong>. You may change your "
+"password below.</p>"
+msgstr ""
+"</p><p>Hasło do konta to <strong>%pass</strong>. Można je zmienić poniżej.</"
+"p>"
+
+#: modules/user/user.module:2328
+msgid ""
+"Created a new user account for <a href=\"@url\">%name</a>. No e-mail has "
+"been sent."
+msgstr ""
+"Utworzono nowe konto użytkownika <a href=\"@url\">%name</a>. Wiadomość e-"
+"mail nie została wysłana."
+
+#: modules/user/user.module:2335
+msgid "Registration successful. You are now logged in."
+msgstr ""
+"Tworzenie konta zakończyło się pomyślnie i nastąpiło zalogowanie do witryny."
+
+#: modules/user/user.module:2345
+msgid ""
+"Password and further instructions have been e-mailed to the new user <a href="
+"\"@url\">%name</a>."
+msgstr ""
+"Hasło i dalsze instrukcje zostały wysłane na adres e-mail nowego użytkownika "
+"<a href=\"@url\">%name</a>."
+
+#: modules/user/user.module:2348
+msgid ""
+"Your password and further instructions have been sent to your e-mail address."
+msgstr "Hasło i dalsze instrukcje zostały wysłane na podany adres e-mail."
+
+#: modules/user/user.module:2356
+msgid ""
+"Thank you for applying for an account. Your account is currently pending "
+"approval by the site administrator.<br />In the meantime, a welcome message "
+"with further instructions has been sent to your e-mail address."
+msgstr ""
+"Dziękujemy za zgłoszenie chęci założenia konta. Konto oczekuje w tej chwili "
+"na zatwierdzenie przez administratora witryny.<br />Tymczasem hasło i dalsze "
+"instrukcje zostały przesłane na podany adres e-mail."
+
+#: modules/user/user.module:2393
+msgid "Notify user of new account"
+msgstr "Powiadom użytkownika o utworzeniu nowego konta"
+
+#: modules/user/user.module:1320
+msgid "Login attempt failed for %user."
+msgstr "Próba zalogowania się użytkownika %user nie powiodła się."
+
+#: modules/user/user.module:1357
+msgid "Session opened for %name."
+msgstr "Otwarto sesję z użytkownikiem %name."
+
+#: modules/user/user.module:1411
+msgid "New external user: %name using module %module."
+msgstr "Nowy użytkownik z zewnątrz: %name, korzystający z modułu %module."
+
+#: modules/user/user.module:1588
+msgid "Deleted user: %name %email."
+msgstr "Usunięto użytkownika %name (%email)."
+
+#: modules/user/user.module:2246
+msgid "Blocked user %name."
+msgstr "Zablokowano dostęp użytkownikowi %name."
+
+#: modules/user/user.module:2256
+msgid "Banned IP address %ip"
+msgstr "Zabroniono dostępu z adresu IP %ip"
+
+#: modules/user/user.module:2310
+msgid "New user: %name (%email)."
+msgstr "Nowy użytkownik: %name (%email)."
+
+#: modules/user/user.module:776;779
+msgid "1 guest"
+msgid_plural "@count guests"
+msgstr[0] "1 gość"
+msgstr[1] "@count gości"
+msgstr[2] "@count gości"
+
+#: modules/user/user.module:544
+msgid "administer permissions"
+msgstr "zarządzanie uprawnieniami"
+
+#: modules/user/user.module:544
+msgid "administer users"
+msgstr "zarządzanie użytkownikami"
+
+#: modules/user/user.module:544
+msgid "access user profiles"
+msgstr "dostęp do profilów użytkowników"
+
+#: modules/user/user.module:544
+msgid "change own username"
+msgstr "zmiana nazwy użytkownika"
+
+#: modules/user/user.module:887
+msgid "User autocomplete"
+msgstr "Automatyczne uzupełnianie nazw użytkowników"
+
+#: modules/user/user.module:897
+msgid "User account"
+msgstr "Konto użytkownika"
+
+#: modules/user/user.module:928
+msgid "Reset password"
+msgstr "Nowe hasło"
+
+#: modules/user/user.module:938
+msgid "User management"
+msgstr "Zarządzanie użytkownikami"
+
+#: modules/user/user.module:939
+msgid "Manage your site's users, groups and access to site features."
+msgstr ""
+"Służy do zarządzania użytkownikami witryny, grupami użytkowników, a także "
+"ich uprawnieniami."
+
+#: modules/user/user.module:948
+msgid "List, add, and edit users."
+msgstr "Wyświetlanie, dodawanie i edycja kont użytkowników."
+
+#: modules/user/user.module:960
+msgid "Add user"
+msgstr "Dodaj użytkownika"
+
+#: modules/user/user.module:967
+msgid "User settings"
+msgstr "Ustawienia dotyczące użytkowników"
+
+#: modules/user/user.module:968
+msgid ""
+"Configure default behavior of users, including registration requirements, e-"
+"mails, and user pictures."
+msgstr ""
+"Ustawienia związane z obsługą użytkowników, włączając w to przebieg "
+"tworzenia konta, ustawienia dotyczące adresów e-mail i portretów."
+
+#: modules/user/user.module:977
+msgid "Permissions"
+msgstr "Uprawnienia"
+
+#: modules/user/user.module:978
+msgid "Determine access to features by selecting permissions for roles."
+msgstr ""
+"Kontrola dostępu użytkowników o określonych rangach do funkcji witryny."
+
+#: modules/user/user.module:986
+msgid "List, edit, or add user roles."
+msgstr "Wyświetlanie, dodawanie lub edycja rang użytkowników."
+
+#: modules/user/user.module:993
+msgid "Edit role"
+msgstr "Edycja rangi"
+
+#: modules/user/user.module:1000
+msgid "Access rules"
+msgstr "Reguły dostępu"
+
+#: modules/user/user.module:1001
+msgid ""
+"List and create rules to disallow usernames, e-mail addresses, and IP "
+"addresses."
+msgstr ""
+"Wyświetlanie lub tworzenie reguł określających dostęp użytkowników do "
+"witryny na podstawie wprowadzanych przez nich nazw użytkowników, adresów e-"
+"mail lub ich adresów IP."
+
+#: modules/user/user.module:1019
+msgid "Check rules"
+msgstr "Sprawdź reguły"
+
+#: modules/user/user.module:1026
+msgid "Edit rule"
+msgstr "Edycja reguły"
+
+#: modules/user/user.module:1033
+msgid "Delete rule"
+msgstr "Usuń regułę"
+
+#: modules/user/user.module:1042
+msgid "Log out"
+msgstr "Wyloguj"
+
+#: modules/user/user.module:1089
+msgid "Account"
+msgstr "Konto"
+
+#: modules/user/user.module:0
+msgid "anonymous user"
+msgstr "użytkownik anonimowy"
+
+#: modules/user/user.module:0
+msgid "authenticated user"
+msgstr "użytkownik uwierzytelniony"
+
+#: modules/user/user.install:9
+msgid "Stores site access rules."
+msgstr ""
+
+#: modules/user/user.install:14
+msgid "Primary Key: Unique access ID."
+msgstr ""
+
+#: modules/user/user.install:21
+msgid "Text mask used for filtering access."
+msgstr ""
+
+#: modules/user/user.install:28
+msgid "Type of access rule: name, mail or host."
+msgstr ""
+
+#: modules/user/user.install:35
+msgid "Whether rule is to allow(1) or deny(0) access."
+msgstr ""
+
+#: modules/user/user.install:42
+msgid "Stores distributed authentication mapping."
+msgstr ""
+
+#: modules/user/user.install:45
+msgid "Primary Key: Unique authmap ID."
+msgstr ""
+
+#: modules/user/user.install:54
+msgid "User's {users}.uid."
+msgstr ""
+
+#: modules/user/user.install:61
+msgid "Unique authentication name."
+msgstr ""
+
+#: modules/user/user.install:68
+msgid "Module which is controlling the authentication."
+msgstr ""
+
+#: modules/user/user.install:76
+msgid "Stores permissions for users."
+msgstr ""
+
+#: modules/user/user.install:81
+msgid "Primary Key: Unique permission ID."
+msgstr ""
+
+#: modules/user/user.install:88
+msgid "The {role}.rid to which the permissions are assigned."
+msgstr ""
+
+#: modules/user/user.install:94
+msgid "List of permissions being assigned."
+msgstr ""
+
+#: modules/user/user.install:101
+msgid "Originally intended for taxonomy-based permissions, but never used."
+msgstr ""
+
+#: modules/user/user.install:109
+msgid "Stores user roles."
+msgstr ""
+
+#: modules/user/user.install:115
+msgid "Primary Key: Unique role id."
+msgstr ""
+
+#: modules/user/user.install:122
+msgid "Unique role name."
+msgstr ""
+
+#: modules/user/user.install:130
+msgid "Stores user data."
+msgstr ""
+
+#: modules/user/user.install:136
+msgid "Primary Key: Unique user ID."
+msgstr ""
+
+#: modules/user/user.install:143
+msgid "Unique user name."
+msgstr ""
+
+#: modules/user/user.install:150
+msgid "User's password (md5 hash)."
+msgstr ""
+
+#: modules/user/user.install:157
+msgid "User's email address."
+msgstr ""
+
+#: modules/user/user.install:164
+msgid ""
+"Per-user comment display mode (threaded vs. flat), used by the {comment} "
+"module."
+msgstr ""
+
+#: modules/user/user.install:171
+msgid ""
+"Per-user comment sort order (newest vs. oldest first), used by the {comment} "
+"module."
+msgstr ""
+
+#: modules/user/user.install:178
+msgid ""
+"Previously used by the {comment} module for per-user preferences; no longer "
+"used."
+msgstr ""
+
+#: modules/user/user.install:185
+msgid "User's default theme."
+msgstr ""
+
+#: modules/user/user.install:192
+msgid "User's signature."
+msgstr ""
+
+#: modules/user/user.install:198
+msgid "Timestamp for when user was created."
+msgstr ""
+
+#: modules/user/user.install:204
+msgid "Timestamp for previous time user accessed the site."
+msgstr ""
+
+#: modules/user/user.install:210
+msgid "Timestamp for user's last login."
+msgstr ""
+
+#: modules/user/user.install:217
+msgid "Whether the user is active(1) or blocked(0)."
+msgstr ""
+
+#: modules/user/user.install:223
+msgid "User's timezone."
+msgstr ""
+
+#: modules/user/user.install:230
+msgid "User's default language."
+msgstr ""
+
+#: modules/user/user.install:237
+msgid "Path to the user's uploaded picture."
+msgstr ""
+
+#: modules/user/user.install:244
+msgid "Email address used for initial account creation."
+msgstr ""
+
+#: modules/user/user.install:250
+msgid ""
+"A serialized array of name value pairs that are related to the user. Any "
+"form values posted during user edit are stored and are loaded into the $user "
+"object during user_load(). Use of this field is discouraged and it will "
+"likely disappear in a future version of Drupal."
+msgstr ""
+
+#: modules/user/user.install:265
+msgid "Maps users to roles."
+msgstr ""
+
+#: modules/user/user.install:272
+msgid "Primary Key: {users}.uid for user."
+msgstr ""
+
+#: modules/user/user.install:279
+msgid "Primary Key: {role}.rid for role."
+msgstr ""

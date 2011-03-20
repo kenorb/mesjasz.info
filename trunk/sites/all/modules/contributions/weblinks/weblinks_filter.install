@@ -1,0 +1,19 @@
+<?php
+// $Id: weblinks_filter.install,v 1.1.2.1 2008/10/22 18:05:56 nancyw Exp $
+
+/**
+ * @file
+ * Update Weblinks_filter data.
+ */
+
+/**
+ * Implementation of hook_update_N().
+ * Fix filter naming (http://drupal.org/node/317054).
+ */
+function weblinks_filter_update_6100() {
+  $ret = array();
+
+  $ret[] = update_sql("UPDATE {filters} f SET f.module = 'weblinks_filter' WHERE  f.module = 'weblinks'");
+  
+  return $ret;
+}

@@ -1,0 +1,12 @@
+; $Id: gtrans.info,v 1.0.2.1 2008/07/16 08:56:04 owahab Exp $
+name = Google Translate
+dependencies[] = locale
+description = Translates your site via Google Translate service
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-07-10
+version = "6.x-1.0"
+project = "gtrans"
+core = "6.x"
+datestamp = "1201423203"
+

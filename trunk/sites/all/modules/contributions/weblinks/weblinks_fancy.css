@@ -1,0 +1,181 @@
+/* $Id: weblinks_fancy.css,v 1.1.2.5 2008/08/11 15:24:37 nancyw Exp $ */
+/**
+ * @file
+ *   Style sheet for the Weblinks module.
+ *
+ *  The colors chosen are from the Garland Blue Lagoon set.
+ *  If these styles are copied into the site style.css then
+ *  the Color module will convert them to the equivalent colors
+ *  for the chosen color set when you configure the theme.
+ */
+
+.weblinks-pagedesc p {
+  display: block;
+  border: 1px ridge #5ab5ee;
+  text-align: center;
+  color: #027ac6;
+  margin-top: 1px;
+}
+
+.weblinks-pagedesc a {
+  text-decoration: underline !important;
+  font-weight: bold;
+}
+
+.weblinks-info {
+  font-style: italic;
+  font-size: 89%;
+  margin-left: 2em;
+}
+
+.weblinks-radios .form-item label.option {
+  float: left;
+  margin-right: 1.5em;
+  white-space: normal;
+}
+
+.weblinks-radios .form-item .description {
+  clear: both;
+}
+
+.block-weblinks {
+  font-size: 89%;
+  line-height: 100%;
+}
+
+.block-weblinks h2 {
+  color: #ffffff;
+  background-color: #2385c2;
+}
+
+.block-weblinks .description p {
+  margin: 0 0 0 -2em;
+  font-size: 89%;
+}
+
+h2.weblinks, h3.weblinks {
+  margin-top: 1em;
+  font-weight: bold;
+}
+
+h2.weblinks img, h3.weblinks img {
+  margin-right: 1em;
+  float: left; 
+}
+
+li.weblinks {
+  clear: both;
+}
+
+li.weblinks-item a {;
+  font-size: 110%;
+  font-weight: bold;
+}
+
+li.weblinks-item .description {
+  margin: 0 0 0 2em;
+  font-size: 109%;
+  line-height: 100%;
+  color: #000000;
+}
+
+item-list ul .weblinks {
+  margin-left: 0;
+}
+
+.weblinkCat fieldset.collapsible {
+  border: 5px ridge #5ab5ee;
+}
+
+.weblinkCat fieldset.collapsible legend {
+  background-color: #0072b9;
+}
+
+.weblinkCat fieldset.collapsible legend a {
+  color: #ffffff;
+}
+
+.weblinkCat fieldset.collapsed {
+  border: 0px;
+}
+
+.weblinkCat fieldset.collapsed legend a {
+  color: #0072b9;
+}
+
+.weblinkCat fieldset.collapsed legend {
+  background-color: transparent;
+}
+
+.weblinkCat {
+  clear: both;
+}
+
+.weblinkCat-depth-1 fieldset legend {
+  font-size: 89%;
+}
+
+.weblinkCat-depth-0 fieldset legend a {
+  font-weight: bold;
+  font-size: 140%;
+}
+
+.weblinks-cat-desc p {
+  font-size: 120%;
+  color: #494949;
+  text-align: center;
+}
+
+.weblinks-ops {
+  display: inline;
+}
+
+.weblinks-linkview {
+  font-size: 130%;
+  font-weight: bold;
+}
+
+.weblinks-comment-links {
+  margin-left: 5em;
+  font-size: 75%;
+}
+
+.weblinks-status-warning {
+  margin-left: 2em;
+  color: red;
+  font-size: 89%;
+  display: inline;
+}
+
+.weblinks-status-notice {
+  margin-left: 2em;
+  color: green;
+  font-size: 89%;
+  display: inline;
+}
+
+li.add a, li.group a, li.admin, li.overview a {
+  border-top: 1px solid #5ab5ee;
+  border-left: 1px solid #5ab5ee;
+  border-right: 1px solid #5ab5ee;
+  padding: 2px 4px 2px 4px;
+}
+
+.weblinks-title {
+  display: inline;
+  color: #2385c2;
+  font-size: 120%;
+}
+
+.weblinks-link {
+  /* If not showing URL, remove the margin. */
+  margin-left: 2em;
+
+  display: inline;
+  /* to put the link on the next line, remove the previous and use this instead: */
+  /* display: block; */
+}
+
+table#weblinks-groups td .description {
+  white-space: normal;
+}

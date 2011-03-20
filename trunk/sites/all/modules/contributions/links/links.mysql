@@ -1,0 +1,45 @@
+-- lid, the link ID, is linked to the sequence links_lid
+CREATE TABLE links (
+  lid INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  url_md5 CHAR(32) NOT NULL,
+  url TEXT NOT NULL DEFAULT '',
+  link_title VARCHAR(255) NOT NULL DEFAULT '',
+  last_click_time INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  PRIMARY KEY (lid),
+  UNIQUE INDEX url_ix (url_md5),
+  UNIQUE INDEX title_ix (link_title, lid),
+  UNIQUE INDEX stale_ix (last_click_time, lid)
+) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+-- lid is a foreign key to links
+CREATE TABLE links_node (
+  lid INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  nid INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  link_title VARCHAR(255) NOT NULL DEFAULT '',
+  weight INT(4) NOT NULL DEFAULT '0',
+  clicks INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  module VARCHAR(60) NOT NULL,
+  PRIMARY KEY (lid, nid, module),
+  UNIQUE INDEX node_link_ix1 (nid, module, link_title, lid),
+  UNIQUE INDEX node_link_ix2 (link_title, nid, module, lid),
+  UNIQUE INDEX node_link_ix3 (nid, module, lid, weight)
+) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+-- lid is a foreign key to links
+-- The interval defaults to 1 week
+CREATE TABLE links_monitor (
+  lid INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  check_interval INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  last_check INT(11) NOT NULL DEFAULT '0',
+  fail_count INT(11) NOT NULL DEFAULT '0',
+  alternate_monitor_url TEXT DEFAULT NULL,
+  redirect_propose_url  TEXT DEFAULT NULL,
+  redirect_saved_url    TEXT DEFAULT NULL,
+  change_threshold INT(11) NOT NULL DEFAULT '0' ,
+  change_flag      INT(1)  NOT NULL DEFAULT '0',
+  change_last_data TEXT DEFAULT NULL,
+  PRIMARY KEY (lid),
+  UNIQUE INDEX check_ix (last_check, check_interval, lid),
+  UNIQUE INDEX change_ix (change_flag, last_check, lid),
+  UNIQUE INDEX rotted_ix (fail_count, last_check, lid)
+) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;

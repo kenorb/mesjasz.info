@@ -1,0 +1,33 @@
+<?php
+// $Id: germany_276_1.cif,v 1.4.4.1 2008/11/03 21:33:50 islandusurper Exp $
+
+function germany_install() {
+  db_query("INSERT INTO {uc_countries} VALUES ('276', 'Germany', 'DE', 'DEU', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(276, 'BAW', 'Baden-Württemberg'),"
+          ."(276, 'BAY', 'Bayern'),"
+          ."(276, 'BER', 'Berlin'),"
+          ."(276, 'BRG', 'Brandenburg'),"
+          ."(276, 'BRE', 'Bremen'),"
+          ."(276, 'HAM', 'Hamburg'),"
+          ."(276, 'HES', 'Hessen'),"
+          ."(276, 'MEC', 'Mecklenburg-Vorpommern'),"
+          ."(276, 'NDS', 'Niedersachsen'),"
+          ."(276, 'NRW', 'Nordrhein-Westfalen'),"
+          ."(276, 'RHE', 'Rheinland-Pfalz'),"
+          ."(276, 'SAR', 'Saarland'),"
+          ."(276, 'SAS', 'Sachsen'),"
+          ."(276, 'SAC', 'Sachsen-Anhalt'),"
+          ."(276, 'SCN', 'Schleswig-Holstein'),"
+          ."(276, 'THE', 'Thüringen')");
+
+  uc_set_address_format(276, "!company\n!first_name !last_name\n!street1\n!street2\n!postal_code !city\n!country_name_if");
+}
+
+function germany_update($version) {
+}
+
+function germany_uninstall() {
+}

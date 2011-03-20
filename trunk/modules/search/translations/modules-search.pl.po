@@ -1,0 +1,360 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/search/search.admin.inc:13
+msgid "Are you sure you want to re-index the site?"
+msgstr "Czy na pewno przeindeksować stronę?"
+
+#: modules/search/search.admin.inc:14
+msgid ""
+" The search index is not cleared but systematically updated to reflect the "
+"new settings. Searching will continue to work but new content won't be "
+"indexed until all existing content has been re-indexed. This action cannot "
+"be undone."
+msgstr ""
+" Indeks wyszukiwania nie jest czyszczony, ale systematycznie aktualizowany, "
+"by odpowiadał nowym ustawieniom. Wyszukiwanie nadal będzie możliwe, jednak "
+"nowa zawartość nie zostanie zindeksowana, dopóki system nie zindeksuje "
+"dotychczasowej. Operacja jest nieodwracalna."
+
+#: modules/search/search.admin.inc:14;52;76
+msgid "Re-index site"
+msgstr "Przeindeksuj stronę"
+
+#: modules/search/search.admin.inc:23;82
+msgid "The index will be rebuilt."
+msgstr "Indeks zostanie przebudowany."
+
+#: modules/search/search.admin.inc:49
+msgid "%percentage of the site has been indexed."
+msgstr "Status zindeksowania witryny: %percentage."
+
+#: modules/search/search.admin.inc:50
+msgid "Indexing status"
+msgstr "Status przeindeksowania"
+
+#: modules/search/search.admin.inc:57
+msgid "Indexing throttle"
+msgstr "Częstotliwość indeksowania"
+
+#: modules/search/search.admin.inc:58
+msgid "Number of items to index per cron run"
+msgstr ""
+"Liczba elementów do umieszczenia w indeksie podczas jednej rundy demona cron"
+
+#: modules/search/search.admin.inc:58
+msgid ""
+"The maximum number of items indexed in each pass of a <a href=\"@cron\">cron "
+"maintenance task</a>. If necessary, reduce the number of items to prevent "
+"timeouts and memory errors while indexing."
+msgstr ""
+"Maksymalna liczba elementów, które mogą zostać zindeksowane podczas "
+"wykonywania zadań cron. Jeżeli to konieczne, można zmniejszyć tę liczbę, by "
+"zapobiec opóźnieniom i zbyt wielkiemu wykorzystaniu pamięci."
+
+#: modules/search/search.admin.inc:60
+msgid "Indexing settings"
+msgstr "Ustawienia indeksowania"
+
+#: modules/search/search.admin.inc:61
+msgid ""
+"<p><em>Changing the settings below will cause the site index to be rebuilt. "
+"The search index is not cleared but systematically updated to reflect the "
+"new settings. Searching will continue to work but new content won't be "
+"indexed until all existing content has been re-indexed.</em></p><p><em>The "
+"default settings should be appropriate for the majority of sites.</em></p>"
+msgstr ""
+"<p><em>Zmiana poniższego ustawienia spowoduje przebudowanie indeksu witryny. "
+"Indeks wyszukiwania nie jest czyszczony, ale systematycznie aktualizowany, "
+"by odpowiadał nowym ustawieniom. Wyszukiwanie nadal będzie działać, jednak "
+"nowa zawartość nie zostanie uwzględniona, póki nie stanie się to z całą "
+"dotychczasową.</em></p><p><em>Domyślne ustawienia powinny być odpowiednie "
+"dla większości witryn.</em></p>"
+
+#: modules/search/search.admin.inc:62
+msgid "Minimum word length to index"
+msgstr "Minimalna długość słowa (indeksowanie)"
+
+#: modules/search/search.admin.inc:62
+msgid ""
+"The number of characters a word has to be to be indexed. A lower setting "
+"means better search result ranking, but also a larger database. Each search "
+"query must contain at least one keyword that is this size (or longer)."
+msgstr ""
+"Minimalna liczba znaków, z których musi się składać słowo, by mogło zostać "
+"zindeksowane. Mniejsza liczba oznacza dokładniejsze wyniki wyszukiwania, ale "
+"i większe wykorzystanie bazy danych. Każde zapytanie do wyszukiwarki musi "
+"zawierać przynajmniej jedno słowo kluczowe takiej długości (lub dłuższe)."
+
+#: modules/search/search.admin.inc:63
+msgid "Simple CJK handling"
+msgstr "Podstawowa obsługa języków wschodniazjatyckich"
+
+#: modules/search/search.admin.inc:63
+msgid ""
+"Whether to apply a simple Chinese/Japanese/Korean tokenizer based on "
+"overlapping sequences. Turn this off if you want to use an external "
+"preprocessor for this instead. Does not affect other languages."
+msgstr ""
+"Podstawowa obsługa języka chińskiego, japońskiego i koreańskiego, bazująca "
+"na powtarzających się sekwencjach symboli. Jeśli do tego celu wykorzystywane "
+"będzie zewnętrzne narzędzie, obsługę należy wyłączyć. Ustawienie to nie ma "
+"wpływu na inne języki."
+
+#: modules/search/search.admin.inc:47
+msgid "There is 1 item left to index."
+msgid_plural "There are @count items left to index."
+msgstr[0] "Pozostał jeden element do zindeksowania."
+msgstr[1] "Pozostały @count elementy do zindeksowania."
+msgstr[2] "Pozostało @count elementów do zindeksowania."
+
+#: modules/search/search.pages.inc:29
+msgid "results"
+msgstr "wyniki"
+
+#: modules/search/search.pages.inc:35
+msgid "Search results"
+msgstr "Wyniki wyszukiwania"
+
+#: modules/search/search.pages.inc:38
+msgid "Your search yielded no results"
+msgstr "Nic nie znaleziono"
+
+#: modules/search/search.pages.inc:123
+msgid "Please enter some keywords."
+msgstr "Wprowadź proszę jakieś słowa kluczowe."
+
+#: modules/search/search.pages.inc:29 modules/search/search.module:0
+msgid "search"
+msgstr "szukaj"
+
+#: modules/search/search.pages.inc:29
+msgid "%keys (@type)."
+msgstr "%keys (@type)."
+
+#: modules/search/search.module:99
+msgid ""
+"The search module adds the ability to search for content by keywords. Search "
+"is often the only practical way to find content on a large site, and is "
+"useful for finding both users and posts."
+msgstr ""
+"Moduł wyszukiwarki umożliwia przeszukiwanie zawartości witryny za pomocą "
+"słów kluczowych. Skorzystanie z wyszukiwarki to często jedyny sposób na "
+"znalezienie interesującej nas zawartości w dużej witrynie. Wyszukiwać można "
+"zarówno wpisy, jak i użytkowników."
+
+#: modules/search/search.module:100
+msgid ""
+"To provide keyword searching, the search engine maintains an index of words "
+"found in your site's content. To build and maintain this index, a correctly "
+"configured <a href=\"@cron\">cron maintenance task</a> is required. Indexing "
+"behavior can be adjusted using the <a href=\"@searchsettings\">search "
+"settings page</a>; for example, the <em>Number of items to index per cron "
+"run</em> sets the maximum number of items indexed in each pass of a <a href="
+"\"@cron\">cron maintenance task</a>. If necessary, reduce this number to "
+"prevent timeouts and memory errors when indexing."
+msgstr ""
+"By umożliwić wyszukiwanie za pomocą słów kluczowych, moduł wyszukiwarki "
+"przechowuje indeks słów znalezionych w witrynie. Wymagane jest do tego "
+"prawidłowe skonfigurowanie <a href=\"@cron\">zadań cron</a>. Sposób "
+"indeksowania, na przykład maksymalna liczba elementów indeksowanych za "
+"jednym razem, może być zmieniony na <a href=\"@searchsettings\">stronie "
+"ustawień wyszukiwarki</a>."
+
+#: modules/search/search.module:101
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@search"
+"\">Search module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@search\">stronie dotyczącej wyszukiwarki</a> "
+"w podręczniku konfiguracji w internecie."
+
+#: modules/search/search.module:104
+msgid ""
+"The search engine maintains an index of words found in your site's content. "
+"To build and maintain this index, a correctly configured <a href=\"@cron"
+"\">cron maintenance task</a> is required. Indexing behavior can be adjusted "
+"using the settings below."
+msgstr ""
+"Moduł wyszukiwarki przechowuje indeks słów znalezionych w witrynie. Wymagane "
+"jest do tego prawidłowe skonfigurowanie <a href=\"@cron\">zadań cron</a>. "
+"Ustawienia indeksowania znajdują się poniżej."
+
+#: modules/search/search.module:106
+msgid ""
+"<ul>\n"
+"<li>Check if your spelling is correct.</li>\n"
+"<li>Remove quotes around phrases to match each word individually: <em>\"blue "
+"smurf\"</em> will match less than <em>blue smurf</em>.</li>\n"
+"<li>Consider loosening your query with <em>OR</em>: <em>blue smurf</em> will "
+"match less than <em>blue OR smurf</em>.</li>\n"
+"</ul>"
+msgstr ""
+"<ul>\n"
+"<li>Sprawdź, czy słowa zostały wpisane poprawnie.</li>\n"
+"<li>Jeśli użyto cudzysłowów, usunięcie ich rozszerzy zakres wyszukiwania: "
+"<em>\"niebieski smerf\"</em> oznacza fragment tekstu w postaci \"niebieski "
+"smerf\" i zwróci mniej wyników niż <em>niebieski smerf</em>.</li>\n"
+"<li>Spróbuj wyszukać jedno <strong>lub</strong> drugie ze słów, wstawiając "
+"pomiędzy nie operator <em>OR</em>: <em>niebieski smerf</em> zwróci mniej "
+"wyników niż <em>niebieski OR smerf</em>.</li>\n"
+"</ul>"
+
+#: modules/search/search.module:152
+msgid "Search form"
+msgstr "Formularz wyszukiwania"
+
+#: modules/search/search.module:918
+msgid ""
+"You must include at least one positive keyword with @count characters or "
+"more."
+msgstr ""
+"Należy wprowadzić przynajmniej jedno słowo kluczowe (niewykluczające) "
+"składające się z minimum @count znaku(-ów)."
+
+#: modules/search/search.module:922
+msgid ""
+"Search for either of the two terms with uppercase <strong>OR</strong>. For "
+"example, <strong>cats OR dogs</strong>."
+msgstr ""
+"Operator <strong>OR</strong> (pisany wielkimi literami) umożliwia wyszukanie "
+"jednego lub drugiego z rozdzielonych nim słów. Przykład: <strong>koty OR "
+"psy</strong>."
+
+#: modules/search/search.module:1029
+msgid "Enter your keywords"
+msgstr "Wprowadź słowa kluczowe"
+
+#: modules/search/search.module:1063
+msgid "Search this site"
+msgstr "Wyszukiwanie w witrynie"
+
+#: modules/search/search.module:1067
+msgid "Enter the terms you wish to search for."
+msgstr "Wprowadź słowa, które mają zostać wyszukane."
+
+#: modules/search/search.module:144
+msgid "search content"
+msgstr "dostęp do wyszukiwarki"
+
+#: modules/search/search.module:144
+msgid "use advanced search"
+msgstr "korzystanie z zaawansowanego wyszukiwania"
+
+#: modules/search/search.module:144
+msgid "administer search"
+msgstr "zarządzanie wyszukiwarką"
+
+#: modules/search/search.module:176
+msgid "Search settings"
+msgstr "Ustawienia wyszukiwarki"
+
+#: modules/search/search.module:177
+msgid "Configure relevance settings for search and other indexing options"
+msgstr "Parametry wyszukiwania oraz ustawienia indeksowania zawartości."
+
+#: modules/search/search.module:185
+msgid "Clear index"
+msgstr "Wyczyść indeks"
+
+#: modules/search/search.module:193
+msgid "Top search phrases"
+msgstr "Najpopularniejsze słowa kluczowe"
+
+#: modules/search/search.module:194
+msgid "View most popular search phrases."
+msgstr "Prezentuje najczęściej wyszukiwane wyrażenia."
+
+#: modules/search/search.install:29
+msgid "Stores items that will be searched."
+msgstr ""
+
+#: modules/search/search.install:36
+msgid "Search item ID, e.g. node ID for nodes."
+msgstr ""
+
+#: modules/search/search.install:42
+msgid "Type of item, e.g. node."
+msgstr ""
+
+#: modules/search/search.install:48
+msgid "List of space-separated words from the item."
+msgstr ""
+
+#: modules/search/search.install:55
+msgid "Set to force node reindexing."
+msgstr ""
+
+#: modules/search/search.install:62
+msgid "Stores the search index, associating words, items and scores."
+msgstr ""
+
+#: modules/search/search.install:69
+msgid "The {search_total}.word that is associated with the search item."
+msgstr ""
+
+#: modules/search/search.install:76
+msgid ""
+"The {search_dataset}.sid of the searchable item to which the word belongs."
+msgstr ""
+
+#: modules/search/search.install:82
+msgid ""
+"The {search_dataset}.type of the searchable item to which the word belongs."
+msgstr ""
+
+#: modules/search/search.install:87
+msgid "The numeric score of the word, higher being more important."
+msgstr ""
+
+#: modules/search/search.install:98
+msgid "Stores search totals for words."
+msgstr ""
+
+#: modules/search/search.install:101
+msgid "Primary Key: Unique word in the search index."
+msgstr ""
+
+#: modules/search/search.install:108
+msgid ""
+"The count of the word in the index using Zipf's law to equalize the "
+"probability distribution."
+msgstr ""
+
+#: modules/search/search.install:117
+msgid ""
+"Stores items (like nodes) that link to other nodes, used to improve search "
+"scores for nodes that are frequently linked to."
+msgstr ""
+
+#: modules/search/search.install:124
+msgid ""
+"The {search_dataset}.sid of the searchable item containing the link to the "
+"node."
+msgstr ""
+
+#: modules/search/search.install:131
+msgid ""
+"The {search_dataset}.type of the searchable item containing the link to the "
+"node."
+msgstr ""
+
+#: modules/search/search.install:138
+msgid "The {node}.nid that this item links to."
+msgstr ""
+
+#: modules/search/search.install:144
+msgid "The text used to link to the {node}.nid."
+msgstr ""

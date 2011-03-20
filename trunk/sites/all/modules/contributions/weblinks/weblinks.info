@@ -1,0 +1,11 @@
+; $Id: weblinks.info,v 1.5 2008/07/01 17:20:38 rmiddle Exp $
+name = Web Links
+description = Web Links provides a comprehensive way to post weblinks to your site. All links are nodes, which can be put into taxonomies/categories and administered.
+core = 6.x
+dependencies[] = taxonomy
+; Information added by drupal.org packaging script on 2008-12-31
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "weblinks"
+datestamp = "1230682683"
+

@@ -1,0 +1,51 @@
+/* $Id: weblinks_minimal.css,v 1.1.2.2 2008/08/11 15:24:37 nancyw Exp $ */
+/**
+* @file
+*   Style sheet for the Weblinks module.
+*/
+
+.weblinks-pagedesc {
+  display: block;
+}
+
+.weblinks-radios .form-item label.option {
+  float: left;
+  margin-right: 1em;
+  white-space: normal;
+}
+
+.weblinks-radios .form-item .description {
+  clear: both;
+}
+
+li.weblinks {
+  clear: both;
+}
+
+li.weblinks-item .description {
+  margin: 0 0 0 2em;
+}
+
+.weblinkCat {
+  clear: both;
+}
+
+.weblinks-ops {
+  display: inline;
+}
+
+.weblinks-status-warning {
+  margin-left: 2em;
+  color: red;
+  display: inline;
+}
+
+.weblinks-status-notice {
+  margin-left: 2em;
+  color: green;
+  display: inline;
+}
+
+table#weblinks-groups td .description {
+  white-space: normal;
+}

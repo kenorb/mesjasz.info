@@ -1,0 +1,64 @@
+<?php
+// $Id: autosave.install,v 1.2.2.7 2008/09/12 13:37:55 ptalindstrom Exp $
+
+/**
+ * Implementation of hook_enable().
+ */
+function autosave_enable() {
+  drupal_set_message(t('Autosave module successfully installed. Please review the <a href="@settings">configuration settings</a>.', array('@settings' => url('admin/settings/autosave'))));
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function autosave_install() {
+  drupal_install_schema('autosave');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function autosave_uninstall() {
+  drupal_uninstall_schema('autosave');
+}
+
+/**
+ * Implementation of hook_schema()
+ */
+function autosave_schema() {
+  return array(
+    'autosaved_forms' => array(
+      'description' => t("Table to save forms in the database"),
+      'fields' => array(
+        'form_id' => array(
+          'type'        => 'varchar',
+          'length'      => 64,
+          'not null'    => TRUE,
+        ),
+        'path' => array(
+          'type'        => 'varchar',
+          'length'      => 255,
+          'not null'    => TRUE,
+        ),
+        'uid' => array(
+          'type'        => 'int',
+          'length'      => 11,
+          'not null'    => TRUE,
+          'default'     => 0,
+        ),
+        'timestamp' => array(
+          'type'        => 'int',
+          'length'      => 11,
+          'not null'    => TRUE,
+          'default'     => 0,
+        ),
+        'serialized' => array(
+          'type'        => 'text',
+          'not null'    => TRUE,
+          'size'        => 'big',
+        ),
+      ),
+      'primary key' => array('form_id', 'path', 'uid'),
+    ),
+  );
+}

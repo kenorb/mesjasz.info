@@ -1,0 +1,74 @@
+<?php
+// $Id: mexico_484_1.cif,v 1.2.2.4 2008/11/03 21:33:50 islandusurper Exp $
+
+/**
+* First implement hook_install() using the name of the country as the base of
+* the function name.
+*/
+function mexico_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES ('484', 'Mexico', 'MX', 'MEX', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+    ."(484, 'AGS','Aguascalientes'),"
+    ."(484, 'BC','Baja California'),"
+    ."(484, 'BCS','Baja California Sur'),"
+    ."(484, 'CAM','Campeche'),"
+    ."(484, 'CHIS','Chiapas'),"
+    ."(484, 'CHI','Chihuahua'),"
+    ."(484, 'COAH','Coahuila'),"
+    ."(484, 'COL','Colima'),"
+    ."(484, 'DF','Distrito Federal'),"
+    ."(484, 'DGO','Durango'),"
+    ."(484, 'GTO','Guanajuato'),"
+    ."(484, 'GRO','Guerrero'),"
+    ."(484, 'HGO','Hidalgo'),"
+    ."(484, 'JAL','Jalisco'),"
+    ."(484, 'ME','México'),"
+    ."(484, 'MICH','Michoacán'),"
+    ."(484, 'MOR','Morelos'),"
+    ."(484, 'NAY','Nayarit'),"
+    ."(484, 'NL','Nuevo León'),"
+    ."(484, 'OAX','Oaxaca'),"
+    ."(484, 'PUE','Puebla'),"
+    ."(484, 'QUE','Querétaro'),"
+    ."(484, 'QR','Quintana Roo'),"
+    ."(484, 'SLP','San Luis Potosi'),"
+    ."(484, 'SIN','Sinaloa'),"
+    ."(484, 'SON','Sonora'),"
+    ."(484, 'TAB','Tabasco'),"
+    ."(484, 'TAM','Tamaulipas'),"
+    ."(484, 'TLA','Tlaxcala'),"
+    ."(484, 'VER','Veracruz'),"
+    ."(484, 'YUC','Yucatán'),"
+    ."(484, 'ZAC','Zacatecas')");
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.  Documentation on address formats
+  // is available at:
+  // http://www.ubercart.org/ubercart_users_guide/country_settings#address_format_docs
+  uc_set_address_format(484,
+    "!company\n!first_name !last_name\n!street1\n!street2"
+   ."\n!postal_code !city\n!country_name_if");
+}
+
+/**
+* If necessary, implement hook_update() with $version being the only argument.
+* Add a new case for each version update, and be sure to always include the
+* latest changes in the install function.
+*/
+function mexico_update($version) {
+}
+
+/**
+* If necessary, implement hook_uninstall().  This requires no argument.  The
+* store module automatically removes rows from the country and zones tables
+* related to the country, and it unsets the address format.  This function is
+* only necessary for other things you may have included in your country's
+* installation process.
+*/
+function mexico_uninstall() {
+}
+

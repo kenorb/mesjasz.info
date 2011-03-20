@@ -1,0 +1,16 @@
+; $Id: adsense_click.info,v 1.2.2.1 2008/12/19 01:32:37 jcnventura Exp $
+; Copyright 2005-2008 Khalid Baheyeldin http://2bits.com
+; Copyright 2008      Joao Ventura      http://www.venturas.org
+
+name = AdSense Click Tracking
+description = Tracks clicks to Google Adsense
+dependencies[] = adsense
+package = Adsense
+core = 6.x
+
+; Information added by drupal.org packaging script on 2010-08-20
+version = "6.x-1.3"
+core = "6.x"
+project = "adsense"
+datestamp = "1282325489"
+

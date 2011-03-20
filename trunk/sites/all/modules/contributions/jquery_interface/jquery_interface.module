@@ -1,0 +1,20 @@
+<?php
+// $Id: jquery_interface.module,v 1.1.2.2 2007/04/28 16:18:35 jjeff Exp $
+
+/**
+ * This module doesn't do too much, but it is a central location for any other
+ * modules that implement the JQuery Interface library. It ensures that multiple
+ * modules will all include the same library script just once on any given page.
+ */
+
+/**
+ * Add JQuery interface library to this page
+ */
+function jquery_interface_add() {
+  static $done;
+  if (!isset($done)) {
+    $path = drupal_get_path('module', 'jquery_interface') . '/interface.js';
+    drupal_add_js($path);
+    $done = TRUE;
+  }
+}

@@ -1,0 +1,36 @@
+<?php
+// $Id: matching.module,v 1.6 2007/04/13 20:33:38 webchick Exp $
+
+/**
+ * @file
+ * Matching question type for quiz module
+ *
+ * Allows the creation of matching questions, which associate one term 
+ * with another
+ */
+
+/**
+ * Implementation of hook_node().
+ */
+function matching_node_info() {
+  return array('matching' => array('name' => t('matching'), 'base' => 'matching'));
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function matching_help($section) {
+  switch ($section) {
+    case 'admin/modules#description':
+      return t('Matching question type for quiz module.');
+    case 'node/add#matching':
+      return t('A question type for the quiz module: allows you to create matching type questions, which connect terms with one another.');
+    default:
+      break;
+  }
+}
+
+// Temporary holding place for list_questions hook
+function matching_list_questions() {
+  return array();
+}

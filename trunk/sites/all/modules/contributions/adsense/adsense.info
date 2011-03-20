@@ -1,0 +1,15 @@
+; $Id: adsense.info,v 1.6 2008/07/21 00:21:33 kbahey Exp $
+; Copyright 2005-2008 Khalid Baheyeldin http://2bits.com
+; Copyright 2008      Joao Ventura      http://www.venturas.org
+
+name = AdSense core
+description = Displays Google AdSense ads on your site to earn revenue. Requires at least one additional ad unit generator module.
+package = Adsense
+core = 6.x
+
+; Information added by drupal.org packaging script on 2010-08-20
+version = "6.x-1.3"
+core = "6.x"
+project = "adsense"
+datestamp = "1282325489"
+

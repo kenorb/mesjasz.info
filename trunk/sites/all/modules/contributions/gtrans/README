@@ -1,0 +1,20 @@
+Google Translation module
+
+THE IDEA:
+Simply connects to Google, translates your pages, show them to the user.
+No single mention of Google.
+
+TESTED:
+Tested on PHP4 and PHP5.
+Doesn't work with anything that Google Translate can't reach.
+
+
+INSTALL:
+After enabling the module, go to settings and 
+make sure you have selected your site language.
+Then enable the Change language block, you're done.
+
+FEATURE REQUESTS:
+Feature requests and feedback is welcome.
+
+Omar Abdel-Wahab

@@ -1,0 +1,19 @@
+/* $Id$ */
+
+#chatblock_block {
+  overflow-x: hidden;
+  overflow: auto;
+  height: 300px;
+  width: 98%;
+  display: block;
+  background-color: white;
+}
+
+div.chatblock-message {
+  width: 95%;
+  display: block;
+}
+
+span.chatblock-username {
+  color: red;
+}

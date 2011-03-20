@@ -1,0 +1,275 @@
+# $Id: es.po,v 1.1.2.1 2008/03/06 16:29:21 nancyw Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  faq_ask.module,v 1.11 2007/12/20 04:19:37 nancyw
+#  faq_ask.install,v 1.1 2007/11/16 15:20:39 nancyw
+#  faq_ask.info,v 1.1 2007/11/16 15:20:39 nancyw
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2007-12-20 13:51+0100\n"
+"PO-Revision-Date: 2007-12-20 21:16+0100\n"
+"Last-Translator: Javier Farreres <farreres at lsi upc edu>\n"
+"Language-Team: España <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: SPAIN\n"
+
+#: faq_ask.module:19
+msgid "This module is an add-on to the FAQ module that allows users with the 'ask question' permission to create a question which will be queued for an 'expert' to answer."
+msgstr "Este módulo es un añadido al módulo FAQ que permite a los usuarios con el permiso de 'hacer preguntas' crear una pregunta que quedará en cola para que un 'experto' la responda."
+
+#: faq_ask.module:20
+msgid "The module shows an abbreviated version of the FAQ form without an answer field. The node is created without the 'published' attribute. There is a block that will show the unanswered questions to the 'expert' (generally, this requires a separate role)."
+msgstr "El módulo muestra una versión abreviada del formulario FAQ sin el campo respuesta. El nodo se crea sin el atributo 'publicado'. Hay un bloque que mostrará las preguntas sin responder al 'experto' (generalmente, esto requiere un rol separado)."
+
+#: faq_ask.module:21
+msgid "Viewing of the completed question and answer pair is done by the FAQ module."
+msgstr "El visionado de la pareja completa pregunta/respuesta lo hace el módulo FAQ."
+
+#: faq_ask.module:25
+msgid "Add a question for our expert to answer. After being answered, your question and the answer will be displayed in the FAQ pages. If the question will not fit in the box below, please try to rephrase it."
+msgstr "Añadir una pregunta para que la responda nuestro experto. Despues de responderla, su pregunta y la respuesta se mostrarán en la página de preguntas y respuestas (FAQ). Si la pregunta no cabe en la caja de texto, intente parafrasearla."
+
+#: faq_ask.module:42
+msgid "ask_question"
+msgstr "ask_question"
+
+#: faq_ask.module:51
+msgid "The Faq_Ask module has been enabled."
+msgstr "El módulo Faq_Asl ha sido activado."
+
+#: faq_ask.module:51;135;303
+msgid "Please go to the <a href=\"!url\">settings page</a> to configure this module."
+msgstr "Pof favor, vaya a la  <a href=\"!url\">página de configuración</a> para configurar este módulo."
+
+#: faq_ask.module:63
+msgid "Experts"
+msgstr "Expertos"
+
+#: faq_ask.module:67
+msgid "Allows the user to configure the Ask_FAQ module."
+msgstr "Permite al usuario configurar el módulo Ask_FAQ."
+
+#: faq_ask.module:74
+msgid "Ask a question"
+msgstr "Hacer una pregunta"
+
+#: faq_ask.module:82
+msgid "Answer a question"
+msgstr "Responder una pregunta."
+
+#: faq_ask.module:90
+msgid "Edit a question"
+msgstr "Editar una pregunta"
+
+#: faq_ask.module:98
+msgid "List more unanswered questions"
+msgstr "Listar más preguntas sin responder"
+
+#: faq_ask.module:135
+msgid "Currently, there are no experts defined. "
+msgstr "Actualmente no hay expertos definidos."
+
+#: faq_ask.module:156
+msgid "Category"
+msgstr "Categoría"
+
+#: faq_ask.module:162
+msgid "Please select the correct category for your question."
+msgstr "Por favor, seleccione la categoría correcta para su pregunta."
+
+#: faq_ask.module:170
+msgid "Question"
+msgstr "Pregunta"
+
+#: faq_ask.module:178
+msgid "Enter your question here. It will be answered as soon as possible. The maximum length for the question is !len characters."
+msgstr "Entre su pregunta aquí. La responderemos lo antes posible. La longitud máxima para la pregunta son !len caracteres."
+
+#: faq_ask.module:183
+msgid "Send my question"
+msgstr "Enviar mi pregunta"
+
+#: faq_ask.module:242
+msgid "The following question has been posted in the \"!cat\" category."
+msgstr "La pregunta siguiente se ha enviado a la categoría \"!cat\"."
+
+#: faq_ask.module:245
+msgid "In order to answer it you will first need to <a href=\"!url\">login</a> to the site."
+msgstr "Para responderla tiene primero que <a href=\"!url\">ingresar</a> en el sitio."
+
+#: faq_ask.module:246
+msgid "Once logged in, you may proceed <a href=\"!url\">directly to the question</a> to answer it."
+msgstr "Una vez dentro, puede usted proceder <a href=\"!url\">directamente a la pregunta</a> para responderla."
+
+#: faq_ask.module:250
+msgid "Expert notification email sent."
+msgstr "Correo de notificación enviado al experto."
+
+#: faq_ask.module:253
+msgid "Expert notification email failed for the \"!cat\" category."
+msgstr "Ha fallado el correo de notificación al experto de la categoría \"!cat\"."
+
+#: faq_ask.module:266
+msgid "left side"
+msgstr "izquierda"
+
+#: faq_ask.module:269
+msgid "right side"
+msgstr "derecha"
+
+#: faq_ask.module:272
+msgid "top"
+msgstr "superior"
+
+#: faq_ask.module:275
+msgid "bottom"
+msgstr "inferior"
+
+#: faq_ask.module:282
+msgid "It should appear in the list at the @region of the screen momentarily."
+msgstr "Debería aparecer en la lista en la parte @region de la pantalla momentáneamente."
+
+#: faq_ask.module:285
+msgid "It should appear in the list momentarily."
+msgstr "Debería aparecer en la lista momentáneamente."
+
+#: faq_ask.module:289
+msgid "Your question has been submitted."
+msgstr "Su pregunta ha sido enviada."
+
+#: faq_ask.module:303
+msgid "The Faq_Ask module requires that FAQ \"Categorize questions.\""
+msgstr "El módulo Faq_Ask requiere que FAQ \"Categorice las preguntas.\""
+
+#: faq_ask.module:308
+msgid "Notify experts"
+msgstr "Notificar a los expertos"
+
+#: faq_ask.module:309
+msgid "If this box is checked, the expert(s) for the question will be notified via email that a question awaits them."
+msgstr "Si se activa, se les notificará a los expertos via correo electrónico que hay una pregunta esperándoles."
+
+#: faq_ask.module:317
+msgid "Question Box Length"
+msgstr "Longitud de la caja de pregunta"
+
+#: faq_ask.module:318
+msgid "This sets the length of the question box (not the question itself). This affects only the FAQ_Ask module, not the FAQ display. The recommendation is to set it as wide as your theme will allow it. Note: If resizable textareas are enabled, this setting will have no effect."
+msgstr "Establece la longitud de la de la caja de pregunta (no de la pregunta misma). Esto solamente afecta al módulo FAQ_Ask, no a la visualización de FAQ. La recomendación es ponerlo tan amplio como el tema lo permita. Nota: si están activadas las areas de texto redimensionables, esta configuración no tendrá efecto."
+
+#: faq_ask.module:330
+msgid "No roles with \"answer question\" permission were found. Please go to the <a href=\"!access\">Access Control page</a> to update your permissions."
+msgstr "No se han encontrado roles con permiso para \"responder preguntas\". Por favor, vaya a la <a href=\"!access\">página de Control de Acceso</a> para actualizar los permisos."
+
+#: faq_ask.module:340
+msgid "No vocabularies or terms were found for the \"faq\" content type . Please go to the <a href=\"!access\">Categories page</a> to update your vocabulary."
+msgstr "No se han encontrado vocabularios o términos para el tipo de contenido \"faq\". Por favor, vaya a la <a href=\"!access\">página de Categorías</a> para actualizar su vocabulario."
+
+#: faq_ask.module:369
+msgid "Expert Roles"
+msgstr "Roles de experto"
+
+#: faq_ask.module:373
+msgid "If you select different roles, you must save the configuration BEFORE selecting users below."
+msgstr "Si selecciona diferentes roles, deberá salvar la configuración ANTES de seleccionar a usuarios debajo."
+
+#: faq_ask.module:422
+msgid "!name doesn't exist. If you have just changed your role selections this may be okay."
+msgstr "!name no existe. Si acabe de cambiar sus selecciones de rol ésto podría ser correcto."
+
+#: faq_ask.module:427
+msgid "Save configuration"
+msgstr "Salvar la configuración"
+
+#: faq_ask.module:466
+msgid "Configuration has been updated."
+msgstr "La configuración ha sido actualizada."
+
+#: faq_ask.module:489
+msgid "Unanswered Questions"
+msgstr "Preguntas sin responder"
+
+#: faq_ask.module:508
+msgid "Number of questions to show"
+msgstr "Número de preguntas que mostrar"
+
+#: faq_ask.module:509
+msgid "This controls the number of questions that appear in the 'Unanswered Questions' block."
+msgstr "Ésto controla el número de preguntas que aparecen en el bloque de 'Preguntas sin responder'."
+
+#: faq_ask.module:576
+msgid "more..."
+msgstr "más..."
+
+#: faq_ask.module:595
+msgid "All Unanswered Questions"
+msgstr "Todas las preguntas sin responder"
+
+#: faq_ask.module:598
+msgid "You may go <a href=\"!setting\">here</a> to change the block limit."
+msgstr "Puede usted ir <a href=\"!setting\">aquí</a> para cambiar el límite del bloque."
+
+#: faq_ask.module:624
+msgid "For some strange reason, I couldn't find any categories for you."
+msgstr "Por alguna extraña razón, no pude encontrar categorías para usted."
+
+#: faq_ask.module:659
+msgid "Currently there are no unanswered questions for you to view."
+msgstr "Actualmente no hay preguntas sin responder que mostrarle."
+
+#: faq_ask.module:250;254
+msgid "FAQ_Ask"
+msgstr "FAQ_Ask"
+
+#: faq_ask.module:34
+msgid "ask question"
+msgstr "hacer una pregunta"
+
+#: faq_ask.module:34
+msgid "answer question"
+msgstr "responder una pregunta"
+
+#: faq_ask.module:0
+msgid "faq_ask"
+msgstr "faq_ask"
+
+#: faq_ask.install:9
+msgid "Contact form log table."
+msgstr "Tabla de registro del formulario de contacto."
+
+#: faq_ask.install:12
+msgid "User identifier for the expert."
+msgstr "Usuario identificado para experto."
+
+#: faq_ask.install:18
+msgid "Taxonomy identifier of the terms for the expert."
+msgstr "Identificador de taxonomía de los términos para el experto."
+
+#: faq_ask.install:57
+msgid "faq_ask module installed."
+msgstr "módulo faq_ask instalado."
+
+#: faq_ask.install:58
+msgid "faq_ask table creation failed. Please \"uninstall\" the module and retry."
+msgstr "creación de la tabla faq_ask fallida. Por favor, \"desinstale\" el módulo y reintente."
+
+#: faq_ask.install:70
+msgid "faq_ask module uninstalled."
+msgstr "módulo faq_ask desinstalado."
+
+#: faq_ask.info:0
+msgid "Ask an FAQ"
+msgstr "Preguntar una FAQ"
+
+#: faq_ask.info:0
+msgid "Allows an unanswered question 'queue' for the FAQ module."
+msgstr "Permite una cola de preguntas sin respuesta para el módulo FAQ."
+

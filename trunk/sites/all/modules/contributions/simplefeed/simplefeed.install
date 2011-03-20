@@ -1,0 +1,115 @@
+<?php
+// $Id: simplefeed.install,v 1.10.4.6 2008/10/07 17:30:13 m3avrck Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function simplefeed_install() {
+  // Create tables.
+  drupal_install_schema('simplefeed');
+  drupal_set_message(t('SimpleFeed successfully installed.'));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function simplefeed_uninstall() {
+  drupal_uninstall_schema('simplefeed');
+  variable_del('simplefeed_expires');
+  variable_del('simplefeed_refresh');
+  variable_del('simplefeed_format');
+  variable_del('simplefeed_vocab');
+  variable_del('simplefeed_categories');
+  variable_del('simplefeed_cron_throttle');
+  variable_get('simplefeed_check_url');
+}
+
+function simplefeed_update_1() {
+  $ret = array();
+  db_add_column($ret, 'simplefeed_feed', 'hash', 'varchar(32)');
+  return $ret;  
+}
+
+function simplefeed_update_2() {
+  $ret = array();
+  $ret[] = update_sql("ALTER TABLE {simplefeed_feed} DROP INDEX url");
+  $ret[] = update_sql("ALTER TABLE {simplefeed_feed} CHANGE url url text");  
+  return $ret;
+}
+
+function simplefeed_update_3() {
+  $ret = array();
+  db_add_column($ret, 'simplefeed_feed', 'error', 'int(1)', array('default' => 0, 'not null' => TRUE));
+  
+  if ($GLOBALS['db_type'] == 'pgsql') {
+    db_query("CREATE INDEX {simplefeed_feed}_error_idx ON {simplefeed_feed} (error)");
+  }
+  else {
+    db_query("CREATE INDEX error ON {simplefeed_feed} (error)");
+  }  
+  return $ret;    
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function simplefeed_schema() {
+  $schema['simplefeed_feed'] = array(
+    'description' => t('Stores simplefeed feed element data. Connects each feed node to a feed element in the simplefeed_feed table.'),
+    'fields' => array(
+      'vid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t("The feed's vid reference."),
+      ),
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t("The feed's nid reference."),
+      ),
+      'url' => array(
+        'type' => 'text',
+        'description' => t("The url of the feed."),
+      ),
+      'expires' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t("How often the feed expires feed items."),
+      ),
+      'refresh' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t("How often the feed should refresh feed items."),
+      ),
+      'checked' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t("The last time that the feed was refreshed."),
+      ),
+      'hash' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'description' => t("A hash of the feed's headers."),
+      ),
+      'error' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'length' => 1,
+        'description' => t("Whether the feed is throwing errors or not."),
+      ),      
+    ),
+    'primary key' => array('vid'),
+    'indexes' => array(
+      'nid' => array('nid'),
+      'error' => array('error'),
+    ),
+  );
+
+  return $schema;
+}

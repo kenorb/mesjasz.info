@@ -1,0 +1,67 @@
+<?php
+// $Id: egypt_818_1.cif,v 1.2.2.4 2008/11/03 21:33:50 islandusurper Exp $
+/**
+ * First implement hook_install() using the name of the country as the base of
+ * the function name.
+ */
+function egypt_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (818, 'Egypt', 'EG', 'EGY', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(818, 'MUH', 'مرسى مطروح'),"
+          ."(818, 'ALX', 'الاسكندرية'),"
+          ."(818, 'WAD', 'الوادي الجديد'),"
+          ."(818, 'GZ', 'الجيزة'),"
+          ."(818, 'FYM', 'الفيوم'),"
+          ."(818, 'BNS', 'بني سويف'),"
+          ."(818, 'MN', 'المنيا'),"
+          ."(818, 'AST', 'اسيوط'),"
+          ."(818, 'SHG', 'سوهاج'),"
+          ."(818, 'ASN', 'اسوان'),"
+          ."(818, 'SIN', 'شمال سيناء'),"
+          ."(818, 'JS', 'جنوب سيناء'),"
+          ."(818, 'MNF', 'المنوفية'),"
+          ."(818, 'BA', 'البحر الاحمر'),"
+          ."(818, 'SHR', 'الشرقية'),"
+          ."(818, 'KB', 'القليوبية'),"
+          ."(818, 'IS', 'الاسماعيلية'),"
+          ."(818, 'SUZ', 'السويس'),"
+          ."(818, 'BH', 'البحيرة'),"
+          ."(818, 'GH', 'الغربية'),"
+          ."(818, 'KFS', 'كفر الشيخ'),"
+          ."(818, 'DK', 'الدقهلية'),"
+          ."(818, 'UQ', 'الاقصر'),"
+          ."(818, 'PTS', 'بور سعيد'),"
+          ."(818, 'DT', 'دمياط'),"
+          ."(818, 'KN', 'قنا'),"
+          ."(818, 'CAI', 'القاهرة')");
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.  Documentation on address formats
+  // is available at:
+  // http://www.ubercart.org/ubercart_users_guide/country_settings#address_format_docs
+  uc_set_address_format(818,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+   ."\r\n!city !zone_name !postal_code\r\n!country_name_if");
+}
+
+/**
+ * If necessary, implement hook_update() with $version being the only argument.
+ * Add a new case for each version update, and be sure to always include the
+ * latest changes in the install function.
+ */
+function egypt_update($version) {
+}
+
+/**
+ * If necessary, implement hook_uninstall().  This requires no argument.  The
+ * store module automatically removes rows from the country and zones tables
+ * related to the country, and it unsets the address format.  This function is
+ * only necessary for other things you may have included in your country's
+ * installation process.
+ */
+function egypt_uninstall() {
+}

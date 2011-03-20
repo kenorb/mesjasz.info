@@ -1,0 +1,32 @@
+<?php
+// $Id: kazakhstan_398_1.cif,v 1.1.4.3 2008/11/07 21:13:24 islandusurper Exp $
+
+function kazakhstan_install() {
+  db_query("INSERT INTO {uc_countries} VALUES (398, 'Kazakhstan', 'KZ', 'KAZ', 1)");
+
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(398, 'ALA', 'Алматы'),"
+          ."(398, 'TSE', 'Астана'),"
+          ."(398, 'AKM', 'Акмолинская область'),"
+          ."(398, 'AKT', 'Актюбинская область'),"
+          ."(398, 'ALM', 'Алматинская область'),"
+          ."(398, 'ATR', 'Атырауская область'),"
+          ."(398, 'EKZ', 'Восточно-Казахстанская область'),"
+          ."(398, 'DZH', 'Жамбылская область'),"
+          ."(398, 'WKZ', 'Западно-Казахстанская область'),"
+          ."(398, 'KAR', 'Карагандинская область'),"
+          ."(398, 'KOR', 'Кызылординская область'),"
+          ."(398, 'KUS', 'Костанайская область'),"
+          ."(398, 'MAN', 'Мангистауская область'),"
+          ."(398, 'PVL', 'Павлодарская область'),"
+          ."(398, 'NKZ', 'Северо-Казахстанская область'),"
+          ."(398, 'SKZ', 'Южно-Казахстанская область');");
+
+  uc_set_address_format(398, "!company\n!first_name !last_name\n!street1\n!street2\n!postal_code !city\n!country_name_if");
+}
+
+function kazakhstan_update($version) {
+}
+
+function kazakhstan_uninstall() {
+}

@@ -1,0 +1,12 @@
+; $Id: weblinks_convert_links.info,v 1.1.4.2 2008/11/03 06:49:06 nancyw Exp $
+name = Web Links Convert Links Package
+description = Allows users to convert Links package to Web Links.
+dependencies[] = weblinks
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-12-31
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "weblinks"
+datestamp = "1230682683"
+

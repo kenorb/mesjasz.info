@@ -1,0 +1,139 @@
+<?php
+// $Id: path_redirect.install,v 1.2.2.6.2.7 2008/04/14 03:29:32 horsepunchkid Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function path_redirect_install() {
+  drupal_install_schema('path_redirect');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function path_redirect_uninstall() {
+  drupal_uninstall_schema('path_redirect');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function path_redirect_schema() {
+  $schema['path_redirect'] = array(
+    'description' => t('Stores information on redirects.'),
+    'fields' => array(
+      'rid'  => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => t('Primary Key: Unique path redirect ID.'),
+      ),
+      'path' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => t('The source path to redirect from.'),
+      ),
+      'redirect' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => t('The destination path to redirect to.'),
+      ),
+      'query' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => t('The query string to send to the destination.'),
+      ),
+      'fragment' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => FALSE,
+        'description' => t('An internal page anchor append to the destination.'),
+      ),
+      'type' => array(
+        'type' => 'int',
+        'size' => 'small',
+        'not null' => TRUE,
+        'description' => t('The HTTP status code to use for the redirect.'),
+      ),
+    ),
+    'primary key' => array('rid'),
+    'unique keys' => array('path' => array('path')),
+  );
+  return $schema;
+}
+
+function path_redirect_update_1() {
+  $ret = array();
+  db_change_field($ret, 'path_redirect', 'path', 'path',
+    array(
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => TRUE,
+      'description' => t('The source path to redirect from.'),
+    )
+  );
+  db_change_field($ret, 'path_redirect', 'redirect', 'redirect',
+    array(
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => TRUE,
+      'description' => t('The destination path to redirect to.'),
+    ),
+    array('unique keys' => array('rid'))
+  );
+  return $ret;
+}
+
+function path_redirect_update_2() {
+  // Drupal 5 has a different drupal_goto() syntax that takes just the error code
+  update_sql("UPDATE {path_redirect} SET type = '300' WHERE type = 'HTTP/1.0 300 Multiple Choices'");
+  update_sql("UPDATE {path_redirect} SET type = '301' WHERE type = 'HTTP/1.0 301 Moved Permanently'");
+  update_sql("UPDATE {path_redirect} SET type = '302' WHERE type = 'HTTP/1.0 302 Found'");
+  update_sql("UPDATE {path_redirect} SET type = '303' WHERE type = 'HTTP/1.0 303 See Other'");
+  update_sql("UPDATE {path_redirect} SET type = '304' WHERE type = 'HTTP/1.0 304 Not Modified'");
+  update_sql("UPDATE {path_redirect} SET type = '305' WHERE type = 'HTTP/1.0 305 Use Proxy'");
+  update_sql("UPDATE {path_redirect} SET type = '307' WHERE type = 'HTTP/1.0 307 Temporary Redirect'");
+  // Now that we've got integers in the column, we change the column type - MySQL will convert values 
+  $ret = array();
+  db_change_field($ret, 'path_redirect', 'type', 'type',
+    array(
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+      'description' => t('The HTTP status code to use for the redirect.'),
+    )
+  );
+  return $ret;
+}
+
+function path_redirect_update_3() {
+  // Admin code had a typo that could have caused 306 to be used mistakenly
+  $ret[] = update_sql("UPDATE {path_redirect} SET type = 307 WHERE type = 306");
+  return $ret;
+}
+
+/**
+ * Clear the menu cache since paths have changed.
+ * Use rid as primary key; recreate unique key on path.
+ */
+function path_redirect_update_4() {
+  cache_clear_all(NULL, 'cache_menu');
+  drupal_set_message(t('Menu paths for the Path Redirect module have been updated.'));
+  $ret = array();
+  db_change_field($ret, 'path_redirect', 'query', 'query',
+    array(
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => TRUE,
+      'description' => t('The query string to send to the destination.'),
+    )
+  );
+  db_drop_primary_key($ret, 'path_redirect');
+  db_drop_unique_key($ret, 'path_redirect', 'rid');
+  db_add_primary_key($ret, 'path_redirect', array('rid'));
+  db_add_unique_key($ret, 'path_redirect', 'path', array('path'));
+  return $ret;
+}
+

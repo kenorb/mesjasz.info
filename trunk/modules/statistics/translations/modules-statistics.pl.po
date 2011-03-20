@@ -1,0 +1,436 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/statistics/statistics.admin.inc:14
+#: modules/statistics/statistics.pages.inc:46
+msgid "Timestamp"
+msgstr "Data"
+
+#: modules/statistics/statistics.admin.inc:15;51
+#: modules/statistics/statistics.pages.inc:47
+msgid "Page"
+msgstr "Strona"
+
+#: modules/statistics/statistics.admin.inc:29
+#: modules/statistics/statistics.pages.inc:25;56
+msgid "details"
+msgstr "szczegóły"
+
+#: modules/statistics/statistics.admin.inc:33;64;97;129
+#: modules/statistics/statistics.pages.inc:29;60
+msgid "No statistics available."
+msgstr "Brak statystyk."
+
+#: modules/statistics/statistics.admin.inc:50;79;115
+msgid "Hits"
+msgstr "Odsłon"
+
+#: modules/statistics/statistics.admin.inc:52
+msgid "Average page generation time"
+msgstr "Średni czas generowania strony"
+
+#: modules/statistics/statistics.admin.inc:53;81
+msgid "Total page generation time"
+msgstr "Całkowity czas generowania strony"
+
+#: modules/statistics/statistics.admin.inc:60
+msgid "%time ms"
+msgstr "%time ms"
+
+#: modules/statistics/statistics.admin.inc:67
+msgid "Top pages in the past %interval"
+msgstr "Najpopularniejsze strony (okres: %interval)"
+
+#: modules/statistics/statistics.admin.inc:92
+msgid "unban"
+msgstr "zezwól na dostęp"
+
+#: modules/statistics/statistics.admin.inc:92
+msgid "ban"
+msgstr "zabroń dostępu"
+
+#: modules/statistics/statistics.admin.inc:100
+msgid "Top visitors in the past %interval"
+msgstr "Najczęściej odwiedzający (okres: %interval)"
+
+#: modules/statistics/statistics.admin.inc:112
+msgid "Top referrers in the past %interval"
+msgstr "Najczęściej odsyłające strony (okres: %interval)"
+
+#: modules/statistics/statistics.admin.inc:116
+msgid "Url"
+msgstr "URL"
+
+#: modules/statistics/statistics.admin.inc:117
+msgid "Last visit"
+msgstr "Ostatnia wizyta"
+
+#: modules/statistics/statistics.admin.inc:188
+#: modules/statistics/statistics.module:136
+msgid "Access log settings"
+msgstr "Ustawienia dziennika odwiedzin"
+
+#: modules/statistics/statistics.admin.inc:191
+msgid "Enable access log"
+msgstr "Włącz dziennik odwiedzin"
+
+#: modules/statistics/statistics.admin.inc:194
+msgid "Log each page access. Required for referrer statistics."
+msgstr ""
+"Zapisywanie do dziennika informacji o każdej odsłonie strony. Konieczne, by "
+"przedstawić statystyki stron odsyłających."
+
+#: modules/statistics/statistics.admin.inc:198
+msgid "Discard access logs older than"
+msgstr "Usuń wpisy w dzienniku starsze niż"
+
+#: modules/statistics/statistics.admin.inc:201
+msgid ""
+"Older access log entries (including referrer statistics) will be "
+"automatically discarded. (Requires a correctly configured <a href=\"@cron"
+"\">cron maintenance task</a>.)"
+msgstr ""
+"Starsze wpisy do dziennika odwiedzin (włączając statystyki stron "
+"odsyłających) będą automatycznie usuwane. Wymaga to poprawnego "
+"skonfigurowania <a href=\"@cron\">zadań cron</a>."
+
+#: modules/statistics/statistics.admin.inc:206
+msgid "Content viewing counter settings"
+msgstr "Ustawienia licznika odsłon"
+
+#: modules/statistics/statistics.admin.inc:209
+msgid "Count content views"
+msgstr "Zliczaj odsłony stron"
+
+#: modules/statistics/statistics.admin.inc:212
+msgid "Increment a counter each time content is viewed."
+msgstr "Aktualizuje licznik przy każdej odsłonie strony."
+
+#: modules/statistics/statistics.module:15
+msgid ""
+"The statistics module keeps track of numerous site usage statistics, "
+"including the number of times, and from where, each of your posts is viewed. "
+"These statistics are useful in determining how users are interacting with "
+"each other and with your site, and are required for the display of some "
+"Drupal blocks."
+msgstr ""
+"Moduł statystyk zbiera informacje o różnych aspektach wykorzystywania "
+"strony. Zapisuje jak często, a także skąd, pobierane są wpisy. Statystyki te "
+"są przydatne do określenia sposobu, w jaki użytkownicy korzystają z witryny "
+"i są wymagane przez niektóre z bloków."
+
+#: modules/statistics/statistics.module:16
+msgid "The statistics module provides:"
+msgstr "Moduł statystyk oferuje:"
+
+#: modules/statistics/statistics.module:17
+msgid ""
+"a counter for each post on your site that increments each time the post is "
+"viewed. (Enable <em>Count content views</em> on the <a href=\"@accesslog"
+"\">access log settings page</a>, and determine if the post access counters "
+"should be visible to any user roles on the <a href=\"@permissions"
+"\">permissions page</a>.)"
+msgstr ""
+"licznik odsłon każdego z wpisów w witrynie. Można go włączyć za pomocą "
+"ustawienia <em>Zliczaj odsłony stron</em> na <a href=\"@accesslog\">stronie "
+"ustawień dziennika odwiedzin</a>. Na <a href=\"@permissions\">stronie "
+"uprawnień</a> można także określić, czy liczniki powinny być wyświetlane "
+"użytkownikom."
+
+#: modules/statistics/statistics.module:18
+msgid ""
+"a <a href=\"@recent-hits\">recent hits</a> log that displays information "
+"about the latest activity on your site, including the URL and title of the "
+"page accessed, the user name (if available) and IP address of the accessing "
+"party."
+msgstr ""
+"dziennik <a href=\"@recent-hits\">ostatnich odsłon</a>, zawierający m.in. "
+"adresy odwiedzanych stron, nazwy użytkowników i ich adresy IP"
+
+#: modules/statistics/statistics.module:19
+msgid ""
+"a <a href=\"@top-referrers\">top referrers</a> log that displays the "
+"referring parties for your site visits (where your visitors came from)."
+msgstr ""
+"dziennik <a href=\"@recent-hits\">najczęściej odsyłających</a>, zawierający "
+"informacje na temat stron, z których przybyli odwiedzający"
+
+#: modules/statistics/statistics.module:20
+msgid ""
+"a <a href=\"@top-pages\">top pages</a> log that displays site content in "
+"descending order by number of views."
+msgstr "dziennik <a href=\"@recent-hits\">najpopularniejszych stron</a>"
+
+#: modules/statistics/statistics.module:21
+msgid ""
+"a <a href=\"@top-visitors\">top visitors</a> log that displays the most "
+"active users on your site."
+msgstr ""
+"dziennik <a href=\"@recent-hits\">najczęściej odwiedzających</a>, "
+"prezentujący listę najczęściej przeglądających witrynę użytkowników"
+
+#: modules/statistics/statistics.module:22
+msgid ""
+"a <em>Popular content</em> block that displays the day's most viewed "
+"content, the all-time most viewed content, and the last content viewed. "
+"(Enable the <em>Popular content</em> block on the <a href=\"@blocks\">blocks "
+"administration page</a>.)"
+msgstr ""
+"blok <em>Popularne strony</em>, wyświetlający listę stron "
+"najpopularniejszych w danym dniu, a także od początku istnienia witryny. "
+"Można go włączyć na <a href=\"@blocks\">stronie zarządzania blokami</a>."
+
+#: modules/statistics/statistics.module:23
+msgid "Configuring the statistics module"
+msgstr "Konfiguracja modułu statystyk"
+
+#: modules/statistics/statistics.module:24
+msgid ""
+"When the <em>Enable access log</em> setting on the <a href=\"@accesslog"
+"\">access log settings page</a> is enabled, data about every page accessed "
+"(including the remote host's IP address, referrer, node accessed, and user "
+"name) is stored in the access log. The access log must be enabled for the <a "
+"href=\"@recent-hits\">recent hits</a>, <a href=\"@top-referrers\">top "
+"referrers</a>, <a href=\"@top-pages\">top pages</a>, and <a href=\"@top-"
+"visitors\">top visitors</a> log pages to function. Enabling the access log "
+"adds one additional database call per page displayed by Drupal."
+msgstr ""
+"Jeśli <a href=\"@accesslog\"><em>dziennik odwiedzin</em></a> jest włączony, "
+"zapisywane są w nim informacje na temat odsłon każdej ze stron. Obejmują one "
+"adres IP, stronę odsyłającą, stronę przeglądaną i nazwę użytkownika. Od "
+"dziennika odwiedzin zależą również strony prezentujące informacje o <a href="
+"\"@recent-hits\">ostatnich odsłonach</a>, <a href=\"@top-referrers"
+"\">najczęściej odsyłających</a> witrynach, <a href=\"@top-pages"
+"\">najpopularniejszych stronach</a> i <a href=\"@top-visitors\">najczęściej "
+"odwiedzających</a> witrynę użytkownikach."
+
+#: modules/statistics/statistics.module:25
+msgid ""
+"The <em>Discard access logs older than</em> setting on the <a href="
+"\"@accesslog\">access log settings page</a> specifies the length of time "
+"entries are retained in the access log before they are deleted. Automatic "
+"access log entry deletion requires a correctly configured <a href=\"@cron"
+"\">cron maintenance task</a>."
+msgstr ""
+"Ustawienie <em>Usuń wpisy w dzienniku starsze niż</em> ze <a href="
+"\"@accesslog\">strony ustawień dziennika odwiedzin</a> umożliwia określenie "
+"czasu, pzez który wpisy mają być przechowywane w dzienniku, który znajduje "
+"się w bazie danych. Automatyczne usuwanie starszych wpisów może się odbywać "
+"tylko wtedy, gdy <a href=\"@cron\">zadania cron</a> są prawidłowo "
+"skonfigurowane."
+
+#: modules/statistics/statistics.module:26
+msgid ""
+"The <em>Count content views</em> setting on the <a href=\"@accesslog"
+"\">access log settings page</a> enables a counter for each post on your site "
+"that increments each time the post is viewed. This option must be enabled to "
+"provide post-specific access counts. Enabling this option adds one "
+"additional database call per each post displayed by Drupal."
+msgstr ""
+"Ustawienie <em>Zliczaj odsłony stron</em> ze <a href=\"@accesslog\">strony "
+"ustawień dziennika odwiedzin</a> umożliwia włączenie licznika odsłon każdego "
+"z wpisów witryny. Włączenie tej opcji powoduje wysyłanie do bazy danych "
+"dodatkowego zapytania, za każdym razem, gdy wpis jest wyświetlany."
+
+#: modules/statistics/statistics.module:27
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@statistics"
+"\">Statistics module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@statistics\">stronie dotyczącej statystyk</"
+"a> w podręczniku konfiguracji w internecie."
+
+#: modules/statistics/statistics.module:30
+msgid ""
+"Settings for the statistical information that Drupal will keep about the "
+"site. See <a href=\"@statistics\">site statistics</a> for the actual "
+"information."
+msgstr ""
+"Ustawienia statystyk, które zbiera Drupal. Więcej informacji na <a href="
+"\"@statistics\">stronie statystyk</a>."
+
+#: modules/statistics/statistics.module:32
+msgid "This page displays the site's most recent hits."
+msgstr "Strona prezentuje informacje o ostatnich odsłonach."
+
+#: modules/statistics/statistics.module:34
+msgid ""
+"This page displays all external referrers, or external references to your "
+"website."
+msgstr ""
+"Znajdują się tu informacje o wszystkich zewnętrznych stronach odsyłających."
+
+#: modules/statistics/statistics.module:36
+msgid ""
+"When you ban a visitor, you prevent the visitor's IP address from accessing "
+"your site. Unlike blocking a user, banning a visitor works even for "
+"anonymous users. This is most commonly used to block resource-intensive bots "
+"or web crawlers."
+msgstr ""
+"Zabronienie dostępu użytkownikowi oznacza, że dostęp do witryny nie będzie "
+"możliwy z komputera o danym numerze IP. Inaczej niż w przypadku zablokowania "
+"konta użytkownika, metoda ta jest skuteczna także w stosunku do użytkowników "
+"anonimowych. Stosuje się ją najczęściej wobec robotów (m.in. "
+"wyszukiwawczych), które wykorzystują wiele zasobów serwera."
+
+#: modules/statistics/statistics.module:246;288
+msgid "Popular content"
+msgstr "Popularne strony"
+
+#: modules/statistics/statistics.module:256
+msgid "Number of day's top views to display"
+msgstr "Liczba najpopularniejszych stron danego dnia"
+
+#: modules/statistics/statistics.module:256
+msgid "How many content items to display in \"day\" list."
+msgstr ""
+"Określa, ile stron ma być wymienianych na liście najpopularniejszych w danym "
+"dniu."
+
+#: modules/statistics/statistics.module:257
+msgid "Number of all time views to display"
+msgstr "Liczba najpopularniejszych stron wszechczasów"
+
+#: modules/statistics/statistics.module:257
+msgid "How many content items to display in \"all time\" list."
+msgstr ""
+"Określa, ile stron ma być wymienianych na liście najpopularniejszych stron "
+"wszechczasów."
+
+#: modules/statistics/statistics.module:258
+msgid "Number of most recent views to display"
+msgstr "Liczba ostatnio przeglądanych stron"
+
+#: modules/statistics/statistics.module:258
+msgid "How many content items to display in \"recently viewed\" list."
+msgstr ""
+"Określa, ile stron ma być wymienianych na liście ostatnio przeglądanych."
+
+#: modules/statistics/statistics.module:272
+msgid "Today's:"
+msgstr "Dzisiejsze:"
+
+#: modules/statistics/statistics.module:277
+msgid "All time:"
+msgstr "Od zawsze:"
+
+#: modules/statistics/statistics.module:282
+msgid "Last viewed:"
+msgstr "Ostatnio:"
+
+#: modules/statistics/statistics.module:85
+msgid "1 read"
+msgid_plural "@count reads"
+msgstr[0] "1 odsłona"
+msgstr[1] "@count odsłony"
+msgstr[2] "@count odsłon"
+
+#: modules/statistics/statistics.module:72
+msgid "access statistics"
+msgstr "dostęp do statystyk odwiedzin"
+
+#: modules/statistics/statistics.module:72
+msgid "view post access counter"
+msgstr "wyświetlanie liczby odsłon wpisu"
+
+#: modules/statistics/statistics.module:97
+msgid "Recent hits"
+msgstr "Ostatnie odsłony"
+
+#: modules/statistics/statistics.module:98
+msgid "View pages that have recently been visited."
+msgstr "Prezentuje listę stron, które niedawno oglądali odwiedzający."
+
+#: modules/statistics/statistics.module:104
+msgid "Top pages"
+msgstr "Najpopularniejsze strony"
+
+#: modules/statistics/statistics.module:105
+msgid "View pages that have been hit frequently."
+msgstr "Prezentuje listę stron, które często oglądali odwiedzający."
+
+#: modules/statistics/statistics.module:112
+msgid "Top visitors"
+msgstr "Najczęściej odwiedzający"
+
+#: modules/statistics/statistics.module:113
+msgid "View visitors that hit many pages."
+msgstr "Prezentuje listę najaktywniejszych odwiedzających."
+
+#: modules/statistics/statistics.module:120
+msgid "Top referrers"
+msgstr "Najczęściej odsyłające strony"
+
+#: modules/statistics/statistics.module:121
+msgid "View top referrers."
+msgstr "Prezentuje listę najczęściej odsyłających stron."
+
+#: modules/statistics/statistics.module:128
+msgid "View access log."
+msgstr "Wyświetla dziennik odwiedzin."
+
+#: modules/statistics/statistics.module:137
+msgid "Control details about what and how your site logs."
+msgstr ""
+"Szczegółowe ustawienia zapisywania informacji o zdarzeniach do dzienników "
+"witryny."
+
+#: modules/statistics/statistics.module:146
+msgid "Track page visits"
+msgstr "Śledź odsłony"
+
+#: modules/statistics/statistics.module:0
+msgid "statistics"
+msgstr "statystyki"
+
+#: modules/statistics/statistics.install:52
+msgid "Stores site access information for statistics."
+msgstr ""
+
+#: modules/statistics/statistics.install:57
+msgid "Primary Key: Unique accesslog ID."
+msgstr ""
+
+#: modules/statistics/statistics.install:64
+msgid "Browser session ID of user that visited page."
+msgstr ""
+
+#: modules/statistics/statistics.install:70
+msgid "Title of page visited."
+msgstr ""
+
+#: modules/statistics/statistics.install:76
+msgid "Internal path to page visited (relative to Drupal root.)"
+msgstr ""
+
+#: modules/statistics/statistics.install:82
+msgid "Referrer URI."
+msgstr ""
+
+#: modules/statistics/statistics.install:88
+msgid "Hostname of user that visited the page."
+msgstr ""
+
+#: modules/statistics/statistics.install:95
+msgid "User {users}.uid that visited the page."
+msgstr ""
+
+#: modules/statistics/statistics.install:102
+msgid "Time in milliseconds that the page took to load."
+msgstr ""
+
+#: modules/statistics/statistics.install:109
+msgid "Timestamp of when the page was visited."
+msgstr ""

@@ -1,0 +1,12 @@
+; $Id: textsize.info,v 1.1.1.1.2.1 2008/03/05 15:40:53 christianzwahlen Exp $
+name = Text Size
+description = Display a text size changer on the page for better web accessibility.
+package = Other
+version = VERSION
+core = 6.x
+; Information added by drupal.org packaging script on 2008-04-11
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "textsize"
+datestamp = "1207873014"
+

@@ -1,0 +1,209 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/trigger/trigger.admin.inc:74
+msgid "Are you sure you want to unassign the action %title?"
+msgstr ""
+"Czy na pewno usunąć powiązanie z działaniem zautomatyzowanym o nazwie %title?"
+
+#: modules/trigger/trigger.admin.inc:76
+msgid "You can assign it again later if you wish."
+msgstr "Powiązanie to można później przywrócić."
+
+#: modules/trigger/trigger.admin.inc:77 modules/trigger/trigger.module:114
+msgid "Unassign"
+msgstr "Usuń powiązanie"
+
+#: modules/trigger/trigger.admin.inc:88;87
+msgid "Action %action has been unassigned."
+msgstr ""
+"Powiązanie z działaniem zautomatyzowanym o nazwie %action zostało usunięte."
+
+#: modules/trigger/trigger.admin.inc:144
+msgid "Trigger: "
+msgstr "Wyzwalacz: "
+
+#: modules/trigger/trigger.admin.inc:154
+msgid "unassign"
+msgstr "usuń powiązanie"
+
+#: modules/trigger/trigger.admin.inc:164 modules/trigger/trigger.module:415
+msgid "Choose an action"
+msgstr "Proszę wskazać działanie"
+
+#: modules/trigger/trigger.admin.inc:171
+msgid "Assign"
+msgstr "Powiąż"
+
+#: modules/trigger/trigger.admin.inc:176
+msgid "No available actions for this trigger."
+msgstr "Brak działań dla tego wyzwalacza."
+
+#: modules/trigger/trigger.admin.inc:192
+msgid "The action you chose is already assigned to that trigger."
+msgstr "Wybrane działanie jest już powiązane z wyzwalaczem."
+
+#: modules/trigger/trigger.admin.inc:218
+msgid ""
+"You have added an action that changes a the property of a post. A Save post "
+"action has been added so that the property change will be saved."
+msgstr ""
+"Dodano działanie, które zmienia cechy wpisu. Automatycznie dodano również "
+"działanie, które zachowuje zmiany poczynione we wpisie."
+
+#: modules/trigger/trigger.admin.inc:238
+msgid "Operation"
+msgstr "Czynność"
+
+#: modules/trigger/trigger.module:14
+msgid ""
+"Triggers are system events, such as when new content is added or when a user "
+"logs in. Trigger module combines these triggers with actions (functional "
+"tasks), such as unpublishing content or e-mailing an administrator. The <a "
+"href=\"@url\">Actions settings page</a> contains a list of existing actions "
+"and provides the ability to create and configure additional actions."
+msgstr ""
+"Wyzwalacze to zdarzenia występujące w systemie, takie jak dodanie nowego "
+"wpisu bądź zalogowanie się użytkownika. Moduł służy do wiązania tych zdarzeń "
+"ze zautomatyzowanymi działaniami, takimi jak wstrzymywanie publikacji lub "
+"wysyłanie wiadomości e-mail do administratora witryny. Na <a href=\"@url"
+"\">stronie działań zautomatyzowanych</a> znajduje się lista działań, a także "
+"formularz pozwalający dodać i skonfigurować nowe działania."
+
+#: modules/trigger/trigger.module:17
+msgid ""
+"Below you can assign actions to run when certain comment-related triggers "
+"happen. For example, you could promote a post to the front page when a "
+"comment is added."
+msgstr ""
+"Niniejsza strona pozwala wiązać działania ze zdarzeniami dotyczącymi "
+"odpowiedzi. Można na przykład umieszczać na stronie głównej wszystkie wpisy, "
+"do których dodawana jest odpowiedź."
+
+#: modules/trigger/trigger.module:19
+msgid ""
+"Below you can assign actions to run when certain content-related triggers "
+"happen. For example, you could send an e-mail to an administrator when a "
+"post is created or updated."
+msgstr ""
+"Niniejsza strona pozwala wiązać działania ze zdarzeniami dotyczącymi "
+"zawartości witryny. Można na przykład wysyłać e-mail do administratora, gdy "
+"tworzony lub aktualizowany jest wpis."
+
+#: modules/trigger/trigger.module:21
+msgid ""
+"Below you can assign actions to run during each pass of a <a href=\"@cron"
+"\">cron maintenance task</a>."
+msgstr ""
+"Niniejsza strona pozwala wiązać działania ze zdarzeniami dotyczącymi <a href="
+"\"@cron\">zadań cron</a>."
+
+#: modules/trigger/trigger.module:23
+msgid ""
+"Below you can assign actions to run when certain taxonomy-related triggers "
+"happen. For example, you could send an e-mail to an administrator when a "
+"term is deleted."
+msgstr ""
+"Niniejsza strona pozwala wiązać działania ze zdarzeniami dotyczącymi "
+"taksonomii. Można na przykład wysyłać e-mail do administratora, gdy jeden z "
+"terminów słownika jest usuwany."
+
+#: modules/trigger/trigger.module:25
+msgid ""
+"Below you can assign actions to run when certain user-related triggers "
+"happen. For example, you could send an e-mail to an administrator when a "
+"user account is deleted."
+msgstr ""
+"Niniejsza strona pozwala wiązać działania ze zdarzeniami dotyczącymi "
+"użytkowników. Można na przykład wysyłać e-mail do administratora, gdy "
+"tworzone jest nowe konto użytkownika."
+
+#: modules/trigger/trigger.module:27
+msgid ""
+"The Trigger module provides the ability to trigger <a href=\"@actions"
+"\">actions</a> upon system events, such as when new content is added or when "
+"a user logs in."
+msgstr ""
+"Moduł wyzwalaczy umożliwia wyzwalanie działań zautomatyzowanych, gdy w "
+"systemie wystąpią określone zdarzenia, takie jak dodanie nowego wpisu czy "
+"zalogowanie się użytkownika."
+
+#: modules/trigger/trigger.module:28
+msgid ""
+"The combination of actions and triggers can perform many useful tasks, such "
+"as e-mailing an administrator if a user account is deleted, or automatically "
+"unpublishing comments that contain certain words. By default, there are five "
+"\"contexts\" of events (Comments, Content, Cron, Taxonomy, and Users), but "
+"more may be added by additional modules."
+msgstr ""
+"Wyzwalacze oraz działania zautomatyzowane mogą wykonywać wiele przydatnych "
+"czynności, takich jak wysyłanie administratorowi wiadomości e-mail, gdy "
+"konto użytkownika jest usuwane, albo automatyczne wstrzymywanie publikacji "
+"odpowiedzi, które zawierają określone słowa. Jest pięć standardowych "
+"rodzajów zdarzeń - zdarzenia dotyczące odpowiedzi, zawartości, zadań cron, "
+"taksonomii oraz użytkowników. Moduły dodatkowe mogą definiować inne rodzaje "
+"zdarzeń."
+
+#: modules/trigger/trigger.module:29
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@trigger"
+"\">Trigger module</a>."
+msgstr ""
+"Więcej informacji znajduje się na <a href=\"@trigger\">stronie dotyczącej "
+"modułu wyzwalaczy</a>."
+
+#: modules/trigger/trigger.module:39
+msgid "Triggers"
+msgstr "Wyzwalacze"
+
+#: modules/trigger/trigger.module:40
+msgid "Tell Drupal when to execute actions."
+msgstr "Uruchamiają działania zautomatyzowane."
+
+#: modules/trigger/trigger.module:85
+msgid "Cron"
+msgstr "Cron"
+
+#: modules/trigger/trigger.module:115
+msgid "Unassign an action from a trigger."
+msgstr "Usuwa powiązanie wyzwalacza z działaniem."
+
+#: modules/trigger/trigger.module:0
+msgid "trigger"
+msgstr "wyzwalacz"
+
+#: modules/trigger/trigger.install:28
+msgid "Maps trigger to hook and operation assignments from trigger.module."
+msgstr ""
+
+#: modules/trigger/trigger.install:35
+msgid ""
+"Primary Key: The name of the internal Drupal hook upon which an action is "
+"firing; for example, nodeapi."
+msgstr ""
+
+#: modules/trigger/trigger.install:42
+msgid ""
+"Primary Key: The specific operation of the hook upon which an action is "
+"firing: for example, presave."
+msgstr ""
+
+#: modules/trigger/trigger.install:49
+msgid "Primary Key: Action's {actions}.aid."
+msgstr ""
+
+#: modules/trigger/trigger.install:55
+msgid "The weight of the trigger assignment in relation to other triggers."
+msgstr ""

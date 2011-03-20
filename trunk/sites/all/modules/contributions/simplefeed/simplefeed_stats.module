@@ -1,0 +1,213 @@
+<?php
+// $Id: simplefeed_stats.module,v 1.1.4.4 2008/10/07 07:50:19 m3avrck Exp $
+
+/**
+ * @file
+ * Produces stats about simple feed and provides an admin interface
+ */
+
+/**
+ * Implentation of hook_menu
+ */
+function simplefeed_stats_menu() {
+  $items = array();
+
+  $items['admin/content/simplefeed'] = array(
+    'title' => t('Feeds'),
+    'description' => t('View statistics about SimpleFeed processing.'),    
+    'page callback' => 'simplefeed_stats_admin',
+    'access callback' => 'user_access',
+    'access arguments' => array('administer feeds'),
+  );
+
+  $items['node/%node/log'] = array(
+    'title' => t('Feed log'),
+    'page callback' => 'simplefeed_stats_log',
+    'page arguments' => array(1),
+    'access callback' => 'simplefeed_stats_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 4,
+  );
+
+  return $items;
+}
+
+/**
+ * Determine stats access.
+ */
+function simplefeed_stats_access($node) {
+  global $user;
+  if ($node->type == 'feed' && (user_access('view simplefeed logs') || (user_access('view own simplefeed logs') && $user->uid == $node->uid))) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+function simplefeed_stats_perm() {
+  return array('view simplefeed logs', 'view own simplefeed logs');
+}
+
+/**
+ * Page callback for the status page of simplefeed
+ */
+function simplefeed_stats_admin() {
+  $header = array(
+    array(
+      'data' => t('Title'),
+      'sort' => 'ASC',
+      'field' => 'title',
+    ),
+    array(
+      'data' => t('Last Refresh'),
+      'sort' => 'DESC',
+      'field' => 'timestamp',
+    ),
+    array(
+      'data' => t('Number of Posts'),
+      'field' => 'number',
+    ),
+    array(
+      'data' => t('Average Posts per Update'),
+      'field' => 'average',
+    ),
+    array(
+      'data' => t('Errors'),
+      'field' => 'error',
+    ),
+    t('Actions'),
+   );
+
+   $sql = "SELECT n.nid, n.title, s.timestamp, count(DISTINCT(i.vid)) as number, SUM(s.new_nodes) / count(s.sid) as average, f.error 
+     FROM {node} n JOIN {simplefeed_feed} f ON n.nid = f.nid JOIN {simplefeed_feed_stats} s ON s.fid = n.nid 
+     LEFT JOIN {simplefeed_feed_item} i ON i.fid = s.fid 
+     GROUP BY s.fid";
+   $count_sql = "SELECT count(s.nid) FROM {simplefeed_feed} s";
+   $results = pager_query($sql . tablesort_sql($header), 15, 0, $count_sql);
+
+   while ($feed_array = db_fetch_array($results)) {
+     $nid = $feed_array['nid'];
+     unset($feed_array['nid']);
+
+     $actions_column = theme('item_list', array(
+       l('Empty', 'node/' . $nid . '/empty'),
+       l('Refresh', 'node/' . $nid . '/refresh'),
+       l('View Log', 'node/' . $nid . '/log'),
+      )
+     );
+
+     $feed_array['timestamp'] = format_date($feed_array['timestamp'], 'small');
+     $feed_array['title'] = l($feed_array['title'], 'node/' . $nid);
+     $feed_array['average'] = round($feed_array['average'], 2);
+     $feed_array['actions'] = $actions_column;
+     $rows[] = $feed_array;
+   }
+
+   if (count($rows) > 0) {
+     $output = theme('table', $header, $rows);
+     $output .= theme('pager', NULL, 15);
+   }
+   else {
+     $output .= t('Cron needs to run first to collect feed stats.');
+   }
+
+   return $output;
+}
+
+/**
+ * recieves the number of simplefeed_items created by a given feed
+ * and adds to the db table
+ *
+ * @param $count
+ * number of nodes created
+ *
+ * @param $fid
+ * the feed id
+ *
+ * @param $type
+ * either 'new' or 'expire'
+ */
+function simplefeed_stats_updated_feed($count, $fid, $type = 'new') {
+  // update the table add in the count msg et al to the table
+  // php5 use $_REQUEST['time'] instead of time()
+  if ($type == 'new') {
+    $message = ($count > 0) ? 'New items' : 'No new items';
+  }
+  else {
+    $message = ($count > 0) ? $count .' items expired' : '';
+    $count = 0; // since items expired, don't want to count these as new
+  }
+  db_query("INSERT INTO {simplefeed_feed_stats} (fid, new_nodes, timestamp, msg) VALUES (%d, %d, %d, '%s')", $fid, $count, time(), $message);
+}
+
+/**
+ * Recieves the error msg when a feed fails and logs it
+ *
+ * @param $feed_node
+ * the feed node that failed
+ *
+ * @param error_msg
+ * error message recieve when it failed
+ */
+function simplefeed_stats_feed_fail($feed_node, $error_msg) {
+  db_query("INSERT INTO {simplefeed_feed_stats} (fid, msg, timestamp) VALUES (%d, '%s', %d)", $feed_node->nid, $error_msg, time());
+}
+
+/**
+ * Recieves a nid that was just emptied
+ *
+ * @param $fid
+ * fid that was just emptied
+ */
+function simplefeed_stats_feed_empty($fid) {
+  db_query("INSERT INTO {simplefeed_feed_stats} (fid, msg, timestamp) VALUES (%d, '%s', %d)", $fid, 'Feed was emptied', time());
+}
+
+/**
+ * Displays the log of the feed
+ *
+ * @param $nid
+ * nid of the feed node
+ */
+function simplefeed_stats_log($node) {
+  $nid = $node->nid;
+  $output = '';
+  drupal_set_title('Feed log');
+
+  // need a check to make sure the node is a feed ?
+  $header = array(
+    array(
+      'data' => t('Date'),
+      'field' => 'timestamp',
+      'sort' => 'DESC',
+    ),
+    array(
+      'data' => t('New Posts'),
+      'field' => 'new_nodes',
+    ),
+    t('Message'),
+  );
+
+  $sql = "SELECT timestamp, new_nodes, msg FROM {simplefeed_feed_stats} WHERE fid = %d";
+  $count_sql = "SELECT COUNT(sid) FROM {simplefeed_feed_stats} WHERE fid = %d";
+  $log_result = pager_query($sql . tablesort_sql($header), 15, 0, $count_sql, $nid);
+  $rows = array();
+  while ($log_object = db_fetch_object($log_result)) {
+    $rows[] = array(
+      format_date($log_object->timestamp, 'small'),
+      $log_object->new_nodes,
+      t($log_object->msg),
+    );
+  }
+
+  if (count($rows) > 0) {
+    $output .= theme('table', $header, $rows) . theme('pager', NULL, 15);
+  }
+  else {
+    $output .= t('Stats for this feed will appear after it has been processed.');
+  }
+
+  return $output;
+}

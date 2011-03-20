@@ -1,0 +1,39 @@
+$Id: TODO.txt,v 1.1.2.1 2009/01/22 03:07:36 syscrusher Exp $
+
+TODO list for links package, with items grouped by module.
+
+links.inc
+
+	Will be adding API functions to support monitoring and validation of
+	links. This code will be contributed primarily by webchick.
+
+links_related.module
+
+	Need to fix sorting and deletion of links in the node edit form.
+
+	Implement a zero/one/many tristate option for related links, rather than
+	just the current yes/no.
+
+links_weblink.module
+
+	Need to have the "related links" fieldset expanded, not collapsed, when
+	editing a "weblink" node, because in that situation the link is
+	required.
+
+	In validation, require the URL to be present.
+
+links_admin.module
+
+	This is still in ALPHA test and development, and not yet fully functional.
+	It is not tagged for the 4.7 branch and is not part of the standard
+	download package yet.
+
+Migration from older versions of weblink.module
+
+	Integrate migration scripts into new install/update support framework.
+
+	Test migration script from 4.6 weblink.module. This uses a similar
+	schema to the one used by the links package, but does not share each
+	link between 1 to N nodes and does not (as best I can tell) use the
+	links API to normalize the link URLs. No major problem to handle this
+	in the migration script, but it isn't done yet.

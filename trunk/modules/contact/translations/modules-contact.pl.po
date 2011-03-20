@@ -1,0 +1,442 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/contact/contact.admin.inc:18;47
+msgid "Recipients"
+msgstr "Odbiorcy"
+
+#: modules/contact/contact.admin.inc:43
+msgid "Example: 'website feedback' or 'product information'."
+msgstr "Na przykład: \"uwagi do strony\" lub \"informacje o produktach\"."
+
+#: modules/contact/contact.admin.inc:49
+msgid ""
+"Example: 'webmaster@example.com' or 'sales@example.com,support@example.com'. "
+"To specify multiple recipients, separate each e-mail address with a comma."
+msgstr ""
+"Na przykład: \"webmaster@twojastrona.com\" lub \"dzialsprzedazy@twojastrona."
+"com\".  Adresy odbiorców rozdziela się za pomocą przecinka."
+
+#: modules/contact/contact.admin.inc:53
+msgid "Auto-reply"
+msgstr "Automatyczna odpowiedź"
+
+#: modules/contact/contact.admin.inc:55
+msgid ""
+"Optional auto-reply. Leave empty if you do not want to send the user an auto-"
+"reply message."
+msgstr ""
+"Odpowiedź wysyłana automatycznie. Wypełnienie pola jest opcjonalne. Jeśli "
+"nie zostanie wypełnione, użytkownik nie będzie otrzymywał żadnej "
+"automatycznie wysyłanej odpowiedzi."
+
+#: modules/contact/contact.admin.inc:60
+msgid ""
+"When listing categories, those with lighter (smaller) weights get listed "
+"before categories with heavier (larger) weights. Categories with equal "
+"weights are sorted alphabetically."
+msgstr ""
+"Na listach kategorii, lżejsze są wyświetlane przed cięższymi. Kategorie o "
+"takiej samej wadze porządkowane są natomiast alfabetycznie."
+
+#: modules/contact/contact.admin.inc:66
+msgid ""
+"Set this to <em>Yes</em> if you would like this category to be selected by "
+"default."
+msgstr "<em>Tak</em>, jeśli ta kategoria ma być domyślnie wybrana."
+
+#: modules/contact/contact.admin.inc:86
+msgid "You must enter one or more recipients."
+msgstr "Wymagane jest wprowadzenie jednego lub więcej odbiorców."
+
+#: modules/contact/contact.admin.inc:92
+msgid "%recipient is an invalid e-mail address."
+msgstr "%recipient nie jest prawidłowym adresem e-mail."
+
+#: modules/contact/contact.admin.inc:114
+msgid "Category %category has been added."
+msgstr "Kategoria %category została dodana."
+
+#: modules/contact/contact.admin.inc:120
+msgid "Category %category has been updated."
+msgstr "Kategoria %category została zaktualizowana."
+
+#: modules/contact/contact.admin.inc:138
+msgid "Are you sure you want to delete %category?"
+msgstr "Czy na pewno usunąć kategorię %category?"
+
+#: modules/contact/contact.admin.inc:147
+msgid "Category %category has been deleted."
+msgstr "Kategoria %category została usunięta."
+
+#: modules/contact/contact.admin.inc:156
+msgid "Additional information"
+msgstr "Dodatkowe informacje"
+
+#: modules/contact/contact.admin.inc:157 modules/contact/contact.pages.inc:41
+msgid "You can leave a message using the contact form below."
+msgstr "Możesz zostawić nam wiadomość, korzystając z poniższego formularza."
+
+#: modules/contact/contact.admin.inc:158
+msgid ""
+"Information to show on the <a href=\"@form\">contact page</a>. Can be "
+"anything from submission guidelines to your postal address or telephone "
+"number."
+msgstr ""
+"Informacje wyświetlane na <a href=\"@form\">stronie kontaktowej</a> - "
+"cokolwiek, począwszy od wskazówek dotyczących wysyłania wiadomości, a "
+"skończywszy na adresie czy numerze telefonu."
+
+#: modules/contact/contact.admin.inc:161
+msgid "Hourly threshold"
+msgstr "Wiadomości na godzinę"
+
+#: modules/contact/contact.admin.inc:164
+msgid ""
+"The maximum number of contact form submissions a user can perform per hour."
+msgstr ""
+"Maksymalna liczba wiadomości, które użytkownik może przesłać w ciągu godziny."
+
+#: modules/contact/contact.admin.inc:168
+msgid "Enable personal contact form by default"
+msgstr "Domyślnie aktywuj osobisty formularz kontaktowy"
+
+#: modules/contact/contact.admin.inc:170
+msgid "Default status of the personal contact form for new users."
+msgstr ""
+"Pozwala zdecydować, czy osobiste formularze kontaktowe użytkowników będą "
+"domyślnie aktywne."
+
+#: modules/contact/contact.admin.inc:115
+msgid "Contact form: category %category added."
+msgstr "Formularz kontaktowy: kategoria %category została dodana."
+
+#: modules/contact/contact.admin.inc:121
+msgid "Contact form: category %category updated."
+msgstr "Formularz kontaktowy: kategoria %category została zaktualizowana."
+
+#: modules/contact/contact.admin.inc:148
+msgid "Contact form: category %category deleted."
+msgstr "Formularz kontaktowy: kategoria %category została usunięta."
+
+#: modules/contact/contact.pages.inc:17
+msgid ""
+"You cannot send more than %number messages per hour. Please try again later."
+msgstr ""
+"Nie można wysyłać więcej niż %number wiadomości w ciągu godziny. Proszę "
+"spróbować później."
+
+#: modules/contact/contact.pages.inc:49
+msgid "Your e-mail address"
+msgstr "Twój adres e-mail"
+
+#: modules/contact/contact.pages.inc:88;197
+msgid "Send yourself a copy."
+msgstr "Prześlij mi kopię."
+
+#: modules/contact/contact.pages.inc:99
+msgid ""
+"The contact form has not been configured. <a href=\"@add\">Add one or more "
+"categories</a> to the form."
+msgstr ""
+"Formularz kontaktowy nie został skonfigurowany. Należy najpierw <a href="
+"\"@add\">ustalić kategorie wiadomości</a>."
+
+#: modules/contact/contact.pages.inc:109
+msgid "You must select a valid category."
+msgstr "Należy wybrać kategorię."
+
+#: modules/contact/contact.pages.inc:112
+msgid "You must enter a valid e-mail address."
+msgstr "Należy wprowadzić prawidłowy adres e-mail."
+
+#: modules/contact/contact.pages.inc:147
+msgid "Your message has been sent."
+msgstr "Wiadomość została wysłana."
+
+#: modules/contact/contact.pages.inc:161
+msgid ""
+"You need to provide a valid e-mail address to contact other users. Please "
+"update your <a href=\"@url\">user information</a> and try again."
+msgstr ""
+"By móc kontaktować się z innymi użytkownikami, należy podać swój właściwy "
+"adres e-mail. Proszę <a href=\"@url\">zaktualizować dane</a> i spróbować "
+"ponownie."
+
+#: modules/contact/contact.pages.inc:164
+msgid ""
+"You cannot contact more than %number users per hour. Please try again later."
+msgstr ""
+"Nie można wysyłać wiadomości do więcej niż %number użytkowników w ciągu "
+"godziny. Proszę spróbować później."
+
+#: modules/contact/contact.pages.inc:179
+msgid "From"
+msgstr "Od"
+
+#: modules/contact/contact.pages.inc:183
+msgid "To"
+msgstr "Do"
+
+#: modules/contact/contact.pages.inc:232
+msgid "The message has been sent."
+msgstr "Wiadomość została wysłana."
+
+#: modules/contact/contact.pages.inc:146
+msgid "%name-from sent an e-mail regarding %category."
+msgstr "Użytkownik %name-from wysłał e-mail związany z kategorią %category."
+
+#: modules/contact/contact.pages.inc:231
+msgid "%name-from sent %name-to an e-mail."
+msgstr "Użytkownik %name-from wysłał e-mail do użytkownika %name-to."
+
+#: modules/contact/contact.module:15
+msgid ""
+"The contact module facilitates communication via e-mail, by allowing your "
+"site's visitors to contact one another (personal contact forms), and by "
+"providing a simple way to direct messages to a set of administrator-defined "
+"recipients (the <a href=\"@contact\">contact page</a>). With either form, "
+"users specify a subject, write their message, and (optionally) have a copy "
+"of their message sent to their own e-mail address."
+msgstr ""
+"Moduł umożliwia użytkownikom kontaktowanie się między sobą za pomocą ich "
+"osobistych formularzy kontaktowych oraz wysyłanie zapytań do osób "
+"prowadzących witrynę, przy wykorzystaniu <a href=\"@contact\">ogólnego "
+"formularza kontaktowego witryny</a>, którego ustawienia pozwalają określić "
+"kategorie zapytań i przyporządkować im grupy odbiorców. W przypadku obydwu "
+"rodzajów formularzy użytkownicy muszą podać tytuł wiadomości i, oczywiście, "
+"wpisać jej treść. Mogą również zażyczyć sobie przesłania im ich własnej "
+"wiadomości."
+
+#: modules/contact/contact.module:16
+msgid ""
+"Personal contact forms allow users to be contacted via e-mail, while keeping "
+"recipient e-mail addresses private. Users may enable or disable their "
+"personal contact forms by editing their <em>My account</em> page. If "
+"enabled, a <em>Contact</em> tab leading to their personal contact form is "
+"available on their user profile. Site administrators have access to all "
+"personal contact forms (even if they have been disabled). The <em>Contact</"
+"em> tab is only visible when viewing another user's profile (users do not "
+"see their own <em>Contact</em> tab)."
+msgstr ""
+"Osobiste formularze kontaktowe pozwalają otrzymywać wiadomości e-mail bez "
+"konieczności podawania adresu e-mail publicznie. Za pomocą ustawień "
+"znajdujących się na stronie <em>Moje konto</em> użytkownik może włączyć lub "
+"wyłączyć swój formularz. Jeśli jest on włączony, na stronie profilu "
+"użytkownika wyświetlana jest karta <em>Kontakt</em>, prowadząca do strony z "
+"formularzem. Administratorzy witryny mają dostęp do wszystkich formularzy "
+"kontaktowych, niezależnie od ustawień poszczególnych użytkowników. "
+
+#: modules/contact/contact.module:17
+msgid ""
+"The <a href=\"@contact\">contact page</a> provides a simple form for "
+"visitors to leave comments, feedback, or other requests. Messages are routed "
+"by selecting a category from a list of administrator-defined options; each "
+"category has its own set of e-mail recipients. Common categories for a "
+"business site include, for example, \"Website feedback\" (messages are "
+"forwarded to web site administrators) and \"Product information\" (messages "
+"are forwarded to members of the sales department). The actual e-mail "
+"addresses defined within a category are not displayed. Only users in roles "
+"with the <em>access site-wide contact form</em> permission may access the <a "
+"href=\"@contact\">contact page</a>."
+msgstr ""
+"Strona kontaktowa witryny daje użytkownikom możliwość przesłania komentarzy, "
+"uwag lub innych zapytań. Wiadomości są kierowane do odbiorców, których "
+"wyznacza administrator. Służą mu do tego kategorie, z których każda ma "
+"własną listę adresów e-mail pod które mają trafiać wiadomości. Na stronie "
+"firmowej mogłyby być na przykład dostępne dwie kategorie: \"Uwagi na temat "
+"witryny\" (wiadomości do administratorów) i \"Zapytania dotyczące produktów"
+"\" (wiadomości do osób z działu sprzedaży). Adresy e-mail odbiorców nie są "
+"wyświetlane, a do formularza mają dostęp jedynie ci użytkownicy, którzy <a "
+"href=\"@contact\">posiadają odpowiednie uprawnienia</a>."
+
+#: modules/contact/contact.module:18
+msgid ""
+"A link to your site's <a href=\"@contact\">contact page</a> from the main "
+"<em>Navigation</em> menu is created, but is disabled by default. Create a "
+"similar link on another menu by adding a menu item pointing to the path "
+"\"contact\""
+msgstr ""
+"Odnośnik do <a href=\"@contact\">strony kontaktowej</a> znajduje się w menu "
+"nawigacyjnym, jednak domyślnie jest on wyłączony. Podobny odnośnik można "
+"umieścić w innym menu - należy wtedy podać ścieżkę \"contact\"."
+
+#: modules/contact/contact.module:19
+msgid ""
+"Customize the <a href=\"@contact\">contact page</a> with additional "
+"information (like physical location, mailing address, and telephone number) "
+"using the <a href=\"@contact-settings\">contact form settings page</a>. The "
+"<a href=\"@contact-settings\">settings page</a> also provides configuration "
+"options for the maximum number of contact form submissions a user may "
+"perform per hour, and the default status of users' personal contact forms."
+msgstr ""
+"Na <a href=\"@contact\">stronie kontaktowej</a> można także umieścić "
+"dodatkowe informacje, takie jak adres firmy czy numer telefonu. Służy do "
+"tego <a href=\"@contact-settings\">strona ustawień formularza kontaktowego</"
+"a>.. Znajdują się na niej również ustawienia określające maksymalną liczbę "
+"wiadomości, które użytkownik może wysłać w ciągu godziny, a także domyślny "
+"status osobistych formularzy kontaktowych."
+
+#: modules/contact/contact.module:20
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@contact"
+"\">Contact module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"%contact\">stronie dotyczącej formularzy "
+"kontaktowych</a> w podręczniku konfiguracji w internecie."
+
+#: modules/contact/contact.module:23
+msgid ""
+"This page lets you set up <a href=\"@form\">your site-wide contact form</a>. "
+"To do so, add one or more categories. You can associate different recipients "
+"with each category to route e-mails to different people. For example, you "
+"can route website feedback to the webmaster and direct product information "
+"requests to the sales department. On the <a href=\"@settings\">settings "
+"page</a>, you can customize the information shown above the contact form. "
+"This can be useful to provide additional contact information such as your "
+"postal address and telephone number."
+msgstr ""
+"Strona pozwala ustawić <a href=\"@form\">ogólny formularz kontaktowy "
+"witryny</a>. By go włączyć, należy najpierw dodać co najmniej jedną "
+"kategorię. Z każdą z nich powiązać można różnych odbiorców, tak by "
+"wiadomości e-mail kierowane były do różnych osób zależnie od wybranej przez "
+"użytkownika kategorii (na przykład zapytania dotyczące produktów - do działu "
+"sprzedaży). Na <a href=\"@settings\">stronie ustawień</a> zmienić można "
+"tekst wyświetlany ponad formularzem kontaktowym. Może on na przykład "
+"zawierać informacje o adresie lub numerze telefonu."
+
+#: modules/contact/contact.module:25
+msgid ""
+"The menu item can be customized and configured only once the menu module has "
+"been <a href=\"@modules-page\">enabled</a>."
+msgstr ""
+"Element menu może być zmodyfikowany tylko jeśli moduł menu jest <a href="
+"\"@modules-page\">włączony</a>."
+
+#: modules/contact/contact.module:30
+msgid ""
+"The contact module also adds a <a href=\"@menu-settings\">menu item</a> "
+"(disabled by default) to the navigation block."
+msgstr ""
+"Moduł umieszcza także w <a href=\"@menu-settings\">menu nawigacyjnym</a> "
+"odnośnik do formularza kontaktowego (domyślnie jest on wyłączony)."
+
+#: modules/contact/contact.module:144
+msgid "Contact settings"
+msgstr "Kontakt"
+
+#: modules/contact/contact.module:149
+msgid "Personal contact form"
+msgstr "Osobisty formularz kontaktowy"
+
+#: modules/contact/contact.module:151
+msgid ""
+"Allow other users to contact you by e-mail via <a href=\"@url\">your "
+"personal contact form</a>. Note that while your e-mail address is not made "
+"public to other members of the community, privileged users such as site "
+"administrators are able to contact you even if you choose not to enable this "
+"feature."
+msgstr ""
+"Umożliwia innym użytkownikom wysyłanie ci wiadomości e-mail za pomocą <a "
+"href=\"@url\">osobistego formularza kontaktowego</a>. Warto pamiętać, że "
+"użytkownicy uprzywilejowani, na przykład administratorzy, mogą korzystać z "
+"formularza kontaktowego niezależnie od niniejszych ustawień."
+
+#: modules/contact/contact.module:172;178
+msgid "[!category] !subject"
+msgstr "[!category] !subject"
+
+#: modules/contact/contact.module:173
+msgid "!name sent a message using the contact form at !form."
+msgstr ""
+"Użytkownik !name wysłał wiadomość, korzystając z formularza kontaktowego na "
+"stronie !form."
+
+#: modules/contact/contact.module:187
+msgid ""
+"!name (!name-url) has sent you a message via your contact form (!form-url) "
+"at !site."
+msgstr ""
+"Oto wiadomość od !name (!name-url), wysłana za pomocą formularza "
+"kontaktowego (!form-url) witryny !site."
+
+#: modules/contact/contact.module:188
+msgid ""
+"If you don't want to receive such e-mails, you can change your settings at !"
+"url."
+msgstr "Wysyłanie wiadomości tego rodzaju można zablokować na stronie !url."
+
+#: modules/contact/contact.module:189
+msgid "Message:"
+msgstr "Wiadomość:"
+
+#: modules/contact/contact.module:39
+msgid "access site-wide contact form"
+msgstr "dostęp do głównego formularza kontaktowego"
+
+#: modules/contact/contact.module:39
+msgid "administer site-wide contact form"
+msgstr "zarządzanie formularzem kontaktowym witryny"
+
+#: modules/contact/contact.module:46
+msgid "Contact form"
+msgstr "Formularz kontaktowy"
+
+#: modules/contact/contact.module:47
+msgid "Create a system contact form and set up categories for the form to use."
+msgstr ""
+"Pozwala stworzyć formularz kontaktowy witryny i ustalić kategorie wiadomości."
+
+#: modules/contact/contact.module:68
+msgid "Edit contact category"
+msgstr "Edycja kategorii"
+
+#: modules/contact/contact.module:76
+msgid "Delete contact"
+msgstr "Usuń kategorię"
+
+#: modules/contact/contact.module:0
+msgid "contact"
+msgstr "kontakt"
+
+#: modules/contact/contact.install:29
+msgid "Contact form category settings."
+msgstr ""
+
+#: modules/contact/contact.install:35
+msgid "Primary Key: Unique category ID."
+msgstr ""
+
+#: modules/contact/contact.install:42
+msgid "Category name."
+msgstr "Nazwa kategorii."
+
+#: modules/contact/contact.install:48
+msgid "Comma-separated list of recipient e-mail addresses."
+msgstr ""
+
+#: modules/contact/contact.install:54
+msgid "Text of the auto-reply message."
+msgstr ""
+
+#: modules/contact/contact.install:61
+msgid "The category's weight."
+msgstr ""
+
+#: modules/contact/contact.install:68
+msgid ""
+"Flag to indicate whether or not category is selected by default. (1 = Yes, 0 "
+"= No)"
+msgstr ""

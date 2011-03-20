@@ -1,0 +1,288 @@
+# Polish translation of Drupal
+# Copyright 2005-2008 archetwist
+msgid ""
+msgstr ""
+"Project-Id-Version: drupal PL arche\n"
+"POT-Creation-Date: 2008-08-16 14:35+0200\n"
+"PO-Revision-Date: 2008-09-08 05:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: archetwist <archetwist#gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: modules/upload/upload.admin.inc:10
+msgid ""
+"The maximum allowed image size expressed as WIDTHxHEIGHT (e.g. 640x480). Set "
+"to 0 for no restriction."
+msgstr ""
+"Maksymalne wymiary wysyłanego pliku graficznego zapisuje się w formie "
+"SZEROKOŚĆxWYSOKOŚĆ (np. 640x480). Wpisanie 0 znosi ograniczenie."
+
+#: modules/upload/upload.admin.inc:18
+msgid ""
+"Depending on your server environment, these settings may be changed in the "
+"system-wide php.ini file, a php.ini file in your Drupal root directory, in "
+"your Drupal site's settings.php file, or in the .htaccess file in your "
+"Drupal root directory."
+msgstr ""
+"W zależności od konfiguracji serwera, poniższe ustawienia mogą być nadpisane "
+"za pomocą pliku php.ini wykorzystywanego przez system, pliku php.ini "
+"umieszczonego w głównym katalogu Drupala, pliku settings.php witryny lub "
+"pliku .htaccess z głównego katalogu Drupala."
+
+#: modules/upload/upload.admin.inc:21;24;39;42
+msgid "The %role file size limit must be a number and greater than zero."
+msgstr ""
+"Maksymalny rozmiar pliku dla użytkowników o randze %role musi być wyrażony "
+"liczbą większą od zera."
+
+#: modules/upload/upload.admin.inc:21;24;31
+msgid "default"
+msgstr "domyślny"
+
+#: modules/upload/upload.admin.inc:31;49
+msgid ""
+"The %role maximum file size per upload is greater than the total file size "
+"allowed per user"
+msgstr ""
+"Maksymalna wielkość wysyłanych plików dla użytkowników o randze %role jest "
+"większa, niż maksymalna wielkość wszystkich plików, które może wysłać "
+"użytkownik"
+
+#: modules/upload/upload.admin.inc:64
+msgid "General settings"
+msgstr "Ustawienia główne"
+
+#: modules/upload/upload.admin.inc:69
+msgid "Maximum resolution for uploaded images"
+msgstr "Maksymalne wymiary wysyłanych plików graficznych"
+
+#: modules/upload/upload.admin.inc:73
+msgid ""
+"The maximum allowed image size (e.g. 640x480). Set to 0 for no restriction. "
+"If an <a href=\"!image-toolkit-link\">image toolkit</a> is installed, files "
+"exceeding this value will be scaled down to fit."
+msgstr ""
+"Maksymalne dozwolone wymiary pliku graficznego (np. 640x480). Wprowadzenie "
+"zera spowoduje zniesienie ograniczenia. Jeśli zainstalowano <a href=\"!image-"
+"toolkit-link\">narzędzie do przetwarzania grafik</a>, pliki o większych "
+"wymiarach będą zmniejszane."
+
+#: modules/upload/upload.admin.inc:74
+msgid "WIDTHxHEIGHT"
+msgstr "SZEROKOŚĆxWYSOKOŚĆ"
+
+#: modules/upload/upload.admin.inc:78
+msgid "List files by default"
+msgstr "Domyślnie wyświetlaj listę załączników"
+
+#: modules/upload/upload.admin.inc:81
+msgid "Display attached files when viewing a post."
+msgstr ""
+"Prezentuje listę plików podczas wyświetlania wpisu, do którego zostały "
+"załączone."
+
+#: modules/upload/upload.admin.inc:97
+msgid ""
+"The default maximum file size a user can upload. If an image is uploaded and "
+"a maximum resolution is set, the size will be checked after the file has "
+"been resized."
+msgstr ""
+"Domyślna maksymalna dozwolona wielkość pliku, który może wysłać użytkownik. "
+"Jeśli jest to plik graficzny, sprawdzenie jego wielkości nastąpi po "
+"dopasowaniu do dozwolonych wymiarów."
+
+#: modules/upload/upload.admin.inc:135
+msgid ""
+"The maximum size of a file a user can upload. If an image is uploaded and a "
+"maximum resolution is set, the size will be checked after the file has been "
+"resized."
+msgstr ""
+"Maksymalna dozwolona wielkość pliku, który może wysłać użytkownik. Jeśli "
+"jest to plik graficzny, sprawdzenie jego wielkości nastąpi po dopasowaniu do "
+"dozwolonych wymiarów."
+
+#: modules/upload/upload.admin.inc:144
+msgid "The maximum size of all files a user can have on the site."
+msgstr ""
+"Maksymalna wielkość wszystkich plików, które wysłać może użytkownik witryny."
+
+#: modules/upload/upload.module:16
+msgid ""
+"The upload module allows users to upload files to the site. The ability to "
+"upload files is important for members of a community who want to share work. "
+"It is also useful to administrators who want to keep uploaded files "
+"connected to posts."
+msgstr ""
+"Moduł obsługujący wysyłanie plików pozwala użytkownikom wysyłać pliki do "
+"witryny. Możliwość wysyłania plików jest ważna dla tych członków "
+"społeczności, którzy chcą podzielić się z innymi swoją pracą. Jest także "
+"użyteczna dla administratorów, chcących umieścić pliki powiązane z "
+"konkretnymi wpisami."
+
+#: modules/upload/upload.module:17
+msgid ""
+"Users with the upload files permission can upload attachments to posts. "
+"Uploads may be enabled for specific content types on the content types "
+"settings page. Each user role can be customized to limit or control the file "
+"size of uploads, or the maximum dimension of image files."
+msgstr ""
+"Użytkownicy z uprawnieniami do wysyłania plików mogą załączać pliki do "
+"wpisów. Możliwość załączania plików można udostępnić poprzez stronę "
+"konfiguracji danego rodzaju zawartości. Użytkownicy każdej z rang mogą mieć "
+"inne ograniczenia dotyczące wielkości pliku i wymiarów plików graficznych."
+
+#: modules/upload/upload.module:18
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@upload"
+"\">Upload module</a>."
+msgstr ""
+"Więcej informacji na <a href=\"@upload\">stronie dotyczącej wysyłania "
+"plików</a> w podręczniku konfiguracji w internecie."
+
+#: modules/upload/upload.module:21
+msgid ""
+"Users with the <a href=\"@permissions\">upload files permission</a> can "
+"upload attachments. Users with the <a href=\"@permissions\">view uploaded "
+"files permission</a> can view uploaded attachments. You can choose which "
+"post types can take attachments on the <a href=\"@types\">content types "
+"settings</a> page."
+msgstr ""
+"Użytkownicy z <a href=\"@permissions\">uprawnieniami do wysyłania plików</a> "
+"mogą załączać pliki. Użytkownicy z <a href=\"@permissions\">uprawnieniami do "
+"wyświetlania wysłanych plików</a> uzyskują dostęp do załączników. Możliwość "
+"załączania plików do wybranych rodzajów zawartości włącza się na <a href="
+"\"@types\">stronie ustawień rodzajów zawartości</a>."
+
+#: modules/upload/upload.module:67
+msgid "Read full article to view attachments."
+msgstr "Lista załączników znajduje się w dalszej części wpisu."
+
+#: modules/upload/upload.module:213
+msgid "Attachments"
+msgstr "Załączniki"
+
+#: modules/upload/upload.module:226
+msgid "File attachments"
+msgstr "Załączniki"
+
+#: modules/upload/upload.module:229
+msgid ""
+"Changes made to the attachments are not permanent until you save this post. "
+"The first \"listed\" file will be included in RSS feeds."
+msgstr ""
+"Póki wpis nie zostanie zachowany, zmiany dokonywane w załącznikach mają "
+"charakter tymczasowy.  Pierwszy z plików na liście zostanie udostępniony "
+"przez kanał RSS."
+
+#: modules/upload/upload.module:247
+msgid ""
+"File attachments are disabled. The file directories have not been properly "
+"configured."
+msgstr ""
+"Funkcja przesyłania plików jest niedostępna. Odpowiednie katalogi nie "
+"zostały prawidłowo skonfigurowane."
+
+#: modules/upload/upload.module:249
+msgid ""
+"Please visit the <a href=\"@admin-file-system\">file system configuration "
+"page</a>."
+msgstr ""
+"Przejdź proszę na <a href=\"@admin-file-system\">stronę konfiguracji systemu "
+"plików</a>."
+
+#: modules/upload/upload.module:252
+msgid "Please contact the site administrator."
+msgstr "Proszę skontaktować się z administratorem."
+
+#: modules/upload/upload.module:344
+msgid "Attachment"
+msgstr "Załącznik"
+
+#: modules/upload/upload.module:344;517
+msgid "Size"
+msgstr "Wielkość"
+
+#: modules/upload/upload.module:491
+msgid "Attach new file"
+msgstr "Załącz nowy plik"
+
+#: modules/upload/upload.module:493
+msgid "Images are larger than %resolution will be resized. "
+msgstr ""
+"Pliki graficzne, których wymiary przekraczają %resolution, zostaną "
+"zmniejszone."
+
+#: modules/upload/upload.module:493
+msgid ""
+"The maximum upload size is %filesize. Only files with the following "
+"extensions may be uploaded: %extensions. "
+msgstr ""
+"Maksymalna dozwolona wielkość pliku to %filesize. Wysyłane mogą być tylko "
+"pliki o następujących rozszerzeniach: %extensions. "
+
+#: modules/upload/upload.module:497
+msgid "Attach"
+msgstr "Załącz"
+
+#: modules/upload/upload.module:502
+msgid "Please wait..."
+msgstr "Proszę czekać..."
+
+#: modules/upload/upload.module:65;309
+msgid "1 attachment"
+msgid_plural "@count attachments"
+msgstr[0] "1 załącznik"
+msgstr[1] "@count załączniki"
+msgstr[2] "@count załączników"
+
+#: modules/upload/upload.module:46
+msgid "upload files"
+msgstr "wysyłanie plików"
+
+#: modules/upload/upload.module:46
+msgid "view uploaded files"
+msgstr "dostęp do wysłanych plików"
+
+#: modules/upload/upload.module:86
+msgid "File uploads"
+msgstr "Wysyłanie plików"
+
+#: modules/upload/upload.module:87
+msgid "Control how files may be attached to content."
+msgstr "Ustawienia związane z załączaniem plików."
+
+#: modules/upload/upload.module:0
+msgid "upload"
+msgstr "wysyłanie plików"
+
+#: modules/upload/upload.install:29
+msgid "Stores uploaded file information and table associations."
+msgstr ""
+
+#: modules/upload/upload.install:36
+msgid "Primary Key: The {files}.fid."
+msgstr ""
+
+#: modules/upload/upload.install:43
+msgid "The {node}.nid associated with the uploaded file."
+msgstr ""
+
+#: modules/upload/upload.install:50
+msgid "Primary Key: The {node}.vid associated with the uploaded file."
+msgstr ""
+
+#: modules/upload/upload.install:57
+msgid "Description of the uploaded file."
+msgstr "Opis przesłanego pliku."
+
+#: modules/upload/upload.install:65
+msgid "Whether the file should be visibly listed on the node: yes(1) or no(0)."
+msgstr ""
+
+#: modules/upload/upload.install:72
+msgid "Weight of this upload in relation to other uploads in this node."
+msgstr ""

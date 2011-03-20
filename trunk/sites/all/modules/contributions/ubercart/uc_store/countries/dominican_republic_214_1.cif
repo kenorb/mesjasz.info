@@ -1,0 +1,56 @@
+<?php
+// $Id: dominican_republic_214_1.cif,v 1.2.2.5 2008/11/03 21:33:50 islandusurper Exp $
+
+/**
+ * First implement hook_install() using the name of the country as the base of
+ * the function name.
+ */
+function dominican_republic_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (214, 'Dominican Republic', 'DO', 'DOM', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(214, 'DN', 'Distrito Nacional'),"
+          ."(214, 'AZ', 'Azua'),"
+          ."(214, 'BC', 'Baoruco'),"
+          ."(214, 'BH', 'Barahona'),"
+          ."(214, 'DJ', 'Dajabon'),"
+          ."(214, 'DU', 'Duarte'),"
+          ."(214, 'EL', 'Elias Pina'),"
+          ."(214, 'SY', 'El Seybo'),"
+          ."(214, 'ET', 'Espaillat'),"
+          ."(214, 'HM', 'Hato Mayor'),"
+          ."(214, 'IN', 'Independencia'),"
+          ."(214, 'AL', 'La Altagracia'),"
+          ."(214, 'RO', 'La Romana'),"
+          ."(214, 'VE', 'La Vega'),"
+          ."(214, 'MT', 'Maria Trinidad Sanchez'),"
+          ."(214, 'MN', 'Monsenor Nouel'),"
+          ."(214, 'MC', 'Monte Cristi'),"
+          ."(214, 'MP', 'Monte Plata'),"
+          ."(214, 'PD', 'Pedernales'),"
+          ."(214, 'PR', 'Peravia (Bani)'),"
+          ."(214, 'PP', 'Puerto Plata'),"
+          ."(214, 'SL', 'Salcedo'),"
+          ."(214, 'SM', 'Samana'),"
+          ."(214, 'SH', 'Sanchez Ramirez'),"
+          ."(214, 'SC', 'San Cristobal'),"
+          ."(214, 'JO', 'San Jose de Ocoa'),"
+          ."(214, 'SJ', 'San Juan'),"
+          ."(214, 'PM', 'San Pedro de Macoris'),"
+          ."(214, 'SA', 'Santiago'),"
+          ."(214, 'ST', 'Santiago Rodriguez'),"
+          ."(214, 'SD', 'Santo Domingo'),"
+          ."(214, 'VA', 'Valverde')");
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.  Documentation on address formats
+  // is available at:
+  // http://www.ubercart.org/ubercart_users_guide/country_settings#address_format_docs
+  uc_set_address_format(214,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+   ."\r\n!city !zone_code !postal_code\r\n!country_name_if");
+}
+

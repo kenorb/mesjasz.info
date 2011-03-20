@@ -1,0 +1,39 @@
+<?php
+// $Id: user_stats.install,v 1.1.2.6.2.2 2008/03/29 07:34:04 liammcdermott Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function user_stats_install() {
+  db_query("DELETE FROM {profile_fields} WHERE name IN ('user_post_count', 'user_ip_address', 'user_login_count')");
+  db_query("INSERT INTO {profile_fields} (
+    title, name, explanation, category, page, type, weight, required, register, visibility, options) VALUES
+    ('Post Count', 'user_post_count', '', 'Statistics', '', 'textfield', 0, 0, 0, 4, '')");
+  db_query("INSERT INTO {profile_fields} (
+    title, name, explanation, category, page, type, weight, required, register, visibility, options) VALUES
+    ('IP Address', 'user_ip_address', '', 'Statistics', '', 'textfield', 0, 0, 0, 4, '')");
+  db_query("INSERT INTO {profile_fields} (
+    title, name, explanation, category, page, type, weight, required, register, visibility, options) VALUES
+    ('Login Count', 'user_login_count', '', 'Statistics', '', 'textfield', 0, 0, 0, 4, '')");
+  variable_set('user_stats_postcount_profile_field', 'user_post_count');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function user_stats_uninstall() {
+  $post_count_profile_field = variable_get('user_stats_postcount_profile_field', 'user_post_count');
+  variable_del('user_stats_rebuild_stats');
+  variable_del('user_stats_last_cron_check');
+  variable_del('user_stats_included_content_types');
+  variable_del('user_stats_reset_count');
+  variable_del('user_stats_user_per_cron');
+  variable_del('user_stats_count_posts');
+  variable_del('user_stats_count_logins');
+  variable_del('user_stats_postcount_profile_field');
+  db_query("DELETE FROM {profile_values}
+    WHERE fid IN (SELECT fid FROM {profile_fields}
+    WHERE name IN ('%s', 'user_ip_address', 'user_login_count'))", $post_count_profile_field);
+  db_query("DELETE FROM {profile_fields}
+    WHERE name IN ('%s', 'user_ip_address', 'user_login_count')", $post_count_profile_field);
+}

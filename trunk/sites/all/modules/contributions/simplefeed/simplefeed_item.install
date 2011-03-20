@@ -1,0 +1,122 @@
+<?php
+// $Id: simplefeed_item.install,v 1.9.4.8 2008/10/07 17:30:13 m3avrck Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function simplefeed_item_install() {
+  // Create tables.
+  drupal_install_schema('simplefeed_item');
+  drupal_set_message(t('SimpleFeed Item successfully installed.'));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function simplefeed_item_uninstall() {
+  drupal_uninstall_schema('simplefeed_item');
+}
+
+function simplefeed_item_update_1() {
+  // this update should never run, it does not work correctly
+  // and update 2 takes care of this update but uses the new updated IIDs
+  // rendering this update useless anywho
+  return;
+}
+
+function simplefeed_item_update_2() {
+  // How many feed items to process each time.
+  $limit = 50;
+
+  // Set-up multipart update.
+  if (!isset($_SESSION['simplefeed_item_update_2'])) {
+    $_SESSION['simplefeed_item_update_2'] = array(
+      'vid' => 0,
+      'max' => db_result(db_query('SELECT MAX(vid) FROM {simplefeed_feed_item}')),
+      'count' => 0,
+    );
+  }
+  
+  // Fetch up to N feed items and update their iids to new schema
+  $num_feed_items = 0;
+  $count = $_SESSION['simplefeed_item_update_2']['count'];
+  $feed_items = db_query_range('SELECT r.vid, r.title, s.url FROM {node_revisions} r JOIN {simplefeed_feed_item} s ON r.vid = s.vid ORDER BY r.vid ASC', $count, $limit);
+  while ($feed_item = db_fetch_object($feed_items)) {
+    $iid = md5($feed_item->title . $feed_item->url);
+    db_query("UPDATE {simplefeed_feed_item} SET iid = '%s' WHERE vid = %d", $iid, $feed_item->vid);
+    $_SESSION['simplefeed_item_update_2']['vid'] = $feed_item->vid;
+    $num_feed_items++;    
+  }
+
+  if ($num_feed_items == $limit) {
+    $_SESSION['simplefeed_item_update_2']['count'] += $limit;
+    // Return progress (never return 100% here to ensure clean-up is still run last).
+    return array('#finished' => $_SESSION['simplefeed_item_update_2']['vid'] / ($_SESSION['simplefeed_item_update_2']['max'] + 1));
+  }
+  else {
+    // Clean-up.
+    unset($_SESSION['simplefeed_item_update_2']);
+    return array();
+  }
+}
+
+function simplefeed_item_update_3() {
+  $ret = array();
+  $ret[] = update_sql("ALTER TABLE {simplefeed_feed_item} CHANGE url url text");
+  $ret[] = update_sql("ALTER TABLE {simplefeed_feed_item} CHANGE iid iid varchar(32) NOT NULL");  
+  return $ret;
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function simplefeed_item_schema() {     
+  $schema['simplefeed_feed_item'] = array(
+    'description' => t('Stores simplefeed feed item data. Connects each feed_item node to a feed item in the simplefeed_feed_item table.'),
+    'fields' => array(
+      'vid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t("The feed item's vid reference."),
+      ),
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t("The feed item's nid reference."),
+      ),
+      'iid' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'description' => t("md5 of the feed item's title and body."),
+      ),
+      'fid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t("The nid of the feed item's parent feed."),
+      ),
+      'expires' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t("How long a feed item should exist before expiring."),
+      ),
+      'url' => array(
+        'type' => 'text',
+        'description' => t("The url of the feed item."),     
+      ),
+    ),
+    'primary key' => array('vid'),
+    'indexes' => array(
+      'nid' => array('nid'),
+      'iid' => array('iid'),
+      'fid' => array('fid'),
+    ),
+  );
+
+  return $schema;
+}

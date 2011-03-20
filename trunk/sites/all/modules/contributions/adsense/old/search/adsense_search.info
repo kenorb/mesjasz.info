@@ -1,0 +1,16 @@
+; $Id: adsense_search.info,v 1.1 2008/07/21 00:21:34 kbahey Exp $
+; Copyright 2005-2008 Khalid Baheyeldin http://2bits.com
+; Copyright 2008      Joao Ventura      http://www.venturas.org
+
+name = Search (old)
+description = AdSense for Search generator module. This module uses the 'old' code in which the user can select to search the entire Web or 1 to 3 user-defined domains.
+dependencies[] = adsense
+package = Adsense
+core = 6.x
+
+; Information added by drupal.org packaging script on 2010-08-20
+version = "6.x-1.3"
+core = "6.x"
+project = "adsense"
+datestamp = "1282325489"
+

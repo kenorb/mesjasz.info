@@ -1,0 +1,15 @@
+; $Id: uc_tax_report.info,v 1.1.2.1 2009/02/27 22:41:35 islandusurper Exp $
+name = Tax Report
+description = View a report about sales tax your customers paid.
+dependencies[] = uc_reports
+dependencies[] = uc_taxes
+package = "Ubercart - core (optional)"
+core = 6.x
+php = 5.0
+
+; Information added by drupal.org packaging script on 2009-03-02
+version = "6.x-2.0-beta5"
+core = "6.x"
+project = "ubercart"
+datestamp = "1236011768"
+

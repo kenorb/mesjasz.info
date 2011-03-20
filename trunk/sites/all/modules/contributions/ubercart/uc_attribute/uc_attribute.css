@@ -1,0 +1,17 @@
+/* $Id: uc_attribute.css,v 1.4.4.2 2009/01/02 20:18:43 islandusurper Exp $ */
+
+.options {
+  display: inline;
+}
+
+tr.draggable div.form-item {
+  display: inline;
+}
+
+#option-key td:first-child {
+  width: 26%;
+}
+
+.combinations td:first-child, .combinations td:first-child + td {
+  width: 12%;
+}

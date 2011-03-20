@@ -1,0 +1,39 @@
+/* $Id: links_weblink.css,v 1.2 2008/11/13 00:06:43 syscrusher Exp $
+
+   This is a stylesheet for rendering links_weblink's display pages.
+   Currently this is a rather ugly style for testing; it will be
+   changed before release.
+*/
+
+/* Headers for "Categories" and "Links..." sections */
+.links_weblink_section {
+	margin-top: 1.0em;
+	margin-bottom: 0.5em;
+	font-weight: bold;
+	font-size: 160%;
+}
+
+/* Parent category plus its list of children, if applicable */
+.links_weblink_category {
+	/* Nothing. Sites can implement their own features. */
+}
+
+/* Parent category only, excluding children (if any) */
+.links_weblink_category_parent {
+	font-weight: bold;
+	font-size: 130%;
+}
+
+/* List of children for a given parent category */
+.links_weblink_category_children {
+	/* Nothing. Sites can implement their own features. */
+}
+
+/* Individual child category */
+.links_weblink_category_child {
+	/* Nothing. Sites can implement their own features. */
+}
+
+.links_weblink_category_children li {
+	/* Nothing. Sites can implement their own features. */
+}

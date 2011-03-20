@@ -1,0 +1,243 @@
+# $Id: user_stats.sv.po,v 1.1.2.1 2008/04/09 15:03:37 liammcdermott Exp $
+#
+# Swedish translation of Drupal (user_stats)
+# Copyright 2008 Magnus Gunnarsson <seals@passagen.se>
+# Generated from files:
+#  user_stats.module,v 1.2.2.16.2.3 2008/03/29 07:34:04 liammcdermott
+#  user_stats.info,v 1.2.2.3.2.1 2008/03/28 11:10:52 liammcdermott
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: User Stats 6.x\n"
+"POT-Creation-Date: 2008-04-06 18:46+0200\n"
+"PO-Revision-Date: 2008-04-06 20:28+0100\n"
+"Last-Translator: Magnus Gunnarsson <seals@passagen.se>\n"
+"Language-Team: drupalsverige.\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: user_stats.module:50
+msgid "Post count options"
+msgstr "Alternativ för räkning av inlägg"
+
+#: user_stats.module:57
+msgid "Count posts"
+msgstr "Räkna inlägg"
+
+#: user_stats.module:58
+msgid "If checked user post counts will be calculated."
+msgstr "Om markerad kommer användarnas inlägg att räknas."
+
+#: user_stats.module:68
+msgid "Content types to include in post count"
+msgstr "Innehållstyp att inkluderas i räkningen av inlägg."
+
+#: user_stats.module:69
+msgid "Select the content types to include in the user post count (hold ctrl or shift to select multiple types). Both nodes and comments will be included in the post count. If you do not select any content types, then all types will be counted."
+msgstr "Välj innehållstyp som skall inkluderas i räkningen av användarnas inlägg (håll nere CTRL eller SHIFT för att välja flera typer). Både noder och kommentarer kommer att inkluderas i räkningen av inlägg. Om du inte väljer någon innehållstyp så kommer alla typer att räknas."
+
+#: user_stats.module:84
+msgid "User stats post count profile field"
+msgstr "Profilfält för antal inlägg av användare"
+
+#: user_stats.module:85
+msgid "This is the profile field that holds the postcount for a user. Changing this can be useful if you have multiple sites using the same database (or you just do not like the default field used for post counts). <strong>The default setting should work for most people.</strong>"
+msgstr "Detta är profilfältet som handhåller räkningen av inlägg för en användare. Att ändra detta kan vara användbart om du har flera webbplatser som använder samma databas (eller helt enkelt inte gillar det förvalda fältet som används för räkningen av inlägg.) <strong>Den förvalda inställningen borde fungera för de flesta.</strong>"
+
+#: user_stats.module:93
+msgid "Number of users to update per cron run"
+msgstr "Antal användare att uppdatera per schemalagd aktivitet"
+
+#: user_stats.module:100
+msgid "Post count reset"
+msgstr "Återställning av antal inlägg"
+
+#: user_stats.module:107;143;156
+msgid "Reset all post counts"
+msgstr "Återställ alla räkningar av inlägg"
+
+#: user_stats.module:112
+msgid "Login count options"
+msgstr "Alternativ för räkning av inloggningar"
+
+#: user_stats.module:119
+msgid "Count logins"
+msgstr "Räkna antal inloggningar"
+
+#: user_stats.module:120
+msgid "If checked user login counts will be calculated."
+msgstr "Om markerad kommer användarnas inloggningar att summeras."
+
+#: user_stats.module:126
+msgid "Login count reset"
+msgstr "Återställning av antal inloggningar"
+
+#: user_stats.module:133;146;164
+msgid "Reset all login counts"
+msgstr "Återställ alla räkningar av inloggningar"
+
+#: user_stats.module:155
+msgid "Are you sure you want to reset post counts?"
+msgstr "Är du säker på att du vill återställa alla räkningar av antal inlägg?"
+
+#: user_stats.module:156;164
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: user_stats.module:163
+msgid "Are you sure you want to reset login counts?"
+msgstr "Är du säker på att du vill återställa antal inloggningar?"
+
+#: user_stats.module:174
+msgid "The post counts will be reset during the next cron run."
+msgstr "Räkningen av antal inlägg kommer att återställas under nästa schemalagd aktivitet."
+
+#: user_stats.module:185
+msgid "The user login counts have been reset"
+msgstr "Antal inloggningar för användaren har återställts"
+
+#: user_stats.module:512
+msgid "Sorry, there is nothing for you to see here."
+msgstr "Ledsen, men det finns inget för dig här att se."
+
+#: user_stats.module:566
+msgid "User post count incremented"
+msgstr "Antal inlägg har ökat för användaren"
+
+#: user_stats.module:568
+msgid "User whos post count has incremented"
+msgstr "Användare vars antal inlägg har ökat"
+
+#: user_stats.module:570;577;584;591;606;614;622
+msgid "User"
+msgstr "Användare"
+
+#: user_stats.module:573
+msgid "User post count decremented"
+msgstr "Antal inlägg har minskat för användaren"
+
+#: user_stats.module:575
+msgid "User whos post count has decremented"
+msgstr "Användare vars antal inlägg har minskat"
+
+#: user_stats.module:580
+msgid "User post count reset"
+msgstr "Antal inlägg för användaren har återställts"
+
+#: user_stats.module:582
+msgid "User whos post count has reset"
+msgstr "Användare vars antal inlägg skall återställas"
+
+#: user_stats.module:587
+msgid "User is a day older"
+msgstr "Användaren är en dag äldre"
+
+#: user_stats.module:589
+msgid "User who is a day older"
+msgstr "Användare som är en dag äldre"
+
+#: user_stats.module:602
+msgid "Increment user post count"
+msgstr "Öka antal inlägg av användare"
+
+#: user_stats.module:604
+msgid "User whos post count should be incremented"
+msgstr "Användare vars antal inlägg skall ökas"
+
+#: user_stats.module:607
+msgid "Increments the post count of a user"
+msgstr "Ökar antal inlägg av en användare"
+
+#: user_stats.module:610
+msgid "Decrement user post count"
+msgstr "Minska antal inlägg av användare"
+
+#: user_stats.module:612
+msgid "User whos post count should be decremented"
+msgstr "Användare vars antal inlägg skall minskas"
+
+#: user_stats.module:615
+msgid "Decrements the post count of a user"
+msgstr "Minskar antal inlägg av en användare"
+
+#: user_stats.module:618
+msgid "Reset the user post count"
+msgstr "Återställ antal inlägg av användaren"
+
+#: user_stats.module:620
+msgid "User whos post count should be reset"
+msgstr "Användare vars antal inlägg skall återställas"
+
+#: user_stats.module:623
+msgid "Resets the post count of the current user."
+msgstr "Återställ antal inlägg av denna användare."
+
+#: user_stats.module:714
+msgid "Number of days since the user registered"
+msgstr "Antal dagar sedan användaren registrerades"
+
+#: user_stats.module:715
+msgid "Number of days since the user logged in"
+msgstr "Antal dagar sedan användaren senast loggade in"
+
+#: user_stats.module:716
+msgid "Number of days since the user posted"
+msgstr "Antal dagars sedan användaren senast gjorde ett inlägg"
+
+#: user_stats.module:717
+msgid "User's post count"
+msgstr "Användarens antal inlägg"
+
+#: user_stats.module:718
+msgid "User's IP address"
+msgstr "Användarens IP-adress"
+
+#: user_stats.module:8
+msgid "administer user stats"
+msgstr "Administrera statistik över användare"
+
+#: user_stats.module:8
+msgid "View statistics"
+msgstr "Visa statistik"
+
+#: user_stats.module:8
+msgid "View IP addresses"
+msgstr "Visa IP-adresser"
+
+#: user_stats.module:19
+msgid "User stats settings"
+msgstr "Inställningar för användarstatistik"
+
+#: user_stats.module:20
+msgid "Configuration of user stats module options."
+msgstr "Alternativ för inställning av modulen User Stats."
+
+#: user_stats.module:27
+msgid "reset user post stats"
+msgstr "Återställ inläggsstatistik för användare"
+
+#: user_stats.module:34
+msgid "reset user login stats"
+msgstr "Återställ inloggningsstatistik för användaren"
+
+#: user_stats.module:0
+msgid "user_stats"
+msgstr "user_stats"
+
+#: user_stats.info:0
+msgid "User Stats"
+msgstr "Statistik för användaren"
+
+#: user_stats.info:0
+msgid "Provides post count and other user statistics. Integrates well with Workflow NG and Token (if installed)."
+msgstr "Erhåller räkning av antal inlägg och annan användarstatistik. Erbjuder bra integrering med modulerna Workflow NG och Token (om de är installerade)."
+
+#: user_stats.info:0
+msgid "User goodies"
+msgstr "Bra användare"
+

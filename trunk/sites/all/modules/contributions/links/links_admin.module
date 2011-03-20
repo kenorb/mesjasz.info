@@ -1,0 +1,1080 @@
+<?php
+/** @file
+ * $Id: links_admin.module,v 1.11.2.4 2009/01/13 03:30:57 syscrusher Exp $
+ *
+ * links_admin provides a user interface to manage all links cataloged for
+ * the site, regardless of which module(s) is/are using each link.
+ *
+ * Author:  Scott Courtney (drupal.org user "syscrusher")
+ *
+ * RELEASE STATUS: This is BETA code; do not use in production sites.
+ */
+
+require_once "links.inc";
+
+/**
+ * Implements hook_init()
+ */
+function links_admin_init() {
+  $links_path =  drupal_get_path('module','links');
+  drupal_add_css($links_path . '/links_admin.css', 'module', 'all', TRUE);
+}
+
+/**
+ * Implements hook_help().
+ */
+function links_admin_help($section="") {
+  switch ($section) {
+    case 'admin/help#links_admin': return t('Administer the database of links');
+  }
+}
+
+/**
+ * Returns an array of the permission names that apply to this module
+ */
+function links_admin_perm() {
+  return array('administer links','change url globally','access links statistics');
+}
+
+/**
+ * Implements hook_menu
+ */
+function links_admin_menu() {
+  $items = array();
+  $items['admin/settings/links/links_admin'] = array(
+    'title' => t('links admin module'),
+    'description' => t('Configure settings for the links administration module.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('links_admin_settings_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 5,
+  );
+  $items['admin/content/links'] = array(
+    'title' => t('Links database'),
+    'description' => t('Update individual links, and mark links for scheduled validation.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('links_admin_list_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer links'),
+  );
+  $items['admin/content/links/%links_admin_ref'] = array(
+    'type' => MENU_CALLBACK,
+    'access callback' => 'user_access',
+    'access arguments' => array('administer links'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('links_admin_edit_form', 3),
+  );
+  $items['admin/content/links/list'] = array(
+    'title' => t('administer links database'),
+    'page callback' => 'links_admin_list_page',
+    'access callback' => 'user_access',
+    'access arguments' => array('administer links'),
+    'type' => MENU_CALLBACK,
+    'weight' => -10,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme to register our theme functions
+ */
+function links_admin_theme($existing, $type, $theme, $path) {
+  return array(
+    'links_admin_list_form' => array(
+      'arguments' => array('element' => NULL),
+    ),
+    'links_admin_edit_form' => array(
+      'arguments' => array('element' => NULL),
+    ),
+    'links_admin_filter' => array(
+      'arguments' => array('element' => NULL),
+    ),
+/*
+    'links_admin_list_row' => array(
+      'arguments' => array('element' => NULL),
+    ),
+*/
+  );
+}
+
+// Menu callback functions
+
+/**
+ * Manages the global settings for the module
+ */
+function links_admin_settings_form() {
+  $form = array();
+  
+  $form['description'] = array(
+    '#type' => 'markup',
+    '#value' => '<p>' . t('These settings control the behavior of the link-management services.'),
+  );
+  
+  $form['display_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Display settings'),
+  );
+  
+  $form['display_settings']['links_admin_pagelines'] = array(
+    '#type' => 'select',
+    '#title' => t("Links per page in administrative screens"),
+    '#options' => drupal_map_assoc(array(5,10,15,20,25,30,40,50)),
+    '#default_value' => variable_get('links_admin_pagelines',10),
+    '#description' => t("This setting controls how many links will be displayed per page in link administration pages."),
+  );
+
+  $form['display_settings']['links_admin_collapse_filter_form'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Always collapse filter criteria form"),
+    '#default_value' => variable_get('links_admin_collapse_filter_form', FALSE),
+    '#description' => t("If selected, this option always hides the sorting criteria form unless you expand it. Otherwise, the form is expanded when there are currently active filter criteria, and collapsed if there are none."),
+  );
+
+  return system_settings_form($form);
+}
+
+function _links_admin_filter_to_html($filter, $match_fields, $count_fields) {
+  $match_sense = array('match_yes'=>t('matches'), 'match_no'=>t('does not match'));
+  $html = '';
+  switch ($filter['type']) {
+    case 'match':
+      $html .= $match_fields[$filter['match_field']] . ' ' . $match_sense[$filter['match_sense']] . ' ';
+      $html .= '&quot;' . check_plain($filter['match_string']) . '&quot;';
+      break;
+    case 'count':
+      $html .= $count_fields[$filter['count_field']] . ' ' . htmlspecialchars($filter['count_op']) . ' ' . $filter['count_value'];
+      break;
+  }
+  return $html;
+}
+
+function _links_admin_filters_to_html() {
+  $match_fields = _links_admin_get_filter_match_fields();
+  $count_fields = _links_admin_get_filter_count_fields();
+  $filters = $_SESSION['links_admin_filter'];
+  $html = t('No filter currently set.');
+  if (is_array($filters) && count($filters)) {
+    $html = t('Current filter displays links matching all of the following:');
+    $html .= '<ul>';
+    foreach ($filters as $filter) {
+      $html .= '<li>' . _links_admin_filter_to_html($filter, $match_fields, $count_fields) . '</li>';
+    }
+    $html .= '</ul>';
+  }
+  return $html;
+}
+
+function _links_admin_filter_to_sql($filter, $match_fields, $count_fields) {
+  $sql = '';
+  switch ($filter['type']) {
+    case 'match':
+      // Respect ^ and $ metacharacters from regexp by simulating with % placement in LIKE
+      $match_string = check_plain($filter['match_string']);
+      if (preg_match('/^\^/', $match_string)) {
+        $match_string = substr($match_string, 1);
+      } else {
+        // Double the % because something in the Drupal stack uses it as a format
+        // string in an sprintf() call.
+        $match_string = '%%' . $match_string;
+      }
+      if (preg_match('/\$$/', $match_string)) {
+        $match_string = substr($match_string, 0, strlen($match_string)-1);
+      } else {
+        // Double the % because something in the Drupal stack uses it as a format
+        // string in an sprintf() call.
+        $match_string .= '%%';
+      }
+      $sql = " (" . $filter['match_field'] . ($filter['match_sense'] == 'match_yes' ? " LIKE '" : " NOT LIKE '") . $match_string . "') ";
+      break;
+    case 'count':
+      $sql = " (" . $filter['count_field'] . $filter['count_op'] . intval($filter['count_value']) . ") ";
+      break;
+  }
+  return $sql;
+}
+
+function _links_admin_filters_to_sql() {
+  $match_fields = _links_admin_get_filter_match_fields();
+  $count_fields = _links_admin_get_filter_count_fields();
+  $filters = $_SESSION['links_admin_filter'];
+  $sql = '';
+  $sql_conditions = array();
+  if (is_array($filters) && count($filters)) {
+    foreach ($filters as $filter) {
+      $sql_cond = _links_admin_filter_to_sql($filter, $match_fields, $count_fields);
+      if (! empty($sql_cond)) {
+        $sql_conditions[] = $sql_cond;
+      }
+    }
+  }
+  if (count($sql_conditions)) {
+    $sql = ' HAVING (' . implode(' AND ', $sql_conditions) . ') ';
+  }
+  return $sql;
+}
+
+function _links_admin_get_filter_match_fields() {
+  $match_fields = array(
+    'l.url' => t('Link URL'),
+    'master_title' => t('Link Title'),
+  );
+  return $match_fields;
+}
+
+function _links_admin_get_filter_count_fields() {
+  $count_fields = array(
+    'total_clicks' => t('Total clicks'),
+    'node_count' => t('Referring nodes'),
+  );
+  return $count_fields;
+}
+
+/**
+ * Returns a form to filter which links are displayed.
+ */
+function links_admin_filter_form() {
+  $match_fields = _links_admin_get_filter_match_fields();
+  $count_fields = _links_admin_get_filter_count_fields();
+  $filters = $_SESSION['links_admin_filter'];
+  $match_sense = array(
+    'match_yes' => t('matches'),
+    'match_no'  => t('does not match'),
+  );
+  if (variable_get('links_admin_collapse_filter_form', FALSE)) {
+    $collapsed = TRUE;
+  } else {
+    $collapsed = ! (is_array($filters) && count($filters));
+  }
+  $fieldset = array(
+    '#type' => 'fieldset',
+    '#title' => t('Filter criteria'),
+    '#tree' => TRUE,
+    '#collapsible' => TRUE,
+    '#collapsed' => $collapsed,
+    '#weight' => -8,
+    '#theme' => 'links_admin_filter',
+    'filter_current' => array(
+      '#type' => 'markup',
+      '#value' => '<p>' . _links_admin_filters_to_html() . '</p>', //  . '<p>SQL: ' . _links_admin_filters_to_sql() . '</p>',
+      '#weight' => -10,
+    ),
+    'match_field' => array(
+      '#type' => 'select',
+      '#title' => t('Show only links where'),
+      '#default_value' => '',
+      '#options' => $match_fields,
+    ),
+    'match_sense' => array(
+      '#type' => 'radios',
+      '#default_value' => 'match_yes',
+      '#options' => $match_sense,
+    ),
+    'match_string' => array(
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#size' => 60,
+      '#maxlength' => 200,
+      '#description' => t('Specify a string to match. Metacharacter ^ matches the start of the string, and $ matches the end of the string, so for instance you can use &quot;.com$&quot; to match URLs like &quot;example.com&quot; but not &quot;www.common.example.net&quot;.'),
+    ),
+    'count_field' => array(
+      '#type' => 'select',
+      '#title' => t('Show only links where'),
+      '#default_value' => '',
+      '#options' => $count_fields,
+    ),
+    'count_op' => array(
+      '#type' => 'select',
+      '#default_value' => '',
+      '#options' => drupal_map_assoc(array('=', '>', '<', '>=', '<=')),
+    ),
+    'count_value' => array(
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#size' => 10,
+      '#maxlength' => 10,
+      '#description' => t('Specify an integer value to match against the selected numeric field.'),
+    ),
+    'filter_submit' => array(
+      '#type' => 'submit',
+      '#value' => t('Add filter'),
+      '#submit' => array('links_admin_links_filter_add_submit'),
+      '#weight' => 9,
+    ),
+    'filter_reset' => array(
+      '#type' => 'submit',
+      '#value' => t('Reset filters'),
+      '#submit' => array('links_admin_links_filter_reset_submit'),
+      '#weight' => 10,
+    ),
+  );
+  $form = array(
+    'filter' => $fieldset,
+  );
+  return $form;
+}
+
+/**
+ * Returns a list of the available operations from this module.
+ * Other modules can add their own by implementing a similar
+ * function named [your_module]_links_admin_operations().
+ *
+ * In our particular case, the name looks strange because
+ * we are invoking our own module from module_invoke_all().
+ *
+ * The $section parameter is one of the following:
+ *   'links'        Master links management screen
+ *   'links_node'   Node-specific references screen
+ */
+function links_admin_links_admin_operations($section) {
+  switch ($section) {
+  case 'links':
+    $operations = array(
+      'update' => array(
+        'label' => t('Update master table only (selection checkboxes ignored)'),
+        // This one is done directly by the form submit function
+        'callback' => NULL,
+      ),
+      'update_node_titles' => array(
+        'label' => t('Use title from master table for all references to selected links'),
+        'callback' => 'links_admin_force_master_title',
+      ),
+      'delete' => array(
+        'label' => t('Delete selected links'),
+        'callback' => NULL,
+      ),
+    );
+    break;
+  case 'links_node':
+    $operations = array(
+      'update' => array(
+        'label' => t('Update titles only (selection checkboxes ignored)'),
+        // This one is done directly by the form submit function
+        'callback' => NULL,
+      ),
+      'update_node_titles' => array(
+        'label' => t('Use title from master table for the selected node references'),
+        'callback' => 'links_admin_force_master_title_nodes',
+      ),
+      'delete' => array(
+        'label' => t('Delete this link from the selected nodes'),
+        'callback' => NULL,
+      ),
+    );
+    break;
+  default:
+    $operations = NULL;
+  }
+  return $operations;
+}
+
+/*
+ * Returns the header array for the main links management page
+ */
+function _links_admin_form_header() {
+  $header = array(
+    t('Select'),
+    array('data'=>t('Link ID'), 'field'=>'l.lid'),
+    array('data'=>t('Title'), 'field'=>'l.link_title'),
+    array('data'=>t('Link URL'), 'field'=>'l.url'),
+    t('Statistics'),
+  );
+  return $header;
+}
+
+/**
+ * Returns a links administration form for links and the nodes that refer to them
+ */
+function links_admin_list_form($form_state) {
+  if (isset($form_state['values']['operation']) && $form_state['values']['operation'] == 'delete') {
+    $selected = _links_admin_get_selected_lids($form_state['values']);
+    $form_state['rebuild'] = TRUE;
+    $form = links_admin_multiple_delete_confirm($selected);
+    return $form;
+  }
+
+  $form = links_admin_filter_form();
+
+  $header = _links_admin_form_header();
+
+  $sort_sql = tablesort_sql($header);
+  if (empty($sort_sql)) {
+    $sort_sql = "ORDER BY l.lid";
+  }
+
+  $filter_sql = _links_admin_filters_to_sql();
+
+  $links_per_page = variable_get('links_admin_pagelines',10);
+
+  $sql = "SELECT l.lid, l.url, l.link_title AS master_title, COUNT(ln.nid) AS node_count, SUM(ln.clicks) AS total_clicks FROM {links} l LEFT JOIN {links_node} ln ON l.lid=ln.lid GROUP BY l.lid " . $filter_sql . $sort_sql;
+
+  // The count SQL gets a little fugly here...
+  $count_sql = "SELECT COUNT(*) FROM (" . $sql . ") AS count_derived_table";
+
+  $result = pager_query($sql, $links_per_page, 0, $count_sql, NULL); 
+
+  while ($row = db_fetch_array($result)) {
+    $lid = $row['lid'];
+    $form[$lid] = array(
+      '#type' => 'markup',
+      '#tree' => TRUE,
+    );
+    $form[$lid]['select'] = array(
+      '#type' => 'checkbox',
+      '#return_value' => 1,
+    );
+    $form[$lid]['lid_display'] = array(
+      '#type' => 'markup',
+      '#value' => $lid,
+    );
+    $form[$lid]['title'] = array(
+      '#type' => 'textfield',
+      '#default_value' => $row['master_title'],
+      '#size' => 30,
+    );
+    $form[$lid]['url'] = array(
+      '#type' => 'textfield',
+      '#default_value' => $row['url'],
+      '#size' => 40,
+    );
+    $form[$lid]['stats'] = array(
+      '#type' => 'markup',
+      '#value' => t('Used by %nodes nodes.<br/>%clicks total clicks.', array('%nodes'=>$row['node_count'], '%clicks'=>$row['total_clicks'])),
+    );
+    $form[$lid]['lid'] = array(
+        '#type' => 'hidden',
+        '#value' => $lid,
+    );
+    $form[$lid]['#node_count'] = $row['node_count'];
+    $form[$lid]['#theme'] = 'links_admin_list_row';
+  }
+
+  $form['pager'] = array('#value' => theme('pager', NULL, $links_per_page, 0));
+
+  $form['update_options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Update options'),
+    '#tree' => FALSE,
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+
+  $options = array();
+  foreach (module_invoke_all('links_admin_operations', 'links') as $operation => $array) {
+    $options[$operation] = $array['label'];
+  }
+
+  $form['update_options']['operation'] = array(
+    '#type' => 'select',
+    '#options' => $options,
+  );
+  $form['update_options']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Update'),
+  );
+
+  $form['instructions'] = array(
+    '#type' => 'markup',
+    '#value' => t('<p>The <em>Links Package</em> keeps all URLs in a master table, regardless of how many nodes refer to the same URL. This screen allows you to conveniently update the master table, or you can link to sub-pages that let you manage the references to a given link. Refer to the detailed instructions below if you are unfamiliar with this page.</p>'),
+    '#weight' => -10,
+  );
+
+  $form['help'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Detailed instructions'),
+    '#tree' => FALSE,
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#weight' => -9,
+  );
+
+  $form['help']['details'] = array(
+    '#type' => 'markup',
+    '#value' => t('<p>If you change a URL here, it will be reflected immediately in all nodes that share that link, unless it has been overridden at the node level.</p><p>Any changes you make to titles in this list will update the master table, but by default any node-specific title overrides are not affected. Select the <strong>Use master link title</strong> update option and select one or more links if you want to force all referring nodes to use the title from the master table, for the selected links. Any unselected links will still change only the master table.</p><p>If you <strong>delete</strong> any links from this screen, they will be removed from all nodes that currently use them.</p>'),
+  );
+
+  return $form;
+}
+
+/**
+ * Returns a confirmation dialog for deletes that may affect multiple links.
+ */
+function links_admin_multiple_delete_confirm($selected) {
+  $link_required_list = module_invoke_all('links_admin_link_required');
+  $link_required_types = array_keys($link_required_list);
+  $link_required_modules = array_values($link_required_list);
+  $form = array();
+  $form['links'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<ul>',
+    '#suffix' => '</ul>',
+    '#tree' => TRUE,
+  );
+  $in_list = implode(',', $selected);
+  $sql = "SELECT l.lid, ln.nid, l.url, l.link_title AS master_title, ln.link_title AS local_title, ln.clicks, ln.module, n.title AS node_title, n.type AS node_type, nt.name AS node_type_name FROM {links} l LEFT JOIN {links_node} ln ON l.lid=ln.lid LEFT JOIN {node} n ON ln.nid=n.nid LEFT JOIN {node_type} nt ON n.type=nt.type WHERE l.lid IN (" . $in_list . ") ORDER BY l.lid, ln.nid";
+  $result = db_query($sql);
+  while ($row = db_fetch_array($result)) {
+    $lid = $row['lid'];
+    $form['links'][$lid] = array(
+      '#type' => 'markup',
+      '#tree' => TRUE,
+      'select' => array(
+        '#type' => 'hidden',
+        '#value' => $lid,
+      ),
+      'text' => array(
+        '#type' => 'markup',
+        '#prefix' => '<li>',
+        '#suffix' => '</li>',
+        '#value' => ($row['nid'] > 0 ? t('Link #!lid (&quot;!link_title&quot;) is used in !type_name node #!nid. (&quot;!title&quot;)', array('!lid'=>$lid, '!link_title'=>$row['master_title'], '!nid'=>$row['nid'], '!title'=>$row['node_title'], '!type_name'=>$row['node_type_name'])) : t('Link #!lid (&quot;!link_title&quot;) is not used in any nodes.', array('!lid'=>$lid, '!link_title'=>$row['master_title']))),
+      ),
+    );
+    if (in_array($row['node_type'], $link_required_types)) {
+      $form['links'][$lid]['text']['#value'] .= t('<br/><strong>The link is required for this content type, so deleting the link will also delete this !type_name.</strong>', array('!type_name'=>$row['node_type_name']));
+    }
+  }
+  $form['operation'] = array('#type' => 'hidden', '#value' => 'delete');
+  $form['#submit'][] = 'links_admin_multiple_delete_confirm_submit';
+  return confirm_form($form,
+                      t('Are you sure you want to delete these links?'),
+                      'admin/content/links', t('This action cannot be undone.'),
+                      t('Delete all'), t('Cancel'));
+}
+
+/*
+ * Called by the wildcard %links_admin_ref from a menu path.
+ */
+function links_admin_ref_load($lid) {
+  if (! is_numeric($lid)) {
+    return FALSE;
+  }
+  $link = links_get_link($lid);
+  if (is_array($link)) {
+    return $link;
+  } else {
+    return FALSE;
+  }
+}
+
+/*
+ * Displays the links node reference edit page. $link is a {links}
+ * record as returned from links_admin_ref_load() or links_get_link().
+ */
+function links_admin_edit_form($form_state, $link) {
+  drupal_set_title(t('Edit references for link #!lid (!link)', array('!lid'=>$link['lid'], '!link'=>$link['link_title'])));
+  $lid = intval($link['lid']);
+
+  if (isset($form_state['values']['operation']) && $form_state['values']['operation'] == 'delete') {
+    $selected = _links_admin_get_selected_nids($form_state['values']);
+    $form_state['rebuild'] = TRUE;
+    $form = links_admin_multiple_delete_confirm_node($lid, $selected);
+    return $form;
+  }
+
+  $links_per_page = variable_get('links_admin_pagelines',10);
+
+  $link_required_list = module_invoke_all('links_admin_link_required');
+  $link_required_types = array_keys($link_required_list);
+  $link_required_modules = array_values($link_required_list);
+  $form = array();
+  $form['lid'] = array(
+    '#type' => 'hidden',
+    '#value' => $lid,
+  );
+  $form['link'] = array(
+    '#type' => 'markup',
+    '#value' => t('<p>These are the node(s) that refer to link #!lid (!link). From this screen you can change the title by which the link is known at the specific node where it is used, which may or may not be the same as its main title in the master links table. You can also delete references to this link in any of the nodes that now refer to it. Be aware that for some node types (such as &quot;weblink&quot;) the link is essential to the node, so deleting the link will also delete the node. You will be warned about this before the nodes are deleted.</p><p><strong>Any records with empty title below are using the title from the master table.</strong>', array('!lid'=>$link['lid'], '!link'=>l($link['link_title'], $link['url']))),
+  );
+  // Obtain the detail records
+  $sql = "SELECT n.nid, ln.link_title AS local_title, ln.clicks, ln.module, n.title AS node_title, n.type AS node_type, nt.name AS node_type_name FROM {links_node} ln LEFT JOIN {node} n ON ln.nid=n.nid LEFT JOIN {node_type} nt ON n.type=nt.type WHERE ln.lid=$lid ORDER BY node_title";
+  $result = pager_query($sql, $links_per_page, 0, "select count(*) from {links_node} where lid=$lid");
+  while ($row = db_fetch_array($result)) {
+    $nid = $row['nid'];
+    $module = $row['module'];
+    $node_data = '<p>' . t('!node_link<br/>Type: !type_name, Total clicks: !clicks', array('!node_link'=>l($row['node_title'], 'node/'.$nid), '!type_name'=>check_plain($row['node_type_name']), '!clicks'=>$row['clicks']));
+    if (in_array($row['module'], $link_required_modules)) {
+      $node_data .= t('<br/><em>This link is required for the node, so deleting the link will also delete the node.</em>');
+    }
+    $node_data .= '</p>';
+    $form[$nid] = array(
+      '#type' => 'markup',
+      '#tree' => TRUE,
+    );
+    $form[$nid]['nid'] = array(
+      '#type' => 'hidden',
+      '#value' => $nid,
+    );
+    $form[$nid]['module'] = array(
+      '#type' => 'hidden',
+      '#value' => $module,
+    );
+    $form[$nid]['select'] = array(
+      '#type' => 'checkbox',
+      '#return_value' => 1,
+    );
+    $form[$nid]['node_data'] = array(
+      '#type' => 'markup',
+      '#value' => $node_data,
+    );
+    $form[$nid]['module_data'] = array(
+      '#type' => 'markup',
+      '#value' => $module,
+    );
+    $form[$nid]['local_title'] = array(
+      '#type' => 'textfield',
+      '#default_value' => $row['local_title'],
+      '#size' => 40,
+      '#maxlength' => 255,
+    );
+  }
+
+  $form['pager'] = array('#value' => theme('pager', NULL, $links_per_page, 0));
+
+  $form['update_options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Update options'),
+    '#tree' => FALSE,
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+
+  $options = array();
+  foreach (module_invoke_all('links_admin_operations', 'links_node') as $operation => $array) {
+    $options[$operation] = $array['label'];
+  }
+
+  $form['update_options']['operation'] = array(
+    '#type' => 'select',
+    '#options' => $options,
+  );
+  $form['update_options']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Update'),
+  );
+  return $form;
+}
+
+//*********** FORM VALIDATE AND SUBMIT FUNCTIONS *************
+
+/*
+ * Scans the form values to return a simple array of
+ * the selected link IDs (the primary key to the {links}
+ * table).
+ */
+function _links_admin_get_selected_lids($form_values) {
+  $selected = array();
+  foreach($form_values as $key=>$child) {
+    if (is_int($key)) {
+      $sel = intval($child['select']);
+      if ($sel) {
+        $selected[] = intval($child['lid']);
+      }
+    }
+  }
+  return $selected;
+}
+
+/*
+ * Scans the form values for the links_node edit form
+ * and returns the selected node IDs and modules for
+ * the links_node table. The return values are an
+ * associative array inside a simple array. Each of
+ * the inner arrays has keys 'nid' and 'module'. The
+ * 'lid' is not returned from here, because it is common
+ * to all of the records and is available directly in
+ * the calling context.
+ */
+function _links_admin_get_selected_nids($form_values) {
+  $selected = array();
+  foreach($form_values as $key=>$child) {
+    if (is_int($key)) {
+      $sel = intval($child['select']);
+      if ($sel) {
+        $nid = intval($child['nid']);
+        $module = $child['module'];
+        $selected[] = array('nid'=>$nid, 'module'=>$module);
+      }
+    }
+  }
+  return $selected;
+}
+
+/*
+ * Validate the main links form.
+ */
+function links_admin_list_form_validate($form_id, $form) {
+  $form_values = $form['values'];
+  foreach($form_values as $key=>$child) {
+    if (is_int($key)) {
+      $lid = intval($child['lid']);
+      if (empty($child['url'])) {
+        form_set_error("$key][url", t('Link URL may not be empty (ID=!lid)', array('!lid'=>$lid)));
+      }
+      if (empty($child['title'])) {
+        form_set_error("$key][title", t('Link title may not be empty in the master table (ID=!lid)', array('!lid'=>$lid)));
+      }
+    }
+  }
+}
+
+/*
+ * Use the title from the master table for all nodes referring to
+ * the specified links.
+ */
+function links_admin_force_master_title($selected) {
+  foreach ($selected as $lid) {
+    drupal_set_message(t("Forcing master title: !lid", array("!lid"=>$lid)));
+    links_force_master_title($lid);
+  }
+}
+
+/*
+ * Use the title from the master table on the specified links references
+ */
+function links_admin_force_master_title_nodes($lid, $selected) {
+  foreach ($selected as $key) {
+    $nid = $key['nid'];
+    $module = $key['module'];
+    drupal_set_message(t("Forcing master title (lid:nid:module): !lid:!nid:!module", array('!lid'=>$lid, '!nid'=>$nid, '!module'=>$module)));
+    links_force_master_title($lid, $nid, $module);
+  }
+}
+
+/*
+ * This is called from the main list form's submit
+ * to perform the common update that is always done
+ * regardless of other functions. It's based on
+ * the data in the title and URL fields.
+ */
+function _links_admin_update_links(&$form_state) {
+  $form_values = $form_state['values'];
+  foreach ($form_values as $key=>$value) {
+    if (is_int($key)) {
+      $lid = intval($value['lid']);
+      $new_url = $value['url'];
+      $new_title = $value['title'];
+      if ($lid) {
+        $new_lid = links_update_link($lid, $new_url, $new_title);
+        if ($new_lid) {
+          drupal_set_message(t("Updated link !old_lid (new ID is !new_lid)", array('!old_lid'=>$lid, '!new_lid'=>$new_lid)));
+        }
+      }
+    }
+  }
+}
+
+/*
+ * Called when the user selects the button to add a filter
+ */
+function links_admin_links_filter_add_submit($form, &$form_state) {
+  $form_values = $form_state['values']['filter'];
+  $match_fields = _links_admin_get_filter_match_fields();
+  $count_fields = _links_admin_get_filter_count_fields();
+  if (is_array($_SESSION['links_admin_filter'])) {
+    $filters = $_SESSION['links_admin_filter'];
+  } else {
+    $filters = array();
+  }
+  if (! empty($form_values['match_string'])) {
+    $newfilter = array(
+      'type' => 'match',
+      'match_field' => $form_values['match_field'],
+      'match_sense' => $form_values['match_sense'],
+      'match_string' => $form_values['match_string'],
+    );
+    $filters[] = $newfilter;
+    drupal_set_message(t("Adding filter: !filter", array('!filter'=>_links_admin_filter_to_html($newfilter, $match_fields, $count_fields))));
+  }
+  $count_value_string = trim($form_values['count_value']);
+  if (strlen($count_value_string) > 0) {
+    $newfilter = array(
+      'type' => 'count',
+      'count_field' => $form_values['count_field'],
+      'count_op' => $form_values['count_op'],
+      'count_value' => intval($count_value_string),
+    );
+    $filters[] = $newfilter;
+    drupal_set_message(t("Adding filter: !filter", array('!filter'=>_links_admin_filter_to_html($newfilter, $match_fields, $count_fields))));
+  }
+  $_SESSION['links_admin_filter'] = $filters;
+}
+
+/*
+ * Called when the user clicks the button to clear the filters
+ */
+function links_admin_links_filter_reset_submit($form, &$form_state) {
+  $_SESSION['links_admin_filter'] = array();
+  drupal_set_message(t('Filters have been removed.'));
+}
+
+/*
+ * Called when the main links management form is submitted for a
+ * normal update.
+ */
+function links_admin_list_form_submit($form, &$form_state) {
+  // Do the common update first
+  _links_admin_update_links($form_state);
+
+  $operations = module_invoke_all('links_admin_operations', 'links');
+  $operation = $operations[$form_state['values']['operation']];
+  $form_values = $form_state['values'];
+  $selected = _links_admin_get_selected_lids($form_values);
+
+  if ($function = $operation['callback']) {
+    // Add in callback arguments if present.
+    if (isset($operation['callback arguments'])) {
+      $args = array_merge(array($selected), $operation['callback arguments']);
+    }
+    else {
+      $args = array($selected);
+    }
+    call_user_func_array($function, $args);
+
+    cache_clear_all();
+  }
+
+  // Necessary to make the delete confirm form work
+  $form_state['rebuild'] = TRUE;
+}
+
+/*
+ * Called when the user accepts a delete confirmation from
+ * the main links management screen.
+ */
+function links_admin_multiple_delete_confirm_submit($form_id, &$form_state) {
+  $form_values = $form_state['values'];
+  $selected = array_keys($form_values['links']);
+  foreach ($selected as $lid) {
+    if (links_delete_link($lid)) {
+      drupal_set_message(t('Deleted link !lid', array('!lid'=>$lid)));
+    } else {
+      drupal_set_message(t('Failed to delete link !lid', array('!lid'=>$lid)), 'error');
+    }
+  }
+}
+
+/**
+ * Returns a confirmation dialog for deletes of references to a specific link.
+ */
+function links_admin_multiple_delete_confirm_node($lid, $selected) {
+  $link_required_list = module_invoke_all('links_admin_link_required');
+  $link_required_types = array_keys($link_required_list);
+  $link_required_modules = array_values($link_required_list);
+  $master = links_get_link($lid);
+  $form = array();
+  $form['links'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<ul>',
+    '#suffix' => '</ul>',
+    '#tree' => TRUE,
+  );
+  $form['lid'] = array(
+    '#type' => 'hidden',
+    '#value' => $lid,
+  );
+  foreach ($selected as $linkref) {
+    $nid = $linkref['nid'];
+    $module = $linkref['module'];
+    $result = db_query("SELECT ln.*, n.title AS node_title, n.type AS node_type, nt.name AS node_type_name FROM {links_node} ln LEFT JOIN {node} n ON n.nid=ln.nid LEFT JOIN {node_type} nt ON nt.type=n.type WHERE lid=%d AND ln.nid=%d AND ln.module='%s'", $lid, $nid, $module);
+    $row = db_fetch_array($result);
+    $link_title = empty($row['link_title']) ? $master['link_title'] : $row['link_title'];
+    $form['nodes'][$nid] = array(
+      '#type' => 'markup',
+      '#tree' => TRUE,
+      'nid' => array(
+        '#type' => 'hidden',
+        '#value' => $nid,
+      ),
+      'module' => array(
+        '#type' => 'hidden',
+        '#value' => $module,
+      ),
+      'text' => array(
+        '#type' => 'markup',
+        '#prefix' => '<li>',
+        '#suffix' => '</li>',
+        '#value' => t('Link #!lid (&quot;!link_title&quot;) is used in !type_name node #!nid. (&quot;!title&quot;)', array('!lid'=>$lid, '!link_title'=>$link_title, '!nid'=>$row['nid'], '!title'=>$row['node_title'], '!type_name'=>$row['node_type_name'])),
+      ),
+    );
+    if (in_array($row['node_type'], $link_required_types) && in_array($module, $link_required_modules)) {
+      $form['nodes'][$nid]['text']['#value'] .= t('<br/><strong>The link is required for this content type, so deleting the link will also delete this !type_name.</strong>', array('!type_name'=>$row['node_type_name']));
+    }
+  }
+  $form['operation'] = array('#type' => 'hidden', '#value' => 'delete');
+  $form['#submit'][] = 'links_admin_multiple_delete_node_confirm_submit';
+  return confirm_form($form,
+                      t('Are you sure you want to delete these link references?'),
+                      'admin/content/links/'.$lid, t('This action cannot be undone.'),
+                      t('Delete all'), t('Cancel'));
+}
+
+// Called for the update of the node-specific link titles, which is
+// done regardless of the dropdown-select operation (if any).
+function _links_admin_update_links_node(&$form_state) {
+  $form_values = $form_state['values'];
+  $lid = $form_values['lid'];
+  foreach ($form_values as $key=>$value) {
+    if (is_int($key)) {
+      $nid = intval($value['nid']);
+      $module = $value['module'];
+      $ident = $lid . ':' . $nid . ':' . $module;
+      $new_title = trim($value['local_title']);
+      links_set_local_title($lid, $nid, $module, $new_title);
+      // We need to rebuild the form to go to a second step.
+      // In this case, it forces the rebuild in case we have
+      // changed the master title for the link, which without
+      // this would display with its old value.
+      $form_state['rebuild'] = TRUE;
+    }
+  }
+}
+
+/*
+ * Called when the user accepts a delete confirmation from
+ * the node reference management screen.
+ */
+function links_admin_multiple_delete_node_confirm_submit($form_id, &$form_state) {
+  $form_values = $form_state['values'];
+  $link_required_list = module_invoke_all('links_admin_link_required');
+  $link_required_types = array_keys($link_required_list);
+  $link_required_modules = array_values($link_required_list);
+  $lid = intval($form_values['lid']);
+  if (! $lid) {
+    watchdog(t('Missing link ID in request to delete link references'), array(), WATCHDOG_ERROR);
+    return;
+  }
+  foreach ($form_values as $key=>$child) {
+    if (is_int($key)) {
+      $nid = $child['nid'];
+      $result = db_query("SELECT title, type AS node_type FROM {node} WHERE nid=%d", $nid);
+      $row = db_fetch_array($result);
+      $module = $child['module'];
+      $result = db_query("DELETE FROM {links_node} WHERE lid=%d AND nid=%d AND module='%s'", $lid, $nid, $module);
+      if (db_error()) {
+        drupal_set_message(t('Failed to delete reference from link !lid to !type node !nid via module !module', array('!lid'=>$lid, '!type'=>$row['node_type'], '!nid'=>$nid, '!module'=>$module)));
+      } else {
+        drupal_set_message(t('Deleted reference from link !lid to !type node !nid via module !module', array('!lid'=>$lid, '!type'=>$row['node_type'], '!nid'=>$nid, '!module'=>$module)));
+      }
+      if (in_array($row['node_type'], $link_required_types) && in_array($module, $link_required_modules)) {
+        node_delete($nid);
+        drupal_set_message(t('Deleted node !nid (&quot;!title&quot;)', array('!nid'=>$nid, '!title'=>$row['title'])));
+      }
+    }
+  }
+}
+
+/*
+ * Called when the user submits an update to the node references
+ * for a given link.
+ */
+function links_admin_edit_form_submit($form_id, &$form_state) {
+  // Always do the common update
+  _links_admin_update_links_node($form_state);
+
+  $operations = module_invoke_all('links_admin_operations', 'links_node');
+  $operation = $operations[$form_state['values']['operation']];
+  $form_values = $form_state['values'];
+  $selected = _links_admin_get_selected_nids($form_values);
+  $lid = intval($form_values['lid']);
+
+  if ($function = $operation['callback']) {
+    // Add in callback arguments if present.
+    if (isset($operation['callback arguments'])) {
+      $args = array_merge(array($lid, $selected), $operation['callback arguments']);
+    }
+    else {
+      $args = array($lid, $selected);
+    }
+    call_user_func_array($function, $args);
+
+    cache_clear_all();
+  }
+  else {
+    // We need to rebuild the form to go to a second step.
+    $form_state['rebuild'] = TRUE;
+  }
+}
+
+//******************* THEME FUNCTIONS ********************
+
+function theme_links_admin_list_form($form) {
+  $html = drupal_render($form['instructions']);
+  $html .= drupal_render($form['help']);
+  $html .= drupal_render($form['filter']);
+  $header = _links_admin_form_header();
+  $rows = array();
+  $columns = array('select', 'lid_display', 'title', 'url', 'stats');
+  $i = 0;
+  reset ($form);
+  foreach (array_keys($form) as $key) {
+    if (is_int($key)) {
+      $rows[$i] = array();
+      $j = 0;
+      foreach ($columns as $col) {
+        $rows[$i][$j] = drupal_render($form[$key][$col]);
+        $lid = intval($form[$key]['lid']['#value']);
+        switch($col) {
+          case 'title':
+            if ($form[$key]['#node_count']) {
+              $rows[$i][$j] .= l(t('Edit references from nodes'), 'admin/content/links/'.$lid);
+            } else {
+              $rows[$i][$j] .= '&nbsp;';
+            }
+            break;
+          case 'url':
+            $rows[$i][$j] .= l(t('Open link'), links_format_goto_url(0,$lid));
+            $rows[$i][$j] .= ' | ';
+            $rows[$i][$j] .= l(t('Open link in new window'), links_format_goto_url(0,$lid), array('attributes'=>array('target'=>'_blank')));
+            break;
+        }
+        $j++;      
+      }
+      $i++;
+    }
+  }
+  $html .= theme('table', $header, $rows);
+  $html .= drupal_render($form);
+  return $html;
+}
+
+/*
+ * Themes the filter criteria form
+ */
+function theme_links_admin_filter(&$element) {
+  $html = drupal_render($element['filter_current']);
+  $html .= '<table id="links_admin_filter">';
+  $html .= '<tr><td>' . drupal_render($element['match_field']) . '</td><td>' . drupal_render($element['match_sense']);
+  $html .= '</td><td>' . drupal_render($element['match_string']) . '</td></tr>';
+  $html .= '<tr><td>' . drupal_render($element['count_field']) . '</td><td>' . drupal_render($element['count_op']);
+  $html .= '</td><td>' . drupal_render($element['count_value']) . '</td></tr>';
+  $html .= '</table>';
+  $html .= '<p>' . drupal_render($element);
+  return $html;
+}
+
+/*
+ * Themes the form to edit the node references to a link
+ */
+function theme_links_admin_edit_form(&$element) {
+  $columns = array('select', 'node_data', 'module_data', 'local_title');
+  $header = array(t('Select'), t('Referring Node'), t('Used by Module'), t('Node-Specific Title'));
+  $html = drupal_render($element['link']);
+  reset($element);
+  $rows = array();
+  $i = 0;
+  while (list($key, $child) = each($element)) {
+    if (is_int($key)) {
+      $j = 0;
+      $rows[$i] = array();
+      foreach ($columns as $col) {
+        $rows[$i][$j++] = drupal_render($element[$key][$col]);
+      }
+      // Special case to cleanup the hidden field(s)
+      $rows[$i++][0] .= drupal_render($element[$key]);
+    }
+  }
+  $html .= theme('table', $header, $rows);
+  $html .= drupal_render($element);
+  return $html;
+}

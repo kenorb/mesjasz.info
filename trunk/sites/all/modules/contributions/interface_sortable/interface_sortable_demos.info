@@ -1,0 +1,13 @@
+; $Id: interface_sortable_demos.info,v 1.3 2007/06/18 22:53:45 dww Exp $
+name = JQuery Interface Sortable Demos
+description = Demos of the JQuery Interface library Sortable component.
+package = User Interface
+dependencies[] = jquery_interface
+dependencies[] = interface_sortable
+
+; Information added by drupal.org packaging script on 2007-06-19
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "interface_sortable"
+datestamp = "1182212165"
+

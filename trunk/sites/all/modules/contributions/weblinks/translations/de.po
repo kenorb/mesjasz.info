@@ -1,0 +1,1322 @@
+# $Id: de.po,v 1.1.2.13 2008/12/30 15:35:30 nancyw Exp $
+#
+# German translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  weblinks_node_view.tpl.php,v 1.5.2.7 2008/10/22 17:41:11 nancyw
+#  weblinks.admin.inc,v 1.34.2.35 2008/12/27 17:00:18 nancyw
+#  token_weblinks.inc,v 1.1.2.6 2008/10/03 15:22:44 nancyw
+#  views_handler_field_weblinks.inc,v 1.1.2.2 2008/11/19 01:22:06 nancyw
+#  weblinks.module,v 1.86.2.73 2008/12/27 09:48:14 nancyw
+#  weblinks_filter.module,v 1.2.2.4 2008/10/22 18:05:56 nancyw
+#  weblinks.views.inc,v 1.1.2.3 2008/09/14 00:31:22 nancyw
+#  weblinks.taxonomy.inc,v 1.3.2.2 2008/08/01 02:59:22 rmiddle
+#  weblinks.user.inc,v 1.2.2.11 2008/08/13 23:18:58 nancyw
+#  weblinks.info,v 1.5 2008/07/01 17:20:38 rmiddle
+#  weblinks_errors.inc,v 1.1.2.2 2008/08/21 01:06:51 nancyw
+#  weblinks_convert_links.module,v 1.1.4.2 2008/11/03 06:49:06 nancyw
+#  weblinks.install,v 1.15.2.13 2008/09/11 21:31:27 nancyw
+#  weblinks_convert_links.info,v 1.1.4.2 2008/11/03 06:49:06 nancyw
+#  weblinks_filter.info,v 1.1 2008/07/28 17:29:02 nancyw
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Drupal Web Links V6.x-1.2\n"
+"POT-Creation-Date: 2008-12-30 10:44+0100\n"
+"PO-Revision-Date: 2008-12-30 10:47+0100\n"
+"Last-Translator: Frank Tartler <frank.tartler@googlemail.com>\n"
+"Language-Team: Frank Tartler <frank.tartler@googlemail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: weblinks_node_view.tpl.php:28
+#: weblinks.admin.inc:276
+msgid "Visit [title]"
+msgstr "[title] aufrufen"
+
+#: token_weblinks.inc:14
+msgid "The weight of the node."
+msgstr "Die Gewichtung des Beitrags."
+
+#: token_weblinks.inc:15
+msgid "The URL of the Web Link."
+msgstr "Die URL des Internet-Links"
+
+#: token_weblinks.inc:16
+msgid "Unfiltered URL of the Web Link.  WARNING - raw user input."
+msgstr "Ungefilterte URL des Internet-Links. Warnung: ungefilterte Benutzereingabe."
+
+#: token_weblinks.inc:17
+msgid "The title of the Web Link."
+msgstr "Der Titel des Internet-Links"
+
+#: token_weblinks.inc:18
+msgid "Unfiltered title of the Web Link.  WARNING - raw user input."
+msgstr "Ungefilterter Titel des Internet-Links. Warnung: ungefilterte Benutzereingabe."
+
+#: token_weblinks.inc:19
+msgid "How many times the Web Link has been clicked."
+msgstr "Die Anzahl, wie oft der Internet-Link angeklickt wurde."
+
+#: token_weblinks.inc:20
+msgid "When the Web Link was last clicked on."
+msgstr "Wann der Internet-Link zum letzten Mal angeklickt wurde."
+
+#: token_weblinks.inc:21
+msgid "The status of the Web Link when it was last checked."
+msgstr "Der Status des Internet-Links nach der letzten Gültigkeitsprüfung."
+
+#: token_weblinks.inc:22
+msgid "The date/time when the Web Link was last checked."
+msgstr "Datum/Uhrzeit, wann der Internet-Link zum letzten Mal geprüft wurde."
+
+#: token_weblinks.inc:67
+msgid "Never"
+msgstr "Nie"
+
+#: views_handler_field_weblinks.inc:33
+msgid "Link points to URL or node"
+msgstr "Links führen zur URL oder zum Beitrag"
+
+#: weblinks.admin.inc:32
+msgid "Vocabulary to use for Weblinks"
+msgstr "Für Internet-Links verwendetes Vokabular"
+
+#: weblinks.admin.inc:44
+msgid "No vocabulary for the weblinks content type was found. A new vocabulary was created."
+msgstr "Es wurde kein Vokabular für den Inhaltstyp ‚Internet-Link‘ gefunden. Ein neues Vokabular wurde erstellt."
+
+#: weblinks.admin.inc:53
+msgid "Maximum block title length"
+msgstr "Maximale Länge des Blocktitels"
+
+#: weblinks.admin.inc:55
+msgid "This controls how much of a node title will be shown in a block to conserve space. Zero (0) means unlimited."
+msgstr "Dies legt fest, wie viel von einem Beitragstitel in einem Block angezeigt wird, um Platz zu sparen. Null (0) bedeutet unbegrenzt."
+
+#: weblinks.admin.inc:60
+msgid "Links page settings"
+msgstr "Einstellungen für Link-Seiten"
+
+#: weblinks.admin.inc:61
+msgid "These settings control the main links page display."
+msgstr "Diese Einstellungen legen das Aussehen der Haupt-Linkseite fest."
+
+#: weblinks.admin.inc:72
+msgid "Make groups collapsible"
+msgstr "Gruppen können zusammengeklappt werden"
+
+#: weblinks.admin.inc:74
+msgid "Enable this if you want the groups to be collapsible on the main links page."
+msgstr "Dies kann aktiviert werden, wenn Gruppen auf der Haupt-Linkseite zusammenklappbar sein sollen."
+
+#: weblinks.admin.inc:80
+msgid "Collapse all groups"
+msgstr "Alle Gruppen  zusammenklappen"
+
+#: weblinks.admin.inc:82
+msgid "Enable this if you want all the groups to be collapsed on the main links page."
+msgstr "Dies kann aktiviert werden, wenn alle Gruppen auf der Haupt-Linkseite zusammengeklappt sein sollen."
+
+#: weblinks.admin.inc:89;376
+#: weblinks.module:1448
+msgid "Normal Drupal - by weight, sticky, created date."
+msgstr "Normales Drupal - nach Gewichtung, Oben in Listen, Erstelldatum."
+
+#: weblinks.admin.inc:90;377
+#: weblinks.module:1449
+msgid "Legacy - by weight and title."
+msgstr "Alt - nach Gewichtung und Titel"
+
+#: weblinks.admin.inc:95
+msgid "Page Sort order"
+msgstr "Sortierreihenfolge der Seite"
+
+#: weblinks.admin.inc:97;423
+msgid "This determines how the links page will sort the links."
+msgstr "Dies legt fest, wie Links auf der Link-Seite sortiert werden."
+
+#: weblinks.admin.inc:105
+msgid "Page information"
+msgstr "Seiteninformation"
+
+#: weblinks.admin.inc:108
+msgid "This description will appear at the top of the links page.  It will be filtered by your default input format."
+msgstr "Diese Beschreibung erscheint oben auf der Link-Seite. Sie wird durch das Standard-Eingabeformat gefiltert."
+
+#: weblinks.admin.inc:119
+msgid "Maximum group depth (main links page)"
+msgstr "Maximale Gruppentiefe (Haupt-Linkseite)"
+
+#: weblinks.admin.inc:121
+msgid "This controls how many subgroups, if any, will display on the main links page. Blank, zero (0), and one (1) will all show only the top level."
+msgstr "Dies legt fest, wie viele Untergruppen, sofern vorhanden, auf der Haupt-Linkseite angezeigt werden. Wenn leer, null (0) oder eins (1) wird nur die oberste Ebene angezeigt."
+
+#: weblinks.admin.inc:131
+#: weblinks.module:443
+msgid "Group settings"
+msgstr "Gruppen-Einstellungen"
+
+#: weblinks.admin.inc:132
+msgid "These settings control the way the groups display on the main links page."
+msgstr "Diese Einstellungen legen fest, wie Gruppen auf der Haupt-Linkseite angezeigt werden."
+
+#: weblinks.admin.inc:140
+msgid "Display group descriptions"
+msgstr "Beschreibungen der Gruppen anzeigen"
+
+#: weblinks.admin.inc:142
+msgid "Generally recommended."
+msgstr "Generell empfohlen."
+
+#: weblinks.admin.inc:147
+msgid "Empty container text"
+msgstr "Text für leere Container"
+
+#: weblinks.admin.inc:150
+msgid "This text will appear when a container is empty. Leave it blank to not show the group at all. It will be filtered by your default input format."
+msgstr "Dieser Text erscheint, wenn ein Container leer ist. Leer lassen, um die Gruppe überhaupt nicht anzuzeigen. Er wird durch das Standard-Eingabeformat gefiltert."
+
+#: weblinks.admin.inc:155
+msgid "Title for unclassified links"
+msgstr "Titel für nicht-klassifizierte Links"
+
+#: weblinks.admin.inc:156
+#: weblinks.module:568
+msgid "Unclassified"
+msgstr "Nicht klassifiziert"
+
+#: weblinks.admin.inc:157
+msgid "This will be used to describe the unclassified links. You may leave it blank for no title. It will not be translated."
+msgstr "Dies wird verwendet, um nicht-klassifizierte Links zu beschreiben. Wenn es leergelassen wird, wird kein Titel verwendet."
+
+#: weblinks.admin.inc:162
+msgid "Description for unclassified links"
+msgstr "Beschreibung für nicht-klassifizierte Links"
+
+#: weblinks.admin.inc:163
+#: weblinks.module:569
+msgid "These links have not been assigned a group."
+msgstr "Diese Links wurden noch keiner Gruppe zugewiesen."
+
+#: weblinks.admin.inc:164
+msgid "This will be used as the description for the unclassified links group. If this group has no title, this will not be shown either. It will not be translated."
+msgstr "Dies wird als Beschreibung für die Gruppe nicht-klassifizierter Links verwendet. Wenn die Gruppe keinen Titel hat, wird sie auch nicht angezeigt. Sie wird nicht übersetzt."
+
+#: weblinks.admin.inc:174
+msgid "Link settings"
+msgstr "Link-Einstellungen"
+
+#: weblinks.admin.inc:175
+msgid "These settings control the way individual links display on the main links page."
+msgstr "Diese Einstellungen legen fest, wie einzelne Links auf der Haupt-Linkseite angezeigt werden."
+
+#: weblinks.admin.inc:183
+#: weblinks.module:1425
+#: weblinks_filter.module:123
+msgid "Links lead to URL or Web Link node"
+msgstr "Links führen zur URL oder zum Beitrag des Internet-Links"
+
+#: weblinks.admin.inc:185
+#: weblinks.module:1427
+#: weblinks_filter.module:125
+msgid "Most people will want to leave this as URL. Specifying \"node\" makes it easier to edit the links, but requires an additional click to follow the link."
+msgstr "Die meisten werden dies auf URL lassen. „Beitrag“ macht es einfacher, die Links zu bearbeiten, erfordert aber einen weiteren Mausklick, um dem Link zu folgen."
+
+#: weblinks.admin.inc:186;265
+#: weblinks.views.inc:33
+#: weblinks.module:138;1428
+#: weblinks_filter.module:126
+msgid "URL"
+msgstr "URL"
+
+#: weblinks.admin.inc:186
+#: weblinks.module:1428
+#: weblinks_filter.module:126
+msgid "node"
+msgstr "Beitrag"
+
+#: weblinks.admin.inc:193
+#: weblinks_filter.module:133
+msgid "Open links in a new window"
+msgstr "Links in einem neuen Fenster öffnen"
+
+#: weblinks.admin.inc:195
+#: weblinks_filter.module:135
+msgid "Recommended to keep your vistors on your site. Should not be used when the \"Links lead...\" option is \"node.\""
+msgstr "Empfohlen, um Besucher auf dieser Website zu halten. Sollte nicht verwendet werden, wenn die Option „Links führen...“ auf „Beitrag“ steht."
+
+#: weblinks.admin.inc:201
+msgid "No description"
+msgstr "Keine Beschreibung"
+
+#: weblinks.admin.inc:202
+msgid "Teaser length"
+msgstr "Anrisstext-Länge"
+
+#: weblinks.admin.inc:203
+msgid "Full length"
+msgstr "Volle Länge"
+
+#: weblinks.admin.inc:208
+msgid "Link description display"
+msgstr "Anzeige der Link-Beschreibung"
+
+#: weblinks.admin.inc:210
+msgid "This sets how the description will be displayed on the main links page."
+msgstr "Dies legt fest, wie die Beschreibung auf der Haupt-Linkseite angezeigt wird."
+
+#: weblinks.admin.inc:217
+msgid "Display URL?"
+msgstr "URL anzeigen?"
+
+#: weblinks.admin.inc:219
+msgid "Do you want to include the actual URL on the links page?"
+msgstr "Soll die aktuelle URL auf der Link-Seite integriert werden?"
+
+#: weblinks.admin.inc:224
+msgid "Display link information?"
+msgstr "Link-Informationen anzeigen?"
+
+#: weblinks.admin.inc:226
+msgid "This displays link author, publish date, and revision date"
+msgstr "Autor, Veröffentlichungsdatum und Überarbeitungsdatum des Links anzeigen"
+
+#: weblinks.admin.inc:231
+msgid "Display a link to other users' links?"
+msgstr "Einen Link auf Links anderer Benutzer anzeigen?"
+
+#: weblinks.admin.inc:233
+msgid "Shows a link to another user's links."
+msgstr "Zeigt einen Link auf Links eines anderen Benutzers"
+
+#: weblinks.admin.inc:238
+msgid "Display comment information?"
+msgstr "Kommentar-Informationen anzeigen?"
+
+#: weblinks.admin.inc:240
+msgid "Shows links for adding and viewing comments."
+msgstr "Links zum Hinzufügen oder Bearbeiten von Kommentaren anzeigen."
+
+#: weblinks.admin.inc:245
+msgid "Spam link deterrent?"
+msgstr "Spam-Link-Abschreckung?"
+
+#: weblinks.admin.inc:247
+#: weblinks_filter.module:149
+msgid "If enabled, Drupal will add rel=\"nofollow\" to all links, as a measure to reduce the effectiveness of spam links. Note: this will also prevent valid links from being followed by search engines, therefore it is likely most effective when enabled for anonymous users."
+msgstr "Wenn aktiviert, fügt Drupal allen Links rel=\"nofollow\" als Maßnahme hinzu, Spam-Links zu reduzieren."
+
+#: weblinks.admin.inc:255
+msgid "View settings"
+msgstr "Ansichts-Einstellungen"
+
+#: weblinks.admin.inc:256
+msgid "These settings control the way individual links display on the node view page."
+msgstr "Diese Einstellungen legen fest, wie einzelne Links in der Linkansicht angezeigt werden."
+
+#: weblinks.admin.inc:264
+msgid "Link displays as"
+msgstr "Link erscheint als"
+
+#: weblinks.admin.inc:265
+msgid "Visit"
+msgstr "Aufrufen"
+
+#: weblinks.admin.inc:267
+msgid "This option sets whether the URL itself will be displayed or will hide behind a \"Visit <em>title</em>\" link."
+msgstr "Diese Option legt fest, ob die URL selbst angezeigt wird oder ob sie sich hinter einem „<em>Titel</em> aufrufen“-Link verbirgt."
+
+#: weblinks.admin.inc:275
+msgid "\"Visit\" text"
+msgstr "„Aufrufen“-Text"
+
+#: weblinks.admin.inc:277
+msgid "This is the text that will be used with the node title (indicated by \"[title]\") to invite a click."
+msgstr "Dies ist der Text, der beim Beitragstitel (angezeigt durch „[title]“) als Aufforderung zum Anklicken verwendet wird."
+
+#: weblinks.admin.inc:285
+msgid "Replacement patterns"
+msgstr "Ersetzungsmuster"
+
+#: weblinks.admin.inc:302
+msgid "Maximum link title length"
+msgstr "Maximale Länge des Link-Titels"
+
+#: weblinks.admin.inc:304
+msgid "This controls how much of long URLs will be shown in a link in full node view. Zero (0) means unlimited."
+msgstr "Dies legt fest, wie viel von langen URLs in einem Link bei Ansicht des ganzen Beitrags angezeigt wird. Null (0) bedeutet unbegrenzt. "
+
+#: weblinks.admin.inc:310
+msgid "Strip protocol and \"www\"?"
+msgstr "Protokoll und „www“ entfernen?"
+
+#: weblinks.admin.inc:312
+msgid "If enabled, the protocol (e.g. \"http://\") and \"www\" (if present) will be removed before displaying the URL."
+msgstr "Falls aktiviert wird das Protokoll (z.B. „http://“) und „www“ (falls vorhanden) vor dem Anzeigen der URL entfernt"
+
+#: weblinks.admin.inc:318
+msgid "Link position on view"
+msgstr "Position des Links beim Anzeigen"
+
+#: weblinks.admin.inc:319
+msgid "above"
+msgstr "oben"
+
+#: weblinks.admin.inc:319
+msgid "below"
+msgstr "unten"
+
+#: weblinks.admin.inc:321
+msgid "This option sets whether the link itself will be displayed above or below the description when viewing the node."
+msgstr "Diese Option legt fest, ob der Link beim Ansehen des Beitrags über oder unter der Beschreibung angezeigt wird."
+
+#: weblinks.admin.inc:331
+msgid "Field defaults"
+msgstr "Feld-Standards"
+
+#: weblinks.admin.inc:332
+msgid "These settings provide various defaults for fields that may be entered. Be careful when changing these as they can interfere with a user's input."
+msgstr "Diese Einstellungen stellen verschiedene Standards für Felder zur Verfügung, die eingegeben werden können. Diese sollten mit Vorsicht geändert werden, da sie Konflikte mit der Eingabe eines Benutzers verursachen können."
+
+#: weblinks.admin.inc:339
+msgid "Default for URL"
+msgstr "Standard-URL"
+
+#: weblinks.admin.inc:341
+msgid "This will be used as a stub in the URL field."
+msgstr "Dies wird als Rumpf im URL-Feld verwendet."
+
+#: weblinks.admin.inc:346
+msgid "Default for description"
+msgstr "Standard-Beschreibung"
+
+#: weblinks.admin.inc:348
+msgid "This will be used as a stub in the \"Link description\" field."
+msgstr "Dies wird als Rumpf im Feld „Link-Beschreibung“ verwendet."
+
+#: weblinks.admin.inc:359
+msgid "Default input format"
+msgstr "Standard-Eingabeformat"
+
+#: weblinks.admin.inc:361
+msgid "This will be used as the default input format."
+msgstr "Dies wird als Standard-Eingabeformat verwendet werden."
+
+#: weblinks.admin.inc:375
+msgid "Default."
+msgstr "Standard"
+
+#: weblinks.admin.inc:388
+msgid "Show %name"
+msgstr "%name anzeigen"
+
+#: weblinks.admin.inc:390
+msgid "Check to display this group on the main links page."
+msgstr "Aktivieren, damit diese Gruppe auf der Haupt-Linkseite angezeigt wird."
+
+#: weblinks.admin.inc:395
+msgid "Collapse by default"
+msgstr "Standardmäßig zusammenklappen"
+
+#: weblinks.admin.inc:397
+msgid "Check to collapse this group on the main links page by default."
+msgstr "Aktivieren, damit diese Gruppe auf der Haupt-Linkseite standardmäßig zusammengeklappt ist."
+
+#: weblinks.admin.inc:405
+msgid "Maximum links to display"
+msgstr "Maximale Anzahl angezeigter Links"
+
+#: weblinks.admin.inc:408
+msgid "Leave blank if you would not like to limit the number of links displayed"
+msgstr "Leer lassen, wenn die Anzahl angezeigter Links nicht begrenzt werden soll."
+
+#: weblinks.admin.inc:413
+msgid "Create block"
+msgstr "Block erstellen"
+
+#: weblinks.admin.inc:415
+msgid "Check to allow a block for this group to be created."
+msgstr "Ankreuzen, um einen Block für diese Gruppe zu erstellen."
+
+#: weblinks.admin.inc:421
+msgid "Group Sort order"
+msgstr "Gruppen-Sortierreihenfolge"
+
+#: weblinks.admin.inc:430
+#: weblinks.taxonomy.inc:46
+msgid "Save"
+msgstr "Speichern"
+
+#: weblinks.admin.inc:448
+msgid "No groups available."
+msgstr "Keine Gruppen verfügbar."
+
+#: weblinks.admin.inc:510
+msgid "Allow duplicate URLs"
+msgstr "Doppelte URLs erlauben"
+
+#: weblinks.admin.inc:512
+msgid "yes"
+msgstr "ja"
+
+#: weblinks.admin.inc:512
+msgid "no"
+msgstr "nein"
+
+#: weblinks.admin.inc:512
+msgid "warn"
+msgstr "warnen"
+
+#: weblinks.admin.inc:513
+msgid "This check is performed at link creation time. Most users will not want to allow duplicate URLs."
+msgstr "Diese Prüfung wird beim Erstellen des Links durchgeführt. Die meisten Anwender werden keine doppelten URLs erlauben wollen."
+
+#: weblinks.admin.inc:520
+msgid "Check if link is valid when entered"
+msgstr "Bei Eingabe prüfen, ob der Link gültig ist"
+
+#: weblinks.admin.inc:522
+msgid "If enabled, the module will attempt to use the URL to contact the site when the link is created or updated. If the link returns any error, the add/update will fail."
+msgstr "Wenn aktiviert wird das Modul versuchen, mittels der URL die Website zu kontaktieren, wenn der Link erstellt oder aktualisiert wird. Wenn der Link einen Fehler zurückliefert, schlägt das Hinzufügen/Aktualisieren fehl."
+
+#: weblinks.admin.inc:527
+msgid "Enable link validity checker?"
+msgstr "Gültigkeitsprüfung von Links aktivieren?"
+
+#: weblinks.admin.inc:528
+msgid "Do you want to check the links on a schedule?"
+msgstr "Sollen die Links zeitgesteuert geprüft werden?"
+
+#: weblinks.admin.inc:534
+msgid "Links to include"
+msgstr "Einzubeziehende Links"
+
+#: weblinks.admin.inc:535
+msgid "This sets the number of links to be checked on each Cron run. If there are too many, the Cron run may time out."
+msgstr "Dies legt die Anzahl von Links fest, die bei jedem Cron-Lauf geprüft werden. Wenn es zu viele sind, kann es beim Cron-Lauf eine Auszeit verursachen."
+
+#: weblinks.admin.inc:543
+msgid "Unpublish link on second error?"
+msgstr "Veröffentlichung des Links bei zweitem Fehler zurücknehmen?"
+
+#: weblinks.admin.inc:544
+msgid "If a previous error has been detected, do you want the link unpublished?"
+msgstr "Soll die Veröffentlichung des Links zurückgenommen werden, wenn ein Fehler festgestellt wurde?"
+
+#: weblinks.admin.inc:550
+msgid "Update link on permanent redirect?"
+msgstr "Link bei permanenter Umleitung aktualisieren?"
+
+#: weblinks.admin.inc:551
+msgid "If a link is marked as a permanent redirect (\"301\"), do you want the link updated?"
+msgstr "Soll der Link aktualisiert werden, wenn der Link als permanente Weiterleitung markiert ist („301“)?"
+
+#: weblinks.admin.inc:559
+msgid "Cron interval"
+msgstr "Cron-Intervall"
+
+#: weblinks.admin.inc:560
+msgid "This sets the frequency of checking. If you run Cron frequently, you may wish to set this higher than your Cron frequency so that you don't overload the linked site. The check will be run at the next scheduled Cron run after this interval expires. An interval of 0 means every cron run."
+msgstr "Dies stellt die Häufigkeit der Prüfung ein. Wenn Cron häufig läuft, muss dieser Wert möglicherweise höher als die Cron-Häufigkeit sein, damit die Website, auf die verwiesen wird, nicht überlastet wird. Die Prüfung läuft beim nächsten Cron-Lauf nach Ablauf des Intervalls. Ein Intervall von 0 bedeutet jeder Cron-Lauf"
+
+#: weblinks.admin.inc:579
+msgid "Ignore error codes"
+msgstr "Fehler-Codes ignorieren"
+
+#: weblinks.admin.inc:581
+msgid "The validity checker will treat all the selected codes as OK."
+msgstr "Die Gültigkeitsprüfung wird alle ausgewählten Codes als in Ordnung behandeln."
+
+#: weblinks.taxonomy.inc:22
+msgid "Group Name"
+msgstr "Gruppen-Name"
+
+#: weblinks.taxonomy.inc:24
+msgid "This Groups the links and allows you to sort them."
+msgstr "Dies gruppiert die Links und ermöglicht, sie zu sortieren."
+
+#: weblinks.taxonomy.inc:30
+msgid "Group Description"
+msgstr "Gruppen-Beschreibung"
+
+#: weblinks.taxonomy.inc:34
+msgid "The description can provide additional information about the link grouping."
+msgstr "Die Beschreibung kann zusätzliche Informationen über die Gruppe der Internet-Links liefern."
+
+#: weblinks.taxonomy.inc:39
+#: weblinks.views.inc:78
+#: weblinks.module:145
+msgid "Weight"
+msgstr "Gewichtung"
+
+#: weblinks.taxonomy.inc:42
+#: weblinks.module:147
+msgid "In listings, the heavier terms (with a larger weight) will sink and the lighter terms will be positioned nearer the top."
+msgstr "In Listen sinken die schwereren Begriffe (mit einer höheren Gewichtung) und die leichteren Begriffe erscheinen weiter oben."
+
+#: weblinks.taxonomy.inc:48
+#: weblinks.module:161
+msgid "Delete"
+msgstr "Löschen"
+
+#: weblinks.taxonomy.inc:59;81
+msgid "weblinks container"
+msgstr "Container für Internet-Links"
+
+#: weblinks.taxonomy.inc:66
+msgid "Created new %type %term."
+msgstr "%type %term wurde neu erstellt."
+
+#: weblinks.taxonomy.inc:69
+msgid "The %type %term has been updated."
+msgstr "%type %term wurde aktualisiert."
+
+#: weblinks.taxonomy.inc:85
+msgid "The %type %term has been deleted."
+msgstr "%type %term wurde gelöscht."
+
+#: weblinks.user.inc:31
+msgid "published"
+msgstr "veröffentlicht"
+
+#: weblinks.user.inc:31
+msgid "not published"
+msgstr "nicht veröffentlicht"
+
+#: weblinks.user.inc:41
+msgid "edit"
+msgstr "bearbeiten"
+
+#: weblinks.user.inc:42
+msgid "delete"
+msgstr "löschen"
+
+#: weblinks.user.inc:55
+msgid "Title"
+msgstr "Titel"
+
+#: weblinks.user.inc:55
+msgid "Status"
+msgstr "Status"
+
+#: weblinks.user.inc:55
+msgid "Group"
+msgstr "Gruppe"
+
+#: weblinks.user.inc:55
+msgid "Operations"
+msgstr "Vorgänge"
+
+#: weblinks.user.inc:70
+msgid "No posts available."
+msgstr "Keine Beiträge verfügbar."
+
+#: weblinks.views.inc:21
+#: weblinks.module:75;1378;397;424
+#: weblinks.info:0
+msgid "Web Links"
+msgstr "Internet-Links"
+
+#: weblinks.views.inc:34
+msgid "The web address for the link."
+msgstr "Die Internetadresse für den Link."
+
+#: weblinks.views.inc:47
+msgid "Click count"
+msgstr "Anklick-Zähler"
+
+#: weblinks.views.inc:48
+msgid "The total number of times the link has been clicked."
+msgstr "Die Anzahl, wir oft ein Link angeklickt wurde."
+
+#: weblinks.views.inc:64
+msgid "Last click"
+msgstr "Zuletzt angeklickt"
+
+#: weblinks.views.inc:65
+msgid "The most recent time the link was clicked."
+msgstr "Wann der Link zum letzten Mal angeklickt wurde."
+
+#: weblinks.views.inc:79
+msgid "The node weight for the link's node."
+msgstr "Die Beitragsgewichtung für den Beitrag des Links."
+
+#: weblinks.views.inc:95
+msgid "Last status"
+msgstr "Letzter Status"
+
+#: weblinks.views.inc:96
+msgid "The status returned the last time the link was checked for validity."
+msgstr "Der Status, den der Link bei der letzten Gültigkeitsprüfung zurückgegeben hat."
+
+#: weblinks.views.inc:112
+msgid "Last checked"
+msgstr "Zuletzt geprüft"
+
+#: weblinks.views.inc:113
+msgid "The most recent time the link was checked to see if it works."
+msgstr "Der Zeitpunkt, zu dem der Link zum letzten Mal auf seine Funktion überprüft wurde."
+
+#: weblinks_errors.inc:10
+msgid "100 - Continue"
+msgstr "100 - Fortfahren"
+
+#: weblinks_errors.inc:11
+msgid "101 - Switching Protocols"
+msgstr "101 - Protokolle werden gewechselt"
+
+#: weblinks_errors.inc:12
+msgid "200 - OK"
+msgstr "200 - OK"
+
+#: weblinks_errors.inc:13
+msgid "201 - Created"
+msgstr "201 - Erstellt"
+
+#: weblinks_errors.inc:14
+msgid "202 - Accepted"
+msgstr "202 - Angenommen"
+
+#: weblinks_errors.inc:15
+msgid "203 - Non-Authoritative Information"
+msgstr "203 - Nicht-autorisierte Information"
+
+#: weblinks_errors.inc:16
+msgid "204 - No Content"
+msgstr "204 - Kein Inhalt"
+
+#: weblinks_errors.inc:17
+msgid "205 - Reset Content"
+msgstr "205 - Inhalt zurückgesetzt"
+
+#: weblinks_errors.inc:18
+msgid "206 - Partial Content"
+msgstr "206 - Teil des angeforderten Inhalts"
+
+#: weblinks_errors.inc:19
+msgid "300 - Multiple Choices"
+msgstr "300 - Daten sind gespiegelt"
+
+#: weblinks_errors.inc:20
+msgid "301 - Moved Permanently"
+msgstr "301 - Dauerhaft verschoben"
+
+#: weblinks_errors.inc:21
+msgid "302 - Found"
+msgstr "302 - Gefunden"
+
+#: weblinks_errors.inc:22
+msgid "303 - See Other"
+msgstr "303 - Siehe anderen URL"
+
+#: weblinks_errors.inc:23
+msgid "304 - Not Modified"
+msgstr "304 - Nicht geändert"
+
+#: weblinks_errors.inc:24
+msgid "305 - Use Proxy"
+msgstr "305 - Proxy verwenden"
+
+#: weblinks_errors.inc:25
+msgid "306 - (Unused)"
+msgstr "306 - (Nicht verwendet)"
+
+#: weblinks_errors.inc:26
+msgid "307 - Temporary Redirect"
+msgstr "307 - Vorübergehende Weiterleitung"
+
+#: weblinks_errors.inc:27
+msgid "400 - Bad Request"
+msgstr "400 - Ungültige Anforderung"
+
+#: weblinks_errors.inc:28
+msgid "401 - Unauthorized"
+msgstr "401 - Nicht autorisiert"
+
+#: weblinks_errors.inc:29
+msgid "402 - Payment Required"
+msgstr "402 - Bezahlung erforderlich"
+
+#: weblinks_errors.inc:30
+msgid "403 - Forbidden"
+msgstr "403 - Verboten"
+
+#: weblinks_errors.inc:31
+msgid "404 - Not Found"
+msgstr "404 - Nicht gefunden"
+
+#: weblinks_errors.inc:32
+msgid "405 - Method Not Allowed"
+msgstr "405 - Methode nicht erlaubt"
+
+#: weblinks_errors.inc:33
+msgid "406 - Not Acceptable"
+msgstr "406 - Nicht akzeptabel"
+
+#: weblinks_errors.inc:34
+msgid "407 - Proxy Authentication Required"
+msgstr "407 - Proxy Authentifizierung erforderlich"
+
+#: weblinks_errors.inc:35
+msgid "408 - Request Timeout"
+msgstr "408 - Zeitüberschreitung der Anforderung"
+
+#: weblinks_errors.inc:36
+msgid "409 - Conflict"
+msgstr "409 - Konflikt"
+
+#: weblinks_errors.inc:37
+msgid "410 - Gone"
+msgstr "410 - Fort"
+
+#: weblinks_errors.inc:38
+msgid "411 - Length Required"
+msgstr "411 - Länge benötigt"
+
+#: weblinks_errors.inc:39
+msgid "412 - Precondition Failed"
+msgstr "412 - Vorbedingungen fehlgeschlagen"
+
+#: weblinks_errors.inc:40
+msgid "413 - Request Entity Too Large"
+msgstr "413 - Zuviele Zeichen in der Anforderungseinheit"
+
+#: weblinks_errors.inc:41
+msgid "414 - Request-URI Too Long"
+msgstr "414 - Anfrage-URI zu lang"
+
+#: weblinks_errors.inc:42
+msgid "415 - Unsupported Media Type"
+msgstr "415 - Nicht unterstützter Medientyp"
+
+#: weblinks_errors.inc:43
+msgid "416 - Requested Range Not Satisfiable"
+msgstr "416 - Angeforderter Bereich kann nicht erfüllt werden"
+
+#: weblinks_errors.inc:44
+msgid "417 - Expectation Failed"
+msgstr "417 - Erwartung fehlgeschlagen"
+
+#: weblinks_errors.inc:45
+msgid "500 - Internal Server Error"
+msgstr "500 - Interner Serverfehler"
+
+#: weblinks_errors.inc:46
+msgid "501 - Not Implemented"
+msgstr "501 - Nicht implementiert"
+
+#: weblinks_errors.inc:47
+msgid "502 - Bad Gateway"
+msgstr "502 - Gatewayfehler"
+
+#: weblinks_errors.inc:48
+msgid "503 - Service Unavailable"
+msgstr "503 - Dienst nicht verfügbar"
+
+#: weblinks_errors.inc:49
+msgid "504 - Gateway Timeout"
+msgstr "504 - Zeitüberschreitung vom Gateway"
+
+#: weblinks_errors.inc:50
+msgid "505 - HTTP Version Not Supported"
+msgstr "505 - HTTP-Version nicht unterstützt"
+
+#: weblinks.module:22
+msgid "Enables the submission and display of categorized links to other web sites."
+msgstr "Ermöglicht das Erstellen und die Anzeige kategorisierter Links auf andere Websites."
+
+#: weblinks.module:33
+msgid "Weblinks Overview"
+msgstr "Übersicht über Internet-Links"
+
+#: weblinks.module:46
+msgid "Add a new link"
+msgstr "Neuen Link hinzufügen"
+
+#: weblinks.module:52
+msgid "Add a group"
+msgstr "Gruppe hinzufügen"
+
+#: weblinks.module:59
+#: weblinks_filter.module:116
+msgid "Weblinks settings"
+msgstr "Einstellungen für Internet-Links"
+
+#: weblinks.module:76
+msgid "Create a new web link."
+msgstr "Neuen Internet-Link erstellen."
+
+#: weblinks.module:78
+msgid "Link Name"
+msgstr "Name des Links"
+
+#: weblinks.module:80
+msgid "Link Description"
+msgstr "Beschreibung des Links"
+
+#: weblinks.module:170
+msgid "\"@url\" does not look like a valid URL."
+msgstr "„@url“ scheint keine gültige URL zu sein."
+
+#: weblinks.module:179;182
+msgid "A link with that URL already exists."
+msgstr "Ein Link mit dieser URL existiert bereits."
+
+#: weblinks.module:199
+msgid "This link is returning an error code of @err (@text)."
+msgstr "Dieser Link gibt einen Fehlercode @err zurück (@text)."
+
+#: weblinks.module:346
+msgid "Home"
+msgstr "Startseite"
+
+#: weblinks.module:584
+msgid "Unpublished"
+msgstr "nicht veröffentlicht"
+
+#: weblinks.module:585
+msgid "These links are not published and need to be reviewed."
+msgstr "Diese Links sind nicht veröffentlicht und müssen überprüft werden."
+
+#: weblinks.module:605;793
+msgid "There are no weblinks to display yet."
+msgstr "Es gibt noch keine Internet-Links."
+
+#: weblinks.module:627
+msgid "Edit group"
+msgstr "Gruppe bearbeiten"
+
+#: weblinks.module:764
+msgid "Invalid group requested."
+msgstr "Ungültige Gruppe angefordert."
+
+#: weblinks.module:812
+msgid "Group !op"
+msgstr "Gruppe !op"
+
+#: weblinks.module:965
+msgid "edit link"
+msgstr "Link bearbeiten"
+
+#: weblinks.module:966
+msgid "delete link"
+msgstr "Link löschen"
+
+#: weblinks.module:1004;1143;1195
+msgid "more&#8230;"
+msgstr "mehr&#8230;"
+
+#: weblinks.module:1201
+msgid "Most Popular Web Links"
+msgstr "Beliebteste Internet-Links"
+
+#: weblinks.module:1202
+msgid "No links have been visited since statistics were enabled or the \"Count content views\" option was not enabled."
+msgstr "Es wurden keine Links besucht, seit die Statistik aktiviert wurde oder die Option „Inhaltsaufrufe zählen“ wurde nicht aktiviert"
+
+#: weblinks.module:1318
+msgid "Recent Web Links"
+msgstr "Neueste Internet-Links"
+
+#: weblinks.module:1325
+msgid "Unpublished Web Links"
+msgstr "Unveröffentlichte Internet-Links"
+
+#: weblinks.module:1337;1350
+msgid "Random Web Links"
+msgstr "Zufällige Internet-Links"
+
+#: weblinks.module:1387
+msgid "Maximum weblinks to display"
+msgstr "Maximum anzuzeigender Internet-Links"
+
+#: weblinks.module:1390
+msgid "The number of links to show in this block."
+msgstr "Die Anzahl von Links, die in diesem Block angezeigt werden soll."
+
+#: weblinks.module:1399
+msgid "\"More...\" link?"
+msgstr "Link „Mehr...“?"
+
+#: weblinks.module:1401
+msgid "If there are more links than the limit above, do you want a \"more...\" link?"
+msgstr "Soll ein Link „Mehr...“ angezeigt werden, wenn es mehr Gruppen gibt als oben angegeben?"
+
+#: weblinks.module:1407
+msgid "Show description?"
+msgstr "Beschreibung anzeigen?"
+
+#: weblinks.module:1409
+msgid "If checked, the link's description will be shown."
+msgstr "Wenn aktiviert, wird die Beschreibung des Links angezeigt."
+
+#: weblinks.module:1414
+msgid "Show image?"
+msgstr "Bild anzeigen?"
+
+#: weblinks.module:1416
+msgid "If checked, the link's attached image will be shown."
+msgstr "Wenn aktiviert, wird das dem Link angehängte Bild angezeigt."
+
+#: weblinks.module:1437
+msgid "List type"
+msgstr "Listen-Typ"
+
+#: weblinks.module:1438
+msgid "Simple list"
+msgstr "Einfache Liste"
+
+#: weblinks.module:1438
+msgid "Numbered list"
+msgstr "Numerierte Liste"
+
+#: weblinks.module:1440
+msgid "This sets the way the list will be displayed."
+msgstr "Dies legt die Art der angezeigten Liste fest."
+
+#: weblinks.module:1454
+msgid "Block Sort order"
+msgstr "Block-Sortierreihenfolge"
+
+#: weblinks.module:1456
+msgid "This determines how the links block will sort the links."
+msgstr "Dies legt fest, wie Links im Link-Block sortiert werden."
+
+#: weblinks.module:1468
+msgid "Update every"
+msgstr "Aktualisieren alle"
+
+#: weblinks.module:1476
+msgid "seconds"
+msgstr "Sekunden"
+
+#: weblinks.module:1477
+msgid "minutes"
+msgstr "Minuten"
+
+#: weblinks.module:1478
+msgid "hours"
+msgstr "Stunden"
+
+#: weblinks.module:1479
+msgid "days"
+msgstr "Tage"
+
+#: weblinks.module:1480
+msgid "weeks"
+msgstr "Wochen"
+
+#: weblinks.module:1487
+msgid "If set, the link displayed in this block will get updated based on the interval specified (requires cron if page cache is enabled). Leave this value blank to have the link updated every time the block is viewed."
+msgstr "Wenn aktiviert, wird der in diesem Block angezeigte Link im angegebenen Intervall aktualisiert (erfordert Cron, wenn der Seitencache aktiviert ist). Wenn der Wert leergelassen wird, wird der Link jedes Mal aktualisiert, wenn der Block angezeigt wird."
+
+#: weblinks.module:1542
+msgid "Group name"
+msgstr "Gruppen-Name"
+
+#: weblinks.module:1543
+msgid "The name of this group."
+msgstr "Der Name dieser Gruppe."
+
+#: weblinks.module:1544
+msgid "Group description"
+msgstr "Gruppen-Beschreibung"
+
+#: weblinks.module:1545
+msgid "A description of the group, to be displayed on web links pages and forms."
+msgstr "Eine Beschreibung der Gruppe, wird auf Seiten und Formularen mit Internet-Links angezeigt."
+
+#: weblinks.module:1548
+msgid "Parent groups."
+msgstr "Übergeordnete Gruppen."
+
+#: weblinks.module:1549
+msgid "Groups are displayed in ascending order by weight."
+msgstr "Gruppen werden in absteigender Reihenfolge oder nach Gewichtung angezeigt."
+
+#: weblinks.module:1554
+msgid "Group image"
+msgstr "Gruppen-Bild"
+
+#: weblinks.module:1555
+msgid "The image file you wish to associate this group."
+msgstr "Die Bilddatei, die dieser Gruppe zugeordnet werden soll."
+
+#: weblinks.module:1638
+msgid "Add comment"
+msgstr "Kommentar hinzufügen"
+
+#: weblinks.module:1645
+msgid "View comments"
+msgstr "Kommentare anzeigen"
+
+#: weblinks.module:1688
+msgid "created: !created by @name"
+msgstr "erstellt: !created von @name"
+
+#: weblinks.module:1696
+msgid "created: !created by @name &nbsp; - &nbsp; updated: !updated"
+msgstr "erstellt: !created von @name &nbsp; - &nbsp; aktualisiert: !updated"
+
+#: weblinks.module:1735
+msgid "As of !date, this link is reporting \"!status.\""
+msgstr "Seit !date zeigt dieser Link „!status“."
+
+#: weblinks.module:1742
+msgid "As of !date, this link is reporting errors."
+msgstr "Seit !date zeigt dieser Link Fehler."
+
+#: weblinks.module:530;535;542;555
+msgid "Weblinks"
+msgstr "Internet-Links"
+
+#: weblinks.module:530
+msgid "!url reports !status !extra."
+msgstr "!url zeigt !status !extra."
+
+#: weblinks.module:535
+msgid "!url updated to !new."
+msgstr "!url aktualisiert in !new."
+
+#: weblinks.module:542
+msgid "!url unpublished."
+msgstr "Veröffentlichung von !url zurückgenommen."
+
+#: weblinks.module:555
+msgid "Weblinks_cron checked !count links."
+msgstr "Weblinks_cron überprüfte !count Links."
+
+#: weblinks.module:217
+msgid "access web links"
+msgstr "auf Internet-Links zugreifen"
+
+#: weblinks.module:217
+msgid "create weblinks"
+msgstr "Internet-Links erstellen"
+
+#: weblinks.module:217
+msgid "edit own weblinks"
+msgstr "eigene Internet-Links bearbeiten"
+
+#: weblinks.module:217
+msgid "view my weblinks"
+msgstr "Meine Internet-Links anzeigen"
+
+#: weblinks.module:217
+msgid "edit group weblinks"
+msgstr "edit group weblinks"
+
+#: weblinks.module:217
+msgid "administer weblinks"
+msgstr "Internet-Links verwalten"
+
+#: weblinks.module:404
+msgid "Web Links Overview"
+msgstr "Übersicht über Internet-Links"
+
+#: weblinks.module:405
+msgid "Overview and maintenance of weblinks groups."
+msgstr "Übersicht und Pflege der Internet-Link-Gruppen."
+
+#: weblinks.module:413
+msgid "My Web Links"
+msgstr "Meine Internet-Links"
+
+#: weblinks.module:425
+msgid "Set a variety of options for web link display and categorization."
+msgstr "Einstellung einer Vielzahl von Optionen für die Darstellung und Kategorisierung von Internet-Links."
+
+#: weblinks.module:433
+msgid "General"
+msgstr "Allgemeines"
+
+#: weblinks.module:453
+msgid "Checker settings"
+msgstr "Prüf-Einstellungen"
+
+#: weblinks.module:0
+msgid "weblinks"
+msgstr "weblinks"
+
+#: weblinks_convert_links.module:36
+msgid "<strong>Warning</strong>: This is a <strong>DESTRUCTIVE</strong> process. The Links package nodes will be changed to Web Links nodes and any taxonomy vocabularies will be updated to be used on the \"weblinks\" content type."
+msgstr "<strong>Warnung</strong>: Dies ist ein <strong>ZERSTÖRERISCHER</strong> Prozess. Beiträge von ‚Links package‘ werden in ‚Web Links‘-Beiträge geändert und alle Taxonomie-Vokabulare werden aktualisiert, um vom ‚Weblinks‘-Inhaltstyp verwendet zu werden."
+
+#: weblinks_convert_links.module:42
+msgid "I have done a back up of my database."
+msgstr "Ich habe meine Datenbank gesichert."
+
+#: weblinks_convert_links.module:47
+msgid "Number of Links to convert at a time"
+msgstr "Anzahl Links, die auf einmal konvertiert werden sollen"
+
+#: weblinks_convert_links.module:50
+msgid "This minimizes the risk of timing out if you have a lot of links to convert."
+msgstr "Dies minimiert das Risiko einer Auszeit, wenn viele Links konvertiert werden müssen."
+
+#: weblinks_convert_links.module:55
+msgid "Convert"
+msgstr "Konvertieren"
+
+#: weblinks_convert_links.module:66
+msgid "You must check the box that says you backed up your database."
+msgstr "Das Ankreuzkästchen, mit dem Sie die Sicherung der Datenbank bestätigen, muss angekreuzt werden."
+
+#: weblinks_convert_links.module:76
+msgid "nid"
+msgstr ""
+
+#: weblinks_convert_links.module:76
+msgid "url"
+msgstr ""
+
+#: weblinks_convert_links.module:76
+msgid "weight"
+msgstr "Gewichtung"
+
+#: weblinks_convert_links.module:76
+msgid "tids"
+msgstr ""
+
+#: weblinks_convert_links.module:76
+msgid "last check"
+msgstr "Zuletzt geprüft"
+
+#: weblinks_convert_links.module:85
+msgid "Improper URL set by Links package in node #!nid."
+msgstr "Ungültige URL seitens ‚Links package‘ im Beitrag #!nid."
+
+#: weblinks_convert_links.module:104
+msgid "!count links converted."
+msgstr "!count Links konvertiert."
+
+#: weblinks_convert_links.module:104
+msgid "No"
+msgstr "Nein"
+
+#: weblinks_convert_links.module:107
+msgid "Found !count vocabularies: (!vocs)"
+msgstr "!count Vokabulare gefunden: (!vocs)"
+
+#: weblinks_convert_links.module:120
+msgid "Added \"Web Links\" content to the !voc vocabulary."
+msgstr "„Web Links“-Inhalt wurde dem Vokabular !voc hinzugefügt."
+
+#: weblinks_convert_links.module:123
+msgid "Failed adding \"Web Links\" content to the !voc vocabulary."
+msgstr "Fehler beim Hinzufügen von „Web Links“-Inhalt zum Vokabular !voc."
+
+#: weblinks_convert_links.module:17
+msgid "Convert Links package"
+msgstr "‚Links Package‘ konvertieren"
+
+#: weblinks_convert_links.module:0
+msgid "weblinks_convert_links"
+msgstr ""
+
+#: weblinks_filter.module:41
+msgid "Weblinks filter"
+msgstr "Filter für Internet-Links"
+
+#: weblinks_filter.module:50
+msgid "Allows users to include links with [link: <em>title</em>]."
+msgstr "Erlaubt Benutzern, Links mit [link: <em>Titel</em>] einzufügen."
+
+#: weblinks_filter.module:53
+msgid "Unknown filter description requested from Weblinks."
+msgstr "Unbekannte Filter-Beschreibung von ‚Weblinks‘ angefordert."
+
+#: weblinks_filter.module:100
+msgid "No link found for @title."
+msgstr "Kein Link gefunden für @title."
+
+#: weblinks_filter.module:140
+msgid "Use link descriptions as title attribute"
+msgstr "Beschreibungen von Links als title-Attribut verwenden"
+
+#: weblinks_filter.module:142
+msgid "If checked the link description will be added as a \"title\" attribute for a hover tip."
+msgstr "Wenn aktiviert wird die Beschreibung des Links als Attribut „title“ als Hover Tip hinzugefügt"
+
+#: weblinks_filter.module:147
+msgid "Spam link deterrent"
+msgstr "Spam-Link-Abschreckung"
+
+#: weblinks_filter.module:154
+msgid "No image"
+msgstr "Kein Bild"
+
+#: weblinks_filter.module:155
+msgid "Before the title"
+msgstr "Vor dem Titel"
+
+#: weblinks_filter.module:156
+msgid "After the title"
+msgstr "Nach dem Titel"
+
+#: weblinks_filter.module:161
+msgid "Use image in the link"
+msgstr "Bild im Link verwenden"
+
+#: weblinks_filter.module:163
+msgid "If checked the link will include an image attached to the link, if there is one."
+msgstr "Der Link beinhaltet ein an den Link angehängtes Bild, wenn es eines gibt."
+
+#: weblinks_filter.module:173
+msgid "Image size"
+msgstr "Bildgröße"
+
+#: weblinks_filter.module:175
+msgid "Which size image to use in the link. Requires \"Use image...\" above to be checked."
+msgstr "Welche Bildgröße im Link verwendet werden soll. Erfordert, dass oben „Bild im Link verwenden“ aktiviert ist."
+
+#: weblinks_filter.module:187
+msgid "To insert a link to a site known to the Weblinks module, you may insert in your content the pseudo-tag: [link: <em>title</em>]. The Weblinks module will insert the appropriate link at that spot in the content."
+msgstr "Um einen Link auf eine Website einzufügen, die dem Modul Weblinks bekannt ist, kann in eigenen Inhalt der Pseudo-Tag [link: <em>Titel</em>] eingefügt werden. Das Modul Weblinks fügt an dieser Stelle den passenden Link in den Inhalt ein."
+
+#: weblinks_filter.module:190
+msgid "You may insert a link to a defined site with [link: <em>title</em>]."
+msgstr "Ein Link auf eine bestimmte Seite kann auch eingefügt werden mit [link: <em>Titel</em>]."
+
+#: weblinks_filter.module:0
+msgid "weblinks_filter"
+msgstr "weblinks_filter"
+
+#: weblinks.install:15
+msgid "weblinks module installed."
+msgstr "Modul ‚Weblinks‘ (Internet-Links) installiert."
+
+#: weblinks.install:18
+msgid "weblinks table creation failed. Please \"uninstall\" the module and retry."
+msgstr "Das Erstellen der Tabelle ‚weblinks‘ ist festgeschlagen. Es wird empfohlen, das Modul zu „deinstallieren“ und es erneut zu versuchen."
+
+#: weblinks.install:281
+msgid "weblinks module uninstalled."
+msgstr "Modul ‚Weblinks‘ deinstalliert."
+
+#: weblinks.info:0
+msgid "Web Links provides a comprehensive way to post weblinks to your site. All links are nodes, which can be put into taxonomies/categories and administered."
+msgstr "Internet-Links stellen einen einfachen Weg bereit, Internet-Links auf der Website darzustellen. Alle Links sind Beiträge, die in Taxonomien/Kategorien abgelegt und verwaltet werden können."
+
+#: weblinks_convert_links.info:0
+msgid "Web Links Convert Links Package"
+msgstr ""
+
+#: weblinks_convert_links.info:0
+msgid "Allows users to convert Links package to Web Links."
+msgstr "Ermöglicht Benutzern, ‚Links package‘ zu ‚Web Links‘ zu konvertieren."
+
+#: weblinks_filter.info:0
+msgid "Web Links Filter"
+msgstr "Filter für Internet-Links"
+
+#: weblinks_filter.info:0
+msgid "Allows users to include links with [link: title]."
+msgstr "Ermöglicht Benutzern, Links mit [link: Titel] zu integrieren"
+

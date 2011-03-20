@@ -1,0 +1,20 @@
+--- workflow.module	2008-09-17 23:35:56.000000000 -0500
++++ workflow.module.new	2008-09-18 15:05:32.000000000 -0500
+@@ -1401,7 +1401,9 @@ function workflow_hook_info() {
+  */
+ function workflow_menu_alter(&$callbacks) {
+   if (module_exists('trigger')) {
+-    $callbacks['admin/build/trigger/workflow']['access callback'] = 'trigger_access_check';
++    if (array_key_exists('admin/build/trigger/workflow', $callbacks)) {
++      $callbacks['admin/build/trigger/workflow']['access callback'] = 'trigger_access_check';
++    }
+   }
+ }
+ 
+@@ -1470,4 +1472,4 @@ function workflow_token_list($type = 'al
+   }
+ 
+   return $tokens;
+-}
+\ No newline at end of file
++}

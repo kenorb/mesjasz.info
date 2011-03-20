@@ -1,0 +1,897 @@
+<?php
+// $Id: user_stats.module,v 1.2.2.16.2.5 2008/10/14 12:14:11 liammcdermott Exp $
+
+/**
+ * Implementation of hook_perm()
+ */
+function user_stats_perm() {
+  return array('administer user stats', 'View statistics', 'View IP addresses');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function user_stats_menu() {
+  $items = array();
+
+  // Admin settings
+  $items['admin/settings/user_stats'] = array(
+    'title' => 'User stats settings',
+    'description' => 'Configuration of user stats module options.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('user_stats_admin_settings'),
+    'access arguments' => array('administer user stats'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/settings/user_stats/reset'] = array(
+    'title' => 'reset user post stats',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('user_stats_reset_postcount_confirm'),
+    'access arguments' => array('administer user stats'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/settings/user_stats/reset_logins'] = array(
+    'title' => 'reset user login stats',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('user_stats_reset_logincount_confirm'),
+    'access arguments' => array('administer user stats'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  return $items;
+}
+
+/**
+ * Implementation of hook_settings().
+ */
+function user_stats_admin_settings() {
+  $form['post_count_options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Post count options'),
+    '#collapsible' => TRUE,
+    '#collapsed' => (variable_get('user_stats_count_posts', TRUE) ? FALSE : TRUE),
+  );
+
+  $form['post_count_options']['user_stats_count_posts'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Count posts'),
+    '#description' => t('If checked user post counts will be calculated.'),
+    '#default_value' => variable_get('user_stats_count_posts', TRUE),
+  );
+
+  foreach (node_get_types() as $types) {
+    $options[$types->type] = $types->name;
+  }
+
+  $form['post_count_options']['user_stats_included_content_types'] = array(
+    '#type' => 'select',
+    '#title' => t('Content types to include in post count'),
+    '#description' => t('Select the content types to include in the user post count (hold ctrl or shift to select multiple types). Both nodes and comments will be included in the post count. If you do not select any content types, then all types will be counted.'),
+    '#options' => $options,
+    '#default_value' => variable_get('user_stats_included_content_types', array()),
+    '#multiple' => TRUE,
+    '#size' => 10,
+  );
+
+  $profile_fields = array('' => 'None');
+  $result = db_query("SELECT name, title FROM {profile_fields} ORDER BY fid");
+  while ($row = db_fetch_object($result)) {
+    $profile_fields[$row->name] = $row->title;
+  }
+
+  $form['post_count_options']['user_stats_postcount_profile_field'] = array(
+    '#type' => 'select',
+    '#title' => t('User stats post count profile field'),
+    '#description' => t('This is the profile field that holds the postcount for a user. Changing this can be useful if you have multiple sites using the same database (or you just do not like the default field used for post counts). <strong>The default setting should work for most people.</strong>'),
+    '#options' => $profile_fields,
+    '#default_value' => variable_get('user_stats_postcount_profile_field', 'user_post_count'),
+    '#required' => TRUE,
+  );
+
+  $form['post_count_options']['user_stats_user_per_cron'] = array(
+    '#type' => 'select',
+    '#title' => t('Number of users to update per cron run'),
+    '#options' => array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '200' => '200'),
+    '#default_value' => variable_get('user_stats_user_per_cron', array('25')),
+  );
+
+  $form['post_count_options']['post_count_reset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Post count reset'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['post_count_options']['post_count_reset']['user_stats_reset_count'] = array(
+    '#type' => 'submit',
+    '#value' => t('Reset all post counts'),
+  );
+
+  $form['login_count_options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Login count options'),
+    '#collapsible' => TRUE,
+    '#collapsed' => (variable_get('user_stats_count_logins', TRUE) ? FALSE : TRUE),
+  );
+
+  $form['login_count_options']['user_stats_count_logins'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Count logins'),
+    '#description' => t('If checked user login counts will be calculated.'),
+    '#default_value' => variable_get('user_stats_count_logins', TRUE),
+  );
+
+  $form['login_count_options']['login_count_reset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Login count reset'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['login_count_options']['login_count_reset']['user_stats_reset_login_count'] = array(
+    '#type' => 'submit',
+    '#value' => t('Reset all login counts'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Validate callback.
+ */
+function user_stats_admin_settings_validate($form, &$form_state) {
+  if ($form_state['values']['op'] == t('Reset all post counts')) {
+    drupal_goto('admin/settings/user_stats/reset');
+  }
+  else if ($form_state['values']['op'] == t('Reset all login counts')) {
+    drupal_goto('admin/settings/user_stats/reset_logins');
+  }
+}
+
+/**
+ * reset post count confim callback
+ */
+function user_stats_reset_postcount_confirm() {
+  return confirm_form(array(), t('Are you sure you want to reset post counts?'),
+    'admin/settings/user_stats', '', t('Reset all post counts'), t('Cancel'));
+}
+
+/**
+ * reset login count confim callback
+ */
+function user_stats_reset_logincount_confirm() {
+  return confirm_form(array(), t('Are you sure you want to reset login counts?'),
+    'admin/settings/user_stats', '', t('Reset all login counts'), t('Cancel'));
+}
+
+/**
+ * reset post count handler
+ */
+function user_stats_reset_postcount_confirm_submit($form, &$form_state) {
+  if ($form_state['values']['confirm']) {
+    variable_set('user_stats_rebuild_stats', TRUE);
+    user_stats_reset_counts('user_post_count');
+    drupal_set_message(t('The post counts will be reset during the next cron run.'));
+    drupal_goto('admin/settings/user_stats');
+  }
+}
+
+/**
+ * reset login count handler
+ */
+function user_stats_reset_logincount_confirm_submit($form, &$form_state) {
+  if ($form_state['values']['confirm']) {
+    user_stats_reset_counts('user_login_count');
+    drupal_set_message(t('The user login counts have been reset'));
+    drupal_goto('admin/settings/user_stats');
+  }
+}
+
+/**
+ * Returns user stats
+ *
+ * @param $type
+ *   The statistic to return. Possible values are:
+ *   - "ip_address"
+ *   - "join_date"
+ *   - "login_count"
+ *   - "login_days"
+ *   - "post_count"
+ *   - "post_days"
+ *   - "reg_days"
+ *   - "online"
+ *   - "profile"
+ * @param $uid
+ *   The user id who's stats should be retrieved.
+ *
+ * @return
+ *   The statistic requested. Every statistic except join_date, online and IP address is a numeric.
+ *   Join date is a string, whilst online is a boolean and IP Address a string.
+ *   Note: if $type = "post_days" and the user hasn't posted any content (of the
+ *   counted types) then 'n/a' is returned.
+ */
+function user_stats_get_stats($type, $uid, $options = array()) {
+  $user = _user_stats_user_cache($uid);
+  // IP address is really a bit of feature creep. But it's so useful in stopping spammers!
+  if (user_access('View IP addresses') && $type == 'ip_address') {
+    return $user->user_ip_address;
+  }
+  if (user_access('View statistics')) {
+    switch ($type) {
+      case 'join_date':
+        return $user->created;
+      case 'login_count':
+        if (!variable_get('user_stats_count_logins', TRUE)) {
+          return 'n/a';
+        }
+        else if (isset($user->user_login_count)) {
+          return $user->user_login_count;
+        }
+        else {
+          return 0;
+        }
+      case 'login_days':
+        return floor((time() - $user->access) / 86400);
+      case 'post_count':
+        if (!variable_get('user_stats_count_posts', TRUE)) {
+          return 'n/a';
+        }
+        // If the post count for this user hasn't been set then update it
+        $post_count_profile_field = variable_get('user_stats_postcount_profile_field', 'user_post_count');
+        if (!isset($user->$post_count_profile_field)) {
+          user_stats_post_count_update($user, 'reset');
+        }
+        return $user->$post_count_profile_field;
+      case 'post_days':
+        $last_post = _user_stats_last_post($user);
+        if ($last_post !== FALSE) {
+          return floor((time() - $last_post) / 86400);
+        }
+        else {
+          return 'n/a';
+        }
+      case 'reg_days':
+        return floor((time() - $user->created) / 86400);
+      case 'online':
+        return (round((time() - $user->access) / 60) < 15 ? TRUE : FALSE);
+      case 'profile':
+        if (!empty($options)) {
+          if (isset($user->$options['field']) && !is_array($user->$options['field'])) {
+            return $user->$options['field'];
+          }
+          break;
+        }
+        break;
+    }
+  }
+}
+
+/**
+ * User cache for optimisation, this needs to be a seperate
+ * function so cache can be flushed by user_stats_post_count_update
+ * below (and possibly other places).
+ *
+ * @param $uid
+ *   User id of user required from cache.
+ * @param $flush
+ *   Defaults to FALSE. If TRUE the $uid is flushed from the cache.
+ *   If $uid is set to 0 and $flush is TRUE the entire cache will
+ *   be purged.
+ * @return
+ *   If the $uid is other than -1 and $flush is false the user object.
+ *   If the $uid is -1 and/or $flush is TRUE nothing.
+ */
+function _user_stats_user_cache($uid, $flush = FALSE) {
+  static $users = array();
+  // Flush entire cache.
+  if ($uid == (-1) && $flush == TRUE) {
+    unset($users);
+    return;
+  }
+  else if ($uid > (-1) && $flush == TRUE) {
+    unset($users[$uid]);
+    return;
+  }
+  else if (!isset($users[$uid]) && $uid > (-1)) {
+    $users[$uid] = user_stats_user_load($uid);
+  }
+  return $users[$uid];
+}
+
+/**
+ * Drupal hook implementations
+ */
+
+/**
+ * Implementation of hook_nodeapi()
+ *
+ * Increments post count on insert or publish
+ * Decrements post count on delete or unpublish
+ * Checks and updates users without post counts on view
+ *
+ * @param &$node
+ *   The node the action is being performed on.
+ * @param $op
+ *   The operation being performed. We are interested in insert, delete, update and view
+ */
+function user_stats_nodeapi(&$node, $op) {
+  // We stop before any work is done if the $op isn't one of the ones we need
+  if (!in_array($op, array('insert', 'delete', 'update'))) {
+    return;
+  }
+  $postcount_content_types = variable_get('user_stats_included_content_types', array());
+  if ((empty($postcount_content_types) ||
+    in_array($node->type, $postcount_content_types)) &&
+    variable_get('user_stats_count_posts', TRUE)) {
+
+    switch ($op) {
+      case 'insert':
+        $user_node = user_stats_user_load($node->uid);
+        if ($node->status) {
+          user_stats_post_count_update($user_node, 'increment');
+        }
+        break;
+      case 'delete':
+        $user_node = user_stats_user_load($node->uid);
+        user_stats_post_count_update($user_node, 'decrement');
+        break;
+      case 'update':
+        $user_node = user_stats_user_load($node->uid);
+        // Can't think of any other way of doing this than resetting the user...
+        user_stats_post_count_update($user_node, 'reset');
+        break;
+    }
+  }
+
+  // Do IP Address update
+  switch ($op) {
+    case 'insert':
+      global $user;
+      // User IP addresses are only interesting if they are posting the content
+      if ($node->uid == $user->uid) {
+        user_stats_ip_address_update($user, ip_address());
+      }
+      break;
+    case 'update':
+      global $user;
+      if ($node->uid == $user->uid) {
+        user_stats_ip_address_update($user, ip_address());
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_comment()
+ *
+ * Increments post count on insert or publish
+ * Decrements post count on delete or unpublish
+ * Updates users with no post count on view
+ *
+ * @param $a1
+ *   Either the form values being submitted, the module form to be displayed,
+ *   or the comment object.
+ * @param $op
+ *   What kind of action is being performed.
+ */
+function user_stats_comment(&$a1, $op) {
+  // We stop before any work is done if the $op isn't one of the ones we need
+  if (!in_array($op, array('insert', 'delete', 'update'))) {
+    return;
+  }
+
+  $comment = (object)$a1;
+  $postcount_content_types = variable_get('user_stats_included_content_types', array());
+  $node = node_load(array('nid' => $comment->nid));
+
+
+  if ((empty($postcount_content_types) ||
+    in_array($node->type, $postcount_content_types)) &&
+    variable_get('user_login_count', TRUE)) {
+
+    switch ($op) {
+      case 'insert':
+        $user = user_stats_user_load($comment->uid);
+        user_stats_post_count_update($user, 'increment');
+        break;
+      case 'delete':
+        $user = user_stats_user_load($comment->uid);
+        user_stats_post_count_update($user, 'decrement');
+        break;
+      case 'update':
+        $user_comment = user_stats_user_load($comment->uid);
+        user_stats_post_count_update($user_comment, 'reset');
+        break;
+    }
+  }
+
+  // Do IP address update
+  global $user;
+  if ($op == 'insert' && $comment->uid == $user->uid) {
+    // User IP addresses are only interesting if they are posting the content
+    user_stats_ip_address_update($user, ip_address());
+  }
+}
+
+/**
+ * Implementation of hook_cron()
+ *
+ * We slowly work through all users without a post count
+ * updating them.
+ */
+function user_stats_cron() {
+  if (variable_get('user_stats_rebuild_stats', TRUE) && variable_get('user_stats_count_posts', TRUE)) {
+    $sql = "SELECT fid FROM {profile_fields} WHERE name='%s'";
+    $fid = db_result(db_query($sql, variable_get('user_stats_postcount_profile_field', 'user_post_count')));
+
+    // Unfortunately this cannot be done with a JOIN because of the need to match on fid
+    $sql  = "SELECT uid FROM {users} WHERE uid NOT IN ( ";
+    $sql .= "  SELECT uid FROM {profile_values} ";
+    $sql .= "  WHERE fid=%d ";
+    $sql .= ") ";
+    // Update 25 users per cron run
+    $result = db_query_range($sql, $fid, 0, variable_get('user_stats_user_per_cron', array('25')));
+    $users_updated = FALSE;
+    while ($update_user = db_fetch_object($result)) {
+      $user = user_stats_user_load($update_user->uid);
+      user_stats_post_count_update($user, 'reset');
+      $users_updated = TRUE;
+    }
+    // If all users have been updated we'll avoid running this expensive
+    // query again by setting the following flag!
+    if (!$users_updated) {
+      variable_set('user_stats_rebuild_stats', FALSE);
+    }
+  }
+  // Fire workflow_ng daily anniversary event
+  if (module_exists('workflow_ng')) {
+    $sql  = "SELECT uid FROM {users} u ";
+    // ((last cron - created) - (time() - created)) > one day
+    $sql .= "WHERE ";
+    $sql .= "(FLOOR((%d-created)/(60*60*24))-FLOOR((%d-created)/(60*60*24)))>0 ";
+    $sql .= "AND uid>0 ";
+    $result = db_query($sql, time(), variable_get('cron_last', time()));
+    $reset_user_count = 0;
+    while ($update_user = db_fetch_object($result)) {
+      $user = user_stats_user_load($update_user->uid);
+      // We stop at 50 reset users (they'll just have to wait) so cron doesn't get timed out
+      if (!isset($user->user_post_count) && $reset_user_count < 50) {
+        user_stats_post_count_update($user, 'reset');
+        $reset_user_count++;
+      }
+      workflow_ng_invoke_event('user_stats_day_older', $user);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_user()
+ */
+function user_stats_user($op, &$edit, &$account) {
+  if (variable_get('user_stats_count_logins', TRUE) && $op == 'login') {
+    if (isset($account->user_login_count)) {
+      // Update existing value
+      $sql = "UPDATE {profile_values} SET value=%d
+        WHERE fid=(SELECT fid FROM {profile_fields} WHERE name='user_login_count')
+        AND uid=%d";
+    }
+    else {
+      // If there isn't a value insert it
+      $sql = "INSERT INTO {profile_values} (fid, value, uid)
+        SELECT fid, %d AS value, %d AS uid FROM {profile_fields}
+        WHERE name='user_login_count'";
+    }
+    if (isset($account->user_login_count)) {
+      $login_count = $account->user_login_count+1;
+    }
+    else {
+      $login_count = 1;
+    }
+    db_query($sql, $login_count, $account->uid);
+  }
+  // Update IP Address
+  if ($op == 'login' || $op == 'logout') {
+    user_stats_ip_address_update($account, ip_address());
+  }
+}
+
+/**
+ * Implementation of hook_form_alter()
+ */
+function user_stats_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'user_edit') {
+    if ($form['_category']['#value'] == 'Statistics') {
+      if (isset($form['Statistics'])) {
+        foreach ($form['Statistics'] as $field => $value) {
+          if (is_array($value) && $value['#type'] == 'textfield') {
+            $form['Statistics'][$field]['#disabled'] = true;
+            $form['Statistics'][$field]['#description'] = 'Field not editable.';
+          }
+        }
+      }
+      else {
+        $form['no_settings_error'] = array('#value' => t('Sorry, there is nothing for you to see here.'));
+      }
+      unset($form['submit']);
+      unset($form['delete']);
+    }
+  }
+}
+
+/**
+ * Helper function to get the last post created by the user.
+ *
+ * @param $account
+ *   User object.
+ *
+ * @return
+ *   Unix timestamp: date of the last post (node or comment).
+ */
+function _user_stats_last_post($account) {
+  $sql  = "SELECT MAX(created) FROM {node} WHERE status=%d AND uid=%d";
+  $postcount_content_types = variable_get('user_stats_included_content_types', array());
+  if (!empty($postcount_content_types)) {
+    $content_types = "'". implode("','", $postcount_content_types) ."'";
+    $where = ' AND type IN ('. $content_types .')';
+    $sql .= $where;
+  }
+  $max_node = db_result(db_query($sql, 1, $account->uid));
+  $sql  = "SELECT MAX(timestamp) FROM {comments} c INNER JOIN {node} n ON c.nid=n.nid WHERE c.status=%d AND c.uid=%d";
+  if (!empty($postcount_content_types)) {
+    $where = ' AND n.type IN ('. $content_types .')';
+    $sql .= $where;
+  }
+  $max_comments = db_result(db_query($sql, COMMENT_PUBLISHED, $account->uid));
+
+  if (is_null($max_node) && is_null($max_comments)) {
+    return FALSE;
+  }
+  else if ($max_node > $max_comments) {
+    return $max_node;
+  }
+  else if ($max_node <= $max_comments) {
+    return $max_comments;
+  }
+}
+
+/**
+ * Workflow-ng hooks and implementing functions
+ */
+
+/**
+ * Implementation of hook_event_info()
+ */
+function user_stats_event_info() {
+  return array(
+    'user_stats_post_count_increment' => array(
+      '#label' => t('User post count incremented'),
+      '#arguments' => array(
+        'user' => array('#entity' => 'user', '#label' => t('User whos post count has incremented')),
+      ),
+      '#module' => t('User'),
+    ),
+    'user_stats_post_count_decrement' => array(
+      '#label' => t('User post count decremented'),
+      '#arguments' => array(
+        'user' => array('#entity' => 'user', '#label' => t('User whos post count has decremented')),
+      ),
+      '#module' => t('User'),
+    ),
+    'user_stats_post_count_reset' => array(
+      '#label' => t('User post count reset'),
+      '#arguments' => array(
+        'user' => array('#entity' => 'user', '#label' => t('User whos post count has reset')),
+      ),
+      '#module' => t('User'),
+    ),
+    'user_stats_day_older' => array(
+      '#label' => t('User is a day older'),
+      '#arguments' => array(
+        'user' => array('#entity' => 'user', '#label' => t('User who is a day older')),
+      ),
+      '#module' => t('User'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_action_info()
+ */
+function user_stats_action_info() {
+  return array(
+    'user_stats_action_post_count_increment' => array(
+      '#label' => t('Increment user post count'),
+      '#arguments' => array(
+        'user' => array('#entity' => 'user', '#label' => t('User whos post count should be incremented')),
+      ),
+      '#module' => t('User'),
+      '#description' => t('Increments the post count of a user'),
+    ),
+    'user_stats_action_post_count_decrement' => array(
+      '#label' => t('Decrement user post count'),
+      '#arguments' => array(
+        'user' => array('#entity' => 'user', '#label' => t('User whos post count should be decremented')),
+      ),
+      '#module' => t('User'),
+      '#description' => t('Decrements the post count of a user'),
+    ),
+    'user_stats_action_post_count_reset' => array(
+      '#label' => t('Reset the user post count'),
+      '#arguments' => array(
+        'user' => array('#entity' => 'user', '#label' => t('User whos post count should be reset')),
+      ),
+      '#module' => t('User'),
+      '#description' => t('Resets the post count of the current user.'),
+    ),
+  );
+}
+
+/**
+ * hook_action_info() callback
+ *
+ * @param &$user
+ *   Reference to the user object
+ * @param $settings
+ *   Workflow-ng settings parameter
+ * @param &$arguments
+ *   Pointer to all arguments passed to the function from Workflow-ng
+ * @param &$log
+ *   Reference to Workflow-ng's internal log
+ */
+function user_stats_action_post_count_increment(&$user, $settings, &$arguments, &$log) {
+  user_stats_post_count_update($user, 'increment');
+}
+
+/**
+ * hook_action_info() callback
+ *
+ * @param &$user
+ *   Reference to the user object
+ * @param $settings
+ *   Workflow-ng settings parameter
+ * @param &$arguments
+ *   Pointer to all arguments passed to the function from Workflow-ng
+ * @param &$log
+ *   Reference to Workflow-ng's internal log
+ */
+function user_stats_action_post_count_decrement(&$user, $settings, &$arguments, &$log) {
+  user_stats_post_count_update($user, 'decrement');
+}
+
+/**
+ * hook_action_info() callback
+ *
+ * @param &$user
+ *   Reference to the user object
+ * @param $settings
+ *   Workflow-ng settings parameter
+ * @param &$arguments
+ *   Pointer to all arguments passed to the function from Workflow-ng
+ * @param &$log
+ *   Reference to Workflow-ng's internal log
+ */
+function user_stats_action_post_count_reset(&$user, $settings, &$arguments, &$log) {
+  user_stats_post_count_update($user, 'reset');
+}
+
+/**
+ * Token hook implementations
+ */
+
+
+/**
+ * Implementation of hook_token_values()
+ * TODO: add login-count
+ */
+function user_stats_token_values($type, $object = NULL) {
+  switch ($type) {
+    case 'user':
+    case 'all' :
+      if (isset($object)) {
+        // Think this is sometimes an array (please raise this as an issue if wrong).
+        $object = (object)$object;
+        $uid = $object->uid;
+      }
+      else {
+        global $user;
+        $uid = $user->uid;
+      }
+
+      // Check_plain added as per Greggles suggestion: http://drupal.org/node/166305#comment-665874
+      $values['reg-days']               = check_plain(user_stats_get_stats('reg_days', $uid));
+      $values['login-days']             = check_plain(user_stats_get_stats('login_days', $uid));
+      $values['post-days']              = check_plain(user_stats_get_stats('post_days', $uid));
+      $values['post-count']             = check_plain(user_stats_get_stats('post_count', $uid));
+      $values['ip-address']             = check_plain(user_stats_get_stats('ip_address', $uid));
+      return $values;
+  }
+}
+
+/**
+ * Implementation of hook_token_list()
+ */
+function user_stats_token_list($type = 'all') {
+  if ($type == 'user' || $type == 'all') {
+    $tokens['user']['reg-days']               = t('Number of days since the user registered');
+    $tokens['user']['login-days']             = t('Number of days since the user logged in');
+    $tokens['user']['post-days']              = t('Number of days since the user posted');
+    $tokens['user']['post-count']             = t('User\'s post count');
+    $tokens['user']['ip-address']             = t('User\'s IP address');
+    return $tokens;
+  }
+}
+
+/**
+ * Manage the post count of a given user
+ *
+ * @param $user
+ *   Reference to user object
+ * @param $op
+ *   Whether the user post count should be incremented, decremented, or reset.
+ *   The default is to increment. Possible values are:
+ *   'increment' (default)
+ *   'decrement'
+ *   'reset'
+ */
+function user_stats_post_count_update(&$user, $op = 'increment') {
+  // The lock stops infinite recursions, the action will still happen, but the
+  // corresponding event (the reason for an infinite loop) will not be fired
+  static $locked;
+  // Shared SQL for increment and decrement
+  $sql  = "UPDATE {profile_values} SET value=%d ";
+  $sql .= "WHERE fid = (SELECT fid FROM {profile_fields} ";
+  $sql .= "WHERE name = '%s') AND uid=%d ";
+  $post_count_profile_field = variable_get('user_stats_postcount_profile_field', 'user_post_count');
+
+  switch ($op) {
+    case 'increment':
+      if (!isset($user->$post_count_profile_field)) {
+        $user = user_stats_post_count_update($user, 'reset');
+      }
+      else {
+        $user->$post_count_profile_field++;
+        db_query($sql, $user->$post_count_profile_field, $post_count_profile_field, $user->uid);
+        // Flush user cache.
+        _user_stats_user_cache($user->uid, TRUE);
+        // Flush token cache
+        if (module_exists('token')) {
+          token_get_values('user', NULL, TRUE);
+        }
+        // We use $locked to stop infinite loops
+        if (!$locked && module_exists('workflow_ng')) {
+          $locked = TRUE;
+          workflow_ng_invoke_event('user_stats_post_count_increment', $user);
+          $locked = FALSE;
+        }
+      }
+      break;
+    case 'decrement':
+      if (!isset($user->$post_count_profile_field)) {
+        $user = user_stats_post_count_update($user, 'reset');
+      }
+      else {
+        $user->$post_count_profile_field--;
+        db_query($sql, $user->$post_count_profile_field, $post_count_profile_field, $user->uid);
+        // Flush user cache.
+        _user_stats_user_cache($user->uid, TRUE);
+        // Flush token cache
+        if (module_exists('token')) {
+          token_get_values('user', NULL, TRUE);
+        }
+        if (!$locked && module_exists('workflow_ng')) {
+          $locked = TRUE;
+          workflow_ng_invoke_event('user_stats_post_count_decrement', $user);
+          $locked = FALSE;
+        }
+      }
+      break;
+    case 'reset':
+      static $fid;
+      if (!isset($fid)) {
+        $sql = "SELECT fid FROM {profile_fields} WHERE name='%s'";
+        $fid = db_result(db_query($sql, $post_count_profile_field));
+      }
+      $sql  = "SELECT COUNT(*) FROM {node} WHERE uid=%d AND status=1";
+      $postcount_content_types = variable_get('user_stats_included_content_types', array());
+      if (!empty($postcount_content_types)) {
+        $content_types = "'". implode("','", $postcount_content_types) ."'";
+        $where = ' AND type IN ('. $content_types .')';
+        $sql .= $where;
+      }
+      $node_count = db_result(db_query($sql, $user->uid));
+      $sql = "SELECT COUNT(*) FROM {comments} c INNER JOIN {node} n ON c.nid=n.nid WHERE c.uid=%d AND c.status=0 AND n.status=1";
+      if (!empty($postcount_content_types)) {
+        $where = ' AND n.type IN ('. $content_types .')';
+        $sql .= $where;
+      }
+      $comments_count = db_result(db_query($sql, $user->uid));
+      $total_count = $node_count + $comments_count;
+      $sql =  "DELETE FROM {profile_values} ";
+      $sql .= "WHERE fid=%d AND uid=%d";
+      db_query($sql, $fid, $user->uid);
+      $sql  = "INSERT INTO {profile_values} (fid, uid, value) VALUES ( ";
+      $sql .= "%d, %d, %d ";
+      $sql .= ") ";
+      db_query($sql, $fid, $user->uid, $total_count);
+      $user->user_post_count = $total_count;
+      // Flush user cache.
+      _user_stats_user_cache($user->uid, TRUE);
+      // Flush token cache
+      if (module_exists('token')) {
+        token_get_values('user', NULL, TRUE);
+      }
+      if (!$locked && module_exists('workflow_ng')) {
+        $locked = TRUE;
+        workflow_ng_invoke_event('user_stats_post_count_reset', $user);
+        $locked = FALSE;
+      }
+      break;
+  }
+}
+
+/**
+ * Manage the IP address of a given user.
+ *
+ * @param $user
+ *   User object whos IP address we are going to update.
+ * @param $ip_address
+ *   IP address to assign to user.
+ */
+function user_stats_ip_address_update(&$user, $ip_address) {
+  profile_load_profile($user);
+  if (isset($user->user_ip_address)) {
+    $sql  = "UPDATE {profile_values} SET value='%s' ";
+    $sql .= "WHERE fid = (SELECT fid FROM {profile_fields} ";
+    $sql .= "WHERE name = 'user_ip_address') AND uid=%d ";
+  }
+  else {
+    $sql  = "INSERT INTO {profile_values} (fid, value, uid) ";
+    $sql .= "SELECT fid, '%s' AS value, %d AS uid FROM {profile_fields} ";
+    $sql .= "WHERE name='user_ip_address' ";
+  }
+  db_query($sql, $ip_address, $user->uid);
+}
+
+/**
+ * Loads a user object. If possible this saves some memory and SQL overhead
+ * by only loading what's needed.
+ *
+ * @param $uid
+ *   User ID of the user to load.
+ * @return
+ *   Object representing the user.
+ */
+function user_stats_user_load($uid) {
+  if (module_exists('workflow_ng')) {
+    // Workflow-ng requires a complete user object (with roles etc.)
+    $user = user_load(array('uid' => $uid));
+  }
+  else {
+    $result = db_query('SELECT * FROM {users} u WHERE uid = %d', $uid);
+    $user = db_fetch_object($result);
+
+    if (is_object($user)) {
+      $user = drupal_unpack($user);
+      profile_load_profile($user);
+    }
+    else {
+      $user = FALSE;
+    }
+  }
+
+  return $user;
+}
+
+/**
+ * Resets statistics. Full stop.
+ *
+ * @param $statistic
+ *   The name of the statistic to be reset.
+ *   This must be the name of the profile_fields field.
+ */
+function user_stats_reset_counts($statistic = 'user_post_count') {
+  $fid = db_result(db_query("SELECT fid FROM {profile_fields} WHERE name = '%s'", variable_get('user_stats_postcount_profile_field', 'user_post_count')));
+  if ($fid) {
+    db_query('DELETE FROM {profile_values} WHERE fid = %d', $fid);
+  }
+}

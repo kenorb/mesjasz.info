@@ -1,0 +1,151 @@
+<?php
+// $Id: italy_380_1.cif,v 1.5.2.1 2008/11/03 21:33:50 islandusurper Exp $
+
+
+/**
+* First implement hook_install() using the name of the country as the base of
+* the function name.
+*/
+function italy_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (380, 'Italy', 'IT', 'ITA', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+          ."(380, 'AG', 'Agrigento'),"
+          ."(380, 'AL', 'Alessandria'),"
+          ."(380, 'AN', 'Ancona'),"
+          ."(380, 'AO', 'Aosta'),"
+          ."(380, 'AP', 'Ascoli Piceno'),"
+          ."(380, 'AQ', 'L\'Aquila'),"
+          ."(380, 'AR', 'Arezzo'),"
+          ."(380, 'AT', 'Asti'),"
+          ."(380, 'AV', 'Avellino'),"
+          ."(380, 'BA', 'Bari'),"
+          ."(380, 'BG', 'Bergamo'),"
+          ."(380, 'BI', 'Biella'),"
+          ."(380, 'BL', 'Belluno'),"
+          ."(380, 'BN', 'Benevento'),"
+          ."(380, 'BO', 'Bologna'),"
+          ."(380, 'BR', 'Brindisi'),"
+          ."(380, 'BS', 'Brescia'),"
+          ."(380, 'BZ', 'Bolzano'),"
+          ."(380, 'CA', 'Cagliari'),"
+          ."(380, 'CB', 'Campobasso'),"
+          ."(380, 'CE', 'Caserta'),"
+          ."(380, 'CH', 'Chieti'),"
+          ."(380, 'CL', 'Caltanissetta'),"
+          ."(380, 'CN', 'Cuneo'),"
+          ."(380, 'CO', 'Como'),"
+          ."(380, 'CR', 'Cremona'),"
+          ."(380, 'CS', 'Cosenza'),"
+          ."(380, 'CT', 'Catania'),"
+          ."(380, 'CZ', 'Catanzaro'),"
+          ."(380, 'EN', 'Enna'),"
+          ."(380, 'FE', 'Ferrara'),"
+          ."(380, 'FG', 'Foggia'),"
+          ."(380, 'FI', 'Firenze'),"
+          ."(380, 'FC', 'Forlì-Cesena'),"
+          ."(380, 'FR', 'Frosinone'),"
+          ."(380, 'GE', 'Genova'),"
+          ."(380, 'GO', 'Gorizia'),"
+          ."(380, 'GR', 'Grosseto'),"
+          ."(380, 'IM', 'Imperia'),"
+          ."(380, 'IS', 'Isernia'),"
+          ."(380, 'KR', 'Crotone'),"
+          ."(380, 'LC', 'Lecco'),"
+          ."(380, 'LE', 'Lecce'),"
+          ."(380, 'LI', 'Livorno'),"
+          ."(380, 'LO', 'Lodi'),"
+          ."(380, 'LT', 'Latina'),"
+          ."(380, 'LU', 'Lucca'),"
+          ."(380, 'MC', 'Macerata'),"
+          ."(380, 'ME', 'Messina'),"
+          ."(380, 'MI', 'Milano'),"
+          ."(380, 'MN', 'Mantova'),"
+          ."(380, 'MO', 'Modena'),"
+          ."(380, 'MS', 'Massa Carrara'),"
+          ."(380, 'MT', 'Matera'),"
+          ."(380, 'NA', 'Napoli'),"
+          ."(380, 'NO', 'Novara'),"
+          ."(380, 'NU', 'Nuoro'),"
+          ."(380, 'OR', 'Oristano'),"
+          ."(380, 'PA', 'Palermo'),"
+          ."(380, 'PC', 'Piacenza'),"
+          ."(380, 'PD', 'Padova'),"
+          ."(380, 'PE', 'Pescara'),"
+          ."(380, 'PG', 'Perugia'),"
+          ."(380, 'PI', 'Pisa'),"
+          ."(380, 'PN', 'Pordenone'),"
+          ."(380, 'PO', 'Prato'),"
+          ."(380, 'PR', 'Parma'),"
+          ."(380, 'PU', 'Pesaro Urbino'),"
+          ."(380, 'PT', 'Pistoia'),"
+          ."(380, 'PV', 'Pavia'),"
+          ."(380, 'PZ', 'Potenza'),"
+          ."(380, 'RA', 'Ravenna'),"
+          ."(380, 'RC', 'Reggio Calabria'),"
+          ."(380, 'RE', 'Reggio Emilia'),"
+          ."(380, 'RG', 'Ragusa'),"
+          ."(380, 'RI', 'Rieti'),"
+          ."(380, 'RM', 'Roma'),"
+          ."(380, 'RN', 'Rimini'),"
+          ."(380, 'RO', 'Rovigo'),"
+          ."(380, 'SA', 'Salerno'),"
+          ."(380, 'SI', 'Siena'),"
+          ."(380, 'SO', 'Sondrio'),"
+          ."(380, 'SP', 'La Spezia'),"
+          ."(380, 'SR', 'Siracusa'),"
+          ."(380, 'SS', 'Sassari'),"
+          ."(380, 'SV', 'Savona'),"
+          ."(380, 'TA', 'Taranto'),"
+          ."(380, 'TE', 'Teramo'),"
+          ."(380, 'TN', 'Trento'),"
+          ."(380, 'TO', 'Torino'),"
+          ."(380, 'TP', 'Trapani'),"
+          ."(380, 'TR', 'Terni'),"
+          ."(380, 'TS', 'Trieste'),"
+          ."(380, 'TV', 'Treviso'),"
+          ."(380, 'UD', 'Udine'),"
+          ."(380, 'VA', 'Varese'),"
+          ."(380, 'VB', 'Verbania'),"
+          ."(380, 'VC', 'Vercelli'),"
+          ."(380, 'VE', 'Venezia'),"
+          ."(380, 'VI', 'Vicenza'),"
+          ."(380, 'VR', 'Verona'),"
+          ."(380, 'VT', 'Viterbo'),"
+          ."(380, 'VV', 'Vibo-Valentia'),"
+          ."(380, 'RSM', 'Rep San Marino'),"
+          ."(380, 'CTV', 'Città del Vaticano')");
+
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.  Documentation on address formats
+  // is available at:
+  // http://www.ubercart.org/ubercart_users_guide/country_settings#address_format_docs
+  uc_set_address_format(380,
+    "!company\r\n!first_name !last_name\r\n!street1\r\n!street2"
+   ."\r\n!postal_code, !city\r\n!zone_code\r\n!country_name_if");
+}
+
+
+/**
+* If necessary, implement hook_update() with $version being the only argument.
+* Add a new case for each version update, and be sure to always include the
+* latest changes in the install function.
+*/
+function italy_update($version) {
+}
+
+
+/**
+* If necessary, implement hook_uninstall().  This requires no argument.  The
+* store module automatically removes rows from the country and zones tables
+* related to the country, and it unsets the address format.  This function is
+* only necessary for other things you may have included in your country's
+* installation process.
+*/
+function italy_uninstall() {
+}
+

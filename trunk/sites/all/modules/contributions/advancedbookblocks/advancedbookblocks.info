@@ -1,0 +1,13 @@
+; $Id: advancedbookblocks.info,v 1.1 2009/01/04 19:57:12 aaronhawkins Exp $
+name = Advanced Book Blocks
+description = Integrates book blocks with JQuery menu.
+dependencies[] = jquerymenu
+dependencies[] = book
+package = Advanced Navigation Pack
+core = 6.x
+; Information added by drupal.org packaging script on 2009-01-13
+version = "6.x-1.2"
+core = "6.x"
+project = "advancedbookblocks"
+datestamp = "1231872602"
+

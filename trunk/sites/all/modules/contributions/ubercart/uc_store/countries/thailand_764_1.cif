@@ -1,0 +1,117 @@
+<?php
+// $Id: thailand_764_1.cif,v 1.2.2.4 2008/11/03 21:33:50 islandusurper Exp $
+
+/**
+ * First implement hook_install() using the name of the country as the base of
+ * the function name.
+ */
+function Thailand_install() {
+  // Make the entry in the country table.
+  // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
+  db_query("INSERT INTO {uc_countries} VALUES (764, 'Thai', 'TH', 'THA', 1)");
+
+  // Make the entries in the zones table.
+  db_query("INSERT INTO {uc_zones} (zone_country_id, zone_code, zone_name) VALUES "
+      ."(764, '1', 'กรุงเทพมหานคร'),"
+      ."(764, '2', 'นนทบุรี'),"
+      ."(764, '3', 'สมุทรปราการ'),"
+      ."(764, '4', 'ปทุมธานี'),"
+      ."(764, '5', 'ภูเก็ต'),"
+      ."(764, '6', 'สมุทรสาคร'),"
+      ."(764, '7', 'สมุทรสงคราม'),"
+      ."(764, '8', 'นครปฐม'),"
+      ."(764, '9', 'ปัตตานี'),"
+      ."(764, '10', 'พระนครศรีอยุธยา'),"
+      ."(764, '11', 'อ่างทอง'),"
+      ."(764, '12', 'ชลบุรี'),"
+      ."(764, '13', 'สิงห์บุรี'),"
+      ."(764, '14', 'สงขลา'),"
+      ."(764, '15', 'มหาสารคาม'),"
+      ."(764, '16', 'สระบุรี'),"
+      ."(764, '17', 'สุรินทร์'),"
+      ."(764, '18', 'ระยอง'),"
+      ."(764, '19', 'ศรีสะเกษ'),"
+      ."(764, '20', 'ขอนแก่น'),"
+      ."(764, '21', 'ราชบุรี'),"
+      ."(764, '22', 'นราธิวาส'),"
+      ."(764, '23', 'ร้อยเอ็ด'),"
+      ."(764, '24', 'สุพรรณบุรี'),"
+      ."(764, '25', 'นครศรีธรรมราช'),"
+      ."(764, '26', 'บุรีรัมย์'),"
+      ."(764, '27', 'พัทลุง'),"
+      ."(764, '28', 'กาฬสินธุ์'),"
+      ."(764, '29', 'ชัยนาท'),"
+      ."(764, '30', 'อุดรธานี'),"
+      ."(764, '31', 'ยโสธร'),"
+      ."(764, '32', 'หนองบัวลำภู'),"
+      ."(764, '33', 'นครพนม'),"
+      ."(764, '34', 'นครราชสีมา'),"
+      ."(764, '35', 'ตรัง'),"
+      ."(764, '36', 'ฉะเชิงเทรา'),"
+      ."(764, '37', 'หนองคาย'),"
+      ."(764, '38', 'พิจิตร'),"
+      ."(764, '39', 'ลพบุรี'),"
+      ."(764, '40', 'นครนายก'),"
+      ."(764, '41', 'อำนาจเจริญ'),"
+      ."(764, '42', 'สกลนคร'),"
+      ."(764, '43', 'สตูล'),"
+      ."(764, '44', 'อุบลราชธานี'),"
+      ."(764, '45', 'นครสวรรค์'),"
+      ."(764, '46', 'เชียงราย'),"
+      ."(764, '47', 'ยะลา'),"
+      ."(764, '48', 'ปราจีนบุรี'),"
+      ."(764, '49', 'สุโขทัย'),"
+      ."(764, '50', 'ลำพูน'),"
+      ."(764, '51', 'ชัยภูมิ'),"
+      ."(764, '52', 'กระบี่'),"
+      ."(764, '53', 'กำแพงเพชร'),"
+      ."(764, '54', 'เชียงใหม่'),"
+      ."(764, '55', 'ชุมพร'),"
+      ."(764, '56', 'จันทบุรี'),"
+      ."(764, '57', 'เพชรบูรณ์'),"
+      ."(764, '58', 'ตราด'),"
+      ."(764, '59', 'พิษณุโลก'),"
+      ."(764, '60', 'ประจวบคีรีขันธ์'),"
+      ."(764, '61', 'มุกดาหาร'),"
+      ."(764, '62', 'พะเยา'),"
+      ."(764, '63', 'สุราษฎร์ธานี'),"
+      ."(764, '64', 'สระแก้ว'),"
+      ."(764, '65', 'เพชรบุรี'),"
+      ."(764, '66', 'แพร่'),"
+      ."(764, '67', 'ลำปาง'),"
+      ."(764, '68', 'อุตรดิตถ์'),"
+      ."(764, '69', 'พังงา'),"
+      ."(764, '70', 'ระนอง'),"
+      ."(764, '71', 'เลย'),"
+      ."(764, '72', 'อุทัยธานี'),"
+      ."(764, '73', 'กาญจนบุรี'),"
+      ."(764, '74', 'น่าน'),"
+      ."(764, '75', 'ตาก'),"
+      ."(764, '76', 'แม่ฮ่องสอน')");
+
+  // Use uc_set_address_format() with the country ID as the first argument and
+  // an address format string as the second.  Documentation on address formats
+  // is available at:
+  // http://www.ubercart.org/ubercart_users_guide/country_settings#address_format_docs
+  uc_set_address_format(764,
+    "!first_name !last_name\r\n!company\r\n!street1\r\n!street2"
+   ."\r\n!city, !zone_name !postal_code\r\n!country_name");
+}
+
+/**
+ * If necessary, implement hook_update() with $version being the only argument.
+ * Add a new case for each version update, and be sure to always include the
+ * latest changes in the install function.
+ */
+function Thailand_update($version) {
+}
+
+/**
+ * If necessary, implement hook_uninstall().  This requires no argument.  The
+ * store module automatically removes rows from the country and zones tables
+ * related to the country, and it unsets the address format.  This function is
+ * only necessary for other things you may have included in your country's
+ * installation process.
+ */
+function Thailand_uninstall() {
+}

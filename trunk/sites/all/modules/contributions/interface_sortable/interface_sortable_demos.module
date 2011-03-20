@@ -1,0 +1,181 @@
+<?php
+// $Id: interface_sortable_demos.module,v 1.3 2007/05/24 01:08:05 marcp Exp $
+
+/**
+ * Implementation of hook_menu().
+ */
+function interface_sortable_demos_menu() {
+  $items = array();
+
+  $items['demos/interface/sortables'] = array(
+    'title' => 'Interface Sortable Demo',
+    'description' => 'Demonstrates ordering things with drag and drop using jQuery Interface.',
+    'page callback' => 'interface_sortable_demos_sortables',
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  $items['demos/interface/sortable_form_element'] = array(
+    'title' => 'Interface Sortable Form Element Demo',
+    'description' => 'Demonstrates a sortable form element.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('interface_sortable_demos_sortable_form_element'),
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  $items['demos/interface/sortable_form_element_with_options'] = array(
+    'title' => 'Interface Sortable Form Element Demo With Options',
+    'description' => 'Demonstrates a sortable form element with options.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('interface_sortable_demos_sortable_form_element_with_options'),
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  
+  return $items;
+}
+
+function interface_sortable_demos_sortables() {
+  _interface_sortable_demos_css();
+  _interface_sortable_demos_sortables_js();
+ 
+  $output = <<<EOT
+<ul id="sort1">
+	<li id="item1" class="sortable-item">Item 1</li>
+	<li id="item2" class="sortable-item">Item 2</li>
+	<li id="item3" class="sortable-item">Item 3</li>
+	<li id="item4" class="sortable-item">Item 4</li>
+	<li id="item5" class="sortable-item">Item 5</li>
+	<li id="item6" class="sortable-item">Item 6</li>
+	<li id="item7" class="sortable-item">Item 7</li>
+</ul>
+<div><a href="#" onClick="serialize('sort1'); return false;" >serialize the list</a></div>
+EOT;
+  
+  return $output;
+}
+
+function interface_sortable_demos_sortable_form_element() {
+  _interface_sortable_demos_css();
+  
+  $items = array(
+    18 => 'eighteen',
+    17 => 'seventeen',
+    16 => 'sixteen',
+    'cat' => 'meow',
+    15 => 'fifteen',
+    14 => 'fourteen',
+    13 => 'thirteen',
+    12 => 'twelve'
+  );
+  
+  $options = array();
+  $options['accept'] = 'sortable-item';
+  $options['helperclass'] = 'sortable-helper';
+  $options['activeclass'] = 'sortable-active';
+  $options['hoverclass'] = 'sortable-hover';
+  $options['fx'] = 300;
+  $options['axis'] = 'vertically';
+  $options['opacity'] = 0.6;
+  
+  $form['sortee'] = array(
+    '#type' => 'sortable',
+    '#items' => $items,
+    '#options' => $options,
+    '#description' => t('Drag and drop the elements to set their order'),
+    '#title' => t('Sortable Form Element')
+  );
+  
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+  
+  return $form;
+}
+
+function interface_sortable_demos_sortable_form_element_submit($form_values, $form, $form_state) {
+  $sorted = interface_get_sort($form_values['sortee']);
+  drupal_set_message('submitted:  ['. implode(',', $sorted) .']');
+}
+
+function interface_sortable_demos_sortable_form_element_with_options() {
+  _interface_sortable_demos_css();
+
+  $items = array(
+    'cat' => 'meow',
+    'dog' => 'woof',
+    'cow' => 'moo',
+    'pig' => 'oink',
+    'bird' => 'cheep'
+  );
+  
+  $options = array(
+      'fx' => 1100,
+      'opacity' => 0.2,
+      '#onchange' => <<<EOT
+        function (obj) {
+          serial = $.SortSerialize(obj[0].id);
+          document.getElementById('edit-order').value = serial.hash;
+          document.getElementById('edit-sorto').value = serial.hash;
+          
+        }
+EOT
+  );
+    
+  $form['order'] = array(
+    '#type' => 'textarea',
+    '#rows' => 3,
+    '#cols' => 80,
+    '#default_value' => t('the order will display here when changed')
+  );
+  
+  $form['sorto'] = array(
+    '#type' => 'sortable',
+    '#outer_tag' => 'ul',
+    '#inner_tag' => 'li',
+    '#options' => $options,
+    '#items' => $items,
+    '#description' => t('Drag and drop the elements to set their order, if you please...'),
+    '#title' => t('Sortable Form Element With Options'),
+    '#default_value' => 'sorto[]=bird&sorto[]=cat&sorto[]=cow&sorto[]=dog&sorto[]=pig'
+  );
+
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+  
+  return $form;
+}
+
+function interface_sortable_demos_sortable_form_element_with_options_submit($form_values, $form, $form_state) {
+  $sorted = interface_get_sort($form_values['sorto']);
+  drupal_set_message('submitted order:  ['. implode(',', $sorted) .']');
+}
+
+function _interface_sortable_demos_sortables_js() {  
+  jquery_interface_add();
+  drupal_add_js( <<<EOT
+$(document).ready(
+  function () {
+    $('ul').Sortable(
+      {
+        accept : 'sortable-item',
+        onchange : function (obj) {
+                     serial = $.SortSerialize(obj[0].id);
+                     alert(serial.hash);
+                   },
+        fx:				200,
+        axis:			'vertically',
+        opacity:		0.8
+      }
+    )
+  }
+);  
+function serialize(s)
+{
+	serial = $.SortSerialize(s);
+	alert(serial.hash);
+}
+EOT
+, 'inline');
+}
+
+function _interface_sortable_demos_css() {
+  $css_file = drupal_get_path('module', 'interface_sortable_demos') .'/interface_sortable_demos.css';
+  drupal_add_css($css_file); 
+}
