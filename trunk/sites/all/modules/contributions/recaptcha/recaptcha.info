@@ -1,12 +1,13 @@
 name = reCAPTCHA
-description = "Uses the reCAPTCHA web service to improve the CAPTCHA system."
-dependencies[] = captcha
-package = "Spam control"
+description = Protect your website from spam and abuse while letting real people pass through with ease. 
 core = 6.x
+package = Spam control
+dependencies[] = captcha
+php = 5.3.2
 
-; Information added by drupal.org packaging script on 2011-05-04
-version = "6.x-1.7"
+; Information added by Drupal.org packaging script on 2016-05-07
+version = "6.x-2.1+1-dev"
 core = "6.x"
 project = "recaptcha"
-datestamp = "1304527316"
+datestamp = "1462619651"
 

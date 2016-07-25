@@ -1,4 +1,3 @@
-// $Id: poormanscron.js,v 1.1.2.3 2010/01/17 00:27:52 davereid Exp $
 (function ($) {
 
 /**

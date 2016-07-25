@@ -1,4 +1,3 @@
-$Id: README.txt,v 1.6.2.2 2009/12/24 20:35:08 davereid Exp $
 
 Description
 -----------

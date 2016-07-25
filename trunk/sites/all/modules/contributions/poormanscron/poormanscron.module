@@ -1,5 +1,4 @@
 <?php
-// $Id: poormanscron.module,v 1.22.2.8 2010/01/17 00:23:12 davereid Exp $
 
 /**
  * @file
@@ -30,6 +29,16 @@ function poormanscron_init() {
     );
     drupal_add_js(array('cron' => $settings), 'setting');
   }
+}
+
+/**
+ * Implements hook_robotstxt().
+ */
+function poormanscron_robotstxt() {
+  return array(
+    'Disallow: /poormanscron/',
+    'Disallow: /?q=poormanscron/',
+  );
 }
 
 /**
@@ -77,11 +86,24 @@ function poormanscron_run_cron_check() {
     // Run cron automatically if it has never run or threshold was crossed.
     $cron_last = variable_get('cron_last', 0);
     if ($time - $cron_last > $cron_threshold) {
+      // Force the current user to anonymous to ensure consistent permissions
+      // on cron runs.
+      session_save_session(FALSE);
+      $original_user = $GLOBALS['user'];
+      $GLOBALS['user'] = drupal_anonymous_user();
+
       // Lock cron threshold semaphore.
       variable_set('cron_threshold_semaphore', $time);
+
+      // Run cron!
       $cron_run = drupal_cron_run();
+
       // Release the cron threshold semaphore.
       variable_del('cron_threshold_semaphore');
+
+      // Restore the user.
+      $GLOBALS['user'] = $original_user;
+      session_save_session(TRUE);
 
       if ($cron_run) {
         // Truncate the page cache so that cached pages get a new timestamp for
