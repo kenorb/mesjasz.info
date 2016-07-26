@@ -1,5 +1,4 @@
 <?php
-// $Id: cache.inc,v 1.20 2008/09/24 21:21:21 merlinofchaos Exp $
 /**
  * @file cache.inc
  *
@@ -27,7 +26,7 @@ function _views_include_default_views() {
 function _views_fetch_data($table = NULL) {
   static $cache = NULL;
   if (!isset($cache)) {
-    $start = microtime();
+    $start = views_microtime();
     // NOTE: This happens whether we retrieve them from cache or otherwise.
     views_include_handlers();
 
@@ -46,7 +45,7 @@ function _views_fetch_data($table = NULL) {
       views_cache_set('views_data', $cache, TRUE);
     }
 
-    vpr('Views data build time: ' . (microtime() - $start) * 1000 . ' ms');
+    vpr('Views data build time: ' . (views_microtime() - $start) * 1000 . ' ms');
   }
 
   if (!$table) {
@@ -66,12 +65,12 @@ function _views_fetch_data($table = NULL) {
 function _views_fetch_plugin_data($type = NULL, $plugin = NULL) {
   static $cache = NULL;
   if (!isset($cache)) {
-    $start = microtime();
+    $start = views_microtime();
     views_include_handlers();
 
     $cache = views_discover_plugins();
 
-    vpr('Views plugins build time: ' . (microtime() - $start) * 1000 . ' ms');
+    vpr('Views plugins build time: ' . (views_microtime() - $start) * 1000 . ' ms');
   }
 
   if (!$type && !$plugin) {
@@ -100,23 +99,53 @@ function _views_discover_default_views() {
   static $cache = NULL;
 
   if (!isset($cache)) {
-    $data = views_cache_get('views_default_views', TRUE);
+    $index = views_cache_get('views_default_views_index', TRUE);
 
-    if (isset($data->data) && is_array($data->data)) {
-      $cache = $data->data;
-    }
-    else {
-      views_include_default_views();
-      $defaults = module_invoke_all('views_default_views');
+    // Retrieve each cached default view
+    if (isset($index->data) && is_array($index->data)) {
       $cache = array();
-
-      foreach ($defaults as $name => $view) {
-        // Only views with a sufficiently high api version are eligible.
-        if (isset($view->api_version) && $view->api_version >= 2) {
-          $cache[$name] = $view;
+      foreach ($index->data as $view_name) {
+        $data = views_cache_get('views_default:' . $view_name, TRUE);
+        if (isset($data->data) && is_object($data->data)) {
+          $cache[$view_name] = $data->data;
         }
       }
-      views_cache_set('views_default_views', $cache, TRUE);
+    }
+    // If missing index, rebuild the cache
+    else {
+      views_include_default_views();
+      $cache = array();
+
+      foreach(module_implements('views_default_views') as $module) {
+        $results = call_user_func($module . "_views_default_views");
+        if (!empty($results) && is_array($results)) {
+          foreach($results as $name => $view) {
+            // Only views with a sufficiently high api version are eligible.
+            if (!empty($view->api_version) && $view->api_version >= 2) {
+              // Do not cache dead handlers.
+              $view->destroy();
+              if (!isset($cache[$name])) {
+                $cache[$name] = $view;
+              }
+              else {
+                watchdog('view', "View name '@name' is already taken", array('@name' => $name), WATCHDOG_ERROR);
+              }
+            }
+          }
+        }
+      }
+
+      // Allow modules to modify default views before they are cached.
+      drupal_alter('views_default_views', $cache);
+
+      // Cache the index
+      $index = array_keys($cache);
+      views_cache_set('views_default_views_index', $index, TRUE);
+
+      // Cache each view
+      foreach ($cache as $name => $view) {
+        views_cache_set('views_default:' . $name, $view, TRUE);
+      }
     }
   }
 
@@ -209,7 +238,7 @@ function views_object_cache_get($obj, $name, $skip_cache = FALSE) {
   if (!array_key_exists($key, $cache)) {
     $data = db_fetch_object(db_query("SELECT * FROM {views_object_cache} WHERE sid = '%s' AND obj = '%s' AND name = '%s'", session_id(), $obj, $name));
     if ($data) {
-      $cache[$key] = unserialize(db_decode_blob($data->data));
+      $cache[$key] = unserialize($data->data);
     }
   }
   return isset($cache[$key]) ? $cache[$key] : NULL;
@@ -228,7 +257,7 @@ function views_object_cache_get($obj, $name, $skip_cache = FALSE) {
  */
 function views_object_cache_set($obj, $name, $cache) {
   views_object_cache_clear($obj, $name);
-  db_query("INSERT INTO {views_object_cache} (sid, obj, name, data, updated) VALUES ('%s', '%s', '%s', %b, %d)", session_id(), $obj, $name, serialize($cache), time());
+  db_query("INSERT INTO {views_object_cache} (sid, obj, name, data, updated) VALUES ('%s', '%s', '%s', '%s', %d)", session_id(), $obj, $name, serialize($cache), time());
 }
 
 /**

@@ -1,5 +1,4 @@
 <?php
-// $Id: translation.views.inc,v 1.2 2008/10/01 17:20:58 merlinofchaos Exp $
 
 /**
  * @file
@@ -8,7 +7,7 @@
  */
 
 /**
- * @defgroup views_translation_module taxonomy.module handlers
+ * @defgroup views_translation_module translation.module handlers
  *
  * @{
  */
@@ -53,7 +52,7 @@ function translation_views_data_alter(&$data) {
       'click sortable' => TRUE,
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_node_tnid',
+      'handler' => 'views_handler_filter_numeric',
     ),
     'argument' => array(
       'handler' => 'views_handler_argument_node_tnid',
@@ -70,7 +69,7 @@ function translation_views_data_alter(&$data) {
       'help' => t('The source that this content was translated from.'),
       'base' => 'node',
       'base field' => 'nid',
-      'handler' => 'views_handler_relationship_translation',
+      'handler' => 'views_handler_relationship',
       'label' => t('Source translation'),
     ),
   );
@@ -92,6 +91,26 @@ function translation_views_data_alter(&$data) {
     ),
   );
 
+  // The source translation.
+  $data['node']['source_translation'] = array(
+    'group' => t('Node translation'),
+    'title' => t('Source translation'),
+    'help' => t('Nodes that are either untranslated or are the original versions of a translation set.'),
+    'filter' => array(
+      'handler' => 'views_handler_filter_node_tnid',
+    ),
+  );
+
+  // The source translation.
+  $data['node']['child_translation'] = array(
+    'group' => t('Node translation'),
+    'title' => t('Child translation'),
+    'help' => t('Nodes that are translations of a source translation.'),
+    'filter' => array(
+      'handler' => 'views_handler_filter_node_tnid_child',
+    ),
+  );
+
   // Translation status
   $data['node']['translate'] = array(
     'group' => t('Node translation'),
@@ -103,12 +122,24 @@ function translation_views_data_alter(&$data) {
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_boolean_operator',
-      'label' => t('Published'),
+      'label' => t('Outdated'),
+      'type' => 'yes-no',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
     ),
   );
+
+  // Translate node link.
+  $data['node']['translate_node'] = array(
+    'group' => t('Node translation'),
+    'title' => t('Translate link'),
+    'help' => t('Provide a simple link to translate the node.'),
+    'field' => array(
+      'handler' => 'views_handler_field_node_link_translate',
+    ),
+  );
+
 
 }
 
@@ -126,11 +157,8 @@ function translation_views_handlers() {
       'views_handler_field_node_language' => array(
         'parent' => 'views_handler_field_node',
       ),
-      'views_handler_field_node_tnid' => array(
-        'parent' => 'views_handler_field_node',
-      ),
-      'views_handler_field_node_translation_link' => array(
-        'parent' => 'views_handler_field',
+      'views_handler_field_node_link_translate' => array(
+        'parent' => 'views_handler_field_node_link',
       ),
       // argument handlers
       'views_handler_argument_node_language' => array(
@@ -139,15 +167,19 @@ function translation_views_handlers() {
       'views_handler_argument_node_tnid' => array(
         'parent' => 'views_handler_argument',
       ),
-
       // filters
       'views_handler_filter_node_language' => array(
         'parent' => 'views_handler_filter_in_operator',
       ),
-
+      'views_handler_filter_node_tnid' => array(
+        'parent' => 'views_handler_filter',
+      ),
       // relationships
       'views_handler_relationship_translation' => array(
         'parent' => 'views_handler_relationship',
+      ),
+      'views_handler_filter_node_tnid_child' => array(
+        'parent' => 'views_handler_filter',
       ),
 
     ),

@@ -1,5 +1,4 @@
 <?php
-// $Id: comment.views.inc,v 1.24 2008/09/29 23:56:28 merlinofchaos Exp $
 /**
  * @file
  * Provide views data and handlers for comment.module
@@ -86,14 +85,14 @@ function comment_views_data() {
       'handler' => 'views_handler_sort',
     ),
     'argument' => array(
-      'handler' => 'views_handler_argument',
+      'handler' => 'views_handler_argument_numeric',
     ),
   );
 
   // name (of comment author)
   $data['comments']['name'] = array(
     'title' => t('Author'),
-    'help' => t('The name of the poster.'),
+    'help' => t("The name of the comment's author. Can be rendered as a link to the author's homepage."),
     'field' => array(
       'handler' => 'views_handler_field_comment_username',
       'click sortable' => TRUE,
@@ -112,11 +111,49 @@ function comment_views_data() {
   // homepage
   $data['comments']['homepage'] = array(
     'title' => t("Author's website"),
-    'help' => t("The website address of the comment's author. Can be a link. The homepage can also be linked with the Name field. Will be empty if posted by a registered user."),
+    'help' => t("The website address of the comment's author. Can be rendered as a link. Will be empty if the author is a registered user."),
     'field' => array(
       'handler' => 'views_handler_field_url',
       'click sortable' => TRUE,
     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_string',
+    ),
+  );
+
+  // hostname
+  $data['comments']['hostname'] = array(
+    'title' => t('Hostname'),
+    'help' => t('Hostname of user that posted the comment.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_string',
+    ),
+  );
+
+  // mail
+  $data['comments']['mail'] = array(
+    'title' => t('Mail'),
+    'help' => t('Email of user that posted the comment. Will be empty if the author is a registered user.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+     ),
     'filter' => array(
       'handler' => 'views_handler_filter_string',
     ),
@@ -147,14 +184,15 @@ function comment_views_data() {
   // status (approved or not)
   $data['comments']['status'] = array(
     'title' => t('In moderation'),
-    'help' => t('Whether or not the comment is currently in moderation.'),
+    'help' => t('Whether or not the comment is currently in the moderation queue.'),
     'field' => array(
       'handler' => 'views_handler_field_boolean',
       'click sortable' => TRUE,
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_boolean_operator',
-      'label' => t('Moderated'),
+      'label' => t('In the moderation queue'),
+      'type' => 'yes-no',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -215,7 +253,7 @@ function comment_views_data() {
     'help' => t('The node the comment is a reply to.'),
     'relationship' => array(
       'base' => 'node',
-      'field' => 'nid',
+      'base field' => 'nid',
       'handler' => 'views_handler_relationship',
       'label' => t('Node'),
     ),
@@ -223,10 +261,10 @@ function comment_views_data() {
 
   $data['comments']['uid'] = array(
     'title' => t('User'),
-    'help' => t('The user who wrote the comment.'),
+    'help' => t("The User ID of the comment's author."),
     'relationship' => array(
       'base' => 'users',
-      'field' => 'uid',
+      'base field' => 'uid',
       'handler' => 'views_handler_relationship',
       'label' => t('User'),
     ),
@@ -242,7 +280,7 @@ function comment_views_data() {
       'title' => t('Parent comment'),
       'help' => t('The parent comment.'),
       'base' => 'comments',
-      'field' => 'cid',
+      'base field' => 'cid',
       'handler' => 'views_handler_relationship',
       'label' => t('Parent comment'),
     ),
@@ -258,6 +296,7 @@ function comment_views_data() {
   $data['node_comment_statistics']['table']['join'] = array(
     //...to the node table
     'node' => array(
+      'type' => 'INNER',
       'left_field' => 'nid',
       'field' => 'nid',
      ),
@@ -268,7 +307,7 @@ function comment_views_data() {
     'title' => t('Last comment time'),
     'help' => t('Date and time of when the last comment was posted.'),
     'field' => array(
-      'handler' => 'views_handler_field_date',
+      'handler' => 'views_handler_field_last_comment_timestamp',
       'click sortable' => TRUE,
     ),
     'sort' => array(
@@ -344,6 +383,14 @@ function comment_views_data_alter(&$data) {
     ),
   );
 
+  $data['node']['comments_link'] = array(
+    'field' => array(
+      'title' => t('Add comment link'),
+      'help' => t('Display the standard add comment link used on regular nodes, which will only display if the viewing user has access to add a comment.'),
+      'handler' => 'views_handler_field_comment_node_link',
+    ),
+  );
+
   // Comment status of the node
   $data['node']['comment'] = array(
     'title' => t('Comment status'),
@@ -362,12 +409,18 @@ function comment_views_data_alter(&$data) {
 
   $data['node']['uid_touch'] = array(
     'title' => t('User posted or commented'),
-    'help' => t('Display comments only if a user posted the node or commented on the node.'),
+    'help' => t('Display nodes only if a user posted the node or commented on the node.'),
     'argument' => array(
       'field' => 'uid',
       'name table' => 'users',
       'name field' => 'name',
       'handler' => 'views_handler_argument_comment_user_uid',
+    ),
+    'filter' => array(
+      'field' => 'uid',
+      'name table' => 'users',
+      'name field' => 'name',
+      'handler' => 'views_handler_filter_comment_user_uid'
     ),
   );
 
@@ -396,6 +449,7 @@ function comment_views_plugins() {
         'help' => t('Display the comment as RSS.'),
         'handler' => 'views_plugin_row_comment_rss',
         'path' => drupal_get_path('module', 'views') . '/modules/comment', // not necessary for most modules
+        'theme' => 'views_view_row_rss',
         'base' => array('comments'), // only works with 'comment' as base.
         'type' => 'feed',
         'help topic' => 'style-comment-rss',
@@ -435,6 +489,9 @@ function comment_views_handlers() {
       'views_handler_field_comment_link_reply' => array(
         'parent' => 'views_handler_field_comment_link',
       ),
+      'views_handler_field_comment_node_link' => array(
+       'parent' => 'views_handler_field',
+      ),
       'views_handler_field_ncs_last_comment_name' => array(
         'parent' => 'views_handler_field',
       ),
@@ -446,6 +503,9 @@ function comment_views_handlers() {
       ),
       'views_handler_field_node_comment' => array(
         'parent' => 'views_handler_field',
+      ),
+      'views_handler_field_last_comment_timestamp' => array(
+        'parent' => 'views_handler_field_date',
       ),
 
       // sort handlers
@@ -463,14 +523,14 @@ function comment_views_handlers() {
       'views_handler_filter_ncs_last_updated' => array(
         'parent' => 'views_handler_filter_date',
       ),
-      'views_handler_filter_ncs_last_updated' => array(
-        'parent' => 'views_handler_filter_in_operator',
-      ),
-
-      // argument handlers
       'views_handler_filter_node_comment' => array(
         'parent' => 'views_handler_filter_in_operator',
       ),
+      'views_handler_filter_comment_user_uid' => array(
+        'parent' => 'views_handler_filter_user_name',
+      ),
+
+      // argument handlers
       'views_handler_argument_comment_user_uid' => array(
         'parent' => 'views_handler_argument',
       ),
@@ -487,8 +547,10 @@ function template_preprocess_views_view_row_comment(&$vars) {
   $plugin = &$view->style_plugin->row_plugin;
   $comment = $plugin->comments[$vars['row']->cid];
   $node = node_load($comment->nid);
+  // Put the view on the node so we can retrieve it in the preprocess.
+  $node->view = &$view;
 
-  $links = '';
+  $links = array();
   if (!empty($options['links'])) {
     $links = module_invoke_all('link', 'comment', $comment, 0);
     drupal_alter('link', $links, $node);

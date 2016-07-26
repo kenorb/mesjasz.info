@@ -1,5 +1,4 @@
 <?php
-// $Id: views_handler_filter_date.inc,v 1.1 2008/09/03 19:21:28 merlinofchaos Exp $
 
 /**
  * Filter to handle dates stored as a timestamp.
@@ -24,7 +23,7 @@ class views_handler_filter_date extends views_handler_filter_numeric {
         '#title' => t('Value type'),
         '#options' => array(
           'date' => t('A date in any machine readable format. CCYY-MM-DD HH:MM:SS is preferred.'),
-          'offset' => t('An offset from the current time such as "+1 day" or "-2 hours and 30 minutes"'),
+          'offset' => t('An offset from the current time such as "!example1" or "!example2"', array('!example1' => '+1 day', '!example2' => '-2 hours -30 minutes')),
         ),
         '#default_value' => !empty($this->value['type']) ? $this->value['type'] : 'date',
       );
@@ -32,7 +31,7 @@ class views_handler_filter_date extends views_handler_filter_numeric {
     parent::value_form($form, $form_state);
   }
 
-  function options_validate(&$form, &$form_state) {
+  function options_validate($form, &$form_state) {
     parent::options_validate($form, $form_state);
 
     if (!empty($form_state['values']['options']['expose']['optional'])) {
@@ -43,7 +42,7 @@ class views_handler_filter_date extends views_handler_filter_numeric {
     $this->validate_valid_time($form['value'], $form_state['values']['options']['operator'], $form_state['values']['options']['value']);
   }
 
-  function exposed_validate(&$form, &$form_state) {
+  function exposed_validate($form, &$form_state) {
     if (empty($this->options['exposed'])) {
       return;
     }
@@ -73,11 +72,11 @@ class views_handler_filter_date extends views_handler_filter_numeric {
 
     if ($operators[$operator]['values'] == 1) {
       $convert = strtotime($value['value']);
-      if ($convert == -1 || $convert === FALSE) {
+      if (!empty($form['value']) && ($convert == -1 || $convert === FALSE)) {
         form_error($form['value'], t('Invalid date format.'));
       }
     }
-    else {
+    elseif ($operators[$operator]['values'] == 2) {
       $min = strtotime($value['min']);
       if ($min == -1 || $min === FALSE) {
         form_error($form['min'], t('Invalid date format.'));
@@ -101,7 +100,7 @@ class views_handler_filter_date extends views_handler_filter_numeric {
     // Don't filter if value(s) are empty.
     $operators = $this->operators();
     if (!empty($this->options['expose']['use_operator']) && !empty($this->options['expose']['operator'])) {
-      $operator = $form_state['values'][$this->options['expose']['operator']];
+      $operator = $input[$this->options['expose']['operator']];
     }
     else {
       $operator = $this->operator;
@@ -139,8 +138,13 @@ class views_handler_filter_date extends views_handler_filter_numeric {
     }
     // %s is safe here because strtotime scrubbed the input and we might
     // have a string if using offset.
-    $this->query->add_where($this->options['group'], "$field >= %s", $a);
-    $this->query->add_where($this->options['group'], "$field <= %s", $b);
+    if ($this->operator == 'between') {
+      $this->query->add_where($this->options['group'], "$field >= %s", $a);
+      $this->query->add_where($this->options['group'], "$field <= %s", $b);
+    }
+    else {
+      $this->query->add_where($this->options['group'], "$field >= %s OR $field <= %s", array($a, $b));
+    }
   }
 
   function op_simple($field) {

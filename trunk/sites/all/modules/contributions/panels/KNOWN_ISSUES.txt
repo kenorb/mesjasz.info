@@ -1,4 +1,3 @@
-# $Id: KNOWN_ISSUES.txt,v 1.2.2.1 2008/12/28 05:04:09 sdboyer Exp $
 
 Known Issue http://drupal.org/node/191771
   'Node' panes can have two titles or have two title areas.
@@ -90,20 +89,3 @@ Known Issue http://drupal.org/node/207859
     from a secure page, the browser denies the call.
   Solution:
     The solution is to simply add panels/* to your Secure Pages configuration.
-    
-Known Issue
-  When editing a secondary default panels display in panels_page for the first
-  time, the export/saving of the page from the root default can be irregular,
-  as can the spawning of a type-specific display from the secondary default.
-  
-  Cause:
-    Gremlins in panels_page's current display selection code.
-  Solution:
-    If you really, really need the functionality, then just force-save the root
-    default, the secondary default, and then the type-specific until you've got
-    three different ones. Once the different ones are instanciated, they'll stay
-    fully separate and work just fine. The developers don't plan to fix this
-    issue, at least on the 2.x branch, because the 2.x branch is being
-    deprecated for D6 onwards. 
-  Solution #2:
-    Figure it out and file a patch!

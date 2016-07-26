@@ -1,5 +1,4 @@
 <?php
-// $Id: statistics.views.inc,v 1.8 2008/09/03 19:21:29 merlinofchaos Exp $
 /**
  * @file
  * Provide views data and handlers for statistics.module
@@ -73,6 +72,9 @@ function statistics_views_data() {
     'field' => array(
       'handler' => 'views_handler_field_date',
       'click sortable' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_date',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -203,7 +205,7 @@ function statistics_views_data() {
     'relationship' => array(
       'handler' => 'views_handler_relationship',
       'base' => 'users',
-      'field' => 'uid',
+      'base field' => 'uid',
      ),
   );
 

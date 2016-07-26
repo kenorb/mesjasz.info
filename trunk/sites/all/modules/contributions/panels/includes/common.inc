@@ -1,5 +1,4 @@
 <?php
-// $Id: common.inc,v 1.9.2.2 2008/11/20 22:15:02 merlinofchaos Exp $
 
 
 /**
@@ -108,7 +107,7 @@ class panels_allowed_layouts {
    *
    * \n @code
    *  function docdemo_allowed_layouts() {
-   *    panels_load_include('common');
+   *    ctools_include('common', 'panels');
    *    if (!is_a($allowed_layouts = unserialize(variable_get('panels_common_allowed_layouts', serialize(''))), 'panels_allowed_layouts')) {
    *     $allowed_layouts = new panels_allowed_layouts();
    *      $allowed_layouts->allow_new = TRUE;
@@ -195,7 +194,7 @@ class panels_allowed_layouts {
    * that has not been serialized.
    *
    */
-  function api_save() {
+  function save() {
     if (!is_null($this->module_name)) {
       variable_set($this->module_name . "_allowed_layouts", serialize($this));
     }
@@ -213,7 +212,7 @@ class panels_allowed_layouts {
   function list_layouts() {
     static $layouts = array();
     if (empty($layouts)) {
-      panels_load_include('plugins');
+      ctools_include('plugins', 'panels');
       $layouts = array_keys(panels_get_layouts());
     }
     return $layouts;
@@ -225,17 +224,23 @@ class panels_allowed_layouts {
  * any modules that don't already have special requirements.
  */
 function panels_common_settings(&$form_state, $module_name = 'panels_common') {
-  panels_load_include('plugins');
-  $content_types = panels_get_content_types();
+  ctools_include('plugins', 'panels');
+  ctools_include('content');
+  $content_types = ctools_get_content_types();
+  $skip = FALSE;
+
   $default_types = variable_get($module_name . '_default', NULL);
   if (!isset($default_types)) {
-    $default_types = array('block' => TRUE, 'views' => TRUE, 'other' => TRUE);
+    $default_types = array('other' => TRUE);
     $skip = TRUE;
   }
 
   foreach ($content_types as $id => $info) {
     if (empty($info['single'])) {
       $default_options[$id] = t('New @s', array('@s' => $info['title']));
+      if ($skip) {
+        $default_types[$id] = TRUE;
+      }
     }
   }
 
@@ -248,15 +253,15 @@ function panels_common_settings(&$form_state, $module_name = 'panels_common') {
     '#default_value' => array_keys(array_filter($default_types)),
   );
 
+  $form_state['skip'] = $skip;
   if ($skip) {
     $form['markup'] = array('#value' => t('<p>Click Submit to be presented with a complete list of available content types set to the defaults you selected.</p>'));
-    $form['skip'] = array('#type' => 'value', '#value' => TRUE);
   }
   else {
     // Rebuild the entire list, setting appropriately from defaults. Give
     // each type its own checkboxes set unless it's 'single' in which
     // case it can go into our fake other set.
-    $available_content_types = panels_get_all_content_types();
+    $available_content_types = ctools_content_get_all_types();
     $allowed_content_types = variable_get($module_name . '_allowed_types', array());
 
     foreach ($available_content_types as $id => $types) {
@@ -289,10 +294,13 @@ function panels_common_settings(&$form_state, $module_name = 'panels_common') {
           '#title' => t('Allowed @s content', array('@s' => $info['title'])),
           '#options' => $options[$id],
           '#default_value' => array_keys(array_filter($allowed[$id])),
+          '#checkall' => TRUE,
         );
       }
     }
   }
+
+  panels_common_allowed_layouts_form($form, $form_state, $module_name);
 
   $form['module_name'] = array(
     '#type' => 'value',
@@ -304,17 +312,25 @@ function panels_common_settings(&$form_state, $module_name = 'panels_common') {
     '#value' => t('Save'),
   );
 
-  drupal_add_css(panels_get_path('css/panels_page.css'));
+  ctools_add_css('panels_page', 'panels');
   return $form;
 }
 
 /**
  * Submit hook for panels_common_settings
  */
+function panels_common_settings_validate($form, &$form_state) {
+  panels_common_allowed_layouts_form_validate($form, $form_state);
+}
+
+/**
+ * Submit hook for panels_common_settings
+ */
 function panels_common_settings_submit($form, &$form_state) {
+  panels_common_allowed_layouts_form_submit($form, $form_state);
   $module_name = $form_state['values']['module_name'];
   variable_set($module_name . '_default', $form_state['values']['panels_common_default']);
-  if (!$form_state['values']['skip']) {
+  if (!$form_state['skip']) {
     // merge the broken apart array neatly back together
     variable_set($module_name . '_allowed_types', call_user_func_array('array_merge', $form_state['values']['content_types']));
   }
@@ -325,10 +341,9 @@ function panels_common_settings_submit($form, &$form_state) {
  * Based upon the settings, get the allowed types for this node.
  */
 function panels_common_get_allowed_types($module, $contexts = array(), $has_content = FALSE, $default_defaults = array(), $default_allowed_types = array()) {
-
   // Get a list of all types that are available
 
-  $default_types = variable_get($module . '_defaults', $default_defaults);
+  $default_types = variable_get($module . '_default', $default_defaults);
   $allowed_types = variable_get($module . '_allowed_types', $default_allowed_types);
 
   // By default, if they haven't gone and done the initial setup here,
@@ -337,8 +352,8 @@ function panels_common_get_allowed_types($module, $contexts = array(), $has_cont
     $default_types['other'] = TRUE;
   }
 
-  panels_load_include('plugins');
-  $content_types = panels_get_available_content_types($contexts, $has_content, $allowed_types, $default_types);
+  ctools_include('content');
+  $content_types = ctools_content_get_available_types($contexts, $has_content, $allowed_types, $default_types);
 
   return $content_types;
 }
@@ -363,104 +378,101 @@ function panels_common_get_allowed_types($module, $contexts = array(), $has_cont
  * @param array $allowed_layouts
  *  The set of allowed layouts that should be used as the default values
  *  for this form. If none is provided, then by default no layouts will be restricted.
- * @param string $title
- *  The title that will be used for the form. Defaults to 'Panels: Allowed Layouts' if
- *  no value was provided in panels_allowed_layouts::set_allowed.
  */
-// TODO need to add something that handles $finish & $destination-type stuff.
-function panels_common_set_allowed_layouts(&$form_state, $allowed_layouts, $title) {
+function panels_common_allowed_layouts_form(&$form, &$form_state, $module_name) {
+  // Fetch our allowed layouts from variables.
+  $allowed_layouts = panels_common_get_allowed_layout_object($module_name);
+
   $layouts = panels_get_layouts();
   foreach ($layouts as $id => $layout) {
     $options[$id] = panels_print_layout_icon($id, $layout, check_plain($layout['title']));
   }
 
-  drupal_set_title($title);
-
   $form_state['allowed_layouts'] = &$allowed_layouts;
 
-  $form['variables'] = array('#type' => 'value', '#value' => array($allowed_layouts));
-
-  drupal_add_js(panels_get_path('js/layout.js'));
+  ctools_add_js('layout', 'panels');
   $form['layouts'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Select allowed layouts'),
     '#options' => $options,
     '#description' => t('Check the boxes for all layouts you want to allow users choose from when picking a layout. You must allow at least one layout.'),
     '#default_value' => array_keys(array_filter($allowed_layouts->allowed_layout_settings)),
+    '#prefix' => '<div class="clear-block panels-layouts-checkboxes">',
+    '#suffix' => '</div>',
+    '#checkall' => TRUE,
   );
 
-  $form['clearer'] = array(
-    // TODO: Fix this to use clear-block instead
-    '#value' => '<div style="clear: both;"></div>',
-  );
-  $form['#redirect'] = FALSE;
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
-  );
-
-  $form['#token'] = FALSE;
   return $form;
 }
 
-function panels_common_set_allowed_layouts_validate($form, &$form_state) {
+function panels_common_allowed_layouts_form_validate($form, &$form_state) {
   $selected = array_filter($form_state['values']['layouts']);
   if (empty($selected)) {
     form_set_error('layouts', 'You must choose at least one layout to allow.');
   }
 }
 
-function panels_common_set_allowed_layouts_submit($form, &$form_status) {
+function panels_common_allowed_layouts_form_submit($form, &$form_state) {
   foreach ($form_state['values']['layouts'] as $layout => $setting) {
-    $form_state['allowed_layouts']->allowed_layout_settings[$layout] = $setting === 0 ? 0 : 1;
+    $form_state['allowed_layouts']->allowed_layout_settings[$layout] = (bool) $setting;
   }
-  method_exists($form_state['allowed_layouts'], 'save') ? $form_state['allowed_layouts']->save() : $form_state['allowed_layouts']->api_save();
-  return $form_state['allowed_layouts']->allowed_layout_settings;
+  $form_state['allowed_layouts']->save();
 }
 
 /**
- * The layout information fieldset displayed at admin/edit/panel-%implementation%/add/%layout%.
+ * Get the allowed layout object for the given module.
  */
-function panels_common_get_layout_information($panel_implementation, $contexts = array()) {
-  $form = array();
-  panels_load_include('plugins');
-  $layout = panels_get_layout($panel_implementation->display->layout);
+function panels_common_get_allowed_layout_object($module_name) {
+  $allowed_layouts = unserialize(variable_get($module_name . "_allowed_layouts", serialize('')));
 
-  $form = array(
-    '#type' => 'fieldset',
-    '#title' => t('Layout'),
-  );
-
-  $form['layout-icon'] = array(
-    '#value' => panels_print_layout_icon($panel_implementation->display->layout, $layout),
-  );
-
-  $form['layout-display'] = array(
-    '#value' => check_plain($layout['title']),
-  );
-  $content = '<dl class="content-list">';
-
-  foreach (panels_get_panels($layout, $panel_implementation->display) as $panel_id => $title) {
-    $content .= "<dt>$title</dt><dd>";
-    if ($panel_implementation->display->panels[$panel_id]) {
-      $content .= '<ol>';
-      foreach ($panel_implementation->display->panels[$panel_id] as $pid) {
-        $content .= '<li>'. panels_get_pane_title($panel_implementation->display->content[$pid], $contexts) .'</li>';
-      }
-      $content .= '</ol>';
-    }
-    else {
-      $content .= t('Empty');
-    }
-    $content .= '</dd>';
+  // if no parameter was provided, or the variable_get failed
+  if (!$allowed_layouts) {
+    // still no dice. simply creates a dummy version where all layouts
+    // are allowed.
+    $allowed_layouts = new panels_allowed_layouts();
+    $allowed_layouts->allow_new = TRUE;
+    $allowed_layouts->module_name = $module_name;
   }
-  $content .= '</dl>';
 
-  $form['layout-content'] = array(
-    '#value' => $content,
-  );
+  // sanitize allowed layout listing; this is redundant if the
+  // $allowed_layouts param was null, but the data is cached anyway
+  $allowed_layouts->sync_with_available();
 
-  return $form;
+  return $allowed_layouts;
+}
+
+/**
+ * Get the allowed layouts for the given module.
+ */
+function panels_common_get_allowed_layouts($module_name) {
+  $available_layouts = panels_get_layouts();
+  if (empty($module_name)) {
+    return $available_layouts;
+  }
+  else if (is_object($module_name)) {
+    $allowed_layouts = $module_name;
+  }
+  else {
+    $allowed_layouts = panels_common_get_allowed_layout_object($module_name);
+  }
+
+  $allowed = array_filter($allowed_layouts->allowed_layout_settings);
+  $order = array();
+  foreach ($available_layouts as $name => $plugin) {
+    if (!empty($allowed[$name])) {
+      $order[$name] = $plugin['category'] . ':' . $plugin['title'];
+    }
+  }
+
+  // Sort
+  $layouts = array();
+
+  asort($order);
+  foreach ($order as $name => $junk) {
+    $layouts[$name] = $available_layouts[$name];
+  }
+
+  return $layouts;
 }
 
 /**
@@ -470,7 +482,7 @@ function panels_common_get_layout_information($panel_implementation, $contexts =
 function theme_panels_common_content_list($display) {
   $layout = panels_get_layout($display->layout);
   $content = '<dl class="content-list">';
-  foreach (panels_get_panels($layout, $display) as $panel_id => $title) {
+  foreach (panels_get_regions($layout, $display) as $panel_id => $title) {
     $content .= "<dt>$title</dt><dd>";
     if (!empty($display->panels[$panel_id])) {
       $content .= '<ol>';
@@ -489,88 +501,73 @@ function theme_panels_common_content_list($display) {
 }
 
 /**
- * Create a visible list of all the contexts available on an object.
- * Assumes arguments, relationships and context objects.
+ * Print a selector of layouts, each linked to the next step.
  *
- * Contexts must be preloaded.
+ * Most operations use radio buttons for selecting layouts, but some will
+ * give each layout as a link that goes to the next step. This function
+ * makes it easy to simply provide a list of allowed layouts and the base
+ * path.
+ *
+ * One limitation is that it will only append the layout name to the end, so
+ * if the actual layout name is needed in the middle, that can't happen.
+ *
+ * @return
+ *   The rendered output.
  */
-function theme_panels_common_context_list($object, $header = '') {
-  $titles = array();
+function panels_common_print_layout_links($layouts, $base_path, $link_options = array()) {
   $output = '';
-  $count  = 1;
-  // Describe 'built in' contexts.
-  if (!empty($object->base_contexts)) {
-    foreach ($object->base_contexts as $id => $context) {
-      $output .= '<tr>';
-      $output .= '<td valign="top"><em>' . t('Built in context') . '</em></td>';
-      $desc = check_plain($context->identifier);
-      if (isset($context->keyword)) {
-        $desc .= '<div class="description">' . t('Keyword: %@keyword', array('@keyword' => $context->keyword)) . '</div>';
-      }
-      if (isset($context->description)) {
-        $desc .= '<div class="description">' . filter_xss_admin($context->description) . '</div>';
-      }
-      $output .= '<td>' . $desc . '</td>';
-      $output .= '</tr>';
-      $titles[$id] = $context->identifier;
-      $count++;
-    }
+
+  $categories = array();
+  ctools_include('cleanstring');
+  foreach ($layouts as $id => $layout) {
+    $category = ctools_cleanstring($layout['category']);
+
+    $categories[$category] = $layout['category'];
+    $options[$category][$id] = panels_print_layout_link($id, $layout, $base_path . '/' . $id, $link_options);
   }
 
-  // First, make a list of arguments. Arguments are pretty simple.
-  if (!empty($object->arguments)) {
-    foreach ($object->arguments as $argument) {
-      $output .= '<tr>';
-      $output .= '<td valign="top"><em>' . t('Argument @count', array('@count' => $count)) . '</em></td>';
-      $desc = check_plain($argument['identifier']);
-      if (isset($argument['keyword'])) {
-        $desc .= '<div class="description">' . t('Keyword: %@keyword', array('@keyword' => $argument['keyword'])) . '</div>';
-      }
-      $output .= '<td>' . $desc . '</td>';
-      $output .= '</tr>';
-      $titles[panels_context_id($argument, 'argument')] = $argument['identifier'];
-      $count++;
+  $form = array();
+  $form['categories'] = array(
+    '#title' => t('Category'),
+    '#type' => 'select',
+    '#options' => $categories,
+    '#name' => 'categories',
+    '#id' => 'edit-categories',
+    '#value' => '',
+    '#parents' => array('categories'),
+  );
+
+  $output .= drupal_render($form);
+
+  $output .= '<div class="panels-choose-layout panels-layouts-checkboxes clear-block">';
+
+  // We're doing these dependencies completely manualy, which is unusual, but
+  // the process code only supports doing them in a form.
+  // @todo modify dependent.inc to make this easier.
+
+  $dependencies = array();
+  foreach ($options as $category => $links) {
+    $dependencies['panels-layout-category-' . $category] = array(
+      'values' => array('edit-categories' => array($category)),
+      'num' => 1,
+      'type' => 'hide',
+    );
+
+    $output .= '<div id="panels-layout-category-' . $category . '-wrapper">';
+    $output .= '<div id="panels-layout-category-' . $category . '" class="form-checkboxes clear-block">';
+    $output .= '<div class="panels-layouts-category">' . $categories[$category] . '</div>';
+
+    foreach ($links as $key => $link) {
+      $output .= $link;
     }
+    $output .= '</div></div>';
   }
-  $count = 1;
-  // Then, make a nice list of contexts.
-  if (!empty($object->contexts)) {
-    foreach ($object->contexts as $context) {
-      $output .= '<tr>';
-      $output .= '<td><em>' . t('Context @count', array('@count' => $count)) . '</em></td>';
-      $desc = check_plain($context['identifier']);
-      if (isset($context['keyword'])) {
-        $desc .= '<div class="description">' . t('Keyword: %@keyword', array('@keyword' => $context['keyword'])) . '</div>';
-      }
-      $output .= '<td>' . $desc . '</td>';
-      $output .= '</tr>';
-      $titles[panels_context_id($context)] = $context['identifier'];
-      $count++;
-    }
-  }
-  // And relationships
-  if (!empty($object->relationships)) {
-    foreach ($object->relationships as $relationship) {
-      $output .= '<tr>';
-      $output .= '<td valign="top"><em>' . t('From "@title"', array('@title' => $titles[$relationship['context']])) . '</em></td>';
-      $desc = check_plain($relationship['identifier']);
-      if (isset($relationship['keyword'])) {
-        $desc .= '<div class="description">' . t('Keyword: %@keyword', array('@keyword' => $relationship['keyword'])) . '</div>';
-      }
-      $output .= '<td>' . $desc . '</td>';
-      $output .= '</tr>';
-      $titles[panels_context_id($relationship, 'relationship')] = $relationship['identifier'];
-      $count++;
-    }
-  }
-  if ($output) {
-    $head = '';
-    if ($header) {
-      $head .= '<thead><tr>';
-      $head .= '<th colspan="2">' . $header . '</th>';
-      $head .= '</tr></thead>';
-    }
-    return "<table>$head<tbody>$output</tbody></table>\n";
-  }
+
+  $output .= '</div>';
+
+  ctools_add_js('dependent');
+  $js['CTools']['dependent'] = $dependencies;
+  drupal_add_js($js, 'setting');
+
+  return $output;
 }
-

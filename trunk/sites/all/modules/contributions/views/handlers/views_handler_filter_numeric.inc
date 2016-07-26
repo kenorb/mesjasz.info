@@ -1,5 +1,4 @@
 <?php
-// $Id: views_handler_filter_numeric.inc,v 1.3 2008/09/10 01:08:06 merlinofchaos Exp $
 
 /**
  * Simple filter to handle greater than/less than filters
@@ -82,7 +81,7 @@ class views_handler_filter_numeric extends views_handler_filter {
           'values' => 0,
         ),
         'not empty' => array(
-          'title' => t('Is not empty (NULL)'),
+          'title' => t('Is not empty (NOT NULL)'),
           'method' => 'op_empty',
           'short' => t('not empty'),
           'values' => 0,
@@ -196,6 +195,14 @@ class views_handler_filter_numeric extends views_handler_filter {
       if (!empty($form_state['exposed']) && !isset($form_state['input'][$identifier]['max'])) {
         $form_state['input'][$identifier]['max'] = $this->value['max'];
       }
+
+      if (!isset($form['value'])) {
+        // Ensure there is something in the 'value'.
+        $form['value'] = array(
+          '#type' => 'value',
+          '#value' => NULL
+        );
+      }
     }
   }
 
@@ -211,16 +218,12 @@ class views_handler_filter_numeric extends views_handler_filter {
 
   function op_between($field) {
     if ($this->operator == 'between') {
-      $a = $this->value['min'];
-      $b = $this->value['max'];
+      $this->query->add_where($this->options['group'], "$field >= %d", $this->value['min']);
+      $this->query->add_where($this->options['group'], "$field <= %d", $this->value['max']);
     }
     else {
-      $a = $this->value['max'];
-      $b = $this->value['min'];
+      $this->query->add_where($this->options['group'], "$field <= %d OR $field >= %d", $this->value['min'], $this->value['max']);
     }
-
-    $this->query->add_where($this->options['group'], "$field >= %d", $a);
-    $this->query->add_where($this->options['group'], "$field <= %d", $b);
   }
 
   function op_simple($field) {
@@ -243,12 +246,13 @@ class views_handler_filter_numeric extends views_handler_filter {
       return t('exposed');
     }
 
-    $output = check_plain($this->operator) . ' ';
+    $options = $this->operator_options('short');
+    $output = check_plain($options[$this->operator]);
     if (in_array($this->operator, $this->operator_values(2))) {
-      $output .= t('@min and @max', array('@min' => $this->value['min'], '@max' => $this->value['max']));
+      $output .= ' ' . t('@min and @max', array('@min' => $this->value['min'], '@max' => $this->value['max']));
     }
-    else {
-      $output .= check_plain($this->value['value']);
+    elseif (in_array($this->operator, $this->operator_values(1))) {
+      $output .= ' ' . check_plain($this->value['value']);
     }
     return $output;
   }
@@ -294,30 +298,5 @@ class views_handler_filter_numeric extends views_handler_filter {
     }
 
     return $rc;
-  }
-}
-
-/**
- * Simple filter to handle greater than/less than filters.
- * It based on views_handler_filter_numeric but deals with
- * float numbers.
- */
-class views_handler_filter_float extends views_handler_filter_numeric {
-  function op_between($field) {
-    if ($this->operator == 'between') {
-      $a = $this->value['min'];
-      $b = $this->value['max'];
-    }
-    else {
-      $a = $this->value['max'];
-      $b = $this->value['min'];
-    }
-
-    $this->query->add_where($this->options['group'], "$field >= %f", $a);
-    $this->query->add_where($this->options['group'], "$field <= %f", $b);
-  }
-
-  function op_simple($field) {
-    $this->query->add_where($this->options['group'], "$field $this->operator %f", $this->value['value']);
   }
 }

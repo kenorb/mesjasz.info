@@ -1,5 +1,4 @@
 <?php
-// $Id: upload.views.inc,v 1.14 2008/09/10 21:29:15 merlinofchaos Exp $
 /**
  * @file
  *
@@ -80,6 +79,7 @@ function upload_views_data() {
     'filter' => array(
       'handler' => 'views_handler_filter_boolean_operator',
       'label' => t('Published'),
+      'type' => 'yes-no',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -119,6 +119,7 @@ function upload_views_data_alter(&$data) {
     'filter' => array(
       'handler' => 'views_handler_filter_upload_fid',
       'title' => t('Has attached files'),
+      'type' => 'yes-no',
       'help' => t('Only display items with attached files. This can cause duplicates if there are multiple attached files.'),
     ),
     'relationship' => array(
@@ -127,7 +128,7 @@ function upload_views_data_alter(&$data) {
       'relationship table' => 'upload',
       'relationship field' => 'fid',
       'base' => 'files',
-      'field' => 'fid',
+      'base field' => 'fid',
       'handler' => 'views_handler_relationship',
       'label' => t('Files'),
     ),
@@ -148,7 +149,7 @@ function upload_views_handlers() {
         'parent' => 'views_handler_field_prerender_list',
       ),
       'views_handler_field_upload_description' => array(
-        'parent' => 'views_handler_field_prerender_list',
+        'parent' => 'views_handler_field',
       ),
       'views_handler_filter_upload_fid' => array(
         'parent' => 'views_handler_filter_boolean_operator',

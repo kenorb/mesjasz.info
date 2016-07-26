@@ -1,21 +1,18 @@
 <?php
-// $Id: node.views_default.inc,v 1.9 2008/10/07 21:24:15 merlinofchaos Exp $
 /**
  * @file
  * Contains default views on behalf of the node module.
  */
 
 /**
- * Implementation of hook_default_view_views().
+ * Implementation of hook_views_default_views().
  */
 function node_views_default_views() {
   $view = new view;
   $view->name = 'frontpage';
   $view->description = 'Emulates the default Drupal front page; you may set the default home page path to this view to make it your front page.';
   $view->tag = 'default';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = '0';
   $view->api_version = 2;
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
@@ -64,14 +61,13 @@ function node_views_default_views() {
     ),
   ));
   $handler->override_option('access', array(
-    'type' => 'none',
+    'type' => 'perm',
     'role' => array(),
-    'perm' => '',
+    'perm' => 'access content',
   ));
   $handler->override_option('header_format', '1');
   $handler->override_option('footer_format', '1');
   $handler->override_option('empty_format', '1');
-  $handler->override_option('use_ajax', '1');
   $handler->override_option('use_pager', '1');
   $handler->override_option('row_plugin', 'node');
   $handler->override_option('row_options', array(
@@ -122,9 +118,7 @@ function node_views_default_views() {
   $view->name = 'glossary';
   $view->description = 'A list of all content, by letter.';
   $view->tag = 'default';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = '0';
   $view->api_version = 2;
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
@@ -188,9 +182,9 @@ function node_views_default_views() {
     ),
   ));
   $handler->override_option('access', array(
-    'type' => 'none',
+    'type' => 'perm',
     'role' => array(),
-    'perm' => '',
+    'perm' => 'access content',
   ));
   $handler->override_option('use_ajax', '1');
   $handler->override_option('items_per_page', 36);
@@ -279,12 +273,11 @@ function node_views_default_views() {
   $view->name = 'archive';
   $view->description = 'Display a list of months that link to content for that month.';
   $view->tag = 'default';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = '0';
   $view->api_version = 2;
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->override_option('title', 'Monthly archive');
   $handler->override_option('sorts', array(
     'created' => array(
       'id' => 'created',
@@ -333,9 +326,9 @@ function node_views_default_views() {
     ),
   ));
   $handler->override_option('access', array(
-    'type' => 'none',
+    'type' => 'perm',
     'role' => array(),
-    'perm' => '',
+    'perm' => 'access content',
   ));
   $handler->override_option('use_pager', '1');
   $handler->override_option('row_plugin', 'node');
@@ -377,7 +370,6 @@ function node_views_default_views() {
       'default_argument_type' => 'fixed',
     ),
   ));
-  $handler->override_option('use_ajax', '1');
   $handler->override_option('block_description', 'Archive list');
   $views[$view->name] = $view;
 

@@ -1,21 +1,18 @@
 <?php
-// $Id: comment.views_default.inc,v 1.6 2008/06/10 21:30:43 merlinofchaos Exp $
 /**
  * @file
  * Contains default views on behalf of the comment module.
  */
 
 /**
- * Implementation of hook_default_view_views().
+ * Implementation of hook_views_default_views().
  */
 function comment_views_default_views() {
   $view = new view;
   $view->name = 'comments_recent';
   $view->description = 'Contains a block and a page to list recent comments; the block will automatically link to the page, which displays the comment body as well as a link to the node.';
   $view->tag = 'default';
-  $view->view_php = '';
   $view->base_table = 'comments';
-  $view->is_cacheable = '0';
   $view->api_version = 2;
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
@@ -74,9 +71,9 @@ function comment_views_default_views() {
     ),
   ));
   $handler->override_option('access', array(
-    'type' => 'none',
+    'type' => 'perm',
     'role' => array(),
-    'perm' => '',
+    'perm' => 'access comments',
   ));
   $handler->override_option('title', 'Recent comments');
   $handler->override_option('items_per_page', 5);
@@ -148,9 +145,7 @@ function comment_views_default_views() {
   $view->name = 'tracker';
   $view->description = 'Shows all new activity on system.';
   $view->tag = 'default';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = '0';
   $view->api_version = 2;
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
@@ -231,10 +226,10 @@ function comment_views_default_views() {
     ),
   ));
   $handler->override_option('arguments', array(
-    'uid' => array(
-      'id' => 'uid',
-      'table' => 'users',
-      'field' => 'uid',
+    'uid_touch' => array(
+      'id' => 'uid_touch',
+      'table' => 'node',
+      'field' => 'uid_touch',
       'default_action' => 'ignore',
       'style_plugin' => 'default_summary',
       'style_options' => array(
@@ -293,9 +288,9 @@ function comment_views_default_views() {
     ),
   ));
   $handler->override_option('access', array(
-    'type' => 'none',
+    'type' => 'perm',
     'role' => array(),
-    'perm' => '',
+    'perm' => 'access content',
   ));
   $handler->override_option('title', 'Recent posts');
   $handler->override_option('items_per_page', '25');

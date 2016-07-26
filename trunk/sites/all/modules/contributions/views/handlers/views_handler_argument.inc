@@ -1,5 +1,4 @@
 <?php
-// $Id: views_handler_argument.inc,v 1.4 2008/10/08 00:14:00 merlinofchaos Exp $
 
 /**
  * @defgroup views_argument_handlers Handlers for arguments
@@ -46,7 +45,7 @@ class views_handler_argument extends views_handler {
     }
   }
 
-  function init(&$view, &$options) {
+  function init(&$view, $options) {
     parent::init($view, $options);
   }
 
@@ -74,7 +73,7 @@ class views_handler_argument extends views_handler {
       $arg = $this->argument;
     }
 
-    return !empty($this->options['wildcard']) && $this->options['wildcard'] == $arg;
+    return !empty($this->options['wildcard']) && $this->options['wildcard'] === $arg;
   }
 
   function wildcard_title() {
@@ -101,6 +100,7 @@ class views_handler_argument extends views_handler {
     $options['wildcard'] = array('default' => 'all');
     $options['wildcard_substitution'] = array('default' => t('All'), 'translatable' => TRUE);
     $options['title'] = array('default' => '', 'translatable' => TRUE);
+    $options['breadcrumb'] = array('default' => '', 'translatable' => TRUE);
     $options['default_argument_type'] = array('default' => 'fixed');
     $options['default_argument'] = array('default' => '');
     $options['validate_type'] = array('default' => 'none');
@@ -119,6 +119,15 @@ class views_handler_argument extends views_handler {
       '#title' => t('Title'),
       '#default_value' => $this->options['title'],
       '#description' => t('The title to use when this argument is present. It will override the title of the view and titles from previous arguments. You can use percent substitution here to replace with argument titles. Use "%1" for the first argument, "%2" for the second, etc.'),
+    );
+
+    $form['breadcrumb'] = array(
+      '#prefix' => '<div class="clear-block">',
+      '#suffix' => '</div>',
+      '#type' => 'textfield',
+      '#title' => t('Breadcrumb'),
+      '#default_value' => $this->options['breadcrumb'],
+      '#description' => t('The Breadcrumb title to use when this argument is present. If no breadcrumb is set here, default Title values will be used, see "Title" for percent substitutions.'),
     );
 
     $form['clear_start'] = array(
@@ -187,7 +196,7 @@ class views_handler_argument extends views_handler {
       '#default_value' => $this->options['validate_type'],
     );
 
-    $validate_types = array('none' => t('<Basic validation>'));
+    $validate_types = array('none' => t('- Basic validation -'));
     $plugins = views_fetch_plugin_data('argument validator');
     foreach ($plugins as $id => $info) {
       if (!empty($info['no ui'])) {
@@ -530,11 +539,10 @@ class views_handler_argument extends views_handler {
   function summary_basics($count_field = TRUE) {
     // Add the number of nodes counter
     $field = $this->query->base_table . '.' . $this->query->base_field;
-    if ($this->view->display_handler->get_option('distinct') && empty($this->query->no_distinct)) {
-      $field = "DISTINCT($field)";
-    }
+    $distinct = ($this->view->display_handler->get_option('distinct') && empty($this->query->no_distinct));
 
-    $count_alias = $this->query->add_field(NULL, "COUNT($field)", 'num_records');
+    $count_alias = $this->query->add_field(NULL, $field, 'num_records',
+                                           array('count' => TRUE, 'distinct' => $distinct));
     $this->query->add_groupby($this->name_alias);
 
     if ($count_field) {
@@ -680,7 +688,7 @@ class views_handler_argument extends views_handler {
       return FALSE;
     }
 
-    if (isset($this->definition['numeric']) && !isset($this->options['break_phrase']) && !is_numeric($arg)) {
+    if (!empty($this->definition['numeric']) && !isset($this->options['break_phrase']) && !is_numeric($arg)) {
       return FALSE;
     }
 
@@ -696,6 +704,43 @@ class views_handler_argument extends views_handler {
     $this->argument = $arg;
     return $this->validate_arg($arg);
   }
+
+  /**
+   * Get the value of this argument.
+   */
+  function get_value() {
+    // If we already processed this argument, we're done.
+    if (isset($this->argument)) {
+      return $this->argument;
+    }
+    
+    // Otherwise, we have to pretend to process ourself to find the value.
+    $value = NULL;
+    // Find the position of this argument within the view.
+    $position = 0;
+    foreach ($this->view->argument as $id => $argument) {
+      if ($id == $this->options['id']) {
+        break;
+      }
+      $position++;
+    }
+
+    $arg = isset($this->view->args[$position]) ? $this->view->args[$position] : NULL;
+    $this->position = $position;
+
+    // Clone ourselves so that we don't break things when we're really
+    // processing the arguments.
+    $argument = drupal_clone($this);
+    if (!isset($arg) && $argument->has_default_argument()) {
+      $arg = $argument->get_default_argument();
+    }
+    // Set the argument, which will also validate that the argument can be set.
+    if ($argument->set_argument($arg)) {
+      $value = $argument->argument;
+    }
+    unset($argument);
+    return $value;
+  }
 }
 
 /**
@@ -704,7 +749,7 @@ class views_handler_argument extends views_handler {
  * @ingroup views_argument_handlers
  */
 class views_handler_argument_broken extends views_handler_argument {
-  function ui_name() {
+  function ui_name($short = FALSE) {
     return t('Broken/missing handler');
   }
 

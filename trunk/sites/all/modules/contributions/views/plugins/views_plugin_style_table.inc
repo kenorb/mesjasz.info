@@ -1,5 +1,4 @@
 <?php
-// $Id: views_plugin_style_table.inc,v 1.3 2008/09/15 20:32:21 merlinofchaos Exp $
 /**
  * @file
  * Contains the table style plugin.
@@ -20,6 +19,7 @@ class views_plugin_style_table extends views_plugin_style {
     $options['override'] = array('default' => TRUE);
     $options['sticky'] = array('default' => FALSE);
     $options['order'] = array('default' => 'asc');
+    $options['summary'] = array('default' => '');
 
     return $options;
   }
@@ -28,10 +28,27 @@ class views_plugin_style_table extends views_plugin_style {
    * Determine if we should provide sorting based upon $_GET inputs.
    */
   function build_sort() {
+    if (!isset($_GET['order']) && ($this->options['default'] == -1 || empty($this->view->field[$this->options['default']]))) {
+      return TRUE;
+    }
+
+    // If a sort we don't know anything about gets through, exit gracefully.
+    if (isset($_GET['order']) && empty($this->view->field[$_GET['order']])) {
+      return TRUE;
+    }
+
+    // Let the builder know whether or not we're overriding the default sorts.
+    return empty($this->options['override']);
+  }
+
+  /**
+   * Add our actual sort criteria
+   */
+  function build_sort_post() {
     if (!isset($_GET['order'])) {
       // check for a 'default' clicksort. If there isn't one, exit gracefully.
       if (empty($this->options['default'])) {
-        return TRUE;
+        return;
       }
       $sort = $this->options['default'];
       $this->order = !empty($this->options['order']) ? $this->options['order'] : 'asc';
@@ -44,7 +61,7 @@ class views_plugin_style_table extends views_plugin_style {
 
     // If a sort we don't know anything about gets through, exit gracefully.
     if (empty($this->view->field[$sort])) {
-      return TRUE;
+      return;
     }
 
     // Ensure $this->order is valid.
@@ -57,14 +74,13 @@ class views_plugin_style_table extends views_plugin_style {
 
     // Tell the field to click sort.
     $this->view->field[$sort]->click_sort($this->order);
-
-    // Let the builder know whether or not we're overriding the default sorts.
-    return empty($this->options['override']);
   }
 
   /**
    * Normalize a list of columns based upon the fields that are
-   * available.
+   * available. This compares the fields stored in the style handler
+   * to the list of fields actually in the view, removing fields that
+   * have been removed and adding new fields in their own column.
    *
    * - Each field must be in a column.
    * - Each column must be based upon a field, and that field
@@ -149,6 +165,13 @@ class views_plugin_style_table extends views_plugin_style {
       '#description' => t('If a default sort order is selected, what order should it use by default.'),
     );
 
+    $form['summary'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Table summary'),
+      '#description' => t('This value will be displayed as table-summary attribute in the html. Set this for better accessiblity of your site.'),
+      '#default_value' => $this->options['summary'],
+    );
+
     // Note: views UI registers this theme handler on our behalf. Your module
     // will have to register your theme handlers if you do stuff like this.
     $form['#theme'] = 'views_ui_style_plugin_table';
@@ -156,18 +179,11 @@ class views_plugin_style_table extends views_plugin_style {
     $columns = $this->sanitize_columns($this->options['columns']);
 
     // Create an array of allowed columns from the data we know:
-    foreach ($handlers as $field => $handler) {
-      if ($label = $handler->label()) {
-        $field_names[$field] = $label;
-      }
-      else {
-        $field_names[$field] = $handler->ui_name();
-      }
-    }
+    $field_names = $this->display->handler->get_field_labels();
 
     if (isset($this->options['default'])) {
       $default = $this->options['default'];
-      if (!isset($fields[$default])) {
+      if (!isset($columns[$default])) {
         $default = -1;
       }
     }

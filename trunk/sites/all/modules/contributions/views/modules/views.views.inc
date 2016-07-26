@@ -1,5 +1,4 @@
 <?php
-// $Id: views.views.inc,v 1.5 2008/09/03 19:21:29 merlinofchaos Exp $
 /**
  * @file
  * Provide views data and handlers that aren't tied to any other module.
@@ -19,6 +18,7 @@ function views_views_data() {
   $data['views']['table']['join'] = array(
     '#global' => array(),
   );
+
   $data['views']['random'] = array(
     'title' => t('Random'),
     'help' => t('Randomize the display order.'),
@@ -34,6 +34,33 @@ function views_views_data() {
       'handler' => 'views_handler_argument_null',
     ),
   );
+
+  $data['views']['nothing'] = array(
+    'title' => t('Custom text'),
+    'help' => t('Provide custom text or link.'),
+    'field' => array(
+      'handler' => 'views_handler_field_custom',
+    ),
+  );
+
+  $data['views']['counter'] = array(
+    'title' => t('View result counter'),
+    'help' => t('Displays the actual position of the view result'),
+    'field' => array(
+      'handler' => 'views_handler_field_counter',
+    ),
+  );
+
+  if (module_invoke('ctools', 'api_version', '1.7.1')) {
+    $data['views']['expression'] = array(
+      'title' => t('Math expression'),
+      'help' => t('Evaluates a mathematical expression and displays it.'),
+      'field' => array(
+        'handler' => 'views_handler_field_math',
+      ),
+    );
+  }
+
   return $data;
 }
 

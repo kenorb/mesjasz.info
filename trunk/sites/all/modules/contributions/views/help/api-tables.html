@@ -1,4 +1,3 @@
-<!-- $Id: api-tables.html,v 1.3 2008/09/10 21:33:12 merlinofchaos Exp $ -->
 Tables are described to Views via hook_views_data(), which returns an array of table information, keyed by the name of the table. For example, if your module is describing three tables, 'foo', 'bar' and 'baz', your array will look like this:
 <pre>$data = array(
   'foo' =&gt; array(
@@ -51,7 +50,9 @@ In general, having 'title' and 'help' at the table level doesn't make a lot of s
   $data['foo']['table']['group'] = t('Foo');
 </pre>
 
-<h3>Base table</h3>
+The other items in the 'table' section are described in the following sections.
+
+<h3>'base': Base table</h3>
 If your table is a base table -- meaning it can be the primary, central table for a View to use, you can declare it to be a base table. This primarily provides UI information so that it can be selected. 
 For example:
 <pre>
@@ -64,19 +65,36 @@ For example:
   );
 </pre>
 
-The following tags are available in the 
+The following items are available in the base section :
 <dl>
 <dt>field</dt>
-<dd>The primary key field for this table. For Views to treat any table as a base table, it <b>must</b> have a primary field. For node this is the 'nid', for users this is the 'uid', etc. Without a primary key field, Views will not be able to utilize the table as a base table.</dd>
+<dd>The primary key field for this table. For Views to treat any table as a base table, it <b>must</b> have a primary field. For node this is the 'nid', for users this is the 'uid', etc. <strong>Without a single primary key field (i.e. not a composite key), Views will not be able to utilize the table as a base table.</strong> If your table does not have a primary key field, it is not too difficult to just add a serial field to it, usually.</dd>
 <dt>title</dt>
 <dd>The title of this table in the UI. It should be singular and describe the object that this table contains from the perspective of the user.</dd>
 <dt>help</dt>
 <dd>A short piece of text to describe what object this table contains.</dd>
 <dt>database</dt>
-<dd>If this table is held in a different database from your Drupal database, specify it as a string in the exact same format as the settings.php file. This is a special purpose variable that will probably be only used in site specific code, and <b>it must be teh same database type as your Drupal database</b>. Also, don't try to join it to any table that isn't in the same database. That'll just create all kinds of silly errors.</dd>
+<dd>If this table is held in a different database from your Drupal database, specify it as a string in the exact same format as the settings.php file. This is a special purpose variable that will probably be only used in site specific code, and <b>it must be the same database type as your Drupal database</b>. Also, don't try to join it to any table that isn't in the same database. That'll just create all kinds of silly errors. For example:
+<pre>
+  // In settings.php for your site
+  // Your drupal (site) database needs to be called 'default'
+  $db_url['default'] = 'mysqli://user:pass@host/drupal_db';
+  $db_url['budget'] = 'mysqli://user:pass@host/other_db';
+</pre>
+Then when you are describing the external database in your base table you would write something like this:
+<pre>
+  $data[$table]['table']['base'] = array(
+    'field' => 'Primary key',
+    'title' => t('Field name'),
+    'help' => t('Field description'),
+    'database' => 'budget',
+    'weight' => -10,
+    );
+</pre>
+</dd>
 </dl>
 
-<h3>Linking your table to existing base tables</h3>
+<h3>'join': Linking your table to existing base tables</h3>
 For Views to use your table, it has to either be a base table, or know how to link to an existing base table. Or sometimes both. Views uses this information to create a path to the base table; when the table is added to the query, Views will walk along this path, adding all tables required into the query.
 
 <div class="help-box" style="text-align:center">
@@ -108,7 +126,7 @@ Above, the fact that 'left_table' is left out lets us know that term_node links 
 Quite a few more fields are available in this definition:
 <dl>
   <dt>handler</dt>
-  <dd>The name of the handler object to use. Defaults to 'views_handler_join'. You may create custom join handlers that may or may not use any of the data below, as they see fit.</dd>
+  <dd>The name of the handler object to use. Defaults to 'views_join'. You may create custom join handlers that may or may not use any of the data below, as they see fit.</dd>
   <dt>table</dt>
   <dd>Table to join. This is optional, and should only be used if the table being referenced is an alias.</dd>
   <dt>field</dt>
@@ -130,10 +148,10 @@ Quite a few more fields are available in this definition:
       <dd>Must be set. If an array, operator will be defaulted to IN.</dd>
       <dt>numeric</dt>
       <dd>If true, the value will not be surrounded in quotes, and %d will be used for its placeholder.</dd>
-      <dt>extra type</dt>
-      <dd> How all the extras will be combined. Either AND or OR. Defaults to AND.</dd>
     </dl>
   </dd>
+  <dt>extra type</dt>
+  <dd> How all the extras will be combined. Either AND or OR. Defaults to AND.</dd>
 </dl>
 
 <h2>Describing fields on tables</h2>
@@ -210,7 +228,7 @@ The following items are allowed in the field definition:
 <dt>sort</dt>
 <dd>A handler definition for the "Sort criteria" section, which will be used to add an ORDER BY clause to the view. The definition is an array; the contents of the array are completely up to the handler, other than the 'handler' definition. If omitted, handler will default to 'views_handler_sort'.</dd>
 <dt>relationship</dt>
-<dd>A handler definition for the "Field" section, which is a way to bring in new or alternative base tables in the view. The definition is an array; the contents of the array are completely up to the handler, other than the 'handler' definition. If omitted, handler will default to 'views_handler_relationship'. The basic relationship handler requires 'base' and 'field' to be set; 'base' and 'field' represent the "right" half of the join that will use this field as the left side.</dd>
+<dd>A handler definition for the "Field" section, which is a way to bring in new or alternative base tables in the view. The definition is an array; the contents of the array are completely up to the handler, other than the 'handler' definition. If omitted, handler will default to 'views_handler_relationship'. The basic relationship handler requires 'base' and 'base field' to be set; 'base' and 'base field' represent the "right" half of the join that will use this field as the left side.</dd>
 <dt>argument</dt>
 <dd>A handler definition for the "Field" section, which is method of accepting user input from the URL or some other source. The definition is an array; the contents of the array are completely up to the handler, other than the 'handler' definition. If omitted, handler will default to 'views_handler_argument'.</dd>
 </dl>

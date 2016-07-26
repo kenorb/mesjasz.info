@@ -1,60 +1,188 @@
 <?php
-// $Id: callbacks.inc,v 1.2 2008/08/06 00:24:46 merlinofchaos Exp $
 /**
  * @file callbacks.inc
  * Minor menu callbacks for Panels helpers.
  */
 
 /**
- * Helper function for autocompletion of node titles.
- * This is mostly stolen from clipper.
+ * A central administrative page for Panels.
  */
-function panels_node_autocomplete($string) {
-  if ($string != '') { // if there are node_types passed, we'll use those in a MySQL IN query.
-    $preg_matches = array();
-    $match = preg_match('/\[nid: (\d+)\]/', $string, $preg_matches);
-    if (!$match) {
-      $match = preg_match('/^nid: (\d+)/', $string, $preg_matches);
-    }
-    if ($match) {
-      $arg = $preg_matches[1];
-      $where = "n.nid = %d";
-    }
-    else {
-      $arg = $string;
-      $where = "LOWER(title) LIKE LOWER('%%%s%%')";
-    }
-    $result = db_query_range(db_rewrite_sql("SELECT n.nid, n.title, u.name FROM {node} n INNER JOIN {users} u ON u.uid = n.uid WHERE $where"), $arg, 0, 10);
+function panels_admin_page() {
+  return theme('panels_dashboard');
+}
 
-    $matches = array();
-    while ($node = db_fetch_object($result)) {
-      $name = empty($node->name) ? variable_get('anonymous', t('Anonymous')) : check_plain($node->name);
-      $matches[$node->title . " [nid: $node->nid]"] = '<span class="autocomplete_title">'. check_plain($node->title) .'</span> <span class="autocomplete_user">('. t('by @user', array('@user' => $name)) .')</span>';
-    }
-    drupal_json($matches);
+function panels_dashboard_final_blocks(&$vars) {
+  // Add in links for missing modules that we still want to mention:
+  if (empty($vars['links']['page_manager'])) {
+    $vars['links']['page_manager'] = array(
+      'weight' => -100,
+      'title' => t('Panel page'),
+      'description' => '<em>' . t('You must activate the page manager module for this functionality.') . '</em>',
+    );
+  }
+  if (empty($vars['links']['panels_mini'])) {
+    $vars['links']['panels_mini'] = array(
+      'title' => t('Mini panel'),
+      'description' => '<em>' . t('You must activate the Mini panels module for this functionality.') . '</em>',
+    );
+  }
+  if (empty($vars['links']['panels_node'])) {
+    $vars['links']['panels_mini'] = array(
+      'title' => t('Panel node'),
+      'description' => '<em>' . t('You must activate the panel node module for this functionality.') . '</em>',
+    );
   }
 }
 
 /**
- * A central administrative page for Panels.
+ * Implementation of hook_panels_dashboard_blocks().
+ *
+ * Adds page information to the Panels dashboard.
  */
-function panels_admin_page() {
-  //
-  // TODO: Provide a cute little panel-base administrative panel
-  // that provides things like "Recently edited", "recently added"
-  // and other administrative items to make dealing with the complexity
-  // of panels a little easier.
+function panels_panels_dashboard_blocks(&$vars) {
+  $vars['links']['panels_layout'] = array(
+    'title' => l(t('Custom layout'), 'admin/build/panels/layouts/add'),
+    'description' => t('Custom layouts can add more, site-specific layouts that you can use in your panels.'),
+  );
 
-  // TODO -- move this to a help file.
-  $output = '<p>'. t('Panels is the core engine for a number of submodules, including panels-pages, panels-nodes, and mini-panels.  Panels allows the website adminstrator (or sometimes the end-user) to manipulate the layout of individual pages, sidebars, and content pieces, as well as easily dictate what content is displayed in the layout.') .'</p>';
-  $output .= '<p>'. t('Most Drupal users are familiar with the block to region layout mechanism in which you can assign a block to any region defined in your theme.  Panels takes this concept a massive step forward.  Through the panels interface you can start by creating a layout with any number of columns, headers, and footer, and control the width of those areas.') .'</p>';
-  $output .= '<p>'. t('After creating your layout, you can assign pieces of content to those areas in an easy drag and drop interface.  Content is not limited to blocks, but can be nodes, views, blocks, or other types of content that extend themselves to panels.') .'</p>';
-  $output .= '<p><b>'. t('Panels-pages') .'</b>' .t(', is the the primary panels module, you can use this for creating single full page layouts.  This replaces the standard panel that existed in the earlier versions of panels. If you are upgrading your site from Panels 1, and you cannot find where your panels went, be sure to enable the panel pages module!') .'</p>';
-  $output .= '<p><b>'. t('Panels-nodes') .'</b>' .t(', is useful for creating layouts that only occupy the content area of your pages.  Frequently, it is desirable to add an area to a node layout, such as a pull quote for a newspaper or a photo block, that you don\'t necessarily want on every node.  Panels Nodes lets you control the layout of a single node at a time and place content such as blog posts, images, blogs in and around the post.') .'</p>';
-  $output .= '<p><b>'. t('Mini-panels') .'</b>' .t(', is a layout mechanism for blocks.  It won\'t take long using panels before you get to a point when you want a panel inside of a panel.  Or a panel that can be used as a block.  That is exactly what mini-panels does. You can create a small panel here with various pieces of content and then put it inside of a panels-page or panels-node.') .'</p>';
+   // Load all mini panels and their displays.
+  ctools_include('export');
+  $items = ctools_export_crud_load_all('panels_layout');
+  $count = 0;
+  $rows = array();
 
-  require_once './' . drupal_get_path('module', 'system') . '/system.admin.inc';
-  $output .= system_admin_menu_block_page();
+  foreach ($items as $item) {
+    $rows[] = array(
+      check_plain($item->admin_title),
+      array(
+        'data' => l(t('Edit'), "admin/build/panels/layouts/list/$item->name/edit"),
+        'class' => 'links',
+      ),
+    );
 
-  return $output;
+    // Only show 10.
+    if (++$count >= 10) {
+      break;
+    }
+  }
+
+  if ($rows) {
+    $content = theme('table', array(), $rows, array('class' => 'panels-manage'));
+  }
+  else {
+    $content = '<p>' . t('There are no custom layouts.') . '</p>';
+  }
+
+  $vars['blocks']['panels_layout'] = array(
+    'title' => t('Manage custom layouts'),
+    'link' => l(t('Go to list'), 'admin/build/panels/layouts'),
+    'content' => $content,
+    'class' => 'dashboard-layouts',
+    'section' => 'right',
+  );
 }
+
+function template_preprocess_panels_dashboard(&$vars) {
+  ctools_add_css('panels-dashboard', 'panels');
+  ctools_include('plugins');
+
+  $vars['image_path'] = ctools_image_path('', 'panels');
+
+  $vars['links'] = array();
+  $vars['blocks'] = array();
+
+  foreach (module_implements('panels_dashboard_blocks') as $module) {
+    $function = $module . '_panels_dashboard_blocks';
+    $function($vars);
+  }
+
+  // Add in any default links for modules that are not active
+  panels_dashboard_final_blocks($vars);
+
+  // If page manager module is enabled, add a very low eight block to
+  // list the page wizards.
+  if (module_exists('page_manager')) {
+    $vars['blocks']['wizards'] = array(
+      'weight' => -101,
+      'section' => 'right',
+      'title' => t('Page wizards'),
+      'content' => '',
+      'class' => 'dashboard-wizards',
+    );
+
+    ctools_include('page-wizard');
+    $plugins = page_manager_get_page_wizards();
+    uasort($plugins, 'ctools_plugin_sort');
+
+    foreach ($plugins as $id => $plugin) {
+      if (isset($plugin['type']) && $plugin['type'] == 'panels') {
+        $link = array(
+          'title' => l($plugin['title'], 'admin/build/pages/wizard/' . $id),
+          'description' => $plugin['description'],
+        );
+
+        $vars['blocks']['wizards']['content'] .= theme('panels_dashboard_link', $link);
+      }
+    }
+
+  }
+
+  uasort($vars['links'], 'ctools_plugin_sort');
+
+  $vars['blocks']['links'] = array(
+    'weight' => -100,
+    'section' => 'left',
+    'title' => t('Create new') . '...',
+    'content' => '',
+    'class' => 'dashboard-create',
+  );
+
+  // Turn the links into a block
+  foreach ($vars['links'] as $link) {
+    $vars['blocks']['links']['content'] .= theme('panels_dashboard_link', $link);
+  }
+
+  uasort($vars['blocks'], 'ctools_plugin_sort');
+
+  $vars['left'] = '';
+  $vars['right'] = '';
+
+  // Render all the blocks
+  foreach ($vars['blocks'] as $block) {
+    $section = !empty($block['section']) ? $block['section'] : 'left';
+    $vars[$section] .= theme('panels_dashboard_block', $block);
+  }
+}
+
+function panels_admin_settings_page() {
+  $form = array();
+  if (module_exists('page_manager')) {
+    foreach (page_manager_get_tasks() as $task) {
+      if ($function = ctools_plugin_get_function($task, 'admin settings')) {
+        $function($form);
+      }
+    }
+  }
+
+  ctools_include('content');
+  foreach (ctools_get_content_types() as $content) {
+    if ($function = ctools_plugin_get_function($content, 'admin settings')) {
+      $function($form);
+    }
+  }
+
+  if (empty($form)) {
+    return array('#value' => t('There are currently no settings to change, but additional plugins or modules may provide them in the future.'));
+  }
+
+  return system_settings_form($form);
+}
+
+/**
+ * Settings for panel contexts created by the page manager.
+ */
+function panels_admin_panel_context_page() {
+  ctools_include('common', 'panels');
+  return drupal_get_form('panels_common_settings', 'panels_page');
+}
+

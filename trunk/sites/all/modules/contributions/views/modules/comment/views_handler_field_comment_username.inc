@@ -1,5 +1,4 @@
 <?php
-// $Id: views_handler_field_comment_username.inc,v 1.1 2008/09/03 19:21:29 merlinofchaos Exp $
 /**
  * Field handler to allow linking to a user account or homepage
  */
@@ -7,7 +6,7 @@ class views_handler_field_comment_username extends views_handler_field {
   /**
    * Override init function to add uid and homepage fields.
    */
-  function init(&$view, &$data) {
+  function init(&$view, $data) {
     parent::init($view, $data);
     $this->additional_fields['uid'] = 'uid';
     $this->additional_fields['homepage'] = 'homepage';
@@ -29,11 +28,11 @@ class views_handler_field_comment_username extends views_handler_field {
   }
 
   function render_link($data, $values) {
-    $account->uid = $values->{$this->aliases['uid']};
-    $account->name = $values->{$this->field_alias};
-    $account->homepage = $values->{$this->aliases['homepage']};
-
     if (!empty($this->options['link_to_user'])) {
+      $account->uid = $values->{$this->aliases['uid']};
+      $account->name = $values->{$this->field_alias};
+      $account->homepage = $values->{$this->aliases['homepage']};
+
       return theme('username', $account);
     }
     else {

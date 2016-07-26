@@ -1,5 +1,4 @@
 <?php
-// $Id: views_handler_argument_string.inc,v 1.2 2008/09/25 00:09:08 merlinofchaos Exp $
 
 /**
  * Basic argument handler to implement string arguments that may have length
@@ -8,7 +7,7 @@
  * @ingroup views_argument_handlers
  */
 class views_handler_argument_string extends views_handler_argument {
-  function init(&$view, &$options) {
+  function init(&$view, $options) {
     parent::init($view, $options);
     if (!empty($this->definition['many to one'])) {
       $this->helper = new views_many_to_one_helper($this);
@@ -23,6 +22,7 @@ class views_handler_argument_string extends views_handler_argument {
     $options = parent::option_definition();
 
     $options['glossary'] = array('default' => FALSE);
+    $options['ignorecase'] = array('default' => FALSE);
     $options['limit'] = array('default' => 0);
     $options['case'] = array('default' => 'none');
     $options['path_case'] = array('default' => 'none');
@@ -44,6 +44,13 @@ class views_handler_argument_string extends views_handler_argument {
       '#title' => t('Glossary mode'),
       '#description' => t('Glossary mode applies a limit to the number of characters used in the argument, which allows the summary view to act as a glossary.'),
       '#default_value' => $this->options['glossary'],
+    );
+
+    $form['ignorecase'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Ignore case'),
+      '#description' => t('Ignore case allows for doing database searches without case sensitivity. MySQL already works in lower-case mode, so MySQL users should leave this unchecked to improve performance.'),
+      '#default_value' => $this->options['ignorecase'],
     );
 
     $form['limit'] = array(
@@ -72,7 +79,7 @@ class views_handler_argument_string extends views_handler_argument {
     $form['path_case'] = array(
       '#type' => 'select',
       '#title' => t('Case in path'),
-      '#description' => t('When printing url paths, how to transform the of the argument. Do not use this unless with Postgres as it uses case sensitive comparisons.'),
+      '#description' => t('When printing url paths, how to transform the case of the argument. Do not use this unless with Postgres as it uses case sensitive comparisons.'),
       '#options' => array(
         'none' => t('No transform'),
         'upper' => t('Upper case'),
@@ -118,14 +125,26 @@ class views_handler_argument_string extends views_handler_argument {
 
     if (empty($this->options['glossary'])) {
       // Add the field.
-      $this->base_alias = $this->name_alias = $this->query->add_field($this->table_alias, $this->real_field);
-      $this->query->set_count_field($this->table_alias, $this->real_field);
+      if (empty($this->options['ignorecase'])){
+        $this->base_alias = $this->name_alias = $this->query->add_field($this->table_alias, $this->real_field);
+        $this->query->set_count_field($this->table_alias, $this->real_field);
+      }
+      else {
+        $this->base_alias = $this->name_alias = $this->query->add_field($this->table_alias, 'LOWER(' . $this->real_field . ')');
+        $this->query->set_count_field($this->table_alias, 'LOWER(' . $this->real_field . ')');
+      }
     }
     else {
       // Add the field.
       $formula = $this->get_formula();
-      $this->base_alias = $this->name_alias = $this->query->add_field(NULL, $formula, $this->field . '_truncated');
-      $this->query->set_count_field(NULL, $formula, $this->field, $this->field . '_truncated');
+      if (empty($this->options['ignorecase'])){
+        $this->base_alias = $this->name_alias = $this->query->add_field(NULL, $formula, $this->field . '_truncated');
+        $this->query->set_count_field(NULL, $formula, $this->field, $this->field . '_truncated');
+      }
+      else {
+        $this->base_alias = $this->name_alias = $this->query->add_field(NULL, 'LOWER(' . $formula . ')', $this->field . '_truncated');
+        $this->query->set_count_field(NULL, $formula, $this->field, $this->field . '_truncated');
+      }
     }
 
     return $this->summary_basics(FALSE);
@@ -167,7 +186,12 @@ class views_handler_argument_string extends views_handler_argument {
       $field = $this->get_formula();
     }
 
-    $this->query->add_where(0, "$field = '%s'", $argument);
+    if (empty($this->options['ignorecase'])){
+      $this->query->add_where(0, "$field = '%s'", $argument);
+    }
+    else {
+      $this->query->add_where(0, "LOWER($field) = LOWER('%s')", $argument);
+    }
   }
 
   function summary_argument($data) {
@@ -179,19 +203,23 @@ class views_handler_argument_string extends views_handler_argument {
   }
 
   function case_transform($string, $option) {
+		global $multibyte;
+		
     switch ($this->options[$option]) {
       default:
         return $string;
       case 'upper':
-        return strtoupper($string);
+        return drupal_strtoupper($string);
       case 'lower':
-        return strtolower($string);
-      case 'upper':
-        return strtoupper($string);
+        return drupal_strtolower($string);
       case 'ucfirst':
-        return ucfirst($string);
+        return drupal_strtoupper(drupal_substr($string, 0, 1)) . drupal_substr($string, 1);
       case 'ucwords':
-        return ucwords($string);
+        if ($multibyte == UNICODE_MULTIBYTE) {
+          return mb_convert_case($string, MB_CASE_TITLE);
+        } else {
+          return ucwords($string);
+        }
     }
   }
 

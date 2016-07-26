@@ -1,5 +1,4 @@
 <?php
-// $Id: panels.module,v 1.27.2.5 2008/11/17 20:46:01 merlinofchaos Exp $
 
 /**
  * @file panels.module
@@ -7,11 +6,11 @@
  * Core functionality for the Panels engine.
  */
 
-/**
- * Error code bitmask used for identifying argument behavior at runtime.
- */
-define('PANELS_ARG_IS_BAD', 1);
-define('PANELS_ARG_USE_FALLBACK', 1 << 1);
+define('PANELS_REQUIRED_CTOOLS_API', '1.8');
+
+define('PANELS_TITLE_FIXED', 0); // Hide title use to be true/false. So false remains old behavior.
+define('PANELS_TITLE_NONE', 1); // And true meant no title.
+define('PANELS_TITLE_PANE', 2); // And this is the new behavior, where the title field will pick from a pane.
 
 /**
  * Returns the API version of Panels. This didn't exist in 1.
@@ -19,10 +18,21 @@ define('PANELS_ARG_USE_FALLBACK', 1 << 1);
  * @return An array with the major and minor versions
  */
 function panels_api_version() {
-  return array(2, 0);
+  return array(3, 1);
 }
 
+// --------------------------------------------------------------------------
+// Core Drupal hook implementations
+
+/**
+ * Implementation of hook_theme()
+ */
 function panels_theme() {
+  // Safety: go away if CTools is not at an appropriate version.
+  if (!module_invoke('ctools', 'api_version', PANELS_REQUIRED_CTOOLS_API)) {
+    return array();
+  }
+
   $theme = array();
   $theme['panels_layout_link'] = array(
     'arguments' => array('title', 'id', 'image', 'link'),
@@ -30,76 +40,66 @@ function panels_theme() {
   $theme['panels_layout_icon'] = array(
     'arguments' => array('id', 'image', 'title' => NULL),
   );
-  $theme['panels_imagebutton'] = array(
-    'arguments' => array('element'),
-  );
-  $theme['panels_edit_display_form'] = array(
-    'arguments' => array('form'),
-    'file' => 'includes/display-edit.inc',
-  );
-  $theme['panels_edit_layout_form_choose'] = array(
-    'arguments' => array('form'),
-    'file' => 'includes/display-edit.inc',
-  );
   $theme['panels_pane'] = array(
-    'arguments' => array('content', 'pane', 'display'),
-    'file' => 'includes/display-render.inc',
+    'arguments' => array('output' => array(), 'pane' => array(), 'display' => array()),
+    'path' => drupal_get_path('module', 'panels') . '/templates',
+    'template' => 'panels-pane',
   );
   $theme['panels_common_content_list'] = array(
     'arguments' => array('display'),
     'file' => 'includes/common.inc',
   );
-  $theme['panels_common_context_list'] = array(
-    'arguments' => array('object'),
-    'file' => 'includes/common.inc',
-  );
-  $theme['panels_common_context_item_form'] = array(
-    'arguments' => array('form'),
-    'file' => 'includes/common.inc',
-  );
-  $theme['panels_common_context_item_row'] = array(
-    'arguments' => array('type', 'form', 'position', 'count', 'with_tr' => TRUE),
-    'file' => 'includes/common.inc',
-  );
-  $theme['panels_dnd'] = array(
-    'arguments' => array('content'),
-    'file' => 'includes/display-edit.inc',
-    'function' => 'theme_panels_dnd',
-  );
-  $theme['panels_panel_dnd'] = array(
-    'arguments' => array('content', 'area', 'label', 'footer'),
-    'file' => 'includes/display-edit.inc',
-    'function' => 'theme_panels_panel_dnd',
-  );
-  $theme['panels_pane_dnd'] = array(
-    'arguments' => array('block', 'id', 'label', 'left_buttons' => NULL, 'buttons' => NULL),
-    'file' => 'includes/display-edit.inc',
-  );
-  $theme['panels_pane_collapsible'] = array(
-    'arguments' => array('block'),
-    'file' => 'includes/display-edit.inc',
-  );
-  $theme['profile_fields_pane'] = array(
-    'arguments' => array('category' => NULL, 'vars' => NULL),
-    'template' => 'content_types/profile_fields_pane',
+  $theme['panels_render_display_form'] = array(
+    'arguments' => array('form' => NULL),
   );
 
+  $theme['panels_dashboard'] = array(
+    'arguments' => array(),
+    'path' => drupal_get_path('module', 'panels') . '/templates',
+    'file' => '../includes/callbacks.inc',
+    'template' => 'panels-dashboard',
+  );
+
+  $theme['panels_dashboard_link'] = array(
+    'arguments' => array('link' => array()),
+    'path' => drupal_get_path('module', 'panels') . '/templates',
+    'file' => '../includes/callbacks.inc',
+    'template' => 'panels-dashboard-link',
+  );
+
+  $theme['panels_dashboard_block'] = array(
+    'arguments' => array('block' => array()),
+    'path' => drupal_get_path('module', 'panels') . '/templates',
+    'file' => '../includes/callbacks.inc',
+    'template' => 'panels-dashboard-block',
+  );
+
+  // We don't need layout and style themes in maintenance mode.
+  // Disabling this: See http://drupal.org/node/979912 for information.
+//  if (defined('MAINTENANCE_MODE')) {
+//    return $theme;
+//  }
+
   // Register layout and style themes on behalf of all of these items.
-  panels_load_include('plugins');
+  ctools_include('plugins', 'panels');
 
   // No need to worry about files; the plugin has to already be loaded for us
   // to even know what the theme function is, so files will be auto included.
   $layouts = panels_get_layouts();
   foreach ($layouts as $name => $data) {
-    if (!empty($data['theme'])) {
-      $theme[$data['theme']] = array(
-        'arguments' => array('css_id' => NULL, 'content' => NULL, 'settings' => NULL),
-        'path' => $data['path'],
-      );
+    foreach (array('theme', 'admin theme') as $callback) {
+      if (!empty($data[$callback])) {
+        $theme[$data[$callback]] = array(
+          'arguments' => array('css_id' => NULL, 'content' => NULL, 'settings' => NULL, 'display' => NULL, 'layout' => NULL, 'renderer' => NULL),
+          'path' => $data['path'],
+          'file' => $data['file'],
+        );
 
-      // if no theme function exists, assume template.
-      if (!function_exists("theme_$data[theme]")) {
-        $theme[$data['theme']]['template'] = str_replace('_', '-', $data['theme']);
+        // if no theme function exists, assume template.
+        if (!function_exists("theme_$data[theme]")) {
+          $theme[$data[$callback]]['template'] = str_replace('_', '-', $data[$callback]);
+          $theme[$data[$callback]]['file'] = $data['file']; // for preprocess.
+        }
       }
     }
   }
@@ -108,15 +108,37 @@ function panels_theme() {
   foreach ($styles as $name => $data) {
     if (!empty($data['render pane'])) {
       $theme[$data['render pane']] = array(
-        'arguments' => array('content' => NULL, 'pane' => NULL, 'display' => NULL),
+        'arguments' => array('output' => NULL, 'pane' => NULL, 'display' => NULL, 'style' => NULL),
+        'path' => $data['path'],
+        'file' => $data['file'],
       );
     }
-    if (!empty($data['render panel'])) {
-      $theme[$data['render panel']] = array(
-        'arguments' => array('display' => NULL, 'panel_id' => NULL, 'panes' => NULL, 'settings' => NULL),
+    // If we're in legacy mode, include the old callback key for legacy styles.
+    if (variable_get('panels_legacy_rendering_mode', TRUE)) {
+      if (!empty($data['render panel'])) {
+        $theme[$data['render panel']] = array(
+          'arguments' => array('display' => NULL, 'panel_id' => NULL, 'panes' => NULL, 'settings' => NULL, 'style' => NULL),
+          'path' => $data['path'],
+          'file' => $data['file'],
+        );
+      }
+    }
+    if (!empty($data['render region'])) {
+      $theme[$data['render region']] = array(
+        'arguments' => array('display' => NULL, 'region_id' => NULL, 'panes' => NULL, 'settings' => NULL, 'style' => NULL),
+        'path' => $data['path'],
+        'file' => $data['file'],
       );
     }
 
+    if (!empty($data['hook theme'])) {
+      if (is_array($data['hook theme'])) {
+        $theme += $data['hook theme'];
+      }
+      else if (function_exists($data['hook theme'])) {
+        $data['hook theme']($theme, $data);
+      }
+    }
   }
 
   return $theme;
@@ -126,105 +148,109 @@ function panels_theme() {
  * Implementation of hook_menu
  */
 function panels_menu() {
+  // Safety: go away if CTools is not at an appropriate version.
+  if (!module_invoke('ctools', 'api_version', PANELS_REQUIRED_CTOOLS_API)) {
+    return array();
+  }
   $items = array();
 
-  // Provide some common options to reduce code repetition.
-  // By using array addition and making sure these are the rightmost
-  // value, they won't override anything already set.
-  $base = array(
+  // Base AJAX router callback.
+  $items['panels/ajax'] = array(
     'access arguments' => array('access content'),
+    'page callback' => 'panels_ajax_router',
     'type' => MENU_CALLBACK,
-    'file' => 'includes/display-edit.inc',
   );
 
-  $items['panels/ajax/add-pane'] = array(
-    'page callback' => 'panels_ajax_add_pane_choose',
-  ) + $base;
-  $items['panels/ajax/add-pane-config'] = array(
-    'page callback' => 'panels_ajax_add_pane_config',
-  ) + $base;
-  $items['panels/ajax/configure'] = array(
-    'page callback' => 'panels_ajax_configure_pane',
-  ) + $base;
-  $items['panels/ajax/show'] = array(
-    'page callback' => 'panels_ajax_toggle_shown',
-    'page arguments' => array('show'),
-  ) + $base;
-  $items['panels/ajax/hide'] = array(
-    'page callback' => 'panels_ajax_toggle_shown',
-    'page arguments' => array('hide'),
-  ) + $base;
-  $items['panels/ajax/cache-method'] = array(
-    'page callback' => 'panels_ajax_cache_method',
-  ) + $base;
-  $items['panels/ajax/cache-settings'] = array(
-    'page callback' => 'panels_ajax_cache_settings',
-  ) + $base;
-
-  // For panel settings on the edit layout settings page
-  $items['panels/ajax/style-settings'] = array(
-    'page callback' => 'panels_ajax_style_settings',
-    'file' => 'includes/display-layout-settings.inc',
-  ) + $base;
-
-  // Non-display editor callbacks
-  $items['panels/node/autocomplete'] = array(
-    'title' => 'Autocomplete node',
-    'page callback' => 'panels_node_autocomplete',
+  $admin_base = array(
     'file' => 'includes/callbacks.inc',
-  ) + $base;
-
-  // For context add/configure calls in common-context.inc
-  $items['panels/ajax/context-add'] = array(
-    'page callback' => 'panels_ajax_context_item_add',
-    'file' => 'includes/common-context.inc',
-  ) + $base;
-  $items['panels/ajax/context-configure'] = array(
-    'page callback' => 'panels_ajax_context_item_edit',
-    'file' => 'includes/common-context.inc',
-  ) + $base;
-  $items['panels/ajax/context-delete'] = array(
-    'page callback' => 'panels_ajax_context_item_delete',
-    'file' => 'includes/common-context.inc',
-  ) + $base;
-
+    'access arguments' => array('use panels dashboard'),
+  );
   // Provide a nice location for a panels admin panel.
-  $items['admin/panels'] = array(
+  $items['admin/build/panels'] = array(
     'title' => 'Panels',
-    'access arguments' => array('access administration pages'),
     'page callback' => 'panels_admin_page',
-    'file' => 'includes/callbacks.inc',
-    'description' => 'Administer items related to the Panels module.',
-  );
+    'description' => 'Get a bird\'s eye view of items related to Panels.',
+  ) + $admin_base;
+
+  $items['admin/build/panels/dashboard'] = array(
+    'title' => 'Dashboard',
+    'page callback' => 'panels_admin_page',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  ) + $admin_base;
+
+  $items['admin/build/panels/settings'] = array(
+    'title' => 'Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('panels_admin_settings_page'),
+    'type' => MENU_LOCAL_TASK,
+  ) + $admin_base;
+
+  $items['admin/build/panels/settings/general'] = array(
+    'title' => 'General',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('panels_admin_settings_page'),
+    'access arguments' => array('administer page manager'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  ) + $admin_base;
+
+  if (module_exists('page_manager')) {
+    $items['admin/build/panels/settings/panel-page'] = array(
+      'title' => 'Panel pages',
+      'page callback' => 'panels_admin_panel_context_page',
+      'type' => MENU_LOCAL_TASK,
+      'weight' => -10,
+    ) + $admin_base;
+  }
+
+  ctools_include('plugins', 'panels');
+  $layouts = panels_get_layouts();
+  foreach ($layouts as $name => $data) {
+    if (!empty($data['hook menu'])) {
+      if (is_array($data['hook menu'])) {
+        $items += $data['hook menu'];
+      }
+      else if (function_exists($data['hook menu'])) {
+        $data['hook menu']($items, $data);
+      }
+    }
+  }
+
 
   return $items;
+}
+
+/**
+ * Menu loader function to load a cache item for Panels AJAX.
+ *
+ * This load all of the includes needed to perform AJAX, and loads the
+ * cache object and makes sure it is valid.
+ */
+function panels_edit_cache_load($cache_key) {
+  ctools_include('display-edit', 'panels');
+  ctools_include('plugins', 'panels');
+  ctools_include('ajax');
+  ctools_include('modal');
+  ctools_include('context');
+
+  return panels_edit_cache_get($cache_key);
 }
 
 /**
  * Implementation of hook_init()
  */
 function panels_init() {
-  drupal_add_css(panels_get_path('css/panels.css'));
-  drupal_add_js(panels_get_path('js/panels.js'));
-}
-
-/**
- * Load a panels include file.
- */
-function panels_load_include($include, $path = 'includes/') {
-  static $loaded = array();
-  if (empty($loaded["$path$include.inc"])) {
-    require_once './' . panels_get_path("$path$include.inc");
-    $loaded["$path$include.inc"] = TRUE;
+  // Safety: go away if CTools is not at an appropriate version.
+  if (!module_invoke('ctools', 'api_version', PANELS_REQUIRED_CTOOLS_API)) {
+    if (user_access('administer site configuration')) {
+      drupal_set_message(t('Panels is enabled but CTools is out of date. All Panels modules are disabled until CTools is updated. See the status page for more information.'), 'error');
+    }
+    return;
   }
-}
 
-/**
- * panels path helper function
- */
-function panels_get_path($file, $base_path = FALSE, $module = 'panels') {
-  $output = $base_path ? base_path() : '';
-  return $output . drupal_get_path('module', $module) . '/' . $file;
+  ctools_add_css('panels', 'panels');
+  ctools_add_js('panels', 'panels');
 }
 
 /**
@@ -237,54 +263,198 @@ function panels_perm() {
     'administer pane visibility',
     'administer pane access',
     'administer advanced pane settings',
-    'use panels caching features'
+    'administer panels layouts',
+    'use panels caching features',
+    'use panels dashboard',
+    'use panels in place editing',
   );
 }
 
 /**
- * Get an object from cache.
+ * Implementation of hook_flush_caches().
+ *
+ * We implement this so that we can be sure our legacy rendering state setting
+ * in $conf is updated whenever caches are cleared.
  */
-function panels_cache_get($obj, $did, $skip_cache = FALSE) {
-  static $cache = array();
-  $key = "$obj:$did";
-  if ($skip_cache) {
-    unset($cache[$key]);
-  }
-
-  if (!array_key_exists($key, $cache)) {
-    $data = db_fetch_object(db_query("SELECT * FROM {panels_object_cache} WHERE sid = '%s' AND obj = '%s' AND did = %d", session_id(), $obj, $did));
-    if ($data) {
-      $cache[$key] = unserialize($data->data);
-    }
-  }
-  return isset($cache[$key]) ? $cache[$key] : NULL;
-}
-
-/**
- * Save the edited object into the cache.
- */
-function panels_cache_set($obj, $did, $cache) {
-  panels_cache_clear($obj, $did);
-  db_query("INSERT INTO {panels_object_cache} (sid, obj, did, data, timestamp) VALUES ('%s', '%s', %d, '%s', %d)", session_id(), $obj, $did, serialize($cache), time());
-}
-
-/**
- * Clear a object from the cache; used if the editing is aborted.
- */
-function panels_cache_clear($obj, $did) {
-  db_query("DELETE FROM {panels_object_cache} WHERE sid = '%s' AND obj = '%s' AND did = %d", session_id(), $obj, $did);
-}
-
-/**
- * Implementation of hook_cron. Clean up old caches.
- */
-function panels_cron() {
-  // delete anything 7 days old or more.
-  db_query("DELETE FROM {panels_object_cache} WHERE timestamp < %d", time() - (86400 * 7));
+function panels_flush_caches() {
+  $legacy = panels_get_legacy_state();
+  $legacy->determineStatus();
 }
 
 // ---------------------------------------------------------------------------
-// panels display editing
+// CTools hook implementations
+//
+// These aren't core Drupal hooks but they are just as important.
+
+/**
+ * Implementation of hook_ctools_plugin_directory() to let the system know
+ * we implement task and task_handler plugins.
+ */
+function panels_ctools_plugin_directory($module, $plugin) {
+  // Safety: go away if CTools is not at an appropriate version.
+  if (!module_invoke('ctools', 'api_version', PANELS_REQUIRED_CTOOLS_API)) {
+    return;
+  }
+  if ($module == 'page_manager' || $module == 'panels' || $module == 'ctools') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Inform CTools that the layout plugin can be loaded from themes.
+ */
+function panels_ctools_plugin_layouts() {
+  return array(
+    'load themes' => TRUE,
+    'use hooks' => TRUE,
+    'process' => 'panels_layout_process',
+    'child plugins' => TRUE,
+  );
+}
+
+/**
+ * Ensure a layout has a minimal set of data.
+ */
+function panels_layout_process(&$plugin) {
+  $plugin += array(
+    'category' => t('Miscellaneous'),
+    'description' => '',
+  );
+}
+
+/**
+ * Inform CTools that the style plugin can be loaded from themes.
+ */
+function panels_ctools_plugin_styles() {
+  return array(
+    'load themes' => TRUE,
+    'use hooks' => TRUE,
+    'process' => 'panels_plugin_styles_process',
+    'child plugins' => TRUE,
+  );
+}
+
+/**
+ * Implementation of hook_ctools_plugin_api().
+ *
+ * Inform CTools about version information for various plugins implemented by
+ * Panels.
+ *
+ * @param string $owner
+ *   The system name of the module owning the API about which information is
+ *   being requested.
+ * @param string $api
+ *   The name of the API about which information is being requested.
+ */
+function panels_ctools_plugin_api($owner, $api) {
+  if ($owner == 'panels' && $api == 'styles') {
+    // As of 6.x-3.6, Panels has a slightly new system for style plugins.
+    return array('version' => 2.0);
+  }
+
+  if ($owner == 'panels' && $api == 'pipelines') {
+    return array(
+      'version' => 1,
+      'path' => drupal_get_path('module', 'panels') . '/includes',
+    );
+  }
+}
+
+/**
+ * Implementation of hook_views_api().
+ */
+function panels_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'panels') . '/plugins/views',
+  );
+}
+
+/**
+ * Perform additional processing on a style plugin.
+ *
+ * Currently this is only being used to apply versioning information to style
+ * plugins in order to ensure the legacy renderer passes the right type of
+ * parameters to a style plugin in a hybrid environment of both new and old
+ * plugins.
+ *
+ * @see _ctools_process_data()
+ *
+ * @param array $plugin
+ *   The style plugin that is being processed.
+ * @param array $info
+ *   The style plugin type info array.
+ */
+function panels_plugin_styles_process(&$plugin, $info) {
+  $plugin += array(
+    'weight' => 0,
+  );
+
+  $compliant_modules = ctools_plugin_api_info('panels', 'styles', 2.0, 2.0);
+  $plugin['version'] = empty($compliant_modules[$plugin['module']]) ? 1.0 : $compliant_modules[$plugin['module']]['version'];
+}
+
+/**
+ * Declare what style types Panels uses.
+ */
+function panels_ctools_style_base_types() {
+  return array(
+    'region' => array(
+      'title' => t('Panel region'),
+      'preview' => 'panels_stylizer_region_preview',
+      'theme arguments' => array('settings' => NULL, 'classes' => NULL, 'content' => NULL),
+    ),
+    'pane' => array(
+      'title' => t('Panel pane'),
+      'preview' => 'panels_stylizer_pane_preview',
+      'theme arguments' => array('settings' => NULL, 'content' => NULL, 'pane' => NULL, 'display' => NULL),
+    ),
+  );
+}
+
+function panels_stylizer_lipsum() {
+  return "
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at velit dolor. Donec egestas tellus sit amet urna rhoncus adipiscing. Proin nec porttitor sem. Maecenas aliquam, purus nec tempus dignissim, nulla arcu aliquam diam, non tincidunt massa ante vel dolor. Aliquam sapien sapien, tincidunt id tristique at, pretium sagittis libero.</p>
+
+    <p>Nulla facilisi. Curabitur lacinia, tellus sed tristique consequat, diam lorem scelerisque felis, at dictum purus augue facilisis lorem. Duis pharetra dignissim rutrum. Curabitur ac elit id dui dapibus tincidunt. Nulla eget sem quam, non eleifend eros. Cras porttitor tempus lectus ac scelerisque. Curabitur vehicula bibendum lorem, vitae ornare ligula venenatis ut.</p>
+  ";
+}
+
+/**
+ * Generate a preview given the current settings.
+ */
+function panels_stylizer_region_preview($plugin, $settings) {
+  ctools_stylizer_add_css($plugin, $settings);
+  return theme($plugin['theme'], $settings, ctools_stylizer_get_css_class($plugin, $settings), panels_stylizer_lipsum());
+}
+
+/**
+ * Generate a preview given the current settings.
+ */
+function panels_stylizer_pane_preview($plugin, $settings) {
+  ctools_stylizer_add_css($plugin, $settings);
+  $pane = new stdClass();
+
+  $content = new stdClass;
+  $content->title = t('Lorem ipsum');
+  $content->content = panels_stylizer_lipsum();
+  $content->type = 'dummy';
+  $content->subtype = 'dummy';
+
+  $content->css_class = ctools_stylizer_get_css_class($plugin, $settings);
+
+  $display = new panels_display();
+
+  if (!empty($plugin['theme'])) {
+    return theme($plugin['theme'], $settings, $content, $pane, $display);
+  }
+  else {
+    return theme('panels_pane', $content, $pane, $display);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Panels display editing
 
 /**
  * @defgroup mainapi Functions comprising the main panels API
@@ -349,11 +519,11 @@ function panels_cron() {
  *      - If empty($destination) == FALSE: the form will redirect to the URL string
  *        given in $destination and NO value will be returned.
  */
-function panels_edit($display, $destination = NULL, $content_types = NULL) {
-  panels_load_include('display-edit');
-  panels_load_include('ajax');
-  panels_load_include('plugins');
-  return _panels_edit($display, $destination, $content_types);
+function panels_edit($display, $destination = NULL, $content_types = NULL, $title = FALSE) {
+  ctools_include('display-edit', 'panels');
+  ctools_include('ajax');
+  ctools_include('plugins', 'panels');
+  return _panels_edit($display, $destination, $content_types, $title);
 }
 
 /**
@@ -395,67 +565,13 @@ function panels_edit($display, $destination = NULL, $content_types = NULL) {
  * @see panels_edit()
  */
 function panels_edit_layout($display, $finish, $destination = NULL, $allowed_layouts = NULL) {
-  panels_load_include('display-layout');
-  panels_load_include('plugins');
+  ctools_include('display-layout', 'panels');
+  ctools_include('plugins', 'panels');
   return _panels_edit_layout($display, $finish, $destination, $allowed_layouts);
 }
 
-/**
- * API entry point for configuring the layout settings for a given display.
- *
- * For all layouts except Flexible, the layout settings form allows the user to select styles,
- * as defined by .inc files in the panels/styles subdirectory, for the panels in their display.
- * For the Flexible layout, the layout settings form allows the user to provide dimensions
- * for their flexible layout in addition to applying styles to panels.
- *
- * @param object $display instanceof panels_display \n
- *  A fully loaded panels $display object, as returned from panels_load_display().
- *  Merely passing a did is NOT sufficient.
- * @param string $finish
- *  A string that will be used for the text of (one of) the form submission button(s). Note that
- *  panels will NOT wrap $finish in t() for you, so your caller should make sure to do so. \n
- *  The submit behavior of the form is primarily governed by the value of $destination (see
- *  below), but is secondarily governed by $finish as follows:
- *    -# If $finish != t('Save'), then two #submit buttons will be present: one with the button
- *       text t('Save'), and the other with the button text $finish. .
- *      - Clicking the 'Save' button will save any changes on the form to the $display object and
- *        keep the user on the same editing page.
- *      - Clicking the $finish button will also save the $display object, but the user will be
- *        redirected to the URL specified in $destination.
- *    -# If $finish == t('Save'), then there is only one button, still called t('Save'), but it
- *       mimics the behavior of the $finish button above by redirecting the user away from the form.
- * @param mixed $destination
- *  Basic usage is a string containing the URL that the form should redirect to upon submission.
- *  For a discussion of advanced usages that rely on NULL values for $destination, see the
- *  panels_edit() documentation.
- * @param mixed $title
- *  The $title variable has three modes of operation:
- *    -# If $title == FALSE (the default), then no widget will appear on the panels_edit_layout_settings form
- *       allowing the user to select a title, and other means for setting page titles will take precedent. If
- *       no other means are used to provide a title, then the title will be hidden when rendering the $display.
- *    -# If $title == TRUE, then two widgets will appear on the panels_edit_layout_settings form allowing the
- *       user to input a title specific to this $display, as well as a checkbox enabling the user to disable
- *       page titles entirely for this $display object.
- *    -# If $title == (string), then the behavior is very similar to mode 2, but the widget description
- *       on the title textfield will indicate that the $title string will be used as the default page title
- *       if none is provided on this form. When utilizing this option, note that the panels API can only
- *       provide the data for these values; you must implement the appropriate conditionals to make it true.
- *
- * @return
- *  Can return nothing, or a modified $display object, or a redirection string; return values for the
- *  panels_edit* family of functions are quite complex. See panels_edit() for detailed discussion.
- * @see panels_edit()
- */
-function panels_edit_layout_settings($display, $finish, $destination = NULL, $title = FALSE) {
-  panels_load_include('display-layout-settings');
-  panels_load_include('ajax');
-  panels_load_include('plugins');
-  return _panels_edit_layout_settings($display, $finish, $destination, $title);
-}
-
-
 // ---------------------------------------------------------------------------
-// panels database functions
+// Panels database functions
 
 /**
  * Forms the basis of a panel display
@@ -468,25 +584,30 @@ class panels_display {
   var $incoming_content = NULL;
   var $css_id = NULL;
   var $context = array();
-  var $layout_settings = array();
-  var $panel_settings = array();
-  var $cache = array();
-  var $title = '';
-  var $hide_title = 0;
-  var $layout = '';
+  var $did = 'new';
+  var $renderer;
 
-  function add_pane($pane, $location = FALSE) {
-    $pane->pid = $this->next_new_pid();
-    if (!$location || !isset($this->panels[$location])) {
-      foreach ($this->panels as $panel_name => $panel) {
-        if (array_key_exists($pane->pid, $panel)) {
-          $this->panels[$panel_name][] = $pane->pid;
-        }
-      }
+  function panels_display() {
+    // Set the default renderer to either the legacy or the standard renderer,
+    // depending on the legacy rendering state
+    $this->renderer = variable_get('panels_legacy_rendering_mode', TRUE) ? 'legacy' : 'standard';
+  }
+
+  function add_pane(&$pane, $location = NULL) {
+    // If no location specified, use what's set in the pane.
+    if (empty($location)) {
+      $location = $pane->panel;
     }
     else {
-      $this->panels[$location][] = $pane->pid;
+      $pane->panel = $location;
     }
+
+    // Get a temporary pid for this pane.
+    $pane->pid = "new-" . $this->next_new_pid();
+
+    // Add the pane to the approprate spots.
+    $this->content[$pane->pid] = &$pane;
+    $this->panels[$location][] = $pane->pid;
   }
 
   function duplicate_pane($pid, $location = FALSE) {
@@ -496,24 +617,92 @@ class panels_display {
 
   function clone_pane($pid) {
     $pane = drupal_clone($this->content[$pid]);
-    foreach (array_keys($this->content) as $pidcheck) {
-      // necessary?
-      unset($pane->position);
-    }
     return $pane;
   }
 
   function next_new_pid() {
-    // necessary if/until we use this method and ONLY this method for adding temporary pids.
-    // then we can do it with a nice static var.
+    // We don't use static vars to record the next new pid because
+    // temporary pids can last for years in exports and in caching
+    // during editing.
     $id = array(0);
     foreach (array_keys($this->content) as $pid) {
       if (!is_numeric($pid)) {
         $id[] = substr($pid, 4);
       }
     }
-    $next_id = end($id);
+    $next_id = max($id);
     return ++$next_id;
+  }
+
+  /**
+   * Get the title from a display.
+   *
+   * The display must have already been rendered, or the setting to set the
+   * display's title from a pane's title will not have worked.
+   *
+   * @return
+   *   The title to use. If NULL, this means to let any default title that may be in use
+   *   pass through. i.e, do not actually set the title.
+   */
+  function get_title() {
+    switch ($this->hide_title) {
+      case PANELS_TITLE_NONE:
+        return '';
+
+      case PANELS_TITLE_PANE:
+        return isset($this->stored_pane_title) ? $this->stored_pane_title : '';
+
+      case PANELS_TITLE_FIXED:
+      case FALSE; // For old exported panels that are not in the database.
+        if (!empty($this->title)) {
+          return filter_xss_admin(ctools_context_keyword_substitute($this->title, array(), $this->context));
+        }
+        return NULL;
+    }
+  }
+
+  /**
+   * Render this panels display.
+   *
+   * After checking to ensure the designated layout plugin is valid, a
+   * display renderer object is spawned and runs its rendering logic.
+   *
+   * @param mixed $renderer
+   *    An instantiated display renderer object, or the name of a display
+   *    renderer plugin+class to be fetched. Defaults to NULL. When NULL, the
+   *    predesignated display renderer will be used.
+   */
+  function render($renderer = NULL) {
+    $layout = panels_get_layout($this->layout);
+    if (!$layout) {
+      return NULL;
+    }
+
+    // If we were not given a renderer object, load it.
+    if (!is_object($renderer)) {
+      // If the renderer was not specified, default to $this->renderer
+      // which is either standard or was already set for us.
+      $renderer = panels_get_renderer_handler(!empty($renderer) ? $renderer : $this->renderer, $this);
+      if (!$renderer) {
+        return NULL;
+      }
+    }
+
+    $output = '';
+    // Let modules act just prior to render.
+    foreach (module_implements('panels_pre_render') as $module) {
+      $function = $module . '_panels_pre_render';
+      $output .= $function($this, $renderer);
+    }
+
+    $output .= $renderer->render();
+
+    // Let modules act just after render.
+    foreach (module_implements('panels_post_render') as $module) {
+      $function = $module . '_panels_post_render';
+      $output .= $function($this, $renderer);
+    }
+    return $output;
   }
 }
 
@@ -521,58 +710,33 @@ class panels_display {
  * }@ End of 'defgroup mainapi', although other functions are specifically added later
  */
 
-function panels_export_pane_across_displays($source_display, &$target_display, $pid, $location = FALSE) {
-  $pane = $source_display->clone_pane($pid);
-  $target_display->add_pane($pane, $location);
-}
-
-/**
- * Clean up a display object and add some required information, if missing.
- *
- * Currently a display object needs 'args', 'incoming content', 'context'
- * and a 'css_id'.
- *
- * @param &$display
- *   The display object to be sanitized.
- * @return
- *   The sanitized display object.
- */
-function panels_sanitize_display(&$display) {
-  if (!isset($display->args)) {
-    $display->args = array();
-  }
-
-  if (!isset($display->incoming_content)) {
-    $display->incoming_content = NULL;
-  }
-
-  if (!isset($display->context)) {
-    $display->context = array();
-  }
-
-  if (!isset($display->css_id)) {
-    $display->css_id = NULL;
-  }
-}
-
 /**
  * Creates a new display, setting the ID to our magic new id.
  */
 function panels_new_display() {
-  $display = new panels_display();
+  ctools_include('export');
+  $display = ctools_export_new_object('panels_display', FALSE);
   $display->did = 'new';
   return $display;
 }
 
-function panels_new_pane($type, $subtype) {
-  $pane = new stdClass();
+/**
+ * Create a new pane.
+ *
+ * @todo -- use schema API for some of this?
+ */
+function panels_new_pane($type, $subtype, $set_defaults = FALSE) {
+  ctools_include('export');
+  $pane = ctools_export_new_object('panels_pane', FALSE);
   $pane->pid = 'new';
   $pane->type = $type;
   $pane->subtype = $subtype;
-  $pane->configuration = array();
-  $pane->access = array();
-  $pane->shown = TRUE;
-  $pane->visibility = '';
+  if ($set_defaults) {
+    $content_type = ctools_get_content_type($type);
+    $content_subtype = ctools_content_get_subtype($content_type, $subtype);
+    $pane->configuration = ctools_content_get_defaults($content_type, $content_subtype);
+  }
+
   return $pane;
 }
 
@@ -586,6 +750,8 @@ function panels_new_pane($type, $subtype) {
  *
  * @return $displays
  *  An array of displays, keyed by their display dids.
+ *
+ * @todo schema API can drasticly simplify this code.
  */
 function panels_load_displays($dids) {
   $displays = array();
@@ -593,41 +759,23 @@ function panels_load_displays($dids) {
     return $displays;
   }
 
-  $result = db_query("SELECT * FROM {panels_display} WHERE did IN (".  db_placeholders($dids) .")", $dids);
+  $result = db_query("SELECT * FROM {panels_display} WHERE did IN (" .  db_placeholders($dids) . ")", $dids);
 
-  while ($obj = db_fetch_array($result)) {
-    $display = new panels_display();
-
-    foreach ($obj as $key => $value) {
-      $display->$key = $value;
-      // unserialize important bits
-      if (in_array($key, array('layout_settings', 'panel_settings', 'cache'))) {
-        $display->$key = empty($display->$key) ? array() : unserialize($display->$key);
-      }
-    }
-
-    $display->panels = $display->content = array();
-
-    $displays[$display->did] = $display;
+  ctools_include('export');
+  while ($obj = db_fetch_object($result)) {
+    $displays[$obj->did] = ctools_export_unpack_object('panels_display', $obj);
+    // Modify the hide_title field to go from a bool to an int if necessary.
   }
 
-  foreach (module_implements('panels_layout_content_alter') as $module) {
-    $function = $module . '_panels_layout_content_alter';
-    $function($content, $layout, $settings);
-  }
+  $result = db_query("SELECT * FROM {panels_pane} WHERE did IN (" . db_placeholders($dids) . ") ORDER BY did, panel, position", $dids);
 
-  $result = db_query("SELECT * FROM {panels_pane} WHERE did IN (". db_placeholders($dids) .") ORDER BY did, panel, position", $dids);
-
-  while ($pane = db_fetch_object($result)) {
-    $pane->configuration = unserialize($pane->configuration);
-    $pane->cache = empty($pane->cache) ? array() : unserialize($pane->cache);
-    $pane->access = ($pane->access ? explode(', ', $pane->access) : array());
-    // Old panels may not have shown property, so enable by default when loading.
-    $pane->shown = isset($pane->shown) ? $pane->shown : TRUE;
+  while ($obj = db_fetch_object($result)) {
+    $pane = ctools_export_unpack_object('panels_pane', $obj);
 
     $displays[$pane->did]->panels[$pane->panel][] = $pane->pid;
     $displays[$pane->did]->content[$pane->pid] = $pane;
   }
+
   return $displays;
 }
 
@@ -655,7 +803,7 @@ function panels_load_displays($dids) {
  *    - $display->incoming_content
  *
  * While all of these members are defined, $display->context is NEVER defined in the returned $display;
- * it must be set using one of the panels_context_create() functions.
+ * it must be set using one of the ctools_context_create() functions.
  */
 function panels_load_display($did) {
   $displays = panels_load_displays(array($did));
@@ -681,9 +829,11 @@ function panels_load_display($did) {
  * @return object $display instanceof panels_display \n
  */
 function panels_save_display(&$display) {
-  // @todo -- update all this to just use drupal_write_record or something like it.
-  if (!empty($display->did) && $display->did != 'new') {
-    db_query("UPDATE {panels_display} SET layout = '%s', layout_settings = '%s', panel_settings = '%s', cache = '%s', title = '%s', hide_title = %d WHERE did = %d", $display->layout, serialize($display->layout_settings), serialize($display->panel_settings), serialize($display->cache), $display->title, $display->hide_title, $display->did);
+  $update = (isset($display->did) && is_numeric($display->did)) ? array('did') : array();
+  drupal_write_record('panels_display', $display, $update);
+
+  $pids = array();
+  if ($update) {
     // Get a list of all panes currently in the database for this display so we can know if there
     // are panes that need to be deleted. (i.e, aren't currently in our list of panes).
     $result = db_query("SELECT pid FROM {panels_pane} WHERE did = %d", $display->did);
@@ -691,51 +841,47 @@ function panels_save_display(&$display) {
       $pids[$pane->pid] = $pane->pid;
     }
   }
-  else {
-    db_query("INSERT INTO {panels_display} (layout, layout_settings, panel_settings, cache, title, hide_title) VALUES ('%s', '%s', '%s', '%s', '%s', %d)", $display->layout, serialize($display->layout_settings), serialize($display->panel_settings), serialize($display->cache), $display->title, $display->hide_title);
-    $display->did = db_last_insert_id('panels_display', 'did');
-    $pids = array();
-  }
 
   // update all the panes
-  panels_load_include('plugins');
+  ctools_include('plugins', 'panels');
+  ctools_include('content');
 
-  foreach ((array) $display->panels as $id => $panes) {
+  foreach ($display->panels as $id => $panes) {
     $position = 0;
     $new_panes = array();
     foreach ((array) $panes as $pid) {
+      if (!isset($display->content[$pid])) {
+        continue;
+      }
       $pane = $display->content[$pid];
+      $type = ctools_get_content_type($pane->type);
+
       $pane->position = $position++;
+      $pane->did = $display->did;
 
-      // make variables right.
-      $type = panels_get_content_type($pane->type);
-      $access = isset($pane->access) ? implode(', ', $pane->access) : '';
-      $visibility = !empty($type['visibility serialize']) ? serialize($pane->visibility) : $pane->visibility;
-      $pane->shown = isset($pane->shown) ? $pane->shown : TRUE;
+      $old_pid = $pane->pid;
+      drupal_write_record('panels_pane', $pane, is_numeric($pid) ? array('pid') : array());
 
-      if (empty($pane->cache)) {
-        $pane->cache = array();
+      if ($pane->pid != $old_pid) {
+        // and put it back so our pids and positions can be used
+        unset($display->content[$id]);
+        $display->content[$pane->pid] = $pane;
+
+        // If the title pane was one of our panes that just got its ID changed,
+        // we need to change it in the database, too.
+        if (isset($display->title_pane) && $display->title_pane == $old_pid) {
+          $display->title_pane = $pane->pid;
+          // Do a simple update query to write it so we don't have to rewrite
+          // the whole record. We can't just save writing the whole record here
+          // because it was needed to get the did. Chicken, egg, more chicken.
+          db_query("UPDATE {panels_display} SET title_pane = %d WHERE did = %d", $pane->pid, $display->did);
+        }
       }
 
-      $v = array($display->did, $pane->panel, $pane->type, $pane->subtype, serialize($pane->configuration), serialize($pane->cache), $pane->shown, $access, $visibility, $pane->position);
-
-      if (!is_numeric($pid)) {
-        unset($display->content[$pid]);
-        // doin it this way for readability
-        $f = 'did, panel, type, subtype, configuration, cache, shown, access, visibility, position';
-        $q = "%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d";
-
-        db_query("INSERT INTO {panels_pane} ($f) VALUES ($q)", $v);
-        $pane->pid = db_last_insert_id('panels_pane', 'pid');
-      }
-      else {
-        $v[] = $pane->pid;
-        $f = "did = %d, panel = '%s', type = '%s', subtype = '%s', configuration = '%s', cache = '%s', shown = '%s', access = '%s', visibility = '%s', position = '%d'";
-        db_query("UPDATE {panels_pane} SET $f WHERE pid = %d", $v);
-      }
-      // and put it back so our pids and positions can be used
-      $display->content[$pane->pid] = $pane;
+      // re-add this to the list of content for this panel.
       $new_panes[] = $pane->pid;
+
+      // Remove this from the list of panes scheduled for deletion.
       if (isset($pids[$pane->pid])) {
         unset($pids[$pane->pid]);
       }
@@ -749,6 +895,19 @@ function panels_save_display(&$display) {
 
   // Clear any cached content for this display.
   panels_clear_cached_content($display);
+
+  // Allow other modules to take action when a display is saved.
+  module_invoke_all('panels_display_save', $display);
+
+  // Log the change to watchdog, using the same style as node.module
+  $watchdog_args = array('%did' => $display->did);
+  if (!empty($display->title)) {
+    $watchdog_args['%title'] = $display->title;
+    watchdog('content', 'Panels: saved display "%title" with display id %did', $watchdog_args, WATCHDOG_NOTICE);
+  }
+  else {
+    watchdog('content', 'Panels: saved display with id %did', $watchdog_args, WATCHDOG_NOTICE);
+  }
 
   // to be nice, even tho we have a reference.
   return $display;
@@ -796,27 +955,25 @@ function panels_delete_display($display) {
  *  the same scope as where you eval(), your existing $display variable WILL be overwritten.
  */
 function panels_export_display($display, $prefix = '') {
-  $output = '';
-  $output .= $prefix . '$display = new panels_display()' . ";\n";
-  $output .= $prefix . '$display->did = \'new\'' . ";\n";
-  // $fields = array('name', 'layout', 'layout_settings', 'panel_settings');
-  // TODO 'name' field was removed several months ago, so temporarily removing
-  // it from here whil investigations into exactly why it was removed continue
-  $fields = array('layout', 'layout_settings', 'panel_settings');
-  foreach ($fields as $field) {
-    $output .= $prefix . '$display->' . $field . ' = ' . panels_var_export($display->$field, $prefix) . ";\n";
-  }
+  ctools_include('export');
+  $output = ctools_export_object('panels_display', $display, $prefix);
 
+  // Initialize empty properties.
   $output .= $prefix . '$display->content = array()' . ";\n";
   $output .= $prefix . '$display->panels = array()' . ";\n";
   $panels = array();
 
+  $title_pid = 0;
   if (!empty($display->content)) {
     $pid_counter = 0;
     $region_counters = array();
     foreach ($display->content as $pane) {
-      $pane->pid = 'new-' . ++$pid_counter;
-      $output .= panels_export_pane($pane, $prefix . '  ');
+      $pid = 'new-' . ++$pid_counter;
+      if ($pane->pid == $display->title_pane) {
+        $title_pid = $pid;
+      }
+      $pane->pid = $pid;
+      $output .= ctools_export_object('panels_pane', $pane, $prefix . '  ');
       $output .= "$prefix  " . '$display->content[\'' . $pane->pid . '\'] = $pane' . ";\n";
       if (!isset($region_counters[$pane->panel])) {
         $region_counters[$pane->panel] = 0;
@@ -824,31 +981,21 @@ function panels_export_display($display, $prefix = '') {
       $output .= "$prefix  " . '$display->panels[\'' . $pane->panel . '\'][' . $region_counters[$pane->panel]++ .'] = \'' . $pane->pid . "';\n";
     }
   }
-  return $output;
-}
+  $output .= $prefix . '$display->hide_title = ';
+  switch ($display->hide_title) {
+    case PANELS_TITLE_FIXED:
+      $output .= 'PANELS_TITLE_FIXED';
+      break;
+    case PANELS_TITLE_NONE:
+      $output .= 'PANELS_TITLE_NONE';
+      break;
+    case PANELS_TITLE_PANE:
+      $output .= 'PANELS_TITLE_PANE';
+      break;
+  }
+  $output .= ";\n";
 
-function panels_export_pane($pane, $prefix = '') {
-  $output = '';
-  $output = $prefix . '$pane = new stdClass()'  . ";\n";
-  $fields = array('pid', 'panel', 'type', 'shown', 'subtype', 'access', 'configuration', 'cache');
-  foreach ($fields as $field) {
-    $output .= "$prefix  " . '$pane->' . $field . ' = ' . panels_var_export($pane->$field, "$prefix  ") . ";\n";
-  }
-  return $output;
-}
-
-function panels_var_export($object, $prefix = '') {
-  if (is_array($object) && empty($object)) {
-    $output = 'array()';
-  }
-  else {
-    // Remove extra space to match Drupal coding standards.
-    $output = str_replace('array (', 'array(', var_export($object, TRUE));
-  }
-
-  if ($prefix) {
-    $output = str_replace("\n", "\n$prefix", $output);
-  }
+  $output .= $prefix . '$display->title_pane =' . " '$title_pid';\n";
   return $output;
 }
 
@@ -858,34 +1005,43 @@ function panels_var_export($object, $prefix = '') {
  *
  * if $incoming_content is NULL, default content will be applied. Use
  * an empty string to indicate no content.
- * @render
  * @ingroup hook_invocations
  */
-function panels_render_display(&$display) {
-  panels_load_include('display-render');
-  panels_load_include('plugins');
-  return _panels_render_display($display);
+function panels_render_display(&$display, $renderer = NULL) {
+  ctools_include('display-render', 'panels');
+  ctools_include('plugins', 'panels');
+  ctools_include('context');
+
+  if (!empty($display->context)) {
+    if ($form_context = ctools_context_get_form($display->context)) {
+      $form_context->form['#theme'] = 'panels_render_display_form';
+      $form_context->form['#display'] = &$display;
+      $form_context->form['#form_context_id'] = $form_context->id;
+      return drupal_render_form($form_context->form_id, $form_context->form);
+    }
+  }
+  return $display->render($renderer);
 }
 
 /**
- * For external use: Given a layout ID and a $content array, return the
- * panel display. The content array is filled in based upon the content
- * available in the layout. If it's a two column with a content
- * array defined like array('left' => t('Left side'), 'right' =>
- * t('Right side')), then the $content array should be array('left' =>
- * $output_left, 'right' => $output_right)
- * @render
+ * Theme function to render our panel as a form.
+ *
+ * When rendering a display as a form, the entire display needs to be
+ * inside the <form> tag so that the form can be spread across the
+ * panes. This sets up the form system to be the main caller and we
+ * then operate as a theme function of the form.
  */
-function panels_print_layout($id, $content) {
-  panels_load_include('plugins');
-  return _panels_print_layout($id, $content);
+function theme_panels_render_display_form($form) {
+  $form['#children'] = $form['#display']->render();
+  drupal_render($form);
+  return theme('form', $form);
 }
 
 // @layout
 function panels_print_layout_icon($id, $layout, $title = NULL) {
-  drupal_add_css(panels_get_path('css/panels_admin.css'));
+  ctools_add_css('panels_admin', 'panels');
   $file = $layout['path'] . '/' . $layout['icon'];
-  return theme('panels_layout_icon', $id, theme('image', $file), $title);
+  return theme('panels_layout_icon', $id, theme('image', $file, strip_tags($layout['title']), strip_tags($layout['description'])), $title);
 }
 
 /**
@@ -919,20 +1075,611 @@ function theme_panels_layout_link($title, $id, $image, $link) {
  * Print the layout link. Sends out to a theme function.
  * @layout
  */
-function panels_print_layout_link($id, $layout, $link) {
-  drupal_add_css(panels_get_path('css/panels_admin.css'));
+function panels_print_layout_link($id, $layout, $link, $options = array()) {
+  if (isset($options['query']['q'])) {
+    unset($options['query']['q']);
+  }
+
+  ctools_add_css('panels_admin', 'panels');
   $file = $layout['path'] . '/' . $layout['icon'];
-  $image = l(theme('image', $file), $link, array('html' => true));
-  $title = l($layout['title'], $link);
+  $image = l(theme('image', $file), $link, array('html' => true) + $options);
+  $title = l($layout['title'], $link, $options);
   return theme('panels_layout_link', $title, $id, $image, $link);
 }
 
+
 /**
- * Implementation of hook_ctools_plugin_directory() to let the system know
- * we implement task and task_handler plugins.
+ * Gateway to the PanelsLegacyState class/object, which does all legacy state
+ * checks and provides information about the cause of legacy states as needed.
+ *
+ * @return PanelsLegacyState $legacy
  */
-function panels_ctools_plugin_directory($plugin) {
-  if ($plugin == 'tasks' || $plugin == 'task_handlers') {
-    return 'plugins/' . $plugin;
+function panels_get_legacy_state() {
+  static $legacy = NULL;
+  if (!isset($legacy)) {
+    ctools_include('legacy', 'panels');
+    $legacy = new PanelsLegacyState();
+  }
+  return $legacy;
+}
+
+/**
+ * Get the display that is currently being rendered as a page.
+ *
+ * Unlike in previous versions of this, this only returns the display,
+ * not the page itself, because there are a number of different ways
+ * to get to this point. It is hoped that the page data isn't needed
+ * at this point. If it turns out there is, we will do something else to
+ * get that functionality.
+ */
+function panels_get_current_page_display($change = NULL) {
+  static $display = NULL;
+  if ($change) {
+    $display = $change;
+  }
+
+  return $display;
+}
+
+/**
+ * Clean up the panel pane variables for the template.
+ */
+function template_preprocess_panels_pane($vars) {
+  $content = $vars['output'];
+  // basic classes
+  $vars['classes'] = 'panel-pane';
+  $vars['id'] = '';
+
+  // Add some usable classes based on type/subtype
+  ctools_include('cleanstring');
+  $type_class = $content->type ? 'pane-'. ctools_cleanstring($content->type, array('lower case' => TRUE)) : '';
+  $subtype_class = $content->subtype ? 'pane-'. ctools_cleanstring($content->subtype, array('lower case' => TRUE)) : '';
+
+  // Sometimes type and subtype are the same. Avoid redudant classes.
+  if ($type_class != $subtype_class) {
+    $vars['classes'] .= " $type_class $subtype_class";
+  }
+  else {
+    $vars['classes'] .= " $type_class";
+  }
+
+  // Add id and custom class if sent in.
+  if (!empty($content->content)) {
+    if (!empty($content->css_id)) {
+      $vars['id'] = ' id="' . $content->css_id . '"';
+    }
+    if (!empty($content->css_class)) {
+      $vars['classes'] .= ' ' . $content->css_class;
+    }
+  }
+
+  // administrative links, only if there is permission.
+  $vars['admin_links'] = '';
+  if (user_access('view pane admin links') && !empty($content->admin_links)) {
+    $vars['admin_links'] = theme('links', $content->admin_links);
+  }
+
+  $vars['title'] = !empty($content->title) ? $content->title : '';
+
+  $vars['feeds'] = !empty($content->feeds) ? implode(' ', $content->feeds) : '';
+  $vars['content'] = !empty($content->content) ? $content->content : '';
+
+  $vars['links'] = !empty($content->links) ? theme('links', $content->links) : '';
+  $vars['more'] = '';
+  if (!empty($content->more)) {
+    if (empty($content->more['title'])) {
+      $content->more['title'] = t('more');
+    }
+    $vars['more'] = l($content->more['title'], $content->more['href'], $content->more);
   }
 }
+
+/**
+ * Route Panels' AJAX calls to the correct object.
+ *
+ * Panels' AJAX is controlled mostly by renderer objects. This menu callback
+ * accepts the incoming request, figures out which object should handle the
+ * request, and attempts to route it. If no object can be found, the default
+ * Panels editor object is used.
+ *
+ * Calls are routed via the ajax_* method space. For example, if visiting
+ * panels/ajax/add-pane then $renderer::ajax_add_pane() will be called.
+ * This means commands can be added without having to create new callbacks.
+ *
+ * The first argument *must always* be the cache key so that a cache object
+ * can be passed through. Other arguments will be passed through untouched
+ * so that the method can do whatever it needs to do.
+ */
+function panels_ajax_router() {
+  $args = func_get_args();
+  if (count($args) < 3) {
+    return MENU_NOT_FOUND;
+  }
+
+  ctools_include('display-edit', 'panels');
+  ctools_include('plugins', 'panels');
+  ctools_include('ajax');
+  ctools_include('modal');
+  ctools_include('context');
+  ctools_include('content');
+
+  $plugin_name = array_shift($args);
+  $method = array_shift($args);
+  $cache_key = array_shift($args);
+
+  $plugin = panels_get_display_renderer($plugin_name);
+  if (!$plugin) {
+    // This is the default renderer for handling AJAX commands.
+    $plugin = panels_get_display_renderer('editor');
+  }
+
+  $cache = panels_edit_cache_get($cache_key);
+  if (empty($cache)) {
+    return MENU_ACCESS_DENIED;
+  }
+
+  $renderer = panels_get_renderer_handler($plugin, $cache->display);
+  if (!$renderer) {
+    return MENU_ACCESS_DENIED;
+  }
+
+  $method = 'ajax_' . str_replace('-', '_', $method);
+  if (!method_exists($renderer, $method)) {
+    return MENU_NOT_FOUND;
+  }
+
+  $renderer->cache = &$cache;
+  ctools_include('cleanstring');
+  $renderer->clean_key = ctools_cleanstring($cache_key);
+
+  $output = call_user_func_array(array($renderer, $method), $args);
+  if (empty($output) && !empty($renderer->commands)) {
+    return ctools_ajax_render($renderer->commands);
+  }
+  return $output;
+}
+
+// --------------------------------------------------------------------------
+// Panels caching functions and callbacks
+//
+// When editing displays and the like, Panels has a caching system that relies
+// on a callback to determine where to get the actual cache.
+
+// @todo This system needs to be better documented so that it can be
+// better used.
+
+/**
+ * Get an object from cache.
+ */
+function panels_cache_get($obj, $did, $skip_cache = FALSE) {
+  ctools_include('object-cache');
+  // we often store contexts in cache, so let's just make sure we can load
+  // them.
+  ctools_include('context');
+  return ctools_object_cache_get($obj, 'panels_display:' . $did, $skip_cache);
+}
+
+/**
+ * Save the edited object into the cache.
+ */
+function panels_cache_set($obj, $did, $cache) {
+  ctools_include('object-cache');
+  return ctools_object_cache_set($obj, 'panels_display:' . $did, $cache);
+}
+
+/**
+ * Clear a object from the cache; used if the editing is aborted.
+ */
+function panels_cache_clear($obj, $did) {
+  ctools_include('object-cache');
+  return ctools_object_cache_clear($obj, 'panels_display:' . $did);
+}
+
+/**
+ * Create the default cache for editing panel displays.
+ *
+ * If an application is using the Panels display editor without having
+ * specified a cache key, this method can be used to create the default
+ * cache.
+ */
+function panels_edit_cache_get_default(&$display, $content_types = NULL, $title = FALSE) {
+  if (empty($content_types)) {
+    $content_types = ctools_content_get_available_types();
+  }
+
+  $display->cache_key = $display->did;
+  panels_cache_clear('display', $display->did);
+
+  $cache = new stdClass();
+  $cache->display = &$display;
+  $cache->content_types = $content_types;
+  $cache->display_title = $title;
+
+  panels_edit_cache_set($cache);
+  return $cache;
+}
+
+/**
+ * Method to allow modules to provide their own caching mechanism for the
+ * display editor.
+ */
+function panels_edit_cache_get($cache_key) {
+  if (strpos($cache_key, ':') !== FALSE) {
+    list($module, $argument) = explode(':', $cache_key, 2);
+    return module_invoke($module, 'panels_cache_get', $argument);
+  }
+
+  // Fall back to our normal method:
+  return panels_cache_get('display', $cache_key);
+}
+
+/**
+ * Method to allow modules to provide their own caching mechanism for the
+ * display editor.
+ */
+function panels_edit_cache_set($cache) {
+  $cache_key = $cache->display->cache_key;
+  if (strpos($cache_key, ':') !== FALSE) {
+    list($module, $argument) = explode(':', $cache_key, 2);
+    return module_invoke($module, 'panels_cache_set', $argument, $cache);
+  }
+
+  // Fall back to our normal method:
+  return panels_cache_set('display', $cache_key, $cache);
+}
+
+/**
+ * Method to allow modules to provide their own mechanism to write the
+ * cache used in the display editor.
+ */
+function panels_edit_cache_save($cache) {
+  $cache_key = $cache->display->cache_key;
+  if (strpos($cache_key, ':') !== FALSE) {
+    list($module, $argument) = explode(':', $cache_key, 2);
+    if (function_exists($module . '_panels_cache_save')) {
+      return module_invoke($module, 'panels_cache_save', $argument, $cache);
+    }
+  }
+
+  // Fall back to our normal method:
+  return panels_save_display($cache->display);
+}
+
+/**
+ * Method to allow modules to provide their own mechanism to clear the
+ * cache used in the display editor.
+ */
+function panels_edit_cache_clear($cache) {
+  $cache_key = $cache->display->cache_key;
+  if (strpos($cache_key, ':') !== FALSE) {
+    list($module, $argument) = explode(':', $cache_key, 2);
+    if (function_exists($module . '_panels_cache_clear')) {
+      return module_invoke($module, 'panels_cache_clear', $argument, $cache);
+    }
+  }
+
+  // Fall back to our normal method:
+  return panels_cache_clear('display', $cache_key);
+}
+
+/**
+ * Method to allow modules to provide a mechanism to break locks.
+ */
+function panels_edit_cache_break_lock($cache) {
+  if (empty($cache->locked)) {
+    return;
+  }
+
+  $cache_key = $cache->display->cache_key;
+  if (strpos($cache_key, ':') !== FALSE) {
+    list($module, $argument) = explode(':', $cache_key, 2);
+    if (function_exists($module . '_panels_cache_break_lock')) {
+      return module_invoke($module, 'panels_cache_break_lock', $argument, $cache);
+    }
+  }
+
+  // Normal panel display editing has no locks, so we do nothing if there is
+  // no fallback.
+  return;
+}
+
+// --------------------------------------------------------------------------
+// Callbacks on behalf of the panel_context plugin.
+//
+// The panel_context plugin lets Panels be used in page manager. These
+// callbacks allow the display editing system to use the page manager
+// cache rather than the default display cache. They are routed by the cache
+// key via panels_edit_cache_* functions.
+
+/**
+ * Get display edit cache on behalf of panel context.
+ *
+ * The key is the second half of the key in this form:
+ * panel_context:TASK_NAME:HANDLER_NAME;
+ */
+function panel_context_panels_cache_get($key) {
+  ctools_include('common', 'panels');
+  ctools_include('context');
+  ctools_include('context-task-handler');
+  // this loads the panel context inc even if we don't use the plugin.
+  $plugin = page_manager_get_task_handler('panel_context');
+
+  list($task_name, $handler_name) = explode(':', $key, 2);
+  $page = page_manager_get_page_cache($task_name);
+  if (isset($page->display_cache[$handler_name])) {
+    return $page->display_cache[$handler_name];
+  }
+
+  if ($handler_name) {
+    $handler = &$page->handlers[$handler_name];
+  }
+  else {
+    $handler = &$page->new_handler;
+  }
+  $cache = new stdClass();
+
+  $cache->display = &panels_panel_context_get_display($handler);
+  $cache->display->context = ctools_context_handler_get_all_contexts($page->task, $page->subtask, $handler);
+  $cache->display->cache_key = 'panel_context:' . $key;
+  $cache->content_types = panels_common_get_allowed_types('panels_page', $cache->display->context);
+  $cache->display_title = TRUE;
+  $cache->locked = $page->locked;
+
+  return $cache;
+}
+
+/**
+ * Get the Page Manager cache for the panel_context plugin.
+ */
+function _panel_context_panels_cache_get_page_cache($key, $cache) {
+  list($task_name, $handler_name) = explode(':', $key, 2);
+  $page = page_manager_get_page_cache($task_name);
+  $page->display_cache[$handler_name] = $cache;
+  if ($handler_name) {
+    $page->handlers[$handler_name]->conf['display'] = $cache->display;
+    $page->handler_info[$handler_name]['changed'] |= PAGE_MANAGER_CHANGED_CACHED;
+  }
+  else {
+    $page->new_handler->conf['display'] = $cache->display;
+  }
+
+  return $page;
+}
+
+/**
+ * Store a display edit in progress in the page cache.
+ */
+function panel_context_panels_cache_set($key, $cache) {
+  $page = _panel_context_panels_cache_get_page_cache($key, $cache);
+  page_manager_set_page_cache($page);
+}
+
+/**
+ * Save all changes made to a display using the Page Manager page cache.
+ */
+function panel_context_panels_cache_clear($key, $cache) {
+  $page = _panel_context_panels_cache_get_page_cache($key, $cache);
+  page_manager_clear_page_cache($page->task_name);
+}
+
+/**
+ * Save all changes made to a display using the Page Manager page cache.
+ */
+function panel_context_panels_cache_save($key, $cache) {
+  $page = _panel_context_panels_cache_get_page_cache($key, $cache);
+  page_manager_save_page_cache($page);
+}
+
+/**
+ * Break the lock on a page manager page.
+ */
+function panel_context_panels_cache_break_lock($key, $cache) {
+  $page = _panel_context_panels_cache_get_page_cache($key, $cache);
+  ctools_object_cache_clear_all('page_manager_page', $page->task_name);
+}
+
+// --------------------------------------------------------------------------
+// Callbacks on behalf of the panels page wizards
+//
+// The page wizards are a pluggable set of 'wizards' to make it easy to create
+// specific types of pages based upon whatever someone felt like putting
+// together. Since they will very often have content editing, we provide
+// a generic mechanism to allow them to store their editing cache in the
+// wizard cache.
+//
+// For them to use this mechanism, they just need to use:
+//   $cache = panels_edit_cache_get('panels_page_wizard:' . $plugin['name']);
+
+/**
+ * Get display edit cache for the panels mini export UI
+ *
+ * The key is the second half of the key in this form:
+ * panels_page_wizard:TASK_NAME:HANDLER_NAME;
+ */
+function panels_page_wizard_panels_cache_get($key) {
+  ctools_include('page-wizard');
+  ctools_include('context');
+  $wizard_cache = page_manager_get_wizard_cache($key);
+  if (isset($wizard_cache->display_cache)) {
+    return $wizard_cache->display_cache;
+  }
+
+  ctools_include('common', 'panels');
+  $cache = new stdClass();
+  $cache->display = $wizard_cache->display;
+  $cache->display->context = !empty($wizard_cache->context) ? $wizard_cache->context : array();
+  $cache->display->cache_key = 'panels_page_wizard:' . $key;
+  $cache->content_types = panels_common_get_allowed_types('panels_page', $cache->display->context);
+  $cache->display_title = TRUE;
+
+  return $cache;
+}
+
+/**
+ * Store a display edit in progress in the page cache.
+ */
+function panels_page_wizard_panels_cache_set($key, $cache) {
+  ctools_include('page-wizard');
+  $wizard_cache = page_manager_get_wizard_cache($key);
+  $wizard_cache->display_cache = $cache;
+  page_manager_set_wizard_cache($wizard_cache);
+}
+
+// --------------------------------------------------------------------------
+// General utility functions
+
+/**
+ * Perform a drupal_goto on a destination that may be an array like url().
+ */
+function panels_goto($destination) {
+  if (!is_array($destination)) {
+    return drupal_goto($destination);
+  }
+  else {
+    // Prevent notices by adding defaults
+    $destination += array(
+      'query' => NULL,
+      'fragment' => NULL,
+      'http_response_code' => NULL,
+    );
+
+    return drupal_goto($destination['path'], $destination['query'], $destination['fragment'], $destination['http_response_code']);
+  }
+}
+
+
+/**
+ * For external use: Given a layout ID and a $content array, return the
+ * panel display.
+ *
+ * The content array is filled in based upon the content available in the
+ * layout. If it's a two column with a content array defined like
+ * @code
+ *   array(
+ *    'left' => t('Left side'),
+ *    'right' => t('Right side')
+ *  ),
+ * @endcode
+ *
+ * Then the $content array should be
+ * @code
+ * array(
+ *   'left' => $output_left,
+ *   'right' => $output_right,
+ * )
+ * @endcode
+ *
+ * The output within each panel region can be either a single rendered
+ * HTML string or an array of rendered HTML strings as though they were
+ * panes. They will simply be concatenated together without separators.
+ */
+function panels_print_layout($layout, $content, $meta = 'standard') {
+  ctools_include('plugins', 'panels');
+
+  // Create a temporary display for this.
+  $display = panels_new_display();
+  $display->layout = is_array($layout) ? $layout['name'] : $layout;
+  $display->content = $content;
+
+  // Get our simple renderer
+  $renderer = panels_get_renderer_handler('simple', $display);
+  $renderer->meta_location = $meta;
+
+  return $renderer->render();
+}
+
+// --------------------------------------------------------------------------
+// Deprecated functions
+//
+// Everything below this line will eventually go away.
+
+/**
+ * Load a panels include file.
+ *
+ * @deprecated This function is deprecated and should no longer be used. It will
+ * be removed in the next major version of Panels. Use ctools_include() instead.
+ */
+function panels_load_include($include, $path = 'includes/') {
+  static $loaded = array();
+  if (empty($loaded["$path$include.inc"])) {
+    require_once './' . panels_get_path("$path$include.inc");
+    $loaded["$path$include.inc"] = TRUE;
+  }
+}
+
+/**
+ * panels path helper function
+ */
+function panels_get_path($file, $base_path = FALSE, $module = 'panels') {
+  $output = $base_path ? base_path() : '';
+  return $output . drupal_get_path('module', $module) . '/' . $file;
+}
+
+/**
+ * Given a full layout structure and a content array, render a panel display.
+ *
+ * @deprecated This function represents an old approach to rendering, and is
+ * retained only as a temporary support for other modules still using that
+ * approach. It will be removed in the next major version of Panels.
+ */
+function panels_render_layout($layout, $content, $css_id = NULL, $settings = array(), $display = NULL) {
+  if (!empty($layout['css'])) {
+    if (file_exists(path_to_theme() . '/' . $layout['css'])) {
+      drupal_add_css(path_to_theme() . '/' . $layout['css']);
+    }
+    else {
+      drupal_add_css($layout['path'] . '/' . $layout['css']);
+    }
+  }
+  // This now comes after the CSS is added, because panels-within-panels must
+  // have their CSS added in the right order; inner content before outer content.
+
+  // If $content is an object, it's a $display and we have to render its panes.
+  if (is_object($content)) {
+    $display = $content;
+    if (empty($display->cache['method'])) {
+      $content = panels_render_panes($display);
+    }
+    else {
+      $cache = panels_get_cached_content($display, $display->args, $display->context);
+      if ($cache === FALSE) {
+        $cache = new panels_cache_object();
+        $cache->set_content(panels_render_panes($display));
+        panels_set_cached_content($cache, $display, $display->args, $display->context);
+      }
+      $content = $cache->content;
+    }
+  }
+
+  $output = theme($layout['theme'], check_plain($css_id), $content, $settings, $display);
+
+  return $output;
+}
+
+/**
+ * Get a list of panel regions available in the layout.
+ *
+ * @deprecated Use panels_get_regions instead.
+ */
+function panels_get_panels($layout, $display) {
+  return panels_get_regions($layout, $display);
+}
+
+/**
+ * Select a context for a pane.
+ *
+ * @param $pane
+ *   A fully populated pane.
+ * @param $contexts
+ *   A keyed array of available contexts.
+ *
+ * @return
+ *   The matching contexts or NULL if none or necessary, or FALSE if
+ *   requirements can't be met.
+ *
+ * @deprecated this function will be removed.
+ */
+function panels_pane_select_context($pane, $contexts) {
+  return ctools_content_select_context($pane->type, $pane->subtype, $pane->configuration, $contexts);
+}
+

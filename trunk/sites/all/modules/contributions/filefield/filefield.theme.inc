@@ -1,18 +1,18 @@
 <?php
-// $Id: filefield.theme.inc,v 1.6 2008/07/23 17:20:49 dopry Exp $
+
 /**
  * @file
- * FileField: Defines a CCK file field type.
+ * Theme functions used for normal file output.
  *
  * Uses content.module to store the fid and field specific metadata,
  * and Drupal's {files} table to store the actual file data.
- *
- * This file contains common theme functions.
  */
 
 /**
  * Return an image with an appropriate icon for the given file.
- * Remember to pass a file object and not an array.
+ *
+ * @param $file
+ *   A file object for which to make an icon.
  */
 function theme_filefield_icon($file) {
   if (is_object($file)) {
@@ -20,57 +20,102 @@ function theme_filefield_icon($file) {
   }
   $mime = check_plain($file['filemime']);
 
-  $dashed_mime = strtr($mime, array('/' => '-'));
+  $dashed_mime = strtr($mime, array('/' => '-', '+' => '-', '.' => '-'));
 
-  if ($icon_url = _filefield_icon_url($file)) {
-    $icon = '<img class="field-icon-'. $dashed_mime .'"  alt="'. $mime .' icon" src="'. $icon_url .'" />';
+  if ($icon_url = filefield_icon_url($file)) {
+    return '<img class="filefield-icon field-icon-'. $dashed_mime .'"  alt="'. t('@mime icon', array('@mime' => $mime)) .'" src="'. $icon_url .'" />';
   }
-  return '<div class="filefield-icon field-icon-'. $dashed_mime .'">'. $icon .'</div>';
 }
 
-function _filefield_icon_url($file) {
+/**
+ * Given a file object, create a URL to a matching icon.
+ *
+ * @param $file
+ *   A file object.
+ * @param $theme
+ *   Optional. The theme to be used for the icon. Defaults to the value of
+ *   the "filefield_icon_theme" variable.
+ * @return
+ *   A URL string to the icon, or FALSE if an appropriate icon could not be
+ *   found.
+ */
+function _filefield_icon_url($file, $theme = NULL) {
   global $base_url;
-  $theme = variable_get('filefield_icon_theme', 'protocons');
 
-  if ($iconpath = _filefield_icon_path($file, $theme)) {
-    return $base_url .'/'. $iconpath;
+  if ($icon_path = _filefield_icon_path($file, $theme)) {
+    return $base_url .'/'. $icon_path;
   }
   return FALSE;
 }
 
-function _filefield_icon_path($file, $theme = 'protocons') {
+/**
+ * Given a file object, create a URL to a matching icon.
+ *
+ * @param $file
+ *   A file object.
+ * @param $theme
+ *   Optional. The theme to be used for the icon. Defaults to the value of
+ *   the "filefield_icon_theme" variable.
+ * @return
+ *   A string to the icon as a local path, or FALSE if an appropriate icon could
+ *   not be found.
+ */
+function _filefield_icon_path($file, $theme = NULL) {
+  if (!isset($theme)) {
+    $theme = variable_get('filefield_icon_theme', 'default');
+  }
+
   // If there's an icon matching the exact mimetype, go for it.
   $dashed_mime = strtr($file['filemime'], array('/' => '-'));
-  if ($iconpath = _filefield_create_icon_path($dashed_mime, $theme)) {
-    return $iconpath;
+  if ($icon_path = _filefield_create_icon_path($dashed_mime, $theme)) {
+    return $icon_path;
   }
   // For a couple of mimetypes, we can "manually" tell a generic icon.
   if ($generic_name = _filefield_generic_icon_map($file)) {
-    if ($iconpath = _filefield_create_icon_path($generic_name, $theme)) {
-      return $iconpath;
+    if ($icon_path = _filefield_create_icon_path($generic_name, $theme)) {
+      return $icon_path;
     }
   }
   // Use generic icons for each category that provides such icons.
   foreach (array('audio', 'image', 'text', 'video') as $category) {
     if (strpos($file['filemime'], $category .'/') === 0) {
-      if ($iconpath = _filefield_create_icon_path($category .'-x-generic', $theme)) {
-        return $iconpath;
+      if ($icon_path = _filefield_create_icon_path($category .'-x-generic', $theme)) {
+        return $icon_path;
       }
     }
   }
   // Try application-octet-stream as last fallback.
-  if ($iconpath = _filefield_create_icon_path('application-octet-stream', $theme)) {
-    return $iconpath;
+  if ($icon_path = _filefield_create_icon_path('application-octet-stream', $theme)) {
+    return $icon_path;
   }
   // Sorry, no icon can be found...
   return FALSE;
 }
 
-function _filefield_create_icon_path($iconname, $theme = 'protocons') {
-  $iconpath = drupal_get_path('module', 'filefield')
-    .'/icons/'. $theme .'/16x16/mimetypes/'. $iconname .'.png';
-  if (file_exists($iconpath)) {
-    return $iconpath;
+/**
+ * Internal function to convert a file icon theme name to a directory.
+ */
+function _filefield_icon_directory($theme = NULL) {
+  static $sets;
+
+  if (!isset($sets)) {
+    $sets = module_invoke_all('filefield_icon_sets');
+    drupal_alter('filefield_icon_sets', $sets);
+  }
+
+  if (!isset($theme) || !isset($sets[$theme])) {
+    $theme = 'default';
+  }
+
+  return $sets[$theme];
+}
+
+function _filefield_create_icon_path($icon_name, $theme = NULL) {
+  $icons_directory = _filefield_icon_directory($theme);
+  $icon_path = $icons_directory .'/'. $icon_name .'.png';
+
+  if (file_exists($icon_path)) {
+    return $icon_path;
   }
   return FALSE;
 }
@@ -118,6 +163,7 @@ function _filefield_generic_icon_map($file) {
     case 'application/vnd.oasis.opendocument.presentation':
     case 'application/vnd.oasis.opendocument.presentation-template':
     case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+    case 'application/vnd.openxmlformats-officedocument.presentationml.slideshow':
     case 'application/vnd.stardivision.impress':
     case 'application/vnd.sun.xml.impress':
     case 'application/vnd.sun.xml.impress.template':
@@ -180,6 +226,15 @@ function _filefield_generic_icon_map($file) {
     // HTML aliases.
     case 'application/xhtml+xml':
       return 'text-html';
+
+    // RTF files.
+    case 'application/rtf':
+      return 'text-rtf';
+
+    // Google earth files.
+    case 'application/vnd.google-earth.kml+xml':
+    case 'application/vnd.google-earth.kmz':
+      return 'application-google-earth';
 
     // Executable types.
     case 'application/x-macbinary':
