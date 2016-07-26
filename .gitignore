@@ -1,3 +1,4 @@
 *.sql
 *.sql.gz
+settings.local.php
 trunk/sites/default/files
