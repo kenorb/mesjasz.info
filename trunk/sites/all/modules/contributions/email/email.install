@@ -1,13 +1,11 @@
 <?php
 
-// Updates happen in random order, whether or not the module is enabled,
-// so include critical code here just to be sure.
-include_once(drupal_get_path('module', 'content') .'/content.module');
 
 /**
  * Implementation of hook_install().
  */
 function email_install() {
+  drupal_load('module', 'content');
   content_notify('install', 'email');
 }
 
@@ -15,6 +13,7 @@ function email_install() {
  * Implementation of hook_uninstall().
  */
 function email_uninstall() {
+  drupal_load('module', 'content');
   content_notify('uninstall', 'email');
 }
 
@@ -24,6 +23,7 @@ function email_uninstall() {
  * Notify content module when this module is enabled.
  */
 function email_enable() {
+  drupal_load('module', 'content');
   content_notify('enable', 'email');
 }
 
@@ -33,6 +33,7 @@ function email_enable() {
  * Notify content module when this module is disabled.
  */
 function email_disable() {
+  drupal_load('module', 'content');
   content_notify('disable', 'email');
 }
 
@@ -45,6 +46,11 @@ function email_disable() {
  * database to NULL.
  */
 function email_update_6001() {
+  if ($abort = content_check_update('email')) {
+    return $abort;
+  }
+  
+  drupal_load('module', 'content');
   $ret = array();
   $ret[] = update_sql("UPDATE {". content_instance_tablename() ."} SET widget_type = 'email_textfield' WHERE widget_type = 'email'");
   content_associate_fields('email');
