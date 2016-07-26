@@ -1,5 +1,4 @@
 <?php
-// $Id: theme.inc,v 1.415.2.24 2009/06/18 12:04:04 goba Exp $
 
 /**
  * @file
@@ -12,14 +11,27 @@
  */
 
 /**
- * @name Content markers
+ * @defgroup content_flags Content markers
  * @{
  * Markers used by theme_mark() and node_mark() to designate content.
  * @see theme_mark(), node_mark()
  */
-define('MARK_READ',    0);
-define('MARK_NEW',     1);
+
+/**
+ * Mark content as read.
+ */
+define('MARK_READ', 0);
+
+/**
+ * Mark content as being new.
+ */
+define('MARK_NEW', 1);
+
+/**
+ * Mark content as being updated.
+ */
 define('MARK_UPDATED', 2);
+
 /**
  * @} End of "Content markers".
  */
@@ -273,18 +285,40 @@ function _theme_process_registry(&$cache, $name, $type, $theme, $path) {
       if (!isset($info['template']) && !isset($info['function'])) {
         $result[$hook]['function'] = ($type == 'module' ? 'theme_' : $name .'_') . $hook;
       }
+
+      // Make sure include files is set so we don't generate notices later.
+      if (!isset($info['include files'])) {
+        $result[$hook]['include files'] = array();
+      }
+
       // If a path is set in the info, use what was set. Otherwise use the
       // default path. This is mostly so system.module can declare theme
       // functions on behalf of core .include files.
       // All files are included to be safe. Conditionally included
       // files can prevent them from getting registered.
       if (isset($info['file']) && !isset($info['path'])) {
-        $result[$hook]['file'] = $path .'/'. $info['file'];
-        include_once($result[$hook]['file']);
+        // First, check to see if the fully qualified file exists.
+        $filename = './'. $path .'/'. $info['file'];
+        if (file_exists($filename)) {
+          require_once $filename;
+          $result[$hook]['include files'][] = $filename;
+        }
+        else {
+          $filename = './'. $info['file'];
+          if (file_exists($filename)) {
+            require_once $filename;
+            $result[$hook]['include files'][] = $filename;
+          }
+        }
       }
       elseif (isset($info['file']) && isset($info['path'])) {
-        include_once($info['path'] .'/'. $info['file']);
+        $filename = './'. $info['path'] .'/'. $info['file'];
+        if (file_exists($filename)) {
+          require_once $filename;
+          $result[$hook]['include files'][] = $filename;
+        }
       }
+
 
       if (isset($info['template']) && !isset($info['path'])) {
         $result[$hook]['template'] = $path .'/'. $info['template'];
@@ -489,7 +523,7 @@ function list_themes($refresh = FALSE) {
 }
 
 /**
- * Generate the themed output.
+ * Generates the themed output.
  *
  * All requests for theme hooks must go through this function. It examines
  * the request and routes it to the appropriate theme function. The theme
@@ -505,14 +539,14 @@ function list_themes($refresh = FALSE) {
  * functions may be used to modify the $variables array. They are processed in
  * this order when available:
  *
- * - template_preprocess(&$variables)
+ * - template_preprocess(&$variables, $hook)
  *   This sets a default set of variables for all template implementations.
  *
  * - template_preprocess_HOOK(&$variables)
  *   This is the first preprocessor called specific to the hook; it should be
  *   implemented by the module that registers it.
  *
- * - MODULE_preprocess(&$variables)
+ * - MODULE_preprocess(&$variables, $hook)
  *   This will be called for all templates; it should only be used if there
  *   is a real need. It's purpose is similar to template_preprocess().
  *
@@ -523,7 +557,7 @@ function list_themes($refresh = FALSE) {
  *   preprocess function of foo_preprocess_node() can be created to intercept
  *   and alter the variable.
  *
- * - ENGINE_engine_preprocess(&$variables)
+ * - ENGINE_engine_preprocess(&$variables, $hook)
  *   This function should only be implemented by theme engines and exists
  *   so that it can set necessary variables for all hooks.
  *
@@ -531,7 +565,7 @@ function list_themes($refresh = FALSE) {
  *   This is the same as the previous function, but it is called for a single
  *   theming hook.
  *
- * - ENGINE_preprocess(&$variables)
+ * - ENGINE_preprocess(&$variables, $hook)
  *   This is meant to be used by themes that utilize a theme engine. It is
  *   provided so that the preprocessor is not locked into a specific theme.
  *   This makes it easy to share and transport code but theme authors must be
@@ -547,7 +581,7 @@ function list_themes($refresh = FALSE) {
  *   The same applies from the previous function, but it is called for a
  *   specific hook.
  *
- * - THEME_preprocess(&$variables)
+ * - THEME_preprocess(&$variables, $hook)
  *   These functions are based upon the raw theme; they should primarily be
  *   used by themes that do not use an engine or by sub-themes. It serves the
  *   same purpose as ENGINE_preprocess().
@@ -572,6 +606,7 @@ function list_themes($refresh = FALSE) {
  *   implementations for named objects.
  * @param ...
  *   Additional arguments to pass along to the theme function.
+ * 
  * @return
  *   An HTML string that generates the themed output.
  */
@@ -605,13 +640,30 @@ function theme() {
   $theme_path = $hooks[$hook]['theme path'];
 
   // Include a file if the theme function or preprocess function is held elsewhere.
+  if (!empty($info['include files'])) {
+    foreach ($info['include files'] as $include_file) {
+      include_once($include_file);
+    }
+  }
+
+  // Handle compatibility with theme_registry_alters to prevent failures.
   if (!empty($info['file'])) {
+    static $included_files = array();
     $include_file = $info['file'];
-    if (isset($info['path'])) {
+    if (!empty($info['path'])) {
       $include_file = $info['path'] .'/'. $include_file;
     }
-    include_once($include_file);
+
+    if (empty($included_files[$include_file])) {
+      // Statically cache files we've already tried to include so we don't
+      // run unnecessary file_exists calls.
+      $included_files[$include_file] = TRUE;
+      if (file_exists('./'. $include_file)) {
+        include_once('./'. $include_file);
+      }
+    }
   }
+
   if (isset($info['function'])) {
     // The theme call is a function.
     $output = call_user_func_array($info['function'], $args);
@@ -768,13 +820,16 @@ function drupal_find_theme_functions($cache, $prefixes) {
               'function' => $match,
               'arguments' => $info['arguments'],
               'original hook' => $hook,
+              'include files' => $info['include files'],
             );
           }
         }
       }
+
       if (function_exists($prefix .'_'. $hook)) {
         $templates[$hook] = array(
           'function' => $prefix .'_'. $hook,
+          'include files' => $info['include files'],
         );
         // Ensure that the pattern is maintained from base themes to its sub-themes.
         // Each sub-theme will have their functions scanned so the pattern must be
@@ -782,6 +837,8 @@ function drupal_find_theme_functions($cache, $prefixes) {
         if (isset($info['pattern'])) {
           $templates[$hook]['pattern'] = $info['pattern'];
         }
+        // Also ensure that the 'file' property is maintained, because it probably
+        // contains the preprocess.
       }
     }
   }
@@ -845,6 +902,7 @@ function drupal_find_theme_templates($cache, $extension, $path) {
       $templates[$hook] = array(
         'template' => $template,
         'path' => dirname($file->filename),
+        'include files' => $cache[$hook]['include files'],
       );
     }
     // Ensure that the pattern is maintained from base themes to its sub-themes.
@@ -873,6 +931,7 @@ function drupal_find_theme_templates($cache, $extension, $path) {
             'path' => dirname($files[$match]->filename),
             'arguments' => $info['arguments'],
             'original hook' => $hook,
+            'include files' => $info['include files'],
           );
         }
       }
@@ -1132,12 +1191,24 @@ function theme_status_messages($display = NULL) {
 }
 
 /**
- * Return a themed set of links.
+ * Returns HTML for a set of links.
  *
  * @param $links
- *   A keyed array of links to be themed.
+ *   An associative array of links to be themed. The key for each link
+ *   is used as its CSS class. Each link should be itself an array, with the
+ *   following elements:
+ *   - title: The link text.
+ *   - href: The link URL. If omitted, the 'title' is shown as a plain text
+ *     item in the links list.
+ *   - html: (optional) Whether or not 'title' is HTML. If set, the title
+ *     will not be passed through check_plain().
+ *   - attributes: (optional) Attributes for the anchor, or for the <span> tag
+ *     used in its place if no 'href' is supplied.
+ *   If the 'href' element is supplied, the entire link array is passed to l()
+ *   as its $options parameter.
  * @param $attributes
- *   A keyed array of attributes
+ *   An associative array of attributes for the UL containing the list of links.
+ *
  * @return
  *   A string containing an unordered list of links.
  */
@@ -1198,6 +1269,7 @@ function theme_links($links, $attributes = array('class' => 'links')) {
  *
  * @param $path
  *   Either the path of the image file (relative to base_path()) or a full URL.
+ *   If this is a full URL, $getsize must be set to FALSE or nothing will be returned.
  * @param $alt
  *   The alternative text for text-based browsers.
  * @param $title
@@ -1206,6 +1278,8 @@ function theme_links($links, $attributes = array('class' => 'links')) {
  *   Associative array of attributes to be placed in the img tag.
  * @param $getsize
  *   If set to TRUE, the image's dimension are fetched and added as width/height attributes.
+ *   Defaults to TRUE. Must be set to FALSE if $path is a full URL.
+ * 
  * @return
  *   A string containing the image tag.
  */
@@ -1274,7 +1348,7 @@ function theme_submenu($links) {
  *   - Any HTML attributes, such as "colspan", to apply to the table cell.
  *
  *   Here's an example for $rows:
- *   @verbatim
+ *   @code
  *   $rows = array(
  *     // Simple row
  *     array(
@@ -1285,7 +1359,7 @@ function theme_submenu($links) {
  *       'data' => array('Cell 1', array('data' => 'Cell 2', 'colspan' => 2)), 'class' => 'funky'
  *     )
  *   );
- *   @endverbatim
+ *   @endcode
  *
  * @param $attributes
  *   An array of HTML attributes to apply to the table tag.
@@ -1313,7 +1387,7 @@ function theme_table($header, $rows, $attributes = array(), $caption = NULL) {
   // Format the table header:
   if (count($header)) {
     $ts = tablesort_init($header);
-    // HTML requires that the thead tag has tr tags in it follwed by tbody
+    // HTML requires that the thead tag has tr tags in it followed by tbody
     // tags. Using ternary operator to check and see if we have any rows.
     $output .= (count($rows) ? ' <thead><tr>' : ' <tr>');
     foreach ($header as $cell) {
@@ -1518,7 +1592,7 @@ function theme_more_help_link($url) {
  *
  * @see theme_feed_icon()
  * @param $url
- *   The url of the feed.
+ *   The URL of the feed.
  */
 function theme_xml_icon($url) {
   if ($image = theme('image', 'misc/xml.png', t('XML feed'), t('XML feed'))) {
@@ -1530,7 +1604,7 @@ function theme_xml_icon($url) {
  * Return code that emits an feed icon.
  *
  * @param $url
- *   The url of the feed.
+ *   The URL of the feed.
  * @param $title
  *   A descriptive title of the feed.
   */
@@ -1544,7 +1618,7 @@ function theme_feed_icon($url, $title) {
  * Returns code that emits the 'more' link used on blocks.
  *
  * @param $url
- *   The url of the main page
+ *   The URL of the main page
  * @param $title
  *   A descriptive verb for the link, like 'Read more'
  */

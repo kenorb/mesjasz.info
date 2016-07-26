@@ -1,5 +1,4 @@
 <?php
-// $Id: node.pages.inc,v 1.28.2.4 2009/04/27 11:35:01 goba Exp $
 
 /**
  * @file
@@ -15,6 +14,9 @@ function node_page_edit($node) {
   return drupal_get_form($node->type .'_node_form', $node);
 }
 
+/**
+ * Page callback: Displays add content links for available content types.
+ */
 function node_add_page() {
   $item = menu_get_item();
   $content = system_admin_menu_block($item);

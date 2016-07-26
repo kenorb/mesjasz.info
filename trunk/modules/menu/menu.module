@@ -1,5 +1,4 @@
 <?php
-// $Id: menu.module,v 1.157.2.6 2009/04/27 12:50:13 goba Exp $
 
 /**
  * @file
@@ -46,7 +45,7 @@ function menu_perm() {
 function menu_menu() {
   $items['admin/build/menu'] = array(
     'title' => 'Menus',
-    'description' => "Control your site's navigation menu, primary links and secondary links. as well as rename and reorganize menu items.",
+    'description' => "Control your site's navigation menu, primary links and secondary links, as well as rename and reorganize menu items.",
     'page callback' => 'menu_overview_page',
     'access callback' => 'user_access',
     'access arguments' => array('administer menu'),
@@ -274,7 +273,6 @@ function menu_block($op = 'list', $delta = 0) {
   if ($op == 'list') {
     $blocks = array();
     foreach ($menus as $name => $title) {
-      // Default "Navigation" block is handled by user.module.
       $blocks[$name]['info'] = check_plain($title);
       // Menu blocks can't be cached because each menu item can have
       // a custom access callback. menu.inc manages its own caching.

@@ -1,5 +1,4 @@
 <?php
-// $Id: profile-wrapper.tpl.php,v 1.2 2007/08/07 08:39:35 goba Exp $
 
 /**
  * @file profile-wrapper.tpl.php
@@ -7,7 +6,7 @@
  * profiles.
  *
  * This template is used when viewing a list of users. It can be a general
- * list for viewing all users with the url of "example.com/profile" or when
+ * list for viewing all users with the URL of "example.com/profile" or when
  * viewing a set of users who share a specific value for a profile such
  * as "example.com/profile/country/belgium".
  *

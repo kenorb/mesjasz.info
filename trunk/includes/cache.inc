@@ -1,5 +1,4 @@
 <?php
-// $Id: cache.inc,v 1.17.2.3 2009/08/10 10:43:55 goba Exp $
 
 /**
  * Return data from the persistent cache. Data may be stored as either plain text or as serialized data.
@@ -10,6 +9,8 @@
  * @param $table
  *   The table $table to store the data in. Valid core values are 'cache_filter',
  *   'cache_menu', 'cache_page', or 'cache' for the default cache.
+ *
+ *   @see cache_set()
  */
 function cache_get($cid, $table = 'cache') {
   global $user;
@@ -39,7 +40,7 @@ function cache_get($cid, $table = 'cache') {
     // cache timer. The cache variable is loaded into the $user object by
     // sess_read() in session.inc.
     else {
-      if ($user->cache > $cache->created) {
+      if (isset($user->cache) && $user->cache > $cache->created) {
         // This cache data is too old and thus not valid for us, ignore it.
         return 0;
       }
@@ -98,6 +99,8 @@ function cache_get($cid, $table = 'cache') {
  *     the given time, after which it behaves like CACHE_TEMPORARY.
  * @param $headers
  *   A string containing HTTP header information for cached pages.
+ *
+ *   @see cache_get()
  */
 function cache_set($cid, $data, $table = 'cache', $expire = CACHE_PERMANENT, $headers = NULL) {
   $serialized = 0;
@@ -169,7 +172,7 @@ function cache_clear_all($cid = NULL, $table = NULL, $wildcard = FALSE) {
   else {
     if ($wildcard) {
       if ($cid == '*') {
-        db_query("DELETE FROM {". $table ."}");
+        db_query("TRUNCATE TABLE {". $table ."}");
       }
       else {
         db_query("DELETE FROM {". $table ."} WHERE cid LIKE '%s%%'", $cid);

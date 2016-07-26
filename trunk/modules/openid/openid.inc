@@ -1,5 +1,4 @@
 <?php
-// $Id: openid.inc,v 1.8.2.1 2009/09/16 17:58:24 goba Exp $
 
 /**
  * @file
@@ -75,7 +74,7 @@ function openid_redirect_form(&$form_state, $url, $message) {
  */
 function _openid_is_xri($identifier) {
   // Strip the xri:// scheme from the identifier if present.
-  if (stripos($identifier, 'xri://') !== FALSE) {
+  if (strpos(strtolower($identifier), 'xri://') !== FALSE) {
     $identifier = substr($identifier, 6);
   }
 
@@ -114,6 +113,9 @@ function _openid_normalize_url($url) {
   if (stristr($url, '://') === FALSE) {
     $normalized_url = 'http://'. $url;
   }
+
+  // Strip the fragment and fragment delimiter if present.
+  $normalized_url = strtok($normalized_url, '#');
 
   if (substr_count($normalized_url, '/') < 3) {
     $normalized_url .= '/';
@@ -359,7 +361,7 @@ function _openid_dh_rand($stop) {
   }
 
   do {
-    $bytes = "\x00". _openid_get_bytes($nbytes);
+    $bytes = "\x00". drupal_random_bytes($nbytes);
     $n = _openid_dh_binary_to_long($bytes);
     // Keep looping if this value is in the low duplicated range.
   } while (bccomp($n, $duplicate) < 0);
@@ -368,23 +370,7 @@ function _openid_dh_rand($stop) {
 }
 
 function _openid_get_bytes($num_bytes) {
-  static $f = null;
-  $bytes = '';
-  if (!isset($f)) {
-    $f = @fopen(OPENID_RAND_SOURCE, "r");
-  }
-  if (!$f) {
-    // pseudorandom used
-    $bytes = '';
-    for ($i = 0; $i < $num_bytes; $i += 4) {
-      $bytes .= pack('L', mt_rand());
-    }
-    $bytes = substr($bytes, 0, $num_bytes);
-  }
-  else {
-    $bytes = fread($f, $num_bytes);
-  }
-  return $bytes;
+  return drupal_random_bytes($num_bytes);
 }
 
 function _openid_response($str = NULL) {

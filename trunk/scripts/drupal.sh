@@ -1,6 +1,5 @@
 #!/usr/bin/php
 <?php
-// $Id: drupal.sh,v 1.4 2007/07/02 14:41:37 dries Exp $
 
 /**
  * Drupal shell execution script
@@ -113,7 +112,7 @@ while ($param = array_shift($_SERVER['argv'])) {
           $_REQUEST = $_GET;
         }
 
-        // set file to execute or Drupal path (clean urls enabled)
+        // set file to execute or Drupal path (clean URLs enabled)
         if (isset($path['path']) && file_exists(substr($path['path'], 1))) {
           $_SERVER['PHP_SELF'] = $_SERVER['REQUEST_URI'] = $path['path'];
           $cmd = substr($path['path'], 1);

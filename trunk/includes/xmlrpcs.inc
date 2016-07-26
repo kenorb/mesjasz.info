@@ -1,5 +1,4 @@
 <?php
-// $Id: xmlrpcs.inc,v 1.24.2.1 2008/04/28 10:04:52 dries Exp $
 
 /**
  * The main entry point for XML-RPC requests.
@@ -64,10 +63,13 @@ function xmlrpc_server($callbacks) {
   if ($xmlrpc_server->message->messagetype != 'methodCall') {
     xmlrpc_server_error(-32600, t('Server error. Invalid XML-RPC. Request must be a methodCall.'));
   }
+  if (!isset($xmlrpc_server->message->params)) {
+    $xmlrpc_server->message->params = array();
+  }
   xmlrpc_server_set($xmlrpc_server);
   $result = xmlrpc_server_call($xmlrpc_server, $xmlrpc_server->message->methodname, $xmlrpc_server->message->params);
 
-  if ($result->is_error) {
+  if (is_object($result) && !empty($result->is_error)) {
     xmlrpc_server_error($result);
   }
   // Encode the result
@@ -211,6 +213,10 @@ function xmlrpc_server_call($xmlrpc_server, $methodname, $args) {
 
 function xmlrpc_server_multicall($methodcalls) {
   // See http://www.xmlrpc.com/discuss/msgReader$1208
+  // To avoid multicall expansion attacks, limit the number of duplicate method
+  // calls allowed with a default of 1. Set to -1 for unlimited.
+  $duplicate_method_limit = variable_get('xmlrpc_multicall_duplicate_method_limit', 1);
+  $method_count = array();
   $return = array();
   $xmlrpc_server = xmlrpc_server_get();
   foreach ($methodcalls as $call) {
@@ -220,14 +226,18 @@ function xmlrpc_server_multicall($methodcalls) {
       $ok = FALSE;
     }
     $method = $call['methodName'];
+    $method_count[$method] = isset($method_count[$method]) ? $method_count[$method] + 1 : 1;
     $params = $call['params'];
     if ($method == 'system.multicall') {
       $result = xmlrpc_error(-32600, t('Recursive calls to system.multicall are forbidden.'));
     }
+    elseif ($duplicate_method_limit > 0 && $method_count[$method] > $duplicate_method_limit) {
+      $result = xmlrpc_error(-156579, t('Too many duplicate method calls in system.multicall.'));
+    }
     elseif ($ok) {
       $result = xmlrpc_server_call($xmlrpc_server, $method, $params);
     }
-    if ($result->is_error) {
+    if (is_object($result) && !empty($result->is_error)) {
       $return[] = array(
         'faultCode' => $result->code,
         'faultString' => $result->message

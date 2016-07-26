@@ -1,4 +1,3 @@
-// $Id: tableselect.js,v 1.8 2007/11/19 12:15:16 goba Exp $
 
 Drupal.behaviors.tableSelect = function (context) {
   $('form table:has(th.select-all):not(.tableSelect-processed)', context).each(Drupal.tableSelect);
@@ -57,7 +56,7 @@ Drupal.tableSelect = function() {
 };
 
 Drupal.tableSelectRange = function(from, to, state) {
-  // We determine the looping mode based on the the order of from and to.
+  // We determine the looping mode based on the order of from and to.
   var mode = from.rowIndex > to.rowIndex ? 'previousSibling' : 'nextSibling';
 
   // Traverse through the sibling nodes.

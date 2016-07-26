@@ -1,5 +1,4 @@
 <?php
-// $Id: xmlrpc.inc,v 1.47.2.5 2009/01/14 21:36:16 goba Exp $
 
 /**
  * @file
@@ -157,11 +156,6 @@ function xmlrpc_message($message) {
  *   TRUE if parsing succeeded; FALSE otherwise
  */
 function xmlrpc_message_parse(&$xmlrpc_message) {
-  // First remove the XML declaration
-  $xmlrpc_message->message = preg_replace('/<\?xml(.*)?\?'.'>/', '', $xmlrpc_message->message);
-  if (trim($xmlrpc_message->message) == '') {
-    return FALSE;
-  }
   $xmlrpc_message->_parser = xml_parser_create();
   // Set XML parser to take the case of tags into account.
   xml_parser_set_option($xmlrpc_message->_parser, XML_OPTION_CASE_FOLDING, FALSE);
@@ -169,13 +163,47 @@ function xmlrpc_message_parse(&$xmlrpc_message) {
   xml_set_element_handler($xmlrpc_message->_parser, 'xmlrpc_message_tag_open', 'xmlrpc_message_tag_close');
   xml_set_character_data_handler($xmlrpc_message->_parser, 'xmlrpc_message_cdata');
   xmlrpc_message_set($xmlrpc_message);
-  if (!xml_parse($xmlrpc_message->_parser, $xmlrpc_message->message)) {
+
+  // Strip XML declaration.
+  $header = preg_replace('/<\?xml.*?\?'.'>/s', '', substr($xmlrpc_message->message, 0, 100), 1);
+  $xml = trim(substr_replace($xmlrpc_message->message, $header, 0, 100));
+  if ($xml == '') {
+    return FALSE;
+  }
+  // Strip DTD.
+  $header = preg_replace('/^<!DOCTYPE[^>]*+>/i', '', substr($xml, 0, 200), 1);
+  $xml = trim(substr_replace($xml, $header, 0, 200));
+  if ($xml == '') {
+    return FALSE;
+  }
+  // Confirm the XML now starts with a valid root tag. A root tag can end in [> \t\r\n]
+  $root_tag = substr($xml, 0, strcspn(substr($xml, 0, 20), "> \t\r\n"));
+  // Reject a second DTD.
+  if (strtoupper($root_tag) == '<!DOCTYPE') {
+    return FALSE;
+  }
+  if (!in_array($root_tag, array('<methodCall', '<methodResponse', '<fault'))) {
+    return FALSE;
+  }
+  // Skip parsing if there is an unreasonably large number of tags.
+  // substr_count() has much better performance (compared to preg_match_all())
+  // for large payloads but is less accurate, so we check for twice the desired
+  // number of allowed tags (to take into account opening/closing tags as well
+  // as false positives).
+  if (substr_count($xml, '<') > 2 * variable_get('xmlrpc_message_maximum_tag_count', 30000)) {
+    return FALSE;
+  }
+
+  if (!xml_parse($xmlrpc_message->_parser, $xml)) {
     return FALSE;
   }
   xml_parser_free($xmlrpc_message->_parser);
   // Grab the error messages, if any
   $xmlrpc_message = xmlrpc_message_get();
-  if ($xmlrpc_message->messagetype == 'fault') {
+  if (!isset($xmlrpc_message->messagetype)) {
+    return FALSE;
+  }
+  elseif ($xmlrpc_message->messagetype == 'fault') {
     $xmlrpc_message->fault_code = $xmlrpc_message->params[0]['faultCode'];
     $xmlrpc_message->fault_string = $xmlrpc_message->params[0]['faultString'];
   }

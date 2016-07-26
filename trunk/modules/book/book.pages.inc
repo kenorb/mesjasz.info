@@ -1,5 +1,4 @@
 <?php
-// $Id: book.pages.inc,v 1.5.2.1 2008/08/13 23:59:13 drumm Exp $
 
 /**
  * @file
@@ -40,6 +39,14 @@ function book_render() {
  *   in a format determined by the $type parameter.
  */
 function book_export($type, $nid) {
+  // Check that the node exists and that the current user has access to it.
+  $node = node_load($nid);
+  if (!$node) {
+    return MENU_NOT_FOUND;
+  }
+  if (!node_access('view', $node)) {
+    return MENU_ACCESS_DENIED;
+  }
 
   $type = drupal_strtolower($type);
 
@@ -78,8 +85,11 @@ function book_export_html($nid) {
     if (isset($node->book)) {
       $tree = book_menu_subtree_data($node->book);
       $contents = book_export_traverse($tree, 'book_node_export');
+      return theme('book_export_html', $node->title, $contents, $node->book['depth']);
     }
-    return theme('book_export_html', $node->title, $contents, $node->book['depth']);
+    else {
+      drupal_not_found();
+    }
   }
   else {
     drupal_access_denied();
@@ -216,19 +226,15 @@ function book_remove_form_submit($form, &$form_state) {
 }
 
 /**
- * AJAX callback to replace the book parent select options.
+ * Renders a new parent page select element when the book selection changes.
  *
- * This function is called when the selected book is changed.  It updates the
- * cached form (either the node form or the book outline form) and returns
- * rendered output to be used to replace the select containing the possible
- * parent pages in the newly selected book.
+ * This function is called via AJAX when the selected book is changed on a node
+ * or book outline form. It creates a new parent page select element, adds it
+ * to the cached form, and then returns the rendered element so it can be
+ * displayed on the form.
  *
- * @param $build_id
- *   The form's build_id.
- * @param $bid
- *   A bid from from among those in the form's book select.
  * @return
- *   Prints the replacement HTML in JSON format.
+ *   The rendered parent page select element.
  */
 function book_form_update() {
   $bid = $_POST['book']['bid'];

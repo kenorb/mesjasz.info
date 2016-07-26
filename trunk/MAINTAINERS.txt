@@ -1,4 +1,3 @@
-// $Id: MAINTAINERS.txt,v 1.19.2.1 2008/05/15 22:13:42 dries Exp $
 
 List of maintainers
 --------------------------------------------------------------------------------
@@ -58,7 +57,7 @@ M: Sammy Spets <sammys-drupal@synerger.com>
 S: maintained
 
 SECURITY COORDINATOR
-M: Heine Deelstra <hdeelstra@gmail.com>
+M: Greg Knaddison <http://drupal.org/user/36762>
 S: maintained
 
 STATISTICS MODULE
@@ -72,7 +71,6 @@ S: maintained
 
 UPDATE MODULE
 M: Derek Wright <http://drupal.org/user/46549/contact>
-   Earl Miles <http://drupal.org/user/26979/contact>
 S: maintained
 
 XML-RPC SERVER/CLIENT

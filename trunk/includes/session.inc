@@ -1,5 +1,4 @@
 <?php
-// $Id: session.inc,v 1.44.2.6 2008/12/11 00:29:34 goba Exp $
 
 /**
  * @file
@@ -14,6 +13,25 @@ function sess_close() {
   return TRUE;
 }
 
+/**
+ * Reads an entire session from the database (internal use only).
+ *
+ * Also initializes the $user object for the user associated with the session.
+ * This function is registered with session_set_save_handler() to support
+ * database-backed sessions. It is called on every page load when PHP sets
+ * up the $_SESSION superglobal.
+ *
+ * This function is an internal function and must not be called directly.
+ * Doing so may result in logging out the current user, corrupting session data
+ * or other unexpected behavior. Session data must always be accessed via the
+ * $_SESSION superglobal.
+ *
+ * @param $key
+ *   The session ID of the session to retrieve.
+ *
+ * @return
+ *   The user's session, or an empty string if no session exists.
+ */
 function sess_read($key) {
   global $user;
 
@@ -23,7 +41,7 @@ function sess_read($key) {
   register_shutdown_function('session_write_close');
 
   // Handle the case of first time visitors and clients that don't store cookies (eg. web crawlers).
-  if (!isset($_COOKIE[session_name()])) {
+  if (empty($key) || !isset($_COOKIE[session_name()])) {
     $user = drupal_anonymous_user();
     return '';
   }
@@ -31,8 +49,9 @@ function sess_read($key) {
   // Otherwise, if the session is still active, we have a record of the client's session in the database.
   $user = db_fetch_object(db_query("SELECT u.*, s.* FROM {users} u INNER JOIN {sessions} s ON u.uid = s.uid WHERE s.sid = '%s'", $key));
 
-  // We found the client's session record and they are an authenticated user
-  if ($user && $user->uid > 0) {
+  // We found the client's session record and they are an authenticated,
+  // active user.
+  if ($user && $user->uid > 0 && $user->status == 1) {
     // This is done to unserialize the data member of $user
     $user = drupal_unpack($user);
 
@@ -44,7 +63,8 @@ function sess_read($key) {
       $user->roles[$role->rid] = $role->name;
     }
   }
-  // We didn't find the client's record (session has expired), or they are an anonymous user.
+  // We didn't find the client's record (session has expired), or they are
+  // blocked, or they are an anonymous user.
   else {
     $session = isset($user->session) ? $user->session : '';
     $user = drupal_anonymous_user($session);
@@ -53,6 +73,24 @@ function sess_read($key) {
   return $user->session;
 }
 
+/**
+ * Writes an entire session to the database (internal use only).
+ *
+ * This function is registered with session_set_save_handler() to support
+ * database-backed sessions.
+ *
+ * This function is an internal function and must not be called directly.
+ * Doing so may result in corrupted session data or other unexpected behavior.
+ * Session data must always be accessed via the $_SESSION superglobal.
+ *
+ * @param $key
+ *   The session ID of the session to write to.
+ * @param $value
+ *   Session data to write as a serialized string.
+ *
+ * @return
+ *   Always returns TRUE.
+ */
 function sess_write($key, $value) {
   global $user;
 

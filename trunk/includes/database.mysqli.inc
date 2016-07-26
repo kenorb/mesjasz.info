@@ -1,5 +1,4 @@
 <?php
-// $Id: database.mysqli.inc,v 1.54.2.1 2009/07/21 08:52:30 goba Exp $
 
 /**
  * @file
@@ -62,9 +61,9 @@ function db_connect($url) {
 
   $url = parse_url($url);
 
-  // Decode url-encoded information in the db connection string
+  // Decode urlencoded information in the db connection string
   $url['user'] = urldecode($url['user']);
-  // Test if database url has a password.
+  // Test if database URL has a password.
   $url['pass'] = isset($url['pass']) ? urldecode($url['pass']) : '';
   $url['host'] = urldecode($url['host']);
   $url['path'] = urldecode($url['path']);
@@ -79,8 +78,15 @@ function db_connect($url) {
     _db_error_page(mysqli_connect_error());
   }
 
-  // Force UTF-8.
-  mysqli_query($connection, 'SET NAMES "utf8"');
+  // Force MySQL to use the UTF-8 character set. Also set the collation, if a
+  // certain one has been set; otherwise, MySQL defaults to 'utf8_general_ci'
+  // for UTF-8.
+  if (!empty($GLOBALS['db_collation'])) {
+    mysqli_query($connection, 'SET NAMES utf8 COLLATE ' . $GLOBALS['db_collation']);
+  }
+  else {
+    mysqli_query($connection, 'SET NAMES utf8');
+  }
 
   return $connection;
 }
@@ -247,9 +253,9 @@ function db_query_range($query) {
 /**
  * Runs a SELECT query and stores its results in a temporary table.
  *
- * Use this as a substitute for db_query() when the results need to stored
- * in a temporary table. Temporary tables exist for the duration of the page
- * request.
+ * Use this as a substitute for db_query() when the results need to be stored
+ * in a temporary table.
+ * 
  * User-supplied arguments to the query should be passed in as separate parameters
  * so that they can be properly escaped to avoid SQL injection attacks.
  *
@@ -268,10 +274,10 @@ function db_query_range($query) {
  *
  *   NOTE: using this syntax will cast NULL and FALSE values to decimal 0,
  *   and TRUE values to decimal 1.
- *
  * @param $table
  *   The name of the temporary table to select into. This name will not be
  *   prefixed as there is no risk of collision.
+ *
  * @return
  *   A database query result resource, or FALSE if the query was not executed
  *   correctly.
@@ -339,6 +345,12 @@ function db_unlock_tables() {
 
 /**
  * Check if a table exists.
+ *
+ * @param $table
+ *   The name of the table.
+ *
+ * @return
+ *   TRUE if the table exists, and FALSE if the table does not exist.
  */
 function db_table_exists($table) {
   return (bool) db_fetch_object(db_query("SHOW TABLES LIKE '{". db_escape_table($table) ."}'"));
@@ -346,34 +358,17 @@ function db_table_exists($table) {
 
 /**
  * Check if a column exists in the given table.
+ *
+ * @param $table
+ *   The name of the table.
+ * @param $column
+ *   The name of the column.
+ *
+ * @return
+ *   TRUE if the column exists, and FALSE if the column does not exist.
  */
 function db_column_exists($table, $column) {
   return (bool) db_fetch_object(db_query("SHOW COLUMNS FROM {". db_escape_table($table) ."} LIKE '". db_escape_table($column) ."'"));
-}
-
-/**
- * Wraps the given table.field entry with a DISTINCT(). The wrapper is added to
- * the SELECT list entry of the given query and the resulting query is returned.
- * This function only applies the wrapper if a DISTINCT doesn't already exist in
- * the query.
- *
- * @param $table Table containing the field to set as DISTINCT
- * @param $field Field to set as DISTINCT
- * @param $query Query to apply the wrapper to
- * @return SQL query with the DISTINCT wrapper surrounding the given table.field.
- */
-function db_distinct_field($table, $field, $query) {
-  $field_to_select = 'DISTINCT('. $table .'.'. $field .')';
-  $matches = array();
-  if (preg_match('/^SELECT(.*?)FROM(.*)/is', $query, $matches)) {
-    $select = preg_replace(
-      '/((?:^|,)\s*)(?<!DISTINCT\()(?:'. $table .'\.)?'. $field .'(\s*(?:,|$))/is',
-      '\1'. $field_to_select .'\2', $matches[1], 1
-    );
-    
-    return 'SELECT'. $select .'FROM'.$matches[2];
-  }
-  return $query;
 }
 
 /**

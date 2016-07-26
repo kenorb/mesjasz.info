@@ -1,5 +1,4 @@
 <?php
-// $Id: dblog.admin.inc,v 1.6.2.1 2008/09/17 05:47:53 goba Exp $
 
 /**
  * @file
@@ -80,7 +79,7 @@ function dblog_overview() {
         format_date($dblog->timestamp, 'small'),
         l(truncate_utf8(_dblog_format_message($dblog), 56, TRUE, TRUE), 'admin/reports/event/'. $dblog->wid, array('html' => TRUE)),
         theme('username', $dblog),
-        $dblog->link,
+        filter_xss($dblog->link),
       ),
       // Attributes for tr
       'class' => "dblog-". preg_replace('/[^a-z]/i', '-', $dblog->type) .' '. $classes[$dblog->severity]
@@ -215,7 +214,7 @@ function dblog_filters() {
   $filters = array();
 
   foreach (_dblog_get_message_types() as $type) {
-    $types[$type] = $type;
+    $types[$type] = t($type);
   }
 
   if (!empty($types)) {
