@@ -1,7 +1,8 @@
 <?php
-// $Id: googleanalytics.module,v 1.16.2.44 2008/05/17 15:47:52 hass Exp $
+// $Id: googleanalytics.module,v 1.16.2.55 2009/03/29 11:01:42 hass Exp $
 
 /*
+ * @file
  * Drupal Module: GoogleAnalytics
  * Adds the required Javascript to the bottom of all your Drupal pages
  * to allow tracking by the Google Analytics statistics package.
@@ -64,14 +65,14 @@ function googleanalytics_init() {
 
     // Add link tracking.
     $link_settings = array();
-    if ($trackOutgoing = variable_get('googleanalytics_trackoutgoing', 1)) {
-      $link_settings['trackOutgoing'] = $trackOutgoing;
+    if ($track_outgoing = variable_get('googleanalytics_trackoutgoing', 1)) {
+      $link_settings['trackOutgoing'] = $track_outgoing;
     }
-    if ($trackMailto = variable_get('googleanalytics_trackmailto', 1)) {
-      $link_settings['trackMailto'] = $trackMailto;
+    if ($track_mailto = variable_get('googleanalytics_trackmailto', 1)) {
+      $link_settings['trackMailto'] = $track_mailto;
     }
-    if (($trackDownload = variable_get('googleanalytics_trackfiles', 1)) && ($trackfiles_extensions = variable_get('googleanalytics_trackfiles_extensions', GA_TRACKFILES_EXTENSIONS))) {
-      $link_settings['trackDownload'] = $trackDownload;
+    if (($track_download = variable_get('googleanalytics_trackfiles', 1)) && ($trackfiles_extensions = variable_get('googleanalytics_trackfiles_extensions', GA_TRACKFILES_EXTENSIONS))) {
+      $link_settings['trackDownload'] = $track_download;
       $link_settings['trackDownloadExtensions'] = $trackfiles_extensions;
     }
     if (!empty($link_settings)) {
@@ -79,6 +80,11 @@ function googleanalytics_init() {
       $link_settings['LegacyVersion'] = $legacy_version ? 1 : 0;
       drupal_add_js(array('googleanalytics' => $link_settings), 'setting', 'header');
       drupal_add_js(drupal_get_path('module', 'googleanalytics') .'/googleanalytics.js', 'module', $scope);
+    }
+
+    // Custom tracking.
+    if (variable_get('googleanalytics_trackadsense', FALSE)) {
+      drupal_add_js('window.google_analytics_uacct = ' . drupal_to_js($id) . ';', 'inline', 'header');
     }
   }
 }
@@ -126,9 +132,21 @@ function googleanalytics_footer($main = 0) {
 
     // Site search tracking support.
     $url_custom = '';
-    if (module_exists('search') && variable_get('googleanalytics_site_search', FALSE) && arg(0) == 'search') {
-      $keys = search_get_keys();
-      $url_custom = drupal_to_js(url('search/'. arg(1), array('query' => 'search='. trim($keys))));
+    if (module_exists('search') && variable_get('googleanalytics_site_search', FALSE) && arg(0) == 'search' && $keys = search_get_keys()) {
+      $url_custom = drupal_to_js(url('search/'. arg(1), array('query' => 'search='. $keys)));
+    }
+
+    // If this node is a translation of another node, pass the original
+    // node instead.
+    if (module_exists('translation') && variable_get('googleanalytics_translation_set', 0)) {
+      // Check we have a node object, it supports translation, and its
+      // translated node ID (tnid) doesn't match its own node ID.
+      $node = menu_get_object();
+      if ($node && translation_supported_type($node->type) && isset($node->tnid) && ($node->tnid != $node->nid)) {
+        $source_node = node_load($node->tnid);
+        $languages = language_list();
+        $url_custom = drupal_to_js(url('node/'. $source_node->nid, array('language' => $languages[$source_node->language])));
+      }
     }
 
     // Track access denied (403) and file not found (404) pages.
@@ -155,31 +173,38 @@ function googleanalytics_footer($main = 0) {
     }
 
     // Add any custom code snippets if specified.
-    $codesnippet = variable_get('googleanalytics_codesnippet', '');
+    $codesnippet_before = variable_get('googleanalytics_codesnippet_before', '');
+    $codesnippet_after = variable_get('googleanalytics_codesnippet_after', '');
 
     // Should the legacy code be used?
-    $script = '';
+    $script = 'try{';
     if ($legacy_version) {
       $script .= '_uacct = '. drupal_to_js($id) .';';
       if (!empty($segmentation)) {
         $script .= $segmentation;
       }
-      if (!empty($codesnippet)) {
-        $script .= $codesnippet;
+      if (!empty($codesnippet_before)) {
+        $script .= $codesnippet_before;
       }
       $script .= 'urchinTracker('. $url_custom .');';
+      if (!empty($codesnippet_after)) {
+        $script .= $codesnippet_after;
+      }
     }
     else {
       $script .= 'var pageTracker = _gat._getTracker('. drupal_to_js($id) .');';
-      $script .= 'pageTracker._initData();';
       if (!empty($segmentation)) {
         $script .= $segmentation;
       }
-      if (!empty($codesnippet)) {
-        $script .= $codesnippet;
+      if (!empty($codesnippet_before)) {
+        $script .= $codesnippet_before;
       }
       $script .= 'pageTracker._trackPageview('. $url_custom .');';
+      if (!empty($codesnippet_after)) {
+        $script .= $codesnippet_after;
+      }
     }
+    $script .= '} catch(err) {}';
 
     drupal_add_js($script, 'inline', 'footer');
   }
@@ -201,9 +226,23 @@ function googleanalytics_user($type, $edit, &$account, $category = NULL) {
           '#collapsible' => TRUE,
           '#tree' => TRUE
         );
+
+        switch ($custom) {
+          case 1:
+            $title = t('Disable user tracking');
+            $description = t('Users are tracked by default, but you are able to opt out.');
+            break;
+
+          case 2:
+            $title = t('Enable user tracking');
+            $description = t('Users are <em>not</em> tracked by default, but you are able to opt in.');
+            break;
+        }
+
         $form['googleanalytics']['custom'] = array(
           '#type' => 'checkbox',
-          '#title' => t('User tracking'),
+          '#title' => $title,
+          '#description' => $description,
           '#default_value' => isset($account->googleanalytics['custom']) ? $account->googleanalytics['custom'] : ($custom == 1)
         );
 
@@ -334,7 +373,7 @@ function _googleanalytics_visibility_roles($account) {
     }
   }
   else {
-    // No role is selected for tracking, therefor all roles should be tracked. 
+    // No role is selected for tracking, therefor all roles should be tracked.
     $enabled = TRUE;
   }
 

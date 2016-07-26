@@ -1,5 +1,5 @@
 <?php
-// $Id: googleanalytics.admin.inc,v 1.2.2.43 2008/05/31 08:14:08 hass Exp $
+// $Id: googleanalytics.admin.inc,v 1.2.2.56 2009/03/08 11:41:32 hass Exp $
 
 /**
  * @file
@@ -100,6 +100,7 @@ function googleanalytics_admin_settings_form(&$form_state) {
       '#title' => t('Pages'),
       '#default_value' => $pages,
       '#description' => $description,
+      '#wysiwyg' => FALSE,
     );
   }
 
@@ -111,11 +112,7 @@ function googleanalytics_admin_settings_form(&$form_state) {
   );
 
   // Compile a list of fields to show.
-  $fields = array(
-    'uid' => t('User identifier'),
-    'name' => t('User name'),
-    'roles' => t('User roles')
-  );
+  $fields = variable_get('googleanalytics_segmentation_default_fields', array('roles' => t('User roles')));
   if ($profile_enabled) {
     $result = db_query('SELECT name, title, type, weight FROM {profile_fields} ORDER BY weight');
     while ($record = db_fetch_object($result)) {
@@ -126,10 +123,10 @@ function googleanalytics_admin_settings_form(&$form_state) {
   $form['segmentation']['googleanalytics_segmentation'] = array(
     '#type' => 'select',
     '#title' => t('Add segmentation information to tracking code'),
-    '#description' => t('Segment users based on different properties, additionally to the basic IP address based tracking provided by Google Analytics.') . (!$profile_enabled ? ' '. t('<a href="@module_list">Enable the profile module</a> to be able to use profile fields for more granular tracking.', array('@module_list' => url('admin/build/modules'))) : '') .' '. t('Selecting one or more values is supported. To select multiple items, hold down CTRL while selecting fields.'),
+    '#description' => t('Segment users based on different properties, additionally to the basic IP address based tracking provided by Google Analytics.') . (!$profile_enabled ? ' '. t('<a href="@module_list">Enable the profile module</a> to be able to use profile fields for more granular tracking.', array('@module_list' => url('admin/build/modules'))) : '') .' '. t('Make sure you will not associate (or permit any third party to associate) any data gathered from Your Website(s) (or such third parties\' website(s)) with any personally identifying information from any source as part of Your use (or such third parties\' use) of the Google Analytics service. For more information see section 8.1 in the <a href="@ga_tos">Google Analytics terms of use</a>.', array('@ga_tos' => 'http://www.google.com/analytics/en-GB/tos.html')) .' '. t('Selecting one or more values is supported. To select multiple items, hold down CTRL (PC) or &#8984; (Mac) while selecting fields.'),
     '#default_value' => variable_get('googleanalytics_segmentation', ''),
     '#options' => $fields,
-    '#size' => $profile_enabled ? 10 : 3,
+    '#size' => (count($fields)>10) ? 10 : count($fields),
     '#multiple' => TRUE
   );
 
@@ -162,7 +159,8 @@ function googleanalytics_admin_settings_form(&$form_state) {
     '#type' => 'textfield',
     '#title' => t('File extensions to track'),
     '#default_value' => variable_get('googleanalytics_trackfiles_extensions', GA_TRACKFILES_EXTENSIONS),
-    '#description' => t('A pipe separated list of file extensions that should be tracked when clicked with regular expression support. Example: !extensions', array('!extensions' => GA_TRACKFILES_EXTENSIONS))
+    '#description' => t('A pipe separated list of file extensions that should be tracked when clicked with regular expression support. Example: !extensions', array('!extensions' => GA_TRACKFILES_EXTENSIONS)),
+    '#maxlength' => 256,
   );
 
   // Advanced feature configurations.
@@ -192,11 +190,21 @@ function googleanalytics_admin_settings_form(&$form_state) {
   );
   if (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PRIVATE) {
     $form['advanced']['googleanalytics_cache']['#disabled'] = TRUE;
-    $form['advanced']['googleanalytics_cache']['#description'] .= ' '. t('<a href="!url">Public file transfers</a> must be enabled to allow local caching.', array('!url' => url('admin/settings/file-system', array('query' => drupal_get_destination()))));
+    $form['advanced']['googleanalytics_cache']['#description'] .= ' '. t('<a href="@url">Public file transfers</a> must be enabled to allow local caching.', array('@url' => url('admin/settings/file-system', array('query' => drupal_get_destination()))));
+  }
+
+  // Allow for tracking of the originating node when viewing translation sets.
+  if (module_exists('translation')) {
+    $form['advanced']['googleanalytics_translation_set'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Track translation sets as one unit'),
+      '#description' => t('When a node is part of a translation set, record statistics for the originating node instead. This allows for a translation set to be treated as a single unit.'),
+      '#default_value' => variable_get('googleanalytics_translation_set', 0),
+    );
   }
 
   $site_search_dependencies = '<div class="admin-dependencies">';
-  $site_search_dependencies .= t('Depends on: !dependencies', array('!dependencies' => (module_exists('search') ? 'Search'. t(' (<span class="admin-enabled">enabled</span>)') : 'Search'. t(' (<span class="admin-disabled">disabled</span>)'))));
+  $site_search_dependencies .= t('Depends on: !dependencies', array('!dependencies' => (module_exists('search') ? t('@module (<span class="admin-enabled">enabled</span>)', array('@module' => 'Search')) : t('@module (<span class="admin-disabled">disabled</span>)', array('@module' => 'Search')))));
   $site_search_dependencies .= '</div>';
 
   // Google already have many translations, if not - they display a note to change the language.
@@ -204,17 +212,40 @@ function googleanalytics_admin_settings_form(&$form_state) {
   $form['advanced']['googleanalytics_site_search'] = array(
     '#type' => 'checkbox',
     '#title' => t('Track internal search'),
-    '#description' => t('If checked, internal search keywords are tracked. You must configure your Google account to use the internal query parameter <strong>search</strong>. For more information see <a href="!url">How do I set up Site Search for my profile</a>.', array('!url' => 'http://www.google.com/support/analytics/bin/answer.py?hl='. $language->language .'&amp;answer=75817')) . $site_search_dependencies,
+    '#description' => t('If checked, internal search keywords are tracked. You must configure your Google account to use the internal query parameter <strong>search</strong>. For more information see <a href="@url">How do I set up Site Search for my profile</a>.', array('@url' => 'http://www.google.com/support/analytics/bin/answer.py?hl='. $language->language .'&answer=75817')) . $site_search_dependencies,
     '#default_value' => variable_get('googleanalytics_site_search', FALSE),
     '#disabled' => (module_exists('search') ? FALSE : TRUE),
   );
 
-  $form['advanced']['googleanalytics_codesnippet'] = array(
-    '#type' => 'textarea',
+  $form['advanced']['googleanalytics_trackadsense'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Track AdSense ads'),
+    '#description' => t('If checked, your AdSense ads will be tracked in your Google Analytics account.'),
+    '#default_value' => variable_get('googleanalytics_trackadsense', FALSE),
+  );
+
+  $form['advanced']['codesnippet'] = array(
+    '#type' => 'fieldset',
     '#title' => t('Custom JavaScript code'),
-    '#default_value' => variable_get('googleanalytics_codesnippet', ''),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#description' => t('You can add custom Google Analytics <a href="@snippets">code snippets</a> here. These will be added to every page that Google Analytics appears on. Before you add custom code to the below textarea\'s you should read <a href="@ga_concepts_overview">Google Analytics Tracking Code - Functional Overview</a> and the <a href="@ga_js_api">Google Analytics Tracking API</a> documentation. <strong>Do not include the &lt;script&gt; tags</strong>, and always end your code with a semicolon (;).', array('@snippets' => 'http://drupal.org/node/248699', '@ga_concepts_overview' => 'http://code.google.com/apis/analytics/docs/gaConceptsOverview.html', '@ga_js_api' => 'http://code.google.com/apis/analytics/docs/gaJSApi.html'))
+  );
+  $form['advanced']['codesnippet']['googleanalytics_codesnippet_before'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Code snippet (before)'),
+    '#default_value' => variable_get('googleanalytics_codesnippet_before', ''),
     '#rows' => 5,
-    '#description' => t('You can add custom Google Analytics <a href="!snippets">code snippets</a> here. These will be added to every page that Google Analytics appears on. <strong>Do not include the &lt;script&gt; tags</strong>, and always end your code with a semicolon (;).', array('!snippets' => 'http://drupal.org/node/248699'))
+    '#wysiwyg' => FALSE,
+    '#description' => t('Code in this textarea will be added <strong>before</strong> urchinTracker() or pageTracker._trackPageview().')
+  );
+  $form['advanced']['codesnippet']['googleanalytics_codesnippet_after'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Code snippet (after)'),
+    '#default_value' => variable_get('googleanalytics_codesnippet_after', ''),
+    '#rows' => 5,
+    '#wysiwyg' => FALSE,
+    '#description' => t("Code in this textarea will be added <strong>after</strong> urchinTracker() or pageTracker._trackPageview(). This is useful if you'd like to track a site in two accounts.")
   );
 
   $form['advanced']['googleanalytics_js_scope'] = array(
@@ -237,14 +268,21 @@ function googleanalytics_admin_settings_form_validate($form, &$form_state) {
   }
 
   // This is for the Newbie's who cannot read a text area description.
-  if (stristr($form_state['values']['googleanalytics_codesnippet'], 'http://www.google-analytics.com/urchin.js') || stristr($form_state['values']['googleanalytics_codesnippet'], 'google-analytics.com/ga.js')) {
-    form_set_error('googleanalytics_codesnippet', t('Do not add the tracker code provided by Google into this field! This module already builds the tracker code based on your Google Analytics account number and settings.'));
+  if (stristr($form_state['values']['googleanalytics_codesnippet_before'], 'http://www.google-analytics.com/urchin.js') || stristr($form_state['values']['googleanalytics_codesnippet_before'], 'google-analytics.com/ga.js')) {
+    form_set_error('googleanalytics_codesnippet_before', t('Do not add the tracker code provided by Google into the javascript code snippets! This module already builds the tracker code based on your Google Analytics account number and settings.'));
   }
-  if (preg_match('/(.*)<\/?script(.*)>(.*)/i', $form_state['values']['googleanalytics_codesnippet'])) {
-    form_set_error('googleanalytics_codesnippet', t('Do not include the &lt;script&gt; tags in this field.'));
+  if (stristr($form_state['values']['googleanalytics_codesnippet_after'], 'http://www.google-analytics.com/urchin.js') || stristr($form_state['values']['googleanalytics_codesnippet_after'], 'google-analytics.com/ga.js')) {
+    form_set_error('googleanalytics_codesnippet_after', t('Do not add the tracker code provided by Google into the javascript code snippets! This module already builds the tracker code based on your Google Analytics account number and settings.'));
+  }
+  if (preg_match('/(.*)<\/?script(.*)>(.*)/i', $form_state['values']['googleanalytics_codesnippet_before'])) {
+    form_set_error('googleanalytics_codesnippet_before', t('Do not include the &lt;script&gt; tags in the javascript code snippets.'));
+  }
+  if (preg_match('/(.*)<\/?script(.*)>(.*)/i', $form_state['values']['googleanalytics_codesnippet_after'])) {
+    form_set_error('googleanalytics_codesnippet_after', t('Do not include the &lt;script&gt; tags in the javascript code snippets.'));
   }
 
   // Trim some text area values.
   $form_state['values']['googleanalytics_pages'] = trim($form_state['values']['googleanalytics_pages']);
-  $form_state['values']['googleanalytics_codesnippet'] = trim($form_state['values']['googleanalytics_codesnippet']);
+  $form_state['values']['googleanalytics_codesnippet_before'] = trim($form_state['values']['googleanalytics_codesnippet_before']);
+  $form_state['values']['googleanalytics_codesnippet_after'] = trim($form_state['values']['googleanalytics_codesnippet_after']);
 }

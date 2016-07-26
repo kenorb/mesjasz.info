@@ -1,13 +1,19 @@
 <?php
-// $Id: googleanalytics.install,v 1.4.2.18 2008/05/31 08:33:32 hass Exp $
+// $Id: googleanalytics.install,v 1.4.2.28 2009/03/08 11:41:32 hass Exp $
+
+/**
+ * @file
+ * Installation file for Google Analytics module.
+ */
 
 function googleanalytics_install() {
   variable_set('googleanalytics_visibility', 0);
 
   // Remove tracking from all administrative pages, see http://drupal.org/node/34970.
   $pages = array(
-    'admin*',
-    'user*',
+    'admin',
+    'admin/*',
+    'user/*/*',
     'node/add*',
     'node/*/*',
   );
@@ -15,11 +21,10 @@ function googleanalytics_install() {
 }
 
 function googleanalytics_uninstall() {
-  $result = db_query("DELETE FROM {variable} WHERE name LIKE 'googleanalytics_track_%'");
-
   variable_del('googleanalytics_account');
   variable_del('googleanalytics_legacy_version');
-  variable_del('googleanalytics_codesnippet');
+  variable_del('googleanalytics_codesnippet_before');
+  variable_del('googleanalytics_codesnippet_after');
   variable_del('googleanalytics_segmentation');
   variable_del('googleanalytics_trackoutgoing');
   variable_del('googleanalytics_trackmailto');
@@ -28,11 +33,13 @@ function googleanalytics_uninstall() {
   variable_del('googleanalytics_cache');
   variable_del('googleanalytics_last_cache');
   variable_del('googleanalytics_site_search');
+  variable_del('googleanalytics_trackadsense');
   variable_del('googleanalytics_js_scope');
   variable_del('googleanalytics_custom');
   variable_del('googleanalytics_roles');
   variable_del('googleanalytics_visibility');
   variable_del('googleanalytics_pages');
+  variable_del('googleanalytics_translation_set');
 }
 
 /**
@@ -93,7 +100,7 @@ function googleanalytics_update_6001() {
 }
 
 /**
- * Upgrade role settings and per user tracking settings 
+ * Upgrade role settings and per user tracking settings
  * of "User 1" and remove outdated tracking variables.
  */
 function googleanalytics_update_6002() {
@@ -124,7 +131,7 @@ function googleanalytics_update_6002() {
   }
 
   // Delete outdated tracking settings.
-  $result = db_query("DELETE FROM {variable} WHERE name LIKE 'googleanalytics_track_%'");
+  $ret[] = update_sql("DELETE FROM {variable} WHERE name LIKE 'googleanalytics_track_%'");
 
   return $ret;
 }
@@ -134,7 +141,104 @@ function googleanalytics_update_6002() {
  */
 function googleanalytics_update_6003() {
   $ret = array();
-  cache_clear_all();
   menu_rebuild();
+  return $ret;
+}
+
+/**
+ * Change visibility setting for path "user/*".
+ */
+function googleanalytics_update_6004() {
+  $ret = array();
+
+  // Orginal pages setting.
+  $pages = array(
+    'admin*',
+    'user*',
+    'node/add*',
+    'node/*/*',
+  );
+
+  $diff = array_diff($pages, preg_split('/(\r\n?|\n)/', variable_get('googleanalytics_pages', implode("\n", $pages))));
+  if (empty($diff)) {
+    // No diff to original settings found. Update with new settings.
+    $pages = array(
+      'admin*',
+      'user/*/*',
+      'node/add*',
+      'node/*/*',
+    );
+    variable_set('googleanalytics_pages', implode("\n", $pages));
+    $ret[] = array('success' => TRUE, 'query' => 'Path visibility filter setting changed from "user*" to "user/*/*".');
+  }
+  else {
+    $ret[] = array('success' => TRUE, 'query' => 'Custom path visibility filter setting found. Update skipped!');
+  }
+
+  return $ret;
+}
+
+/**
+ * Change visibility setting for path "admin*".
+ */
+function googleanalytics_update_6005() {
+  $ret = array();
+
+  // Orginal pages setting.
+  $pages = array(
+    'admin*',
+    'user/*/*',
+    'node/add*',
+    'node/*/*',
+  );
+
+  $diff = array_diff($pages, preg_split('/(\r\n?|\n)/', variable_get('googleanalytics_pages', implode("\n", $pages))));
+  if (empty($diff)) {
+    // No diff to original settings found. Update with new settings.
+    $pages = array(
+      'admin',
+      'admin/*',
+      'user/*/*',
+      'node/add*',
+      'node/*/*',
+    );
+    variable_set('googleanalytics_pages', implode("\n", $pages));
+    $ret[] = array('success' => TRUE, 'query' => 'Path visibility filter setting changed from "admin*" to "admin" and "admin/*".');
+  }
+  else {
+    $ret[] = array('success' => TRUE, 'query' => 'Custom path visibility filter setting found. Update skipped!');
+  }
+
+  return $ret;
+}
+
+/**
+ * Upgrade custom javascript settings.
+ */
+function googleanalytics_update_6006() {
+  $ret = array();
+
+  variable_set('googleanalytics_codesnippet_before', variable_get('googleanalytics_codesnippet', ''));
+  variable_del('googleanalytics_codesnippet');
+  $ret[] = array('success' => TRUE, 'query' => 'Upgraded custom javascript codesnippet setting.');
+
+  return $ret;
+}
+
+/**
+ * Remove "User identifier" and "User name" from segmentation fields.
+ * 
+ * This is a data protection and privacy law change. For more information see Google Analytics
+ * terms of use section 8.1 (http://www.google.com/analytics/en-GB/tos.html).
+ */
+function googleanalytics_update_6007() {
+  $ret = array();
+
+  $profile_fields = variable_get('googleanalytics_segmentation', array());
+  unset($profile_fields['uid']);
+  unset($profile_fields['name']);
+  variable_set('googleanalytics_segmentation', $profile_fields);
+  $ret[] = array('success' => TRUE, 'query' => 'Removed "User identifier" and "User name" from segmentation fields.');
+
   return $ret;
 }
