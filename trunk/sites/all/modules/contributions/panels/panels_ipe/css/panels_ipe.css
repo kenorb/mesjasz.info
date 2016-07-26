@@ -95,11 +95,11 @@ div.panels-ipe-placeholder h3 {
 }
 
 /* Hide editor-state-on elements initially */
-.panels-ipe-on {
+body .panels-ipe-on {
   display: none;
 }
 
-.panels-ipe-editing .panels-ipe-on {
+body .panels-ipe-editing .panels-ipe-on {
 	display: block;
 }
 

@@ -422,9 +422,10 @@ class panels_renderer_standard {
     $path = file_create_path($filename);
     switch ($this->meta_location) {
       case 'standard':
-        if ($path) {
-          // Use CTools CSS add because it can handle temporary CSS in private
-          // filesystem.
+        if (file_check_location($filename, file_directory_path())) {
+          // If the file is located in the files directory, use
+          // ctools_css_add_css() because it can handle temporary CSS in the
+          // private filesystem.
           ctools_include('css');
           ctools_css_add_css($filename, $type, $media, $preprocess);
         }

@@ -73,6 +73,9 @@ class panels_renderer_ipe extends panels_renderer_editor {
 
   function render_pane_content(&$pane) {
     $content = parent::render_pane_content($pane);
+    if (!is_object($content)) {
+      $content = new StdClass();
+    }
     // Ensure that empty panes have some content.
     if (empty($content->content)) {
       // Get the administrative title.
@@ -106,8 +109,6 @@ class panels_renderer_ipe extends panels_renderer_editor {
     $output = theme('panels_ipe_region_wrapper', $output, $region_id, $this->display);
     $classes = 'panels-ipe-region';
 
-    ctools_include('cleanstring');
-    $region_id = ctools_cleanstring($region_id);
     return "<div id='panels-ipe-regionid-$region_id' class='panels-ipe-region'>$output</div>";
   }
 
@@ -200,9 +201,7 @@ class panels_renderer_ipe extends panels_renderer_editor {
       $pane = $this->display->content[$pid];
     }
 
-    ctools_include('cleanstring');
-    $region_id = ctools_cleanstring($pane->panel);
-    $this->commands[] = ctools_ajax_command_append("#panels-ipe-regionid-$region_id div.panels-ipe-sort-container", $this->render_pane($pane));
+    $this->commands[] = ctools_ajax_command_append("#panels-ipe-regionid-{$pane->panel} div.panels-ipe-sort-container", $this->render_pane($pane));
     $this->commands[] = ctools_ajax_command_changed("#panels-ipe-display-{$this->clean_key}");
   }
 }

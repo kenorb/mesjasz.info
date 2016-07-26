@@ -109,7 +109,7 @@
     calculateDropZones: function(event, dropzone) {
       var dropzones = [];
       $(this.accept).each(function() {
-        var offset = $(this).offset({padding:true});
+        var offset = $(this).offset();
         offset.obj = this;
         offset.width = $(this).outerWidth();
         offset.height = $(this).outerHeight();
@@ -120,7 +120,7 @@
 
     reCalculateDropZones: function() {
       for (var i in this.dropzones) {
-        offset = $(this.dropzones[i].obj).offset({padding:true});
+        offset = $(this.dropzones[i].obj).offset();
         offset.width = $(this.dropzones[i].obj).outerWidth();
         offset.height = $(this.dropzones[i].obj).outerHeight();
         $.extend(this.dropzones[i], offset);

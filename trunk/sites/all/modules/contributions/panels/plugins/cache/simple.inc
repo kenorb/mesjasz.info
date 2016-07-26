@@ -25,7 +25,7 @@ $plugin = array(
  */
 function panels_simple_cache_get_cache($conf, $display, $args, $contexts, $pane = NULL) {
   $cid = panels_simple_cache_get_id($conf, $display, $args, $contexts, $pane);
-  $cache = cache_get($cid, 'cache');
+  $cache = cache_get($cid, 'cache_panels');
   if (!$cache) {
     return FALSE;
   }
@@ -42,7 +42,7 @@ function panels_simple_cache_get_cache($conf, $display, $args, $contexts, $pane 
  */
 function panels_simple_cache_set_cache($conf, $content, $display, $args, $contexts, $pane = NULL) {
   $cid = panels_simple_cache_get_id($conf, $display, $args, $contexts, $pane);
-  cache_set($cid, $content);
+  cache_set($cid, $content, 'cache_panels');
 }
 
 /**
@@ -59,7 +59,7 @@ function panels_simple_cache_clear_cache($display) {
   }
   $cid .= ':' . $display->did;
 
-  cache_clear_all($cid, 'cache', TRUE);
+  cache_clear_all($cid, 'cache_panels', TRUE);
 }
 
 /**
@@ -68,11 +68,23 @@ function panels_simple_cache_clear_cache($display) {
 function panels_simple_cache_get_id($conf, $display, $args, $contexts, $pane) {
   $id = 'panels_simple_cache';
 
-  // This is used in case this is an in-code display, which means did will be something like 'new-1'.
-  if (isset($display->owner) && isset($display->owner->id)) {
-    $id .= ':' . $display->owner->id;
+  // If the panel is stored in the database it'll have a numeric did value.
+  if (is_numeric($display->did)) {
+    $id .= ':' . $display->did;
   }
-  $id .= ':' . $display->did;
+  // Exported panels won't have a numeric did but may have a usable cache_key.
+  elseif (!empty($display->cache_key)) {
+    $id .= ':' . str_replace('panel_context:', '', $display->cache_key);
+  }
+  // Alternatively use the css_id.
+  elseif (!empty($display->css_id)) {
+    $id .= ':' . $display->css_id;
+  }
+  // Failover to just appending the did, which may be the completely unusable
+  // string 'new'.
+  else {
+    $id .= ':' . $display->did;
+  }
 
   if ($pane) {
     $id .= ':' . $pane->pid;
@@ -104,7 +116,7 @@ function panels_simple_cache_get_id($conf, $display, $args, $contexts, $pane) {
     $id .= ':' . $language->language;
   }
   
-  if($pane->configuration['use_pager'] == 1) {
+  if (!empty($pane->configuration['use_pager']) && !empty($_GET['page'])) {
     $id .= ':p' . check_plain($_GET['page']);
   }
   

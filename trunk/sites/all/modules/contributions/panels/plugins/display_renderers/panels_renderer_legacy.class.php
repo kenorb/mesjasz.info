@@ -234,12 +234,12 @@ class panels_renderer_legacy {
     }
 
     // Pass long the css_id that is usually available.
-    if (!empty($pane->css['css_id'])) {
+    if (!empty($pane->css['css_id']) && is_object($content)) {
       $content->css_id = $pane->css['css_id'];
     }
 
     // Pass long the css_class that is usually available.
-    if (!empty($pane->css['css_class'])) {
+    if (!empty($pane->css['css_class']) && is_object($content)) {
       $content->css_class = $pane->css['css_class'];
     }
 

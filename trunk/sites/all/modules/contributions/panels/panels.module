@@ -264,6 +264,7 @@ function panels_perm() {
     'administer pane access',
     'administer advanced pane settings',
     'administer panels layouts',
+    'administer panels styles',
     'use panels caching features',
     'use panels dashboard',
     'use panels in place editing',
@@ -274,11 +275,15 @@ function panels_perm() {
  * Implementation of hook_flush_caches().
  *
  * We implement this so that we can be sure our legacy rendering state setting
- * in $conf is updated whenever caches are cleared.
+ * in $conf is updated whenever caches are cleared. Also indicates the custom
+ * Panels cache table.
  */
 function panels_flush_caches() {
   $legacy = panels_get_legacy_state();
   $legacy->determineStatus();
+
+  // The custom cache table.
+  return array('cache_panels');
 }
 
 // ---------------------------------------------------------------------------
@@ -1124,7 +1129,7 @@ function panels_get_current_page_display($change = NULL) {
 /**
  * Clean up the panel pane variables for the template.
  */
-function template_preprocess_panels_pane($vars) {
+function template_preprocess_panels_pane(&$vars) {
   $content = $vars['output'];
   // basic classes
   $vars['classes'] = 'panel-pane';

@@ -5,9 +5,9 @@ dependencies[] = panels
 core = 6.x
 
 
-; Information added by drupal.org packaging script on 2012-01-18
-version = "6.x-3.10"
+; Information added by Drupal.org packaging script on 2016-02-25
+version = "6.x-3.12"
 core = "6.x"
 project = "panels"
-datestamp = "1326917148"
+datestamp = "1456375276"
 
