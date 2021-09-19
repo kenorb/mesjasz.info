@@ -1,4 +1,5 @@
 <?php
+// $Id: user.pages.inc,v 1.11.2.2 2009/09/16 17:54:20 goba Exp $
 
 /**
  * @file
@@ -43,19 +44,17 @@ function user_pass() {
 function user_pass_validate($form, &$form_state) {
   $name = trim($form_state['values']['name']);
   
+  // Blocked accounts cannot request a new password,
+  // check provided username and email against access rules.
+  if (drupal_is_denied('user', $name) || drupal_is_denied('mail', $name)) {
+    form_set_error('name', t('%name is not allowed to request a new password.', array('%name' => $name)));
+  }
 
   // Try to load by email.
   $account = user_load(array('mail' => $name, 'status' => 1));
   if (!$account) {
     // No success, try to load by name.
     $account = user_load(array('name' => $name, 'status' => 1));
-  }
-  if ($account) {
-    // Blocked accounts cannot request a new password,
-    // check provided username and email against access rules.
-    if (drupal_is_denied('user', $account->name) || drupal_is_denied('mail', $account->mail)) {
-      form_set_error('name', t('%name is not allowed to request a new password.', array('%name' => $name)));
-    }
   }
   if (isset($account->uid)) {
     form_set_value(array('#parents' => array('account')), $account, $form_state);
@@ -106,7 +105,7 @@ function user_pass_reset(&$form_state, $uid, $timestamp, $hashed_pass, $action =
         drupal_set_message(t('You have tried to use a one-time login link that has expired. Please request a new one using the form below.'));
         drupal_goto('user/password');
       }
-      else if ($account->uid && $timestamp > $account->login && $timestamp < $current && $hashed_pass == user_pass_rehash($account->pass, $timestamp, $account->login, $account->uid)) {
+      else if ($account->uid && $timestamp > $account->login && $timestamp < $current && $hashed_pass == user_pass_rehash($account->pass, $timestamp, $account->login)) {
         // First stage is a confirmation form, then login
         if ($action == 'login') {
           watchdog('user', 'User %name used one-time login link at time %timestamp.', array('%name' => $account->name, '%timestamp' => $timestamp));

@@ -1,5 +1,3 @@
-// $Id: README.txt,v 1.3.2.7 2008/09/28 21:28:43 hass Exp $
-
 Module: Google Analytics
 Author: Mike Carter <www.ixis.co.uk/contact>
 
@@ -42,14 +40,13 @@ comes with an interface that copies Drupal's block visibility settings.
 The default is set to "Add to every page except the listed pages". By
 default the following pages are listed for exclusion:
 
-admin
-admin/*
-user/*/*
-node/add*
+admin* 
+user* 
+node/add* 
 node/*/*
 
 These defaults are changeable by the website administrator or any other
-user with 'administer google analytics' permission.
+user with 'administer google analytics' permission. 
 
 Like the blocks visibility settings in Drupal core, there is now a
 choice for "Add if the following PHP code returns TRUE." Sample PHP snippets

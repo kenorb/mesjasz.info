@@ -1,0 +1,14 @@
+; $Id: panels_views.info,v 1.2 2008/08/06 00:24:46 merlinofchaos Exp $
+name = Views panes
+description = Integrates Views as Panel panes (content types).
+package = "Panels"
+dependencies[] = panels
+dependencies[] = views
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-12-30
+version = "6.x-2.0-alpha3"
+core = "6.x"
+project = "panels"
+datestamp = "1230669627"
+
